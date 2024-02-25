@@ -12,6 +12,10 @@ import icon_public_112 from "@/assets/public/svg/icon_public_112.svg";
 import icon_public_113 from "@/assets/public/svg/icon_public_113.svg";
 import { storeToRefs } from "pinia";
 import { useTimer } from "vue-timer-hook";
+import * as clipboard from "clipboard-polyfill";
+import SuccessIcon from "@/components/global/notification/SuccessIcon.vue";
+import WarningIcon from "@/components/global/notification/WarningIcon.vue";
+import { useToast } from "vue-toastification";
 
 const { t } = useI18n();
 const { setDepositConfirmDialogToggle } = depositStore();
@@ -24,6 +28,10 @@ const mxnPaymentChannel = ref<any>({
   oxxo: icon_public_105,
   codi: icon_public_107,
 });
+
+const depositConfirmItem = ref<any>({});
+
+const notificationText = ref<string>("");
 
 const time = new Date();
 time.setSeconds(time.getSeconds() + timer_value.value); // 1hour timer
@@ -40,13 +48,43 @@ const channnelName = computed(() => {
   return getChannelName.value;
 });
 
-const depositAmount = computed(() => {
-  const { getDepositAmount } = storeToRefs(depositStore());
-  return getDepositAmount.value;
-});
+// const depositAmount = computed(() => {
+//   const { getDepositAmount } = storeToRefs(depositStore());
+//   return getDepositAmount.value;
+// });
+
+// const depositSubmit = computed(() => {
+//   const { getDepositSubmit } = storeToRefs(depositStore());
+//   return getDepositSubmit.value;
+// });
 
 const closeDepositConfirmDialog = () => {
   setDepositConfirmDialogToggle(false);
+};
+
+const depositInfoCopy = (content: string) => {
+  clipboard.writeText(content).then(
+    () => {
+      console.log("Copied to clipboard!");
+      notificationText.value = "Successful replication";
+      const toast = useToast();
+      toast.success(notificationText.value, {
+        timeout: 5000,
+        closeOnClick: false,
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+        draggable: false,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: SuccessIcon,
+        rtl: false,
+      });
+    },
+    (error) => {
+      console.error("Could not copy text: ", error);
+    }
+  );
 };
 
 onMounted(() => {
@@ -65,6 +103,10 @@ onMounted(() => {
       setDepositConfirmDialogToggle(false);
     }
   });
+  const speiValue = localStorage.getItem("spei");
+  if (speiValue !== null) {
+    depositConfirmItem.value = JSON.parse(speiValue);
+  }
 });
 
 onUnmounted(() => {
@@ -90,20 +132,20 @@ onUnmounted(() => {
       <img :src="mxnPaymentChannel[channnelName]" width="63" />
       <div class="m-order-amount text-center mt-2 pa-2">
         <div class="text-700-14 white">{{ t("deposit_confirm.text_1") }}</div>
-        <div class="text-900-28 yellow">$ {{ depositAmount }}</div>
+        <div class="text-900-28 yellow">$ {{ depositConfirmItem.deposit_amount }}</div>
         <div class="text-700-10 orange">
           {{ t("deposit_confirm.text_2") }}&nbsp;{{ timer.minutes }}:{{ timer.seconds }}
         </div>
       </div>
       <div class="text-400-12 gray my-2 mx-4">{{ t("deposit_confirm.text_3") }}</div>
       <div class="m-provider-body py-2 px-4">
-        <div class="text-700-12 white">STP</div>
+        <div class="text-700-12 white">{{ depositConfirmItem.bank_name }}</div>
         <v-btn
           class="m-copy-button"
           icon="true"
           width="24"
           height="24"
-          @click="closeDepositConfirmDialog"
+          @click="depositInfoCopy(depositConfirmItem.bank_name)"
         >
           <img src="@/assets/public/svg/icon_public_71.svg" width="18" />
         </v-btn>
@@ -115,26 +157,26 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="m-provider-body py-2 px-4">
-        <div class="text-700-12 white">6180260987172188</div>
+        <div class="text-700-12 white">{{ depositConfirmItem.account_number }}</div>
         <v-btn
           class="m-copy-button"
           icon="true"
           width="24"
           height="24"
-          @click="closeDepositConfirmDialog"
+          @click="depositInfoCopy(depositConfirmItem.account_number)"
         >
           <img src="@/assets/public/svg/icon_public_71.svg" width="18" />
         </v-btn>
       </div>
       <div class="text-400-12 gray my-2 mx-4">{{ t("deposit_confirm.text_6") }}</div>
       <div class="m-provider-body py-2 px-4">
-        <div class="text-700-12 white">PACSMILE M EXICO SA DE CV</div>
+        <div class="text-700-12 white">{{ depositConfirmItem.account_name }}</div>
         <v-btn
           class="m-copy-button"
           icon="true"
           width="24"
           height="24"
-          @click="closeDepositConfirmDialog"
+          @click="depositInfoCopy(depositConfirmItem.account_name)"
         >
           <img src="@/assets/public/svg/icon_public_71.svg" width="18" />
         </v-btn>
@@ -147,7 +189,7 @@ onUnmounted(() => {
       <div class="text-400-10 gray">{{ t("deposit_confirm.text_9") }}</div>
       <div class="text-400-10 gray">
         {{ t("deposit_confirm.text_10") }}
-        <span class="text-700-10 yellow">${{ depositAmount }}</span>
+        <span class="text-700-10 yellow">${{ depositConfirmItem.deposit_amount }}</span>
       </div>
       <div class="text-400-10 gray">{{ t("deposit_confirm.text_11") }}</div>
       <v-btn

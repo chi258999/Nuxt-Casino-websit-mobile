@@ -25,6 +25,7 @@ import WithdrawInfo from "./WithdrawInfo.vue";
 import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
 import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
 import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
+import paypal_icon from "@/assets/public/svg/paypal.svg";
 import { getUnitByCurrency } from '@/utils/currencyUnit';
 
 const { name, width } = useDisplay();
@@ -43,15 +44,19 @@ const { dispatchUserBalance } = userStore();
 const { dispatchCurrencyList } = currencyStore();
 import router from '@/router';
 import { currencyStore } from '@/store/currency';
+import { json } from 'stream/consumers';
 
 const selectedPaymentItem = ref<GetPaymentItem>({
   id: "1",
   icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
   name: "PIX",
+  channel_type: "",
   description: "20~150.000 BRL",
   min: 149,
   max: 588.88
 })
+
+const withdraw_type = ref<string>("");
 
 const currencyTemplateList = [
   {
@@ -94,7 +99,8 @@ const currencyTemplateList = [
 const mxnPaymentChannel = ref<any>({
   spei: icon_public_106,
   oxxo: icon_public_105,
-  codi: icon_public_107
+  codi: icon_public_107,
+  paypal: paypal_icon,
 })
 
 const svgIconColor = ref<string>("#12FF76");
@@ -106,6 +112,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     id: "1",
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_1",
+    channel_type: "",
     description: "20~150.000 BRL",
     min: 149,
     max: 588.88
@@ -185,7 +192,8 @@ watch(withdrawConfig, (newValue) => {
       id: item.channel_id,
       icon: userBalance.value.currency == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
       name: item.channel_name,
-      description: item.min + "~" + item.max + " " + item.channel_type,
+      channel_type: item.channel_type,
+      description: item.min + "~" + item.max + " " + item.currecy_type,
       min: item.min,
       max: item.max
     })
@@ -250,6 +258,12 @@ const svgTransform = (el: any, color: string) => {
   return el;
 };
 
+const showWithdrawInfoDialog = (type: string) => {
+  console.log(type);
+  withdraw_type.value = type
+  withdrawInfoDialog.value = true
+}
+
 const handleWithdrawSubmit = async () => {
   if (Number(withdrawAmount.value) == 0 || Number(userBalance.value.availabe_balance) == 0) {
     const toast = useToast();
@@ -280,6 +294,18 @@ const handleWithdrawSubmit = async () => {
   }
   formData.channels_id = selectedPaymentItem.value.id;
   formData.amount = Number(withdrawAmount.value)
+  const withdrawInfo = localStorage.getItem(userInfo.value.id.toString())
+  if (withdrawInfo !== null) {
+    let withdrawInfoItem = JSON.parse(withdrawInfo);
+    formData.id_number = withdrawInfoItem.clabe_number;
+    formData.first_name = withdrawInfoItem.name;
+    formData.last_name = userInfo.value.last_name
+    formData.email = withdrawInfoItem.email;
+    formData.phone = "52" + userInfo.value.phone;
+    formData.bank_name = withdrawInfoItem.bank_code;
+    // formData.bank_name = "STP";
+    formData.rfc = withdrawInfoItem.rfc;
+  }
   await dispatchUserWithdrawSubmit(formData)
   loading.value = false;
   if (success.value) {
@@ -367,6 +393,22 @@ onMounted(async () => {
   await dispatchUserBalance();
   await dispatchCurrencyList();
   selectedCurrencyUnit.value = getUnitByCurrency(userBalance.value.currency);
+  paymentList.value = [];
+  withdrawConfig.value["cfg"][userBalance.value.currency].map((item: any) => {
+    paymentList.value.push({
+      id: item.channel_id,
+      icon: userBalance.value.currency == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
+      name: item.channel_name,
+      channel_type: item.channel_type,
+      description: item.min + "~" + item.max + " " + item.currecy_type,
+      min: item.min,
+      max: item.max
+    })
+  })
+  const keyArray = Object.keys(withdrawConfig.value["cfg"]);
+  const filteredObjects = filterByKeyArray(currencyTemplateList, 'name', keyArray);
+  currencyList.value = filteredObjects;
+  selectedPaymentItem.value = paymentList.value[0];
 })
 </script>
 
@@ -394,7 +436,10 @@ onMounted(async () => {
     :transition="'dialog-top-transition'"
     @click:outside="withdrawInfoDialog = false"
   >
-    <WithdrawInfo @closeWithdrawInfoDialog="withdrawInfoDialog = false" />
+    <WithdrawInfo
+      @closeWithdrawInfoDialog="withdrawInfoDialog = false"
+      :withdraw_type="withdraw_type"
+    />
   </v-dialog>
   <div
     class="mobile-withdraw-container"
@@ -519,7 +564,11 @@ onMounted(async () => {
                       :transform-source="(el: any) => svgTransform(el, '#12FF76')"
                     >
                     </inline-svg>
-                    <img src="@/assets/public/svg/icon_public_109.svg" class="ml-2" />
+                    <img
+                      src="@/assets/public/svg/icon_public_109.svg"
+                      class="ml-2"
+                      @click="showWithdrawInfoDialog(paymentItem.channel_type)"
+                    />
                   </v-col>
                 </v-row>
               </v-list-item>
