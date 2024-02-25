@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watch, onMounted, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
 import icon_public_09 from "@/assets/public/svg/icon_public_09.svg";
 import { type GetUserInfo } from "@/interface/user";
@@ -7,135 +7,165 @@ import { authStore } from "@/store/auth";
 import { storeToRefs } from 'pinia';
 
 const { t } = useI18n();
+const props = defineProps<{ withdraw_type: string }>();
+const { withdraw_type } = toRefs(props)
 const withdrawMethodShow = ref<boolean>(false);
 const selectedWithdrawMethodItem = ref<string>(t("withdraw_info_dialog.text_2"));
 const withdrawMethodList = ref<Array<string>>([
-    t("withdraw_info_dialog.text_2"),
-    t("withdraw_info_dialog.text_3"),
+  t("withdraw_info_dialog.text_2"),
+  t("withdraw_info_dialog.text_3"),
 ]);
 const bankCodeList = ref<any>({
-    ABC_CAPITAL: "ABC CAPITAL",
-    ACCENDO_BANCO: "ACCENDO BANCO",
-    ACTINVER: "ACTINVER",
-    AFIRME: "AFIRME",
-    AKALA: "AKALA",
-    AMERICAN_EXPRES: "AMERICAN EXPRES",
-    ASP_INTEGRA_OPC: "ASP INTEGRA OPC",
-    AUTOFIN: "AUTOFIN",
-    AZTECA: "AZTECA",
-    BAJIO: "BAJIO",
-    BANAMEX: "BANAMEX",
-    BANCO_FINTERRA: "BANCO FINTERRA",
-    BANCO_S3: "BANCO S3",
-    BANCOMEXT: "BANCOMEXT",
-    BANCOPPEL: "BANCOPPEL",
-    BANCREA: "BANCREA",
-    BANJERCITO: "BANJERCITO",
-    BANK_OF_AMERICA: "BANK OF AMERICA",
-    BANKAOOL: "BANKAOOL",
-    BANOBRAS: "BANOBRAS",
-    BANORTE: "BANORTE",
-    BANREGIO: "BANREGIO",
-    BANSEFI: "BANSEFI",
-    BANSI: "BANSI",
-    BANXICO: "BANXICO",
-    BARCLAYS: "BARCLAYS",
-    BBASE: "BBASE",
-    BBVA_BANCOMER: "BBVA BANCOMER",
-    BMONEX: "BMONEX",
-    CAJA_POP_MEXICA: "CAJA POP MEXICA",
-    CAJA_TELEFONIST: "CAJA TELEFONIST",
-    CB_INTERCAM: "CB INTERCAM",
-    CI_BOLSA: "CI BOLSA",
-    CIBANCO: "CIBANCO",
-    CoDi_Valida: "CoDi Valida",
-    COMPARTAMOS: "COMPARTAMOS",
-    CONSUBANCO: "CONSUBANCO",
-    CREDICAPITAL: "CREDICAPITAL",
-    CREDIT_SUISSE: "CREDIT SUISSE",
-    CRISTOBAL_COLON: "CRISTOBAL COLON",
-    DEUTSCHE: "DEUTSCHE",
-    DONDE: "DONDE",
-    ESTRUCTURADORES: "ESTRUCTURADORES",
-    EVERCORE: "EVERCORE",
-    FINAMEX: "FINAMEX",
-    FINCOMUN: "FINCOMUN",
-    FOMPED: "FOMPED",
-    FONDO_FIRA: "FONDO (FIRA)",
-    GBM: "GBM",
-    HDI_SEGUROS: "HDI SEGUROS",
-    HIPOTECARIA_FED: "HIPOTECARIA FED",
-    HSBC: "HSBC",
-    ICBC: "ICBC",
-    INBURSA: "INBURSA",
-    INDEVAL: "INDEVAL",
-    INMOBILIARIO: "INMOBILIARIO",
-    INTERCAM_BANCO: "INTERCAM BANCO",
-    INVERCAP: "INVERCAP",
-    INVEX: "INVEX",
-    JP_MORGAN: "JP MORGAN",
-    KUSPIT: "KUSPIT",
-    LIBERTAD: "LIBERTAD",
-    MASARI: "MASARI",
-    MIFEL: "MIFEL",
-    MIZUHO_BANK: "MIZUHO BANK",
-    MONEXCB: "MONEXCB",
-    MUFG: "MUFG",
-    MULTIVA_BANCO: "MULTIVA BANCO",
-    MULTIVA_CBOLSA: "MULTIVA CBOLSA",
-    NAFIN: "NAFIN",
-    PAGATODO: "PAGATODO",
-    PROFUTURO: "PROFUTURO",
-    REFORMA: "REFORMA",
-    SABADELL: "SABADELL",
-    SANTANDER: "SANTANDER",
-    SANTANDER2: "SANTANDER2",
-    SCOTIABANK: "SCOTIABANK",
-    SHINHAN: "SHINHAN",
-    TP: "STP",
-    TRANSFER: "TRANSFER",
-    UNAGRA: "UNAGRA",
-    VALMEX: "VALMEX",
-    VALUE: "VALUE",
-    VE_POR_MAS: "VE POR MAS",
-    VECTOR: "VECTOR",
-    VOLKSWAGEN: "VOLKSWAGEN"
+  ABC_CAPITAL: "ABC CAPITAL",
+  ACCENDO_BANCO: "ACCENDO BANCO",
+  ACTINVER: "ACTINVER",
+  AFIRME: "AFIRME",
+  AKALA: "AKALA",
+  AMERICAN_EXPRES: "AMERICAN EXPRES",
+  ASP_INTEGRA_OPC: "ASP INTEGRA OPC",
+  AUTOFIN: "AUTOFIN",
+  AZTECA: "AZTECA",
+  BAJIO: "BAJIO",
+  BANAMEX: "BANAMEX",
+  BANCO_FINTERRA: "BANCO FINTERRA",
+  BANCO_S3: "BANCO S3",
+  BANCOMEXT: "BANCOMEXT",
+  BANCOPPEL: "BANCOPPEL",
+  BANCREA: "BANCREA",
+  BANJERCITO: "BANJERCITO",
+  BANK_OF_AMERICA: "BANK OF AMERICA",
+  BANKAOOL: "BANKAOOL",
+  BANOBRAS: "BANOBRAS",
+  BANORTE: "BANORTE",
+  BANREGIO: "BANREGIO",
+  BANSEFI: "BANSEFI",
+  BANSI: "BANSI",
+  BANXICO: "BANXICO",
+  BARCLAYS: "BARCLAYS",
+  BBASE: "BBASE",
+  BBVA_BANCOMER: "BBVA BANCOMER",
+  BMONEX: "BMONEX",
+  CAJA_POP_MEXICA: "CAJA POP MEXICA",
+  CAJA_TELEFONIST: "CAJA TELEFONIST",
+  CB_INTERCAM: "CB INTERCAM",
+  CI_BOLSA: "CI BOLSA",
+  CIBANCO: "CIBANCO",
+  CoDi_Valida: "CoDi Valida",
+  COMPARTAMOS: "COMPARTAMOS",
+  CONSUBANCO: "CONSUBANCO",
+  CREDICAPITAL: "CREDICAPITAL",
+  CREDIT_SUISSE: "CREDIT SUISSE",
+  CRISTOBAL_COLON: "CRISTOBAL COLON",
+  DEUTSCHE: "DEUTSCHE",
+  DONDE: "DONDE",
+  ESTRUCTURADORES: "ESTRUCTURADORES",
+  EVERCORE: "EVERCORE",
+  FINAMEX: "FINAMEX",
+  FINCOMUN: "FINCOMUN",
+  FOMPED: "FOMPED",
+  FONDO_FIRA: "FONDO (FIRA)",
+  GBM: "GBM",
+  HDI_SEGUROS: "HDI SEGUROS",
+  HIPOTECARIA_FED: "HIPOTECARIA FED",
+  HSBC: "HSBC",
+  ICBC: "ICBC",
+  INBURSA: "INBURSA",
+  INDEVAL: "INDEVAL",
+  INMOBILIARIO: "INMOBILIARIO",
+  INTERCAM_BANCO: "INTERCAM BANCO",
+  INVERCAP: "INVERCAP",
+  INVEX: "INVEX",
+  JP_MORGAN: "JP MORGAN",
+  KUSPIT: "KUSPIT",
+  LIBERTAD: "LIBERTAD",
+  MASARI: "MASARI",
+  MIFEL: "MIFEL",
+  MIZUHO_BANK: "MIZUHO BANK",
+  MONEXCB: "MONEXCB",
+  MUFG: "MUFG",
+  MULTIVA_BANCO: "MULTIVA BANCO",
+  MULTIVA_CBOLSA: "MULTIVA CBOLSA",
+  NAFIN: "NAFIN",
+  PAGATODO: "PAGATODO",
+  PROFUTURO: "PROFUTURO",
+  REFORMA: "REFORMA",
+  SABADELL: "SABADELL",
+  SANTANDER: "SANTANDER",
+  SANTANDER2: "SANTANDER2",
+  SCOTIABANK: "SCOTIABANK",
+  SHINHAN: "SHINHAN",
+  TP: "STP",
+  TRANSFER: "TRANSFER",
+  UNAGRA: "UNAGRA",
+  VALMEX: "VALMEX",
+  VALUE: "VALUE",
+  VE_POR_MAS: "VE POR MAS",
+  VECTOR: "VECTOR",
+  VOLKSWAGEN: "VOLKSWAGEN"
 })
 const accountTypeList = ref<Array<string>>([
-    "Clabe"
+  "Clabe"
 ])
 const bankCodeMenuShow = ref<boolean>(false);
-const selectedBankCode = ref<string>("");
 const accountTypeMenuShow = ref<boolean>(false);
-const selectedAccountType = ref<string>("");
 const typeMenuShow = ref<boolean>(false);
-const selectedType = ref<string>("RFC");
+
+const withdrawInfoItem = ref<any>({
+  name: "",
+  email: "",
+  phone: "",
+  bank_code: "",
+  account_type: "",
+  clabe_number: "",
+  type: "RFC",
+  rfc: "",
+  paypal_account: "",
+})
 
 const typeList = ref<Array<string>>([
-    "RFC",
-    "CURP"
+  "RFC",
+  "CURP"
 ]);
 
 const userInfo = computed((): GetUserInfo => {
-    const { getUserInfo } = storeToRefs(authStore());
-    return getUserInfo.value;
+  const { getUserInfo } = storeToRefs(authStore());
+  return getUserInfo.value;
 })
+
+watch(withdraw_type, (value) => {
+  console.log(withdraw_type);
+  selectedWithdrawMethodItem.value = value.toLocaleLowerCase() == t("withdraw_info_dialog.text_2").toLocaleLowerCase() ? t("withdraw_info_dialog.text_2") : t("withdraw_info_dialog.text_3")
+})
+
 const handleSelectWithdrawMethod = (item: string) => {
-    selectedWithdrawMethodItem.value = item;
+  selectedWithdrawMethodItem.value = item;
 };
 const handleSelectBankCode = (key: string) => {
-    selectedBankCode.value = key;
+  withdrawInfoItem.value.bank_code = key;
 }
 const handleSelectAccountType = (item: string) => {
-    selectedAccountType.value = item;
+  withdrawInfoItem.value.account_type = item;
 }
 const handleSelectType = (item: string) => {
-    selectedType.value = item;
+  withdrawInfoItem.value.type = item;
 }
 const svgTransform = (el: any, color: string) => {
-    el.children[0].setAttribute("fill", color);
-    return el;
+  el.children[0].setAttribute("fill", color);
+  return el;
 };
+
+const addWithdrawInfo = () => {
+  withdrawInfoItem.value.phone = userInfo.value.phone;
+  localStorage.setItem(userInfo.value.id.toString(), JSON.stringify(withdrawInfoItem.value))
+}
+
+onMounted(() => {
+  selectedWithdrawMethodItem.value = withdraw_type.value.toLocaleLowerCase() == t("withdraw_info_dialog.text_2").toLocaleLowerCase() ? t("withdraw_info_dialog.text_2") : t("withdraw_info_dialog.text_3")
+  const withdrawInfo = localStorage.getItem(userInfo.value.id.toString());
+  if (withdrawInfo !== null) {
+    withdrawInfoItem.value = JSON.parse(withdrawInfo);
+  }
+})
 </script>
 
 <template>
@@ -168,7 +198,7 @@ const svgTransform = (el: any, color: string) => {
               v-bind="props"
               class=""
               value="withdraw method dropdown"
-              :append-icon="withdrawMethodShow ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+              :append-icon="withdrawMethodShow ? 'mdi-chevron-up' : 'mdi-chevron-down'"
             >
               <v-list-item-title class="ml-2 text-400-12 d-flex align-center">
                 {{ selectedWithdrawMethodItem }}
@@ -194,6 +224,7 @@ const svgTransform = (el: any, color: string) => {
       <div class="mt-2 m-withdraw-info-input-card px-4">
         <input
           type="text"
+          v-model="withdrawInfoItem.name"
           :placeholder="t('withdraw_info_dialog.text_5')"
           class="text-700-12"
         />
@@ -204,6 +235,7 @@ const svgTransform = (el: any, color: string) => {
       <div class="mt-2 m-withdraw-info-input-card px-4">
         <input
           type="text"
+          v-model="withdrawInfoItem.email"
           :placeholder="t('withdraw_info_dialog.text_7')"
           class="text-700-12"
         />
@@ -212,7 +244,7 @@ const svgTransform = (el: any, color: string) => {
       <!------------------- phone number ------------------------>
       <div class="text-400-12 gray px-4 mt-4">{{ t("withdraw_info_dialog.text_8") }}</div>
       <div class="mt-2 m-withdraw-info-input-card px-4 d-flex align-center">
-        <div class="text-600-12 white">+52 123456</div>
+        <div class="text-600-12 white">+52 {{ userInfo.phone }}</div>
         <inline-svg
           :src="icon_public_09"
           width="20"
@@ -237,16 +269,16 @@ const svgTransform = (el: any, color: string) => {
               v-bind="props"
               class=""
               value="withdraw method dropdown"
-              :append-icon="bankCodeMenuShow ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+              :append-icon="bankCodeMenuShow ? 'mdi-chevron-up' : 'mdi-chevron-down'"
             >
               <v-list-item-title
                 class="ml-2 text-400-12 d-flex align-center"
-                :class="selectedBankCode == '' ? 'gray' : 'white'"
+                :class="withdrawInfoItem.bank_code == '' ? 'gray' : 'white'"
               >
                 {{
-                  selectedBankCode == ""
+                  withdrawInfoItem.bank_code == ""
                     ? t("withdraw_info_dialog.text_10")
-                    : bankCodeList[selectedBankCode]
+                    : bankCodeList[withdrawInfoItem.bank_code]
                 }}
               </v-list-item-title>
             </v-list-item>
@@ -261,7 +293,7 @@ const svgTransform = (el: any, color: string) => {
           <template v-for="(key, index) in Object.keys(bankCodeList)" :key="index">
             <div
               class="m-withdraw-info-menu-list text-700-12 white d-flex align-center px-4"
-              :class="selectedBankCode == key ? 'active' : ''"
+              :class="withdrawInfoItem.bank_code == key ? 'active' : ''"
               @click="handleSelectBankCode(key)"
             >
               {{ bankCodeList[key] }}
@@ -286,16 +318,16 @@ const svgTransform = (el: any, color: string) => {
                 v-bind="props"
                 class=""
                 value="withdraw method dropdown"
-                :append-icon="accountTypeMenuShow ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+                :append-icon="accountTypeMenuShow ? 'mdi-chevron-up' : 'mdi-chevron-down'"
               >
                 <v-list-item-title
                   class="ml-2 text-400-12 d-flex align-center"
-                  :class="selectedAccountType == '' ? 'gray' : 'white'"
+                  :class="withdrawInfoItem.account_type == '' ? 'gray' : 'white'"
                 >
                   {{
-                    selectedAccountType == ""
+                    withdrawInfoItem.account_type == ""
                       ? t("withdraw_info_dialog.text_12")
-                      : selectedAccountType
+                      : withdrawInfoItem.account_type
                   }}
                 </v-list-item-title>
               </v-list-item>
@@ -305,7 +337,7 @@ const svgTransform = (el: any, color: string) => {
             <template v-for="(item, index) in accountTypeList" :key="index">
               <div
                 class="m-withdraw-info-menu-list text-700-12 white d-flex align-center px-4"
-                :class="selectedAccountType == item ? 'active' : ''"
+                :class="withdrawInfoItem.account_type == item ? 'active' : ''"
                 @click="handleSelectAccountType(item)"
               >
                 {{ item }}
@@ -324,6 +356,7 @@ const svgTransform = (el: any, color: string) => {
         <div class="mt-2 m-withdraw-info-input-card px-4">
           <input
             type="text"
+            v-model="withdrawInfoItem.clabe_number"
             :placeholder="t('withdraw_info_dialog.text_14')"
             class="text-700-12"
           />
@@ -344,13 +377,13 @@ const svgTransform = (el: any, color: string) => {
                 v-bind="props"
                 class=""
                 value="withdraw method dropdown"
-                :append-icon="typeMenuShow ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+                :append-icon="typeMenuShow ? 'mdi-chevron-up' : 'mdi-chevron-down'"
               >
                 <v-list-item-title
                   class="ml-2 text-400-12 d-flex align-center"
-                  :class="selectedType == '' ? 'gray' : 'white'"
+                  :class="withdrawInfoItem.type == '' ? 'gray' : 'white'"
                 >
-                  {{ selectedType }}
+                  {{ withdrawInfoItem.type }}
                 </v-list-item-title>
               </v-list-item>
             </v-card>
@@ -359,7 +392,7 @@ const svgTransform = (el: any, color: string) => {
             <template v-for="(item, index) in typeList" :key="index">
               <div
                 class="m-withdraw-info-menu-list text-700-12 white d-flex align-center px-4"
-                :class="selectedType == item ? 'active' : ''"
+                :class="withdrawInfoItem.type == item ? 'active' : ''"
                 @click="handleSelectType(item)"
               >
                 {{ item }}
@@ -373,6 +406,7 @@ const svgTransform = (el: any, color: string) => {
         <div class="mt-2 m-withdraw-info-input-card px-4">
           <input
             type="text"
+            v-model="withdrawInfoItem.rfc"
             :placeholder="t('withdraw_info_dialog.text_17')"
             class="text-700-12"
           />
@@ -386,6 +420,7 @@ const svgTransform = (el: any, color: string) => {
         <div class="mt-2 m-withdraw-info-input-card px-4">
           <input
             type="text"
+            v-model="withdrawInfoItem.paypal_account"
             :placeholder="t('withdraw_info_dialog.text_7')"
             class="text-700-12"
           />
@@ -394,11 +429,20 @@ const svgTransform = (el: any, color: string) => {
 
       <!------------------- add ------------------------>
       <v-row class="ma-0 pa-0 mt-4 align-center">
-        <v-col cols="6" class="text-700-12 gray text-center">
+        <v-col
+          cols="6"
+          class="text-700-12 gray text-center"
+          @click="$.emit('closeWithdrawInfoDialog')"
+        >
           {{ t("withdraw_info_dialog.text_18").toUpperCase() }}
         </v-col>
         <v-col cols="6" class="text-center">
-          <v-btn class="m-withdraw-info-add-btn" width="144" height="40">
+          <v-btn
+            class="m-withdraw-info-add-btn"
+            width="144"
+            height="40"
+            @click="addWithdrawInfo"
+          >
             {{ t("withdraw_info_dialog.text_19") }}
           </v-btn>
         </v-col>
