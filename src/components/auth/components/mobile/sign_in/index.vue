@@ -231,26 +231,27 @@ const Login = defineComponent({
 
     const statusChangeCallback = (response) => {
       console.log('statusChangeCallback');
-      console.log(response);
-      if (response.status === 'connected') {
+      console.log(response);                   // The current login status of the person.
+      if (response.status === 'connected') {   // Logged into your webpage and Facebook.
         testAPI();  
-      } else {
+      } else {                                 // Not logged into your webpage or we are unable to tell.
         console.log('报错了')
       }
     }
 
     const onSignInSuccess = () => {
-      FB.init({
-        appId      : '1782039332218801',
-        cookie     : true,                     // Enable cookies to allow the server to access the session.
-        xfbml      : true,                     // Parse social plugins on this webpage.
-        version    : 'v19.0'           // Use this Graph API version for this call.
+      FB.login(function(response){
+          console.log(response);
       });
-
-
-      // FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
-      //   statusChangeCallback(response);        // Returns the login status.
+      // FB.init({
+      //   appId: '1782039332218801',
+      //   xfbml: true,
+      //   version: 'v18.0'
       // });
+      // FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
+      //   statusChangeCallback(response);       // Returns the login status.
+      // // get your auth token and info
+      // })
     }
 
     const testAPI = () => {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
@@ -266,20 +267,9 @@ const Login = defineComponent({
     }
 
     const checkLoginState = () => {               // Called when a person is finished with the Login Button.
-      // FB.getLoginStatus(function(response) {   // See the onlogin handler
-      //   statusChangeCallback(response);
-      // });
-      FB.login(function (response) {
-            if (response.authResponse) {
-                console.log('Welcome!  Fetching your information.... ');
-                console.log('authResponse', response.authResponse);
-                FB.api('/me', function (response) {
-                    console.log('Good to see you, ' + response.name + '.');
-                });
-            } else {
-                console.log('User cancelled login or did not fully authorize.');
-            }
-        });
+      FB.getLoginStatus(function(response) {   // See the onlogin handler
+        statusChangeCallback(response);
+      });
     }
 
     watch(
@@ -292,7 +282,7 @@ const Login = defineComponent({
     );
 
     onMounted(() => {
-      onSignInSuccess()
+      // onSignInSuccess()
     });
 
     return {
@@ -322,7 +312,7 @@ export default Login;
   <div class="m-login-container px-6">
     <div id="status"></div>
     <div class="my-15 d-flex justify-center align-center">
-      <img src="@/assets/public/image/logo_public_01.png" width="86" />
+      <img src="@/assets/public/image/logo_public_04.png" width="86" />
       <div class="ml-2">
         <div class="text-800-16 white">
           {{ t("signup.formPage.header.titleLine1") }}
@@ -454,7 +444,7 @@ export default Login;
             <!-- <div @click="onSignInSuccessGoogle">谷歌登录</div> -->
             <!-- <button id="loginBtn" @click="onSignInSuccess" >登录</button>  -->
             <!-- <div @click="onSignInSuccess">facebook登录</div> -->
-            <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>
+            <!-- <fb:login-button scope="public_profile,email" @click="checkLoginState();"></fb:login-button> -->
           </div>
         </v-col>
       </v-row>
