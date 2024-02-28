@@ -820,7 +820,7 @@ const goReferFriend = (index:number) =>{
         </div>
       </div>
     </v-btn>
-    <v-btn class="menu-text-color" @click="handleSportsToggle">
+    <v-btn class="menu-text-color" @click="handleSportsToggle" v-warp-label="{nodeName: 'menu-btn'}">
       <inline-svg
         :src="icon_public_40"
         width="20"
@@ -831,7 +831,7 @@ const goReferFriend = (index:number) =>{
         {{ t("mobile_menu.sport") }}
       </div>
     </v-btn>
-    <v-btn class="menu-text-color" @click="handleRewardToggle">
+    <v-btn class="menu-text-color" @click="handleRewardToggle"  v-warp-label="{nodeName: 'menu-btn'}">
       <inline-svg
         :src="icon_public_100"
         width="20"
@@ -1031,6 +1031,10 @@ const goReferFriend = (index:number) =>{
   z-index: 2009 !important;
   overflow: inherit !important;
 
+  .v-btn {
+    flex: 1 !important;
+  }
+
   .v-btn--active {
     .v-btn__content {
       color: white;
@@ -1041,7 +1045,10 @@ const goReferFriend = (index:number) =>{
     transform: none !important;
   }
 }
-
+// ::v-deep .v-bottom-navigation  {
+//   .v-bottom-navigation__content > .v-btn {
+//   }
+// }
 .m-mail-menu-overlay {
   bottom: 80px !important;
   overflow-x: hidden;
@@ -1142,6 +1149,7 @@ const goReferFriend = (index:number) =>{
   .v-btn__content {
     font-weight: 700 !important;
     font-size: 12px !important;
+    line-height: 20px;
   }
 
   .chat-box-text {
