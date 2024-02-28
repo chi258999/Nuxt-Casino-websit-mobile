@@ -231,27 +231,26 @@ const Login = defineComponent({
 
     const statusChangeCallback = (response) => {
       console.log('statusChangeCallback');
-      console.log(response);                   // The current login status of the person.
-      if (response.status === 'connected') {   // Logged into your webpage and Facebook.
+      console.log(response);
+      if (response.status === 'connected') {
         testAPI();  
-      } else {                                 // Not logged into your webpage or we are unable to tell.
+      } else {
         console.log('报错了')
       }
     }
 
     const onSignInSuccess = () => {
-      FB.login(function(response){
-          console.log(response);
+      FB.init({
+        appId      : '1782039332218801',
+        cookie     : true,                     // Enable cookies to allow the server to access the session.
+        xfbml      : true,                     // Parse social plugins on this webpage.
+        version    : 'v19.0'           // Use this Graph API version for this call.
       });
-      // FB.init({
-      //   appId: '1782039332218801',
-      //   xfbml: true,
-      //   version: 'v18.0'
-      // });
+
+
       // FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
-      //   statusChangeCallback(response);       // Returns the login status.
-      // // get your auth token and info
-      // })
+      //   statusChangeCallback(response);        // Returns the login status.
+      // });
     }
 
     const testAPI = () => {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
@@ -267,9 +266,20 @@ const Login = defineComponent({
     }
 
     const checkLoginState = () => {               // Called when a person is finished with the Login Button.
-      FB.getLoginStatus(function(response) {   // See the onlogin handler
-        statusChangeCallback(response);
-      });
+      // FB.getLoginStatus(function(response) {   // See the onlogin handler
+      //   statusChangeCallback(response);
+      // });
+      FB.login(function (response) {
+            if (response.authResponse) {
+                console.log('Welcome!  Fetching your information.... ');
+                console.log('authResponse', response.authResponse);
+                FB.api('/me', function (response) {
+                    console.log('Good to see you, ' + response.name + '.');
+                });
+            } else {
+                console.log('User cancelled login or did not fully authorize.');
+            }
+        });
     }
 
     watch(
@@ -282,7 +292,7 @@ const Login = defineComponent({
     );
 
     onMounted(() => {
-      // onSignInSuccess()
+      onSignInSuccess()
     });
 
     return {
@@ -444,7 +454,7 @@ export default Login;
             <!-- <div @click="onSignInSuccessGoogle">谷歌登录</div> -->
             <!-- <button id="loginBtn" @click="onSignInSuccess" >登录</button>  -->
             <!-- <div @click="onSignInSuccess">facebook登录</div> -->
-            <!-- <fb:login-button scope="public_profile,email" @click="checkLoginState();"></fb:login-button> -->
+            <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button>
           </div>
         </v-col>
       </v-row>
