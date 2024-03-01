@@ -8,6 +8,7 @@ export interface GetPaymentItem {
     id: string
     icon: string
     name: string
+    channel_type: string
     description: string
     min: string | number
     max: string | number
@@ -40,6 +41,7 @@ export interface DepositHistoryItem {
     amount: string
     status: number
     note: string
+    currency: string
 }
 
 export interface DepositHistoryResponse {

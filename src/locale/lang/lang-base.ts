@@ -1112,6 +1112,7 @@ export type langType = {
     }
   }
   mobile_menu: {
+    home: string
     menu: string
     casino: string
     share: string
@@ -1152,6 +1153,7 @@ export type langType = {
       confirm_success_text: string
       confirm_warning_text: string
     }
+    text_1: string
   }
   transaction_history: {
     type: {
@@ -1191,7 +1193,6 @@ export type langType = {
       confirm_warning_text: string
     }
     text_1: string
-    text_1_1: string
     text_2: string
     text_3: string
     text_4: string
@@ -1199,6 +1200,17 @@ export type langType = {
     other_text_1: string
     withdraw_btn_text: string
     withdraw_warning_text: string
+    text_5: string
+    text_6: string
+    text_7: string
+    text_8: string
+    text_9: string
+    text_10: string
+    text_11: string
+    text_12: string
+    text_13: string
+    text_14: string
+    text_15: string
   }
   mail_dialog: {
     header_text: string
@@ -1394,6 +1406,7 @@ export type langType = {
       text_10: string
       text_11: string
       text_12: string
+      text_13: string
     }
   }
   account: {
@@ -1922,5 +1935,62 @@ export type langType = {
   game_confirm: {
     text_1: string
     text_2: string
+  },
+  deposit_confirm: {
+    text_1: string
+    text_2: string
+    text_3: string
+    text_4: string
+    text_5: string
+    text_6: string
+    text_7: string
+    text_8: string
+    text_9: string
+    text_10: string
+    text_11: string
+    text_12: string
+    text_13: string
+  }
+  phone_binding_dialog: {
+    text_1: string
+    text_2: string
+    text_3: string
+    text_4: string
+    text_5: string
+    text_6: string
+    text_7: string
+    text_8: string
+  }
+  withdraw_info_dialog: {
+    text_1: string
+    text_2: string
+    text_3: string
+    text_4: string
+    text_5: string
+    text_6: string
+    text_7: string
+    text_8: string
+    text_9: string
+    text_10: string
+    text_11: string
+    text_12: string
+    text_13: string
+    text_14: string
+    text_15: string
+    text_16: string
+    text_17: string
+    text_18: string
+    text_19: string
+    text_20: string
+    text_21: string
+    text_22: string
+    text_23: string
+    text_24: string
+    text_25: string
+  }
+  order_dialog: {
+    text_1: string
+    text_2: string
+    text_3: string
   }
 };

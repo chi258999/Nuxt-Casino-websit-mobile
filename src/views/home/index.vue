@@ -37,6 +37,7 @@ import { useRouter, useRoute } from "vue-router";
 import MGameConfirm from "@/views/home/components/mobile/GameConfirm.vue";
 import { ProgressiveImage } from "vue-progressive-image";
 import { mainStore } from "@/store/main";
+import MOrder from "@/views/home/components/mobile/Order.vue";
 
 const GameProviders = defineAsyncComponent(() => import("@/components/global/game_provider/index.vue"));
 
@@ -55,6 +56,7 @@ const Dashboard = defineComponent({
   components: {
     GameProviders,
     MGameConfirm,
+    MOrder,
     ProgressiveImage,
   },
   setup() {
@@ -180,6 +182,7 @@ const Dashboard = defineComponent({
       name: "",
       image: "",
       provider: "",
+      producer: "",
       is_demo: false
     })
 
@@ -242,6 +245,11 @@ const Dashboard = defineComponent({
       return getFavoriteGameList.value
     })
 
+    const casinoGameShow = computed(() => {
+      const { getCasinoGameShow } = storeToRefs(mainStore());
+      return getCasinoGameShow.value
+    })
+
     const mobileVersion = computed(() => {
       return name.value;
     });
@@ -285,6 +293,13 @@ const Dashboard = defineComponent({
 
     const cdnUrl = computed(() => {
       return instance?.appContext.config.globalProperties.$cdn('vue');
+    })
+
+    watch(casinoGameShow, (newValue) => {
+      window.scrollTo({
+        top: 450,
+        behavior: "smooth",
+      });
     })
 
     watch(mobileVersion, (newValue: string) => {
@@ -404,7 +419,7 @@ const Dashboard = defineComponent({
 
     const handleGameFilterBtn = async (gamFilterBtn: string) => {
       window.scrollTo({
-        top: 250,
+        top: 450,
         behavior: "smooth",
       });
       console.log(gamFilterBtn, t("home.button.all_game"));
@@ -592,7 +607,8 @@ const Dashboard = defineComponent({
           left = 116.48 + 148 * (index - 1);
           right = left + 148;
         }
-        const width = element[0].offsetWidth;
+        console.log((element[0] as any).offsetWidth);
+        const width = (element[0] as any).offsetWidth;
         if (!(left > curPos && left < curPos + width)) {
           element[0].scrollLeft = 116.48 + (index - 1) * 148;
         }
@@ -690,8 +706,6 @@ const Dashboard = defineComponent({
       setFavoriteGameList([]);
       await dispatchGameFavoriteList();
       state.is_favorite = favoriteGameList.value.some(item => item == game_item.id);
-      console.log(favoriteGameList.value);
-      console.log(state.is_favorite);
       gameConfirmDialogShow.value = true;
       selectedGameItem.value = game_item;
     }
@@ -1139,6 +1153,12 @@ const Dashboard = defineComponent({
           selectedCategoryName.value = "live";
           break;
       }
+      if (route.query.game == "casino") {
+        window.scrollTo({
+          top: 450,
+          behavior: "smooth",
+        });
+      }
     });
 
     return {
@@ -1227,6 +1247,8 @@ export default Dashboard;
     "
     v-else
   >
+    <!----------------------- Order component --------------------------->
+    <MOrder />
     <!-- game confirmation dialog -->
 
     <v-navigation-drawer
@@ -2024,7 +2046,7 @@ export default Dashboard;
     transform: translate(-50%, -50%);
     width: 48px;
     height: 46px;
-    background-image: url("@/assets/public/image/img_public_42.png");
+    background-image: url("@/assets/public/image/logo_public_06.png");
     background-repeat: no-repeat;
     background-size: contain;
     animation: opacityAnimation 0.6s ease-in infinite;
@@ -2083,7 +2105,9 @@ export default Dashboard;
 .v-field__input::placeholder {
   opacity: unset !important;
   color: #7782aa !important;
-  font-family: "Inter";
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
+    sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -2128,7 +2152,9 @@ export default Dashboard;
     .v-field__input::placeholder {
       opacity: unset !important;
       color: #7782aa !important;
-      font-family: "Inter";
+      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
       font-size: 10px;
       font-style: normal;
       font-weight: 500;
@@ -2145,14 +2171,18 @@ export default Dashboard;
   .lobby-btn-color {
     .v-btn__content {
       font-size: 12px !important;
-      font-family: "Inter";
+      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
     }
   }
 
   .popular-btn-color {
     .v-btn__content {
       font-size: 12px !important;
-      font-family: "Inter";
+      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
     }
   }
 }
@@ -2244,7 +2274,9 @@ export default Dashboard;
 
   .v-btn__content {
     text-align: center;
-    font-family: Inter;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 700;

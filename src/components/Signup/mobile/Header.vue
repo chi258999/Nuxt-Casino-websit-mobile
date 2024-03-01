@@ -55,7 +55,7 @@ export default SignupHeader;
         </p>
       </v-row>
     </v-col>
-    <img src="@/assets/public/image/logo_public_01.png" class="m-logo-image" width="80" />
+    <img src="@/assets/public/image/logo_public_04.png" class="m-logo-image" width="80" />
     <img src="@/assets/login/image/img_su_01.png" class="m-coin-image" />
   </v-row>
 </template>
@@ -119,7 +119,7 @@ export default SignupHeader;
 }
 
 .m-logo-text2 {
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 16px;

@@ -17,7 +17,13 @@ export const depositStore = defineStore({
     depositSubmit: {} as any,
     pixInfo: {} as Deposit.GetPixInfo,
     pixInfoToggle: false as boolean,
-    depositHistoryItem: {} as Deposit.DepositHistoryResponse
+    depositHistoryItem: {} as Deposit.DepositHistoryResponse,
+    depositConfirmDialogToggle: false as boolean,
+    channelName: "spei" as string,
+    depositAmount: 0 as number,
+    depositOrderDialog: false as boolean,
+    timerValue: 0 as number,
+    depositOrderTimeRefresh: false as boolean,
   }),
   getters: {
     getSuccess: (state) => state.success,
@@ -26,7 +32,13 @@ export const depositStore = defineStore({
     getDepositSubmit: (state) => state.depositSubmit,
     getPixInfo: (state) => state.pixInfo,
     getPixInfoToggle: (state) => state.pixInfoToggle,
-    getDepositHistoryItem: (state) => state.depositHistoryItem
+    getDepositHistoryItem: (state) => state.depositHistoryItem,
+    getDepositConfirmDialogToggle: (state) => state.depositConfirmDialogToggle,
+    getChannelName: (state) => state.channelName,
+    getDepositAmount: (state) => state.depositAmount,
+    getDepositOrderDialog: (state) => state.depositOrderDialog,
+    getTimerValue: (state) => state.timerValue,
+    getDepositOrderTimeRefresh: (state) => state.depositOrderTimeRefresh,
   },
   actions: {
     // set functions
@@ -50,6 +62,24 @@ export const depositStore = defineStore({
     },
     setDepositHistoryItem(depositHistoryItem: Deposit.DepositHistoryResponse) {
       this.depositHistoryItem = depositHistoryItem
+    },
+    setDepositConfirmDialogToggle(depositConfirmDialogToggle: boolean) {
+      this.depositConfirmDialogToggle = depositConfirmDialogToggle
+    },
+    setChannelName(channelName: string) {
+      this.channelName = channelName;
+    },
+    setDepositAmount(depositAmount: number) {
+      this.depositAmount = depositAmount
+    },
+    setDepositOrderDialog(depositOrderDialog: boolean){
+      this.depositOrderDialog = depositOrderDialog
+    },
+    setTimerValue(timerValue: number) {
+      this.timerValue = timerValue
+    },
+    setDepositOrderTimeRefresh(depositOrderTimeRefresh: boolean){
+      this.depositOrderTimeRefresh = depositOrderTimeRefresh
     },
     // user deposit configuration
     async dispatchUserDepositCfg() {

@@ -29,10 +29,13 @@ import img_vipemblem_75_99 from "@/assets/vip/image/img_vipemblem_75-99.png";
 import img_vipemblem_100_149 from "@/assets/vip/image/img_vipemblem_100-149.png";
 import img_vipemblem_159_199 from "@/assets/vip/image/img_vipemblem_159-199.png";
 import img_vipemblem_200 from "@/assets/vip/image/img_vipemblem_200.png";
-
+import Cookies from "js-cookie"
+import currencyListValue from "@/utils/currencyList";
 import { currencyStore } from "@/store/currency";
 import { bonusStore } from "@/store/bonus";
 import { bannerStore } from "@/store/banner";
+import { depositStore } from "@/store/deposit";
+import icon_public_81 from "@/assets/public/svg/icon_public_81.svg";
 
 const { setAuthModalType } = authStore();
 const { setAuthDialogVisible } = authStore();
@@ -58,6 +61,8 @@ const { setDepositWithdrawToggle } = appBarStore();
 const { setBonusDashboardDialogVisible } = appBarStore();
 const { dispatchCurrencyList } = currencyStore();
 const { dispatchUserBonus } = bonusStore();
+const { setDepositOrderDialog } = depositStore();
+const { setTimerValue } = depositStore();
 
 const { dispatchBannerList } = bannerStore();
 const { dispatchGameEnter, getGameBetbyInit, closeKill } = gameStore();
@@ -73,6 +78,9 @@ const { t } = useI18n();
 const currentLanguage = ref<string>("en");
 const appBarWidth = ref<string>("app-bar-pc");
 const notificationText = ref<string>("");
+
+const menuIconColor = ref<string>("#7782AA");
+const navbarToggle = ref<boolean>(false);
 
 // logged in user info
 const user = ref<GetUserData>({
@@ -138,6 +146,13 @@ const token = computed(() => {
   const { getToken } = storeToRefs(authStore());
   return getToken.value;
 });
+
+console.log(Cookies.get("blue-game-token-key"))
+
+const navToggle = computed(() => {
+  const { getNavBarToggle } = storeToRefs(appBarStore());
+  return getNavBarToggle.value
+})
 
 const userInfo = computed(() => {
   const { getUserInfo } = storeToRefs(authStore());
@@ -248,14 +263,14 @@ watch(currencyMenuShow, async (value: boolean) => {
     if (value) {
       await dispatchCurrencyList();
       setUserNavBarToggle(false);
-      setMainBlurEffectShow(false);
+      // setMainBlurEffectShow(false);
       setNavBarToggle(false);
-      setMailMenuShow(false);
+      // setMailMenuShow(false);
       setBonusDashboardDialogVisible(false);
-      setTimeout(() => {
-        setFixPositionEnable(true);
-        setMainBlurEffectShow(true);
-      }, 10)
+      // setTimeout(() => {
+      setFixPositionEnable(true);
+      //   setMainBlurEffectShow(true);
+      // }, 10)
     } else {
       setFixPositionEnable(false);
     }
@@ -353,7 +368,8 @@ const currencyImages: Array<any> = ([
 const imageIndex = ref<Array<number>>([]);
 const currencyList = computed(() => {
   const { getCurrencyList } = storeToRefs(currencyStore());
-  return getCurrencyList.value
+  let orderedCurrencyList = getCurrencyList.value.sort((a, b) => a.currency.localeCompare(b.currency));
+  return orderedCurrencyList
 })
 
 watch(currencyList, (() => {
@@ -402,7 +418,7 @@ const showUserNavBar = async () => {
 }
 
 watch(userBalance, (value) => {
-  console.log("userbalance================");
+  console.log("userbalance================", value);
   let locale = 'pt-BR';
   const currencyUnit = value.currency
   switch (currencyUnit) {
@@ -439,29 +455,13 @@ watch(userBalance, (value) => {
 
 watch(socketBalance, (value) => {
   console.log("socketBalance================", value);
-  let locale = 'pt-BR';
-  switch (value.cur) {
-    case "BRL":
-      locale = 'pt-BR';
-      break;
-    case "PHP":
-      locale = 'en-PH';
-      break;
-    case "PEN":
-      locale = 'en-PE';
-      break;
-    case "MXN":
-      locale = 'es-MX';
-      break;
-    case "CLP":
-      locale = 'es-CL';
-      break;
-    case "USD":
-      locale = 'en-US';
-    case "COP":
-      locale = 'es-CO';
-      break;
+  if (value.op_type == 201) {
+    setTimerValue(0);
+    localStorage.removeItem("spei");
+    localStorage.removeItem("timer");
+    setDepositOrderDialog(false);
   }
+  let locale = currencyListValue[value.cur];
   if (user.value.currency == value.cur) {
     user.value.wallet = formatCurrency(Number(value.bal), locale, value.cur);
   }
@@ -556,6 +556,35 @@ const headerBlurEffectShow = computed(() => {
   return getHeaderBlurEffectShow.value
 })
 
+const menuSvgTransform = (el: any) => {
+  for (let node of el.children) {
+    node.setAttribute('fill', menuIconColor.value)
+    for (let subNode of node.children) {
+      subNode.setAttribute('fill', menuIconColor.value)
+    }
+  }
+  return el
+}
+
+const handleNavbarToggle = () => {
+  navbarToggle.value = !navbarToggle.value
+  setUserNavBarToggle(false);
+  setBonusDashboardDialogVisible(false);
+  setMainBlurEffectShow(false);
+  setTimeout(() => {
+    setNavBarToggle(navbarToggle.value);
+    if (mobileWidth.value < 600) {
+      setMainBlurEffectShow(navbarToggle.value);
+    }
+  }, 10);
+  menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
+}
+
+watch(navToggle, (newValue) => {
+  navbarToggle.value = newValue;
+  menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
+}, { deep: true })
+
 onMounted(async () => {
   if (mobileWidth.value < 600) {
     currencyMenuWidth.value = (window.innerWidth - 20) + "px";
@@ -599,24 +628,32 @@ onMounted(async () => {
 
     <v-toolbar-title v-if="mobileWidth > 800">
       <img
-        src="@/assets/public/image/logo_public_01.png"
+        src="@/assets/public/image/logo_public_04.png"
         @click="goHomePage"
         style="margin-top: 12px"
       />
       <!-- <v-btn height="60" @click="goHomePage" class="align-center mt-1">
-        <img src="@/assets/public/image/logo_public_01.png" />
+        <img src="@/assets/public/image/logo_public_04.png" />
       </v-btn> -->
     </v-toolbar-title>
 
     <v-toolbar-title v-else>
+      <inline-svg
+        :src="icon_public_81"
+        width="20"
+        height="20"
+        class="mb-3 mr-4"
+        :transform-source="menuSvgTransform"
+        @click="handleNavbarToggle"
+      ></inline-svg>
       <img
-        src="@/assets/public/image/logo_public_03.png"
+        src="@/assets/public/image/logo_public_04.png"
         @click="goHomePage"
         class="mt-1"
-        width="52"
+        width="44"
       />
       <!-- <v-btn height="46" width="100" @click="goHomePage" class="align-center">
-        <img src="@/assets/public/image/logo_public_03.png" />
+        <img src="@/assets/public/image/logo_public_04.png" />
       </v-btn> -->
     </v-toolbar-title>
     <div v-if="token != undefined">
@@ -724,7 +761,7 @@ onMounted(async () => {
                     </template>
                     <v-list
                       theme="dark"
-                      bg-color="#23262F"
+                      bg-color="#1d2027"
                       class="px-2"
                       :width="currencyMenuWidth"
                     >
@@ -1219,7 +1256,7 @@ onMounted(async () => {
     opacity: 0 !important;
   }
 
-  .v-overlay__content::after {
+  .v-overlay__content::before {
     content: "";
     position: absolute;
     align-self: center;

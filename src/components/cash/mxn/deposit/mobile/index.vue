@@ -2,6 +2,7 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { appBarStore } from '@/store/appBar';
 import { authStore } from "@/store/auth";
+import { userStore } from '@/store/user';
 import { depositStore } from '@/store/deposit';
 import { type GetCurrencyItem } from '@/interface/deposit';
 import { type GetPaymentItem } from '@/interface/deposit';
@@ -17,6 +18,9 @@ import router from '@/router';
 import MParticipatingDialog from "./MParticipatingDialog.vue";
 import MDepositInfoDialog from "./MDepositInfoDialog.vue";
 import { useToast } from "vue-toastification";
+import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
+import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
+import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
 
 const { name, width } = useDisplay();
 const { t } = useI18n();
@@ -33,7 +37,13 @@ const { setCashDialogToggle } = appBarStore();
 const { dispatchUserDepositCfg } = depositStore();
 const { dispatchUserDepositSubmit } = depositStore();
 const { setPixInfoToggle } = depositStore();
+const { setDepositConfirmDialogToggle } = depositStore();
+const { setDepositAmount } = depositStore();
 const { dispatchUserProfile } = authStore();
+const { dispatchUserBalance } = userStore();
+const { setDepositOrderDialog } = depositStore();
+const { setTimerValue } = depositStore();
+const { setDepositOrderTimeRefresh } = depositStore();
 
 const selectedCurrencyUnit = ref<string>("R$");
 
@@ -47,6 +57,7 @@ const selectedPaymentItem = ref<GetPaymentItem>({
   id: "",
   icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
   name: "PIX",
+  channel_type: "",
   description: "20~150.000 BRL",
   min: 149,
   max: 588.88
@@ -97,62 +108,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     id: "1",
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_1",
-    description: "20~150.000 BRL",
-    min: 149,
-    max: 588.88
-  },
-  {
-    id: "2",
-    icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
-    name: "PIX_2",
-    description: "20~150.000 BRL",
-    min: 149,
-    max: 588.88
-  },
-  {
-    id: "3",
-    icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
-    name: "PIX_3",
-    description: "20~150.000 BRL",
-    min: 149,
-    max: 588.88
-  },
-  {
-    id: "4",
-    icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
-    name: "PIX_4",
-    description: "20~150.000 BRL",
-    min: 149,
-    max: 588.88
-  },
-  {
-    id: "5",
-    icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
-    name: "PIX_5",
-    description: "20~150.000 BRL",
-    min: 149,
-    max: 588.88
-  },
-  {
-    id: "6",
-    icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
-    name: "PIX_6",
-    description: "20~150.000 BRL",
-    min: 149,
-    max: 588.88
-  },
-  {
-    id: "7",
-    icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
-    name: "PIX_7",
-    description: "20~150.000 BRL",
-    min: 149,
-    max: 588.88
-  },
-  {
-    id: "8",
-    icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
-    name: "PIX_8",
+    channel_type: "",
     description: "20~150.000 BRL",
     min: 149,
     max: 588.88
@@ -188,6 +144,12 @@ const promotionDialogVisible = ref<boolean>(false);
 
 const depositInfoDialogVisible = ref<boolean>(false);
 
+const mxnPaymentChannel = ref<any>({
+  spei: icon_public_106,
+  oxxo: icon_public_105,
+  codi: icon_public_107
+})
+
 const notificationShow = ref<boolean>(false);
 const currencyMenuShow = ref<boolean>(false);
 const paymentMenuShow = ref<boolean>(false);
@@ -206,8 +168,14 @@ const userInfo = computed((): GetUserInfo => {
   return getUserInfo.value;
 })
 
-watch(userInfo, (value) => {
+const userFundsIdentity = computed(() => {
+  const { getUserFundsIdentity } = storeToRefs(userStore());
+  return getUserFundsIdentity.value
+})
 
+const depositOrderTimeRefresh = computed(() => {
+  const { getDepositOrderTimeRefresh } = storeToRefs(depositStore());
+  return getDepositOrderTimeRefresh.value
 })
 
 const pixInfo = computed(() => {
@@ -238,9 +206,10 @@ watch(depositConfig, (newValue) => {
   newValue["cfg"][selectedCurrencyItem.value.name].map((item: any) => {
     paymentList.value.push({
       id: item.channel_id,
-      icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
+      icon: selectedCurrencyItem.value.name == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
       name: item.channel_name,
-      description: item.min + "~" + item.max + " " + item.channel_type,
+      channel_type: item.channel_type,
+      description: item.min + "~" + item.max + " " + item.currecy_type,
       min: item.min,
       max: item.max
     })
@@ -291,9 +260,10 @@ const handleSelectCurrency = (item: GetCurrencyItem) => {
   depositConfig.value["cfg"][selectedCurrencyItem.value.name]?.map((item: any) => {
     paymentList.value.push({
       id: item.channel_id,
-      icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
+      icon: selectedCurrencyItem.value.name == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
       name: item.channel_name,
-      description: item.min + "~" + item.max + " " + item.channel_type,
+      channel_type: item.channel_type,
+      description: item.min + "~" + item.max + " " + item.currecy_type,
       min: item.min,
       max: item.max
     })
@@ -367,57 +337,53 @@ const handleDepositSubmit = async () => {
   }
   loading.value = true
   let formData = {} as any;
-  if (depositConfig.value.deposit_user_switch) {
-    formData.id_number = pixInfo.value.id
-    formData.first_name = pixInfo.value.first_name
-    formData.last_name = pixInfo.value.last_name
-  }
+  // if (depositConfig.value.deposit_user_switch) {
+  //   formData.id_number = pixInfo.value.id
+  //   formData.bank_number = pixInfo.value.id
+  //   formData.first_name = pixInfo.value.first_name
+  //   formData.last_name = pixInfo.value.last_name
+  // }
+  formData.id_number = userFundsIdentity.value.identity.pix !== undefined ? userFundsIdentity.value.identity.pix.id_number : userInfo.value.id_number
+  formData.bank_number = userFundsIdentity.value.identity.pix !== undefined ? userFundsIdentity.value.identity.pix.bank_number : userInfo.value.id_number
+  formData.first_name = userFundsIdentity.value.identity.pix !== undefined ? userFundsIdentity.value.identity.pix.user_name : userInfo.value.first_name
+  formData.last_name = userInfo.value.last_name
   formData.channels_id = selectedPaymentItem.value.id;
   formData.amount = depositConfig.value["bonus"].length > 0 && depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
   formData.is_bonus = bonusCheck.value ? false : true;
   await dispatchUserDepositSubmit(formData);
   loading.value = false;
   if (success.value) {
-    await dispatchUserProfile();
-    if (depositSubmit.value.code_url != "") {
-      depositAmountWithBonus.value = depositConfig.value["bonus"].length > 0 && depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
-      let locale = 'pt-BR';
-      switch (selectedCurrencyItem.value.name) {
-        case "BRL":
-          locale = 'pt-BR';
-          break;
-        case "PHP":
-          locale = 'en-PH';
-          break;
-        case "PEN":
-          locale = 'en-PE';
-          break;
-        case "MXN":
-          locale = 'en-MX';
-          break;
-        case "CLP":
-          locale = 'es-CL';
-          break;
-        case "USD":
-          locale = 'en-US';
-        case "COP":
-          locale = 'es-CO';
-          break;
-      }
-      depositAmountWithCurrency.value = formatCurrency(Number(depositAmount.value), locale, selectedCurrencyItem.value.name);
-      codeUrl.value = depositSubmit.value.code_url;
-      setMainBlurEffectShow(false);
-      setOverlayScrimShow(false);
-      setDepositHeaderBlurEffectShow(false);
-      setDepositBlurEffectShow(false);
-      setTimeout(() => {
-        depositInfoDialogVisible.value = true;
-      }, 10)
+    if (depositSubmit.value.url != "") {
+      window.open(depositSubmit.value.url, '_blank');
+      const toast = useToast();
+      toast.success(t("deposit_dialog.text_1"), {
+        timeout: 3000,
+        closeOnClick: false,
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+        draggable: false,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: SuccessIcon,
+        rtl: false,
+      });
+      depositAmount.value = "";
       return;
     }
-    window.open(depositSubmit.value.url, '_blank');
+    let depositConfirmItem: any = {
+      deposit_amount: depositAmount.value,
+      bank_name: depositSubmit.value.bank_name,
+      account_number: depositSubmit.value.account_number,
+      account_name: depositSubmit.value.account_name,
+    }
+    localStorage.setItem("spei", JSON.stringify(depositConfirmItem));
+    setDepositOrderTimeRefresh(!depositOrderTimeRefresh.value);
+    setTimerValue(0);
+    setDepositOrderDialog(true);
+    // setDepositAmount(Number(depositAmount.value));
     const toast = useToast();
-    toast.success("Successfully submitted", {
+    toast.success(t("deposit_dialog.text_1"), {
       timeout: 3000,
       closeOnClick: false,
       pauseOnFocusLoss: false,
@@ -429,12 +395,67 @@ const handleDepositSubmit = async () => {
       icon: SuccessIcon,
       rtl: false,
     });
-    setDepositDialogToggle(false);
-    setCashDialogToggle(false);
-    setMainBlurEffectShow(false);
-    setHeaderBlurEffectShow(false);
-    setMenuBlurEffectShow(false);
-    router.push({ name: "Dashboard" })
+    await dispatchUserProfile();
+    await dispatchUserBalance();
+    // if (depositSubmit.value.code_url != "") {
+    //   depositAmountWithBonus.value = depositConfig.value["bonus"].length > 0 && depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
+    //   let locale = 'pt-BR';
+    //   switch (selectedCurrencyItem.value.name) {
+    //     case "BRL":
+    //       locale = 'pt-BR';
+    //       break;
+    //     case "PHP":
+    //       locale = 'en-PH';
+    //       break;
+    //     case "PEN":
+    //       locale = 'en-PE';
+    //       break;
+    //     case "MXN":
+    //       locale = 'en-MX';
+    //       break;
+    //     case "CLP":
+    //       locale = 'es-CL';
+    //       break;
+    //     case "USD":
+    //       locale = 'en-US';
+    //     case "COP":
+    //       locale = 'es-CO';
+    //       break;
+    //   }
+    //   depositAmountWithCurrency.value = formatCurrency(Number(depositAmount.value), locale, selectedCurrencyItem.value.name);
+    //   codeUrl.value = depositSubmit.value.code_url;
+    //   setMainBlurEffectShow(false);
+    //   setOverlayScrimShow(false);
+    //   setDepositHeaderBlurEffectShow(false);
+    //   setDepositBlurEffectShow(false);
+    //   setTimeout(() => {
+    //     depositInfoDialogVisible.value = true;
+    //   }, 10)
+    //   return;
+    // }
+    // window.open(depositSubmit.value.url, '_blank');
+    // const toast = useToast();
+    // toast.success("Successfully submitted", {
+    //   timeout: 3000,
+    //   closeOnClick: false,
+    //   pauseOnFocusLoss: false,
+    //   pauseOnHover: false,
+    //   draggable: false,
+    //   showCloseButtonOnHover: false,
+    //   hideProgressBar: true,
+    //   closeButton: "button",
+    //   icon: SuccessIcon,
+    //   rtl: false,
+    // });
+
+
+    // setDepositDialogToggle(false);
+    // setCashDialogToggle(false);
+    // setMainBlurEffectShow(false);
+    // setHeaderBlurEffectShow(false);
+    // setMenuBlurEffectShow(false);
+    setDepositConfirmDialogToggle(true);
+    depositAmount.value = "";
   } else {
     const toast = useToast();
     toast.success(errMessage.value, {
@@ -798,8 +819,8 @@ onMounted(async () => {
       <img src="@/assets/public/svg/icon_public_22.svg" class="ml-auto" width="16" />
     </div>
     <v-row class="m-deposit-footer-text-position text-600-10 white justify-center mx-2">
-      {{ selectedCurrencyUnit }}{{ depositAmount }} + {{ selectedCurrencyUnit
-      }}{{
+      {{ selectedCurrencyUnit }}{{ depositAmount }} + {{ selectedCurrencyUnit }}
+      {{
         depositConfig["bonus"].length > 0 &&
         depositConfig["bonus"][0]["type"] == 0 &&
         depositConfig["bonus"] != undefined
@@ -889,7 +910,9 @@ onMounted(async () => {
     color: white !important;
 
     .v-btn__content {
-      font-family: Inter;
+      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
       font-size: 12px;
       font-style: normal;
       font-weight: 700;
@@ -905,7 +928,9 @@ onMounted(async () => {
     width: 100% !important;
 
     .v-btn__content {
-      font-family: Inter;
+      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
       font-size: 12px;
       font-style: normal;
       font-weight: 700;
@@ -944,7 +969,9 @@ onMounted(async () => {
     .v-btn__content {
       color: #fff;
       text-align: center;
-      font-family: Inter;
+      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
       font-size: 14px;
       font-style: normal;
       font-weight: 700;
@@ -1039,7 +1066,9 @@ onMounted(async () => {
     // background: rgba(119, 130, 170, 1);
     font-weight: 400;
     font-size: 10px !important;
-    font-family: "Inter";
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
     opacity: 1;
   }
 }
@@ -1062,7 +1091,9 @@ onMounted(async () => {
 
   .v-field__field {
     .v-label.v-field-label {
-      font-family: "Inter";
+      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
       font-size: 12px !important;
       font-style: normal;
       font-weight: 400;

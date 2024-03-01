@@ -5,6 +5,8 @@ import type * as Game from "@/interface/game";
 import { handleException } from './exception';
 import { authStore } from "@/store/auth";
 import { appBarStore } from "@/store/appBar";
+import Cookies from "js-cookie";
+import CacheKey from "@/constants/cacheKey";
 
 type dialogType = "login" | "signup";
 
@@ -132,7 +134,7 @@ export const gameStore = defineStore({
             setOverlayScrimShow(false);
         },
         closeKill() {
-            this.betby?.kill();
+            (this.betby as any)?.kill();
         },
         setGameBigWinItem(gameBigWinItem: Game.GameBigWinData) {
             this.gameBigWinItem = gameBigWinItem;
@@ -150,15 +152,19 @@ export const gameStore = defineStore({
                     betSlipOffsetTop: 0,
                     betslipZIndex: 999,
                     themeName: "default",
-                    onLogin: () => {
-                        this.openDialog('login');
+                    onLogin: async () => {
+                        if (Cookies.get(CacheKey.TOKEN) == "") {
+                            this.openDialog('login');
+                        } else {
+                            this.closeKill();
+                            await this.getGameBetbyInit();
+                        }
                     },
                     onRegister: () => {
                         this.openDialog('signup');
                     },
                     onTokenExpired: async () => {
                         this.closeKill();
-                        await this.dispatchGameEnter({ id: '9999', demo: false });
                         await this.getGameBetbyInit();
                     },
                     onSessionRefresh: async () => {
@@ -245,6 +251,7 @@ export const gameStore = defineStore({
             const next = (response: Game.GetGameEnterResponse) => {
                 if (response.code == 200) {
                     this.setSuccess(true);
+                    this.setErrorMessage("");
                     this.setGameEnterItem(response.data);
                 } else {
                     this.setErrorMessage(handleException(response.code));

@@ -48,7 +48,7 @@ const refferalAppBarShow = computed(() => {
   return getRefferalAppBarShow.value;
 });
 
-const agentNavBarToggle = computed(() => {})
+const agentNavBarToggle = computed(() => {});
 
 const mobileWidth = computed(() => {
   return width.value;
@@ -67,7 +67,6 @@ const bonusDashboardDialogShow = computed(() => {
 const handleScroll = () => {
   console.log("scroll");
 };
-
 </script>
 
 <template>
@@ -81,7 +80,7 @@ const handleScroll = () => {
     <template v-else>
       <MNavBarLayout />
       <RewardBarLayout v-if="route.name !== 'Sports'" />
-      <AgentBarLayout/>
+      <AgentBarLayout />
       <VipBar />
     </template>
     <UserNavBarLayout />
@@ -98,7 +97,7 @@ const handleScroll = () => {
 }
 
 .v-navigation-drawer {
-  background: #1D2027 !important;
+  background: #1d2027 !important;
 }
 
 .v-application {
@@ -128,13 +127,15 @@ const handleScroll = () => {
   height: 60px;
   border: none;
   border-radius: 16px 0px 0px 16px;
-  background: var(--bg-2, #181522);
+  background: var(--bg-2, #15161c);
   box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.4);
 }
 
 .Vue-Toastification__toast-body {
   color: var(--sec-text, #7782aa);
-  font-family: Inter;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
+    sans-serif;
   font-size: 10px;
   font-style: normal;
   font-weight: 500;

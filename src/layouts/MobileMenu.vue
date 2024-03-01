@@ -6,6 +6,7 @@ import { appBarStore } from "@/store/appBar";
 import { gameStore } from "@/store/game";
 import { mailStore } from "@/store/mail";
 import { menuStore } from "@/store/menu";
+import { mainStore } from "@/store/main";
 import { refferalStore } from "@/store/refferal";
 import { type GetMailData } from '@/interface/mail';
 import { useDisplay } from 'vuetify'
@@ -21,6 +22,7 @@ import icon_public_100 from "@/assets/public/svg/icon_public_100.svg";
 import img_public_17 from "@/assets/public/image/temp/img_public_17.png";
 import img_public_18 from "@/assets/public/image/temp/img_public_18.png";
 import img_public_19 from "@/assets/public/image/temp/img_public_19.png";
+import icon_public_151 from "@/assets/public/svg/icon_public_151.svg";
 
 const { t } = useI18n();
 const { name, width } = useDisplay()
@@ -37,6 +39,7 @@ const { setSemiCircleShow } = menuStore();
 const { setRewardNavShow } = menuStore();
 const { setMobileMenuMailToggle } = mailStore();
 const { setRefferalDialogShow } = refferalStore();
+const { setSearchDialogShow } = mainStore();
 
 // mail count
 const mailCount = ref<number>(10);
@@ -50,6 +53,7 @@ const searchBtnActive = ref<boolean>(false);
 const mailBtnActive = ref<boolean>(false);
 const mailNavigation = ref<boolean>(false);
 const rewardBtnActive = ref<boolean>(false);
+const homeBtnActive = ref<boolean>(false);
 const mailMenuShow = ref<boolean>(false);
 const tempMailList = ref<Array<GetMailData>>([]);
 
@@ -60,6 +64,7 @@ const mailIconColor = ref<string>('#7782AA');
 const promoIconColor = ref<string>('#7782AA');
 const searchIconColor = ref<string>('#7782AA');
 const rewardIconColor = ref<string>("#7782AA");
+const homeIconColor = ref<string>("#7782AA");
 
 const shareIcon = ref<any>(new URL("@/assets/public/image/img_public_19.png", import.meta.url).href)
 const shareIconIndex = ref<number>(0);
@@ -129,7 +134,7 @@ watch(selectedItem, (new_value, old_value) => {
         case t("mobile_menu.mail"):
           rotation.value = rotation.value + 240;
           break;
-        case t("mobile_menu.search"):
+        case t("mobile_menu.casino"):
           rotation.value = rotation.value + 120;
           break;
       }
@@ -139,12 +144,12 @@ watch(selectedItem, (new_value, old_value) => {
         case t("mobile_menu.promo"):
           rotation.value = rotation.value + 120;
           break;
-        case t("mobile_menu.search"):
+        case t("mobile_menu.casino"):
           rotation.value = rotation.value + 240;
           break;
       }
       break;
-    case t("mobile_menu.search"):
+    case t("mobile_menu.casino"):
       switch (new_value) {
         case t("mobile_menu.promo"):
           rotation.value = rotation.value + 240;
@@ -160,9 +165,9 @@ watch(selectedItem, (new_value, old_value) => {
       selectedImg.value = img_public_17;
       selectedIcon.value = icon_public_97;
       break;
-    case t("mobile_menu.search"):
+    case t("mobile_menu.casino"):
       selectedImg.value = img_public_18;
-      selectedIcon.value = icon_public_94;
+      selectedIcon.value = icon_public_34;
       break;
     case t("mobile_menu.mail"):
       selectedImg.value = img_public_19;
@@ -230,8 +235,8 @@ watch(mailList, (newValue) => {
 }, { deep: true })
 
 watch(navToggle, (newValue) => {
-  navbarToggle.value = newValue;
-  menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
+  // navbarToggle.value = newValue;
+  // menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
 }, { deep: true })
 
 watch(bonusToggle, (newValue) => {
@@ -311,7 +316,8 @@ const handleNavbarToggle = () => {
 }
 
 const goHomePage = () => {
-  casinoBtnActive.value = !casinoBtnActive.value
+  homeBtnActive.value = !homeBtnActive.value;
+  casinoBtnActive.value = false;
   mailMenuShow.value = false;
   sportBtnActive.value = false
   promoBtnActive.value = false;
@@ -327,6 +333,7 @@ const goHomePage = () => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
   }, 200);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA";
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -416,6 +423,7 @@ const handleRewardToggle = () => {
 
 const handleSearchToggle = () => {
   searchBtnActive.value = !searchBtnActive.value
+  homeBtnActive.value = false;
   mailMenuShow.value = false;
   casinoBtnActive.value = false;
   navbarToggle.value = false;
@@ -425,10 +433,12 @@ const handleSearchToggle = () => {
   setMainBlurEffectShow(false);
   setRewardNavShow(false);
   setSemiCircleShow(false);
+    setSearchDialogShow(true);
   setTimeout(() => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
   }, 200);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA";
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -543,6 +553,16 @@ const menuSvgTransform = (el: any) => {
   return el
 }
 
+const homeSvgTransform = (el: any) => {
+  for (let node of el.children) {
+    node.setAttribute('fill', homeIconColor.value)
+    for (let subNode of node.children) {
+      subNode.setAttribute('fill', homeIconColor.value)
+    }
+  }
+  return el
+}
+
 const casinoSvgTransform = (el: any) => {
   for (let node of el.children) {
     node.setAttribute("fill", casinoIconColor.value);
@@ -629,8 +649,8 @@ const menuBlurEffectShow = computed(() => {
 onMounted(() => {
 })
 
-const goReferFriend = (index:number) =>{
-  if(index == 1){
+const goReferFriend = (index: number) => {
+  if (index == 1) {
     setOverlayScrimShow(false);
     setRefferalDialogShow(true);
   }
@@ -646,29 +666,26 @@ const goReferFriend = (index:number) =>{
     :class="menuBlurEffectShow ? 'menu-bg-blur' : ''"
     style="height: 60px"
   >
-    <v-btn class="menu-text-color" @click="handleNavbarToggle" :ripple="false">
+    <v-btn class="menu-text-color" @click="goHomePage" :ripple="false">
       <inline-svg
-        :src="icon_public_81"
-        width="20"
-        height="20"
-        :transform-source="menuSvgTransform"
-      ></inline-svg>
-      <div
-        class="pt-1 text-600-12"
-        :style="{ color: navbarToggle ? 'white' : '#7782AA' }"
-      >
-        {{ t("mobile_menu.menu") }}
-      </div>
-    </v-btn>
-    <v-btn class="menu-text-color" @click="goHomePage">
-      <inline-svg
-        :src="icon_public_34"
-        width="20"
-        height="20"
-        :transform-source="casinoSvgTransform"
+        :src="icon_public_151"
+        width="22"
+        height="22"
+        :transform-source="homeSvgTransform"
       ></inline-svg>
       <div class="pt-1 text-600-12">
-        {{ t("mobile_menu.casino") }}
+        {{ t("mobile_menu.home") }}
+      </div>
+    </v-btn>
+    <v-btn class="menu-text-color" @click="handleSearchToggle">
+      <inline-svg
+        :src="icon_public_94"
+        width="20"
+        height="20"
+        :transform-source="searchSvgTransform"
+      ></inline-svg>
+      <div class="pt-1 text-600-12">
+        {{ t("mobile_menu.search") }}
       </div>
     </v-btn>
     <!-- <v-btn class="menu-text-color" @click="goToSharePage">
@@ -712,35 +729,50 @@ const goReferFriend = (index:number) =>{
           <div
             class="letter white"
             ref="casino_1"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.promo') }"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.promo'),
+              'text-700-8': selectedItem == t('mobile_menu.promo'),
+            }"
           >
             P
           </div>
           <div
             class="letter white"
             ref="casino_2"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.promo') }"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.promo'),
+              'text-700-8': selectedItem == t('mobile_menu.promo'),
+            }"
           >
             R
           </div>
           <div
             class="letter white"
             ref="casino_3"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.promo') }"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.promo'),
+              'text-700-8': selectedItem == t('mobile_menu.promo'),
+            }"
           >
             O
           </div>
           <div
             class="letter white"
             ref="casino_4"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.promo') }"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.promo'),
+              'text-700-8': selectedItem == t('mobile_menu.promo'),
+            }"
           >
             M
           </div>
           <div
             class="letter white"
             ref="casino_5"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.promo') }"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.promo'),
+              'text-700-8': selectedItem == t('mobile_menu.promo'),
+            }"
           >
             O
           </div>
@@ -748,71 +780,101 @@ const goReferFriend = (index:number) =>{
           <div
             class="letter white"
             ref="reward_1"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
-          >
-            S
-          </div>
-          <div
-            class="letter white"
-            ref="reward_2"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
-          >
-            E
-          </div>
-          <div
-            class="letter white"
-            ref="reward_3"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
-          >
-            A
-          </div>
-          <div
-            class="letter white"
-            ref="reward_4"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
-          >
-            R
-          </div>
-          <div
-            class="letter white"
-            ref="reward_5"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.casino'),
+              'text-700-8': selectedItem == t('mobile_menu.casino'),
+            }"
           >
             C
           </div>
           <div
             class="letter white"
-            ref="reward_6"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
+            ref="reward_2"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.casino'),
+              'text-700-8': selectedItem == t('mobile_menu.casino'),
+            }"
           >
-            H
+            A
+          </div>
+          <div
+            class="letter white"
+            ref="reward_3"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.casino'),
+              'text-700-8': selectedItem == t('mobile_menu.casino'),
+            }"
+          >
+            S
+          </div>
+          <div
+            class="letter white"
+            ref="reward_4"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.casino'),
+              'text-700-8': selectedItem == t('mobile_menu.casino'),
+            }"
+          >
+            I
+          </div>
+          <div
+            class="letter white"
+            ref="reward_5"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.casino'),
+              'text-700-8': selectedItem == t('mobile_menu.casino'),
+            }"
+          >
+            N
+          </div>
+          <div
+            class="letter white"
+            ref="reward_6"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.casino'),
+              'text-700-8': selectedItem == t('mobile_menu.casino'),
+            }"
+          >
+            O
           </div>
           <div class="letter white" ref="mail_1"></div>
           <div
             class="letter white"
             ref="mail_2"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.mail') }"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.mail'),
+              'text-700-8': selectedItem == t('mobile_menu.mail'),
+            }"
           >
             M
           </div>
           <div
             class="letter white"
             ref="mail_3"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.mail') }"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.mail'),
+              'text-700-8': selectedItem == t('mobile_menu.mail'),
+            }"
           >
             A
           </div>
           <div
             class="letter white"
             ref="mail_4"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.mail') }"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.mail'),
+              'text-700-8': selectedItem == t('mobile_menu.mail'),
+            }"
           >
             I
           </div>
           <div
             class="letter white"
             ref="mail_5"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.mail') }"
+            :class="{
+              'opacity-1': selectedItem != t('mobile_menu.mail'),
+              'text-700-8': selectedItem == t('mobile_menu.mail'),
+            }"
           >
             L
           </div>
@@ -942,9 +1004,11 @@ const goReferFriend = (index:number) =>{
   .letter {
     position: absolute;
     transform-origin: center;
-    font-size: 7px;
-    font-family: Inter;
-    font-weight: 500;
+    font-size: 8px;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
+    font-weight: 400;
     word-wrap: break-word;
     // transform: rotateY(0deg) rotateZ(0deg);
     text-align: center;
@@ -963,7 +1027,7 @@ const goReferFriend = (index:number) =>{
   }
 
   .letter:nth-child(3) {
-    transform: rotateZ(278deg) translateY(-27px) rotateZ(-184deg);
+    transform: rotateZ(278deg) translateY(-26px) rotateZ(-184deg);
   }
 
   .letter:nth-child(4) {

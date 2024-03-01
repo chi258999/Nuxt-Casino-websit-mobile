@@ -372,7 +372,7 @@ export default Login;
       <!-- Forgot password -->
       <div v-if="currentPage == PAGE_TYPE.FORGOT_PASSWORD" class="full-width">
         <v-row class="mt-8 d-flex justify-center">
-          <img src="@/assets/public/image/logo_public_01.png" class="logo-image mr-2" />
+          <img src="@/assets/public/image/logo_public_04.png" class="logo-image mr-2" />
           <!-- <span class="logo-text purple text-large">{{ t('main.logo_text_1') }}</span>
                     <span class="logo-text yellow text-large">{{ t('main.logo_text_2') }}</span> -->
         </v-row>
@@ -488,7 +488,7 @@ export default Login;
 
 // divider
 .divide-text {
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -518,7 +518,7 @@ export default Login;
 
 .login-forget-passwrod-text {
   cursor: pointer;
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;

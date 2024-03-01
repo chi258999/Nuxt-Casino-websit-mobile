@@ -4,6 +4,7 @@ import { appBarStore } from "@/store/appBar";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
+import { userStore } from "@/store/user";
 import icon_public_60 from "@/assets/public/svg/icon_public_60.svg";
 import icon_public_65 from "@/assets/public/svg/icon_public_65.svg";
 
@@ -16,6 +17,8 @@ const { setMainBlurEffectShow } = appBarStore();
 const { setDepositBlurEffectShow } = appBarStore();
 const { setHeaderBlurEffectShow } = appBarStore();
 const { setMenuBlurEffectShow } = appBarStore();
+
+const { dispatchUserFundsIdentity } = userStore();
 
 const cashToggleSwitch = ref<boolean>(false);
 
@@ -92,7 +95,8 @@ const withdrawTransform = (el: any) => {
   return el;
 };
 
-onMounted(() => {
+onMounted(async () => {
+  await dispatchUserFundsIdentity();
   setMainBlurEffectShow(false);
   setHeaderBlurEffectShow(false);
   setMenuBlurEffectShow(false);
@@ -323,7 +327,9 @@ onMounted(() => {
   .v-btn__content {
     color: #fff;
     text-align: center;
-    font-family: Inter;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
     font-size: 14px !important;
     text-transform: none;
     font-style: normal;
@@ -385,7 +391,9 @@ onMounted(() => {
 
     .v-field__field {
       .v-label.v-field-label {
-        font-family: "Inter";
+        font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+          DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+          WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
         font-size: 12px !important;
         font-style: normal;
         font-weight: 400;
@@ -424,13 +432,15 @@ onMounted(() => {
     height: 60px;
     border: none;
     border-radius: 16px 0px 0px 16px;
-    background: var(--bg-2, #181522);
+    background: var(--bg-2, #15161c);
     box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.4);
   }
 
   .Vue-Toastification__toast-body {
     color: var(--sec-text, #7782aa);
-    font-family: Inter;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
     font-size: 10px;
     font-style: normal;
     font-weight: 500;
