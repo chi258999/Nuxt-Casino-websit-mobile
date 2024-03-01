@@ -245,6 +245,7 @@ watch(bonusToggle, (newValue) => {
 
 watch(mailMenuShow, async (newValue) => {
   if (newValue) {
+    homeBtnActive.value = false;
     sportBtnActive.value = false
     casinoBtnActive.value = false;
     navbarToggle.value = false;
@@ -256,6 +257,7 @@ watch(mailMenuShow, async (newValue) => {
     setBonusDashboardDialogVisible(false);
     setRewardNavShow(false);
     setSemiCircleShow(false);
+    homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
     menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
     casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
     sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -289,6 +291,7 @@ watch(mailMenuShow, async (newValue) => {
 
 const handleNavbarToggle = () => {
   navbarToggle.value = !navbarToggle.value
+  homeBtnActive.value = false;
   mailMenuShow.value = false;
   casinoBtnActive.value = false;
   sportBtnActive.value = false;
@@ -306,6 +309,7 @@ const handleNavbarToggle = () => {
       setMainBlurEffectShow(navbarToggle.value);
     }
   }, 10);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -395,6 +399,7 @@ const handlePromoToggle = () => {
 
 const handleRewardToggle = () => {
   rewardBtnActive.value = !rewardBtnActive.value
+  homeBtnActive.value = false;
   promoBtnActive.value = false
   mailMenuShow.value = false;
   sportBtnActive.value = false
@@ -412,6 +417,7 @@ const handleRewardToggle = () => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
   }, 200);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -419,6 +425,10 @@ const handleRewardToggle = () => {
   promoIconColor.value = promoBtnActive.value ? "white" : "#7782AA";
   searchIconColor.value = searchBtnActive.value ? "white" : "#7782AA";
   rewardIconColor.value = rewardBtnActive.value ? "white" : "#7782AA";
+  setTimeout(() => {
+    rewardBtnActive.value = false
+    rewardIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
+  }, 1000)
 }
 
 const handleSearchToggle = () => {
@@ -433,7 +443,7 @@ const handleSearchToggle = () => {
   setMainBlurEffectShow(false);
   setRewardNavShow(false);
   setSemiCircleShow(false);
-    setSearchDialogShow(true);
+  setSearchDialogShow(true);
   setTimeout(() => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
@@ -446,10 +456,15 @@ const handleSearchToggle = () => {
   promoIconColor.value = promoBtnActive.value ? "white" : "#7782AA";
   searchIconColor.value = searchBtnActive.value ? "white" : "#7782AA";
   rewardIconColor.value = rewardBtnActive.value ? "white" : "#7782AA";
+  setTimeout(() => {
+    searchBtnActive.value = false
+    searchIconColor.value = searchBtnActive.value ? "white" : "#7782AA";
+  }, 1000)
 }
 
 const handleSportsToggle = () => {
   sportBtnActive.value = !sportBtnActive.value
+  homeBtnActive.value = false;
   searchBtnActive.value = false;
   mailMenuShow.value = false;
   casinoBtnActive.value = false;
@@ -464,6 +479,7 @@ const handleSportsToggle = () => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
   }, 200);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -472,10 +488,15 @@ const handleSportsToggle = () => {
   searchIconColor.value = searchBtnActive.value ? "white" : "#7782AA";
   rewardIconColor.value = rewardBtnActive.value ? "white" : "#7782AA";
   router.push({ name: "Sports" });
+  setTimeout(() => {
+    sportBtnActive.value = false
+    sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
+  }, 1000)
 }
 
 const goToSportPage = () => {
   sportBtnActive.value = !sportBtnActive.value
+  homeBtnActive.value = false;
   mailMenuShow.value = false;
   casinoBtnActive.value = false;
   navbarToggle.value = false;
@@ -488,6 +509,7 @@ const goToSportPage = () => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
   }, 200);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -499,6 +521,7 @@ const goToSportPage = () => {
 
 const goToSharePage = () => {
   // bonusDashboardToggle.value = !bonusDashboardToggle.value;
+  homeBtnActive.value = false;
   navbarToggle.value = false;
   mailMenuShow.value = false;
   casinoBtnActive.value = false;
@@ -514,6 +537,7 @@ const goToSharePage = () => {
   //   setBonusDashboardDialogVisible(bonusDashboardToggle.value)
   //   setMainBlurEffectShow(bonusDashboardToggle.value);
   // }, 10);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -684,7 +708,10 @@ const goReferFriend = (index: number) => {
         height="20"
         :transform-source="searchSvgTransform"
       ></inline-svg>
-      <div class="pt-1 text-600-12">
+      <div
+        class="pt-1 text-600-12"
+        :class="searchIconColor == 'white' ? 'white' : 'gray'"
+      >
         {{ t("mobile_menu.search") }}
       </div>
     </v-btn>
@@ -882,25 +909,36 @@ const goReferFriend = (index: number) => {
         </div>
       </div>
     </v-btn>
-    <v-btn class="menu-text-color" @click="handleSportsToggle" v-warp-label="{nodeName: 'menu-btn'}">
+    <v-btn
+      class="menu-text-color"
+      @click="handleSportsToggle"
+      v-warp-label="{ nodeName: 'menu-btn' }"
+    >
       <inline-svg
         :src="icon_public_40"
         width="20"
         height="20"
         :transform-source="sportSvgTransform"
       ></inline-svg>
-      <div class="pt-1 text-600-12">
+      <div class="pt-1 text-600-12" :class="sportIconColor == 'white' ? 'white' : 'gray'">
         {{ t("mobile_menu.sport") }}
       </div>
     </v-btn>
-    <v-btn class="menu-text-color" @click="handleRewardToggle"  v-warp-label="{nodeName: 'menu-btn'}">
+    <v-btn
+      class="menu-text-color"
+      @click="handleRewardToggle"
+      v-warp-label="{ nodeName: 'menu-btn' }"
+    >
       <inline-svg
         :src="icon_public_100"
         width="20"
         height="20"
         :transform-source="rewardSvgTransform"
       ></inline-svg>
-      <div class="pt-1 text-600-12">
+      <div
+        class="pt-1 text-600-12"
+        :class="rewardIconColor == 'white' ? 'white' : 'gray'"
+      >
         {{ t("mobile_menu.reward") }}
       </div>
     </v-btn>
@@ -1109,6 +1147,7 @@ const goReferFriend = (index: number) => {
     transform: none !important;
   }
 }
+
 // ::v-deep .v-bottom-navigation  {
 //   .v-bottom-navigation__content > .v-btn {
 //   }
