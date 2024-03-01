@@ -37,11 +37,25 @@ import { setupGlobDirectives } from '@/directives';
 // Import the English locale (or any other locale you want to customize)
 import 'dayjs/locale/en';
 
+// vue3 google login
+import Vue3GoogleLogin from 'vue3-google-login';
+
+import Adjust from '@adjustcom/adjust-web-sdk';
+
+Adjust.initSdk({
+  appToken: 'YOUR_APP_TOKEN',
+  environment: 'sandbox', // or 'production'
+});
+
 const app = createApp(App)
 
 registerPlugins(app)
 
 app.use(i18n)
+
+app.use(Vue3GoogleLogin, {
+  clientId: '315002729492-ij8mt521q04m5hmqmdl1gdgc70oedbsi.apps.googleusercontent.com',
+})
 
 dayjs.locale('en', {
   name: 'en',
@@ -86,7 +100,7 @@ setupGlobDirectives(app);
 
 const options: PluginOptions = {
   position: POSITION.TOP_RIGHT,
-  timeout: 2000,
+  timeout: 3000,
   closeOnClick: false,
   pauseOnFocusLoss: false,
   pauseOnHover: false,

@@ -1114,6 +1114,7 @@ export const lang: langType = {
     }
   },
   mobile_menu: {
+    home: "Home",
     menu: "Menu",
     casino: "Casino",
     share: "Bonus",
@@ -1153,7 +1154,8 @@ export const lang: langType = {
       confirm_text: "Confirm",
       confirm_success_text: "Successfully submitted, need to modify please contact customer service",
       confirm_warning_text: "Please contact customer service to make changes"
-    }
+    },
+    text_1: "Successfully submitted, need to modify please contact customer service"
   },
   transaction_history: {
     type: {
@@ -1192,15 +1194,25 @@ export const lang: langType = {
       confirm_success_text: "Successfully submitted, need to modify please contact customer service",
       confirm_warning_text: "Please contact customer service to make changes"
     },
-    text_1: "Withdrawal fee: ",
-    text_1_1: "%.",
-    text_2: "Free monthly withdrawal amount: 100",
-    text_3: "Withdrawal hours: 11:00 - 19:00.",
-    text_4: "Payout time: from 5 minutes to 24 hours.",
+    text_1: "Withdrawal rate: ",
+    text_2: "Free monthly retreat fee: ",
+    text_3: "Withdrawal time: 00:00 - 23:59",
+    text_4: "Payout time: from 5 minutes to 72 hours.",
     other_text: "% fee,",
     other_text_1: " into your account",
     withdraw_btn_text: "WITHDRAW",
     withdraw_warning_text: "Excess of withdrawable amount",
+    text_5: "service fee",
+    text_6: "cashable",
+    text_7: "total residual value",
+    text_8: "Withdrawal of consent",
+    text_9: "Extracted records",
+    text_10: "Excess of withdrawable amount",
+    text_11: "Successful withdrawal of funds",
+    text_12: "",
+    text_13: "",
+    text_14: "",
+    text_15: "",
   },
   mail_dialog: {
     header_text: "Personal Email"
@@ -1396,6 +1408,7 @@ export const lang: langType = {
       text_10: "Bonus",
       text_11: "Vip Level",
       text_12: "Vip Rank",
+      text_13: "VIP Login Bonus"
     }
   },
   account: {
@@ -1795,7 +1808,7 @@ export const lang: langType = {
     text_3: "Claim A Promo Code",
     text_4: "Enter Promo Code You Would Like To Clai",
     text_5: "Claim",
-    text_6: "Achievement Bonus",
+    text_6: "Refferals Bonus",
     text_7: "ADD",
     text_8: "CashBack",
     text_9: "Daily Bonus",
@@ -1838,7 +1851,7 @@ export const lang: langType = {
     text_11: "Copy the invitation code",
     text_12: "facebook",
     text_13: "telegram",
-    text_14: "Whats App",
+    text_14: "WhatsApp",
     text_15: "Twitter",
     text_16: "Email",
     text_17: "Total:",
@@ -1924,5 +1937,62 @@ export const lang: langType = {
   game_confirm: {
     text_1: "Fun Mode",
     text_2: "Real Mode"
+  },  
+  deposit_confirm: {
+    text_1: "Order Amount",
+    text_2: "Payment term",
+    text_3: "Provider",
+    text_4: "Account Number/Account",
+    text_5: "For one time use only",
+    text_6: "Name of payee",
+    text_7: "SPEI Recharge Tutorial",
+    text_8: "process",
+    text_9: "Step 1: Copy the CLABE information provided.",
+    text_10: "Step 2: Login to the banking application, paste the CLABE information, then pay with ",
+    text_11: "Step 3: Check if the payment has been received (there may be a delay, if it has not been received, please check back later or contact customer service).",
+    text_12: "Transfer completed",
+    text_13: "safety and security",
+  },
+  phone_binding_dialog: {
+    text_1: "Binding cell phone number",
+    text_2: "For the security of your account and subsequent withdrawals,",
+    text_3: "please bind your cell phone number",
+    text_4: "phone number",
+    text_5: "Enter phone number",
+    text_6: "captcha",
+    text_7: "Enter the verification code",
+    text_8: "Submit",
+  },
+  withdraw_info_dialog: {
+    text_1: "WITHDRAW",
+    text_2: "SPEI",
+    text_3: "PayPal",
+    text_4: "Enter your name",
+    text_5: "Name",
+    text_6: "E-mail",
+    text_7: "Enter the correct email",
+    text_8: "phone number",
+    text_9: "Bank Code",
+    text_10: "Select Bank Code",
+    text_11: "Account Type",
+    text_12: "Select Account Type",
+    text_13: "Clabe number",
+    text_14: "Enter the bank's Clabe number",
+    text_15: "How to get",
+    text_16: "Please select type",
+    text_17: "Please enter the full RFC",
+    text_18: "back",
+    text_19: "add",
+    text_20: "PayPal account",
+    text_21: "",
+    text_22: "",
+    text_23: "",
+    text_24: "",
+    text_25: "",
+  },
+  order_dialog: {
+    text_1: "You have an open order",
+    text_2: "countdown ",
+    text_3: "continue",
   }
 };

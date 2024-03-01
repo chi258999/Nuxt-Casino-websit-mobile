@@ -43,6 +43,7 @@ import MLoginBonusDialog from "@/components/login_bonus/mobile/index.vue";
 
 import { mailStore } from "@/store/mail";
 import router from '@/router';
+import { depositStore } from '@/store/deposit';
 
 const GetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonus/index.vue"));
 const MGetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonus/mobile/index.vue"));
@@ -74,6 +75,7 @@ const VipUpgradeDialog = defineAsyncComponent(() => import("@/components/vip/com
 const VipUpRankDialog = defineAsyncComponent(() => import("@/components/vip/components/vip_uprank_dialog/index.vue"));
 const Search = defineAsyncComponent(() => import("@/components/global/search/index.vue"));
 const MSearch = defineAsyncComponent(() => import("@/components/global/search/mobile/index.vue"));
+const MDepositConfirm = defineAsyncComponent(() => import("@/components/cash/mxn/deposit/mobile/MDepositConfirm.vue"));
 
 const { t } = useI18n();
 const { name, width } = useDisplay();
@@ -134,6 +136,7 @@ const accountDialog = ref<boolean>(false);
 const nickNameDialog = ref<boolean>(false);
 const levelUpDialog = ref<boolean>(false);
 const searchDialog = ref<boolean>(false);
+const depositConfirmDialog = ref<boolean>(false);
 // const bonusDashboardDialog = ref<boolean>(false);
 const overlayScrimBackground = ref<string>('rgb(var(--v-theme-on-surface))')
 
@@ -289,7 +292,6 @@ const depositWithdrawToggle = computed(() => {
 })
 
 watch(depositDialogToggle, (newValue) => {
-  console.log("qqqqqqqqqqqqqqqqq", depositDialogToggle.value);
   depositDialog.value = newValue;
 })
 
@@ -315,6 +317,16 @@ watch(cashDialogToggle, (newValue) => {
 
 watch(cashDialog, (newValue) => {
   console.log(cashDialog)
+})
+
+// deposit confirm dialog
+const depositConfirmDialogToggle = computed(() => {
+  const { getDepositConfirmDialogToggle } = storeToRefs(depositStore());
+  return getDepositConfirmDialogToggle.value
+})
+
+watch(depositConfirmDialogToggle, (value) => {
+  depositConfirmDialog.value = value
 })
 
 // refferal dialog
@@ -407,6 +419,7 @@ const overlayScrimShow = computed(() => {
   const { getOverlayScrimShow } = storeToRefs(appBarStore());
   return getOverlayScrimShow.value;
 })
+
 watch(overlayScrimShow, (newValue) => {
   if (newValue) {
     overlayScrimBackground.value = "transparent";
@@ -460,7 +473,8 @@ const selectActiveIndex = (index: number) => {
   setMenuBlurEffectShow(false);
   setOverlayScrimShow(false);
   setAccountDialogShow(false);
-  router.push({ name: "Account", params: { index: activeMenuIndex.value }, query: { index: activeMenuIndex.value } });
+  //router.push({ name: "Account", params: { index: activeMenuIndex.value }, query: { index: activeMenuIndex.value } });
+  router.push({ name: "Account"});
 }
 
 watch(accountDialogVisible, (value: boolean) => {
@@ -525,8 +539,8 @@ onMounted(() => {
     class="main-background"
     :class="mainBlurEffectShow ? 'main-bg-blur' : ''"
     :style="{
-      height: mobileWidth < 600 && mailMenuShow ? mainHeight + 'px' : 'unset',
-      overflow: mobileWidth < 600 && mailMenuShow ? 'hidden' : 'unset',
+      height: mobileWidth < 600 && mailMenuShow ? mainHeight + 'px' : 'fit-content',
+      overflow: mobileWidth < 600 && mailMenuShow ? 'hidden' : 'hidden',
     }"
   >
     <!-- game search dialog -->
@@ -538,10 +552,11 @@ onMounted(() => {
       temporary
       :touchless="true"
       :style="{
-        height: '100%',
+        height: '100dvh',
         top: '0px',
         zIndex: 300000,
         background: 'unset !important',
+        width: '100dvw',
       }"
       v-if="mobileWidth < 600"
     >
@@ -619,6 +634,21 @@ onMounted(() => {
         <Deposit v-if="mobileWidth > 600" />
         <MDeposit v-else />
       </template>
+    </v-dialog>
+
+    <!---------------------------------- Deposit Confirm ----------------------------------------->
+
+    <v-dialog
+      class="m-deposit-cofirm-dialog"
+      v-model="depositConfirmDialog"
+      :width="''"
+      :fullscreen="true"
+      :scrim="false"
+      persistent
+      v-if="mobileVersion == 'sm'"
+      :transition="'dialog-top-transition'"
+    >
+      <MDepositConfirm />
     </v-dialog>
 
     <!-----------------------Authentication Dialog --------------------------------------->
@@ -838,7 +868,7 @@ onMounted(() => {
   height: 60px;
   border: none;
   border-radius: 16px 0px 0px 16px;
-  background: var(--bg-2, #181522);
+  background: var(--bg-2, #15161c);
   box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.4);
 }
 
@@ -874,6 +904,7 @@ onMounted(() => {
 }
 
 .main-background {
+  width: 100dvw !important;
   background: #15161c;
 }
 
@@ -931,9 +962,13 @@ onMounted(() => {
 }
 
 .cash-header-dialog {
-  z-index: 2430 !important;
+  z-index: 2431 !important;
   height: 80px;
   margin: 0px !important;
+}
+
+.m-deposit-cofirm-dialog {
+  z-index: 2432 !important;
 }
 
 // .m-withdraw-dialog{
