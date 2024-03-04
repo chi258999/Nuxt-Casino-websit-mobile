@@ -673,7 +673,7 @@ const goReferFriend = (index: number) => {
         height="22"
         :transform-source="homeSvgTransform"
       ></inline-svg>
-      <div class="pt-1 text-600-12">
+      <div class="text-600-10 menu-text">
         {{ t("mobile_menu.home") }}
       </div>
     </v-btn>
@@ -684,7 +684,7 @@ const goReferFriend = (index: number) => {
         height="20"
         :transform-source="searchSvgTransform"
       ></inline-svg>
-      <div class="pt-1 text-600-12">
+      <div class="text-600-10  menu-text">
         {{ t("mobile_menu.search") }}
       </div>
     </v-btn>
@@ -889,7 +889,7 @@ const goReferFriend = (index: number) => {
         height="20"
         :transform-source="sportSvgTransform"
       ></inline-svg>
-      <div class="pt-1 text-600-12">
+      <div class="text-600-10 menu-text">
         {{ t("mobile_menu.sport") }}
       </div>
     </v-btn>
@@ -900,7 +900,7 @@ const goReferFriend = (index: number) => {
         height="20"
         :transform-source="rewardSvgTransform"
       ></inline-svg>
-      <div class="pt-1 text-600-12">
+      <div class="text-600-10 menu-text">
         {{ t("mobile_menu.reward") }}
       </div>
     </v-btn>
@@ -1209,11 +1209,19 @@ const goReferFriend = (index: number) => {
 
 .menu-text-color {
   color: #7782aa;
+  padding: 0px !important;
+  min-width: unset !important;
 
   .v-btn__content {
     font-weight: 700 !important;
     font-size: 12px !important;
     line-height: 20px;
+
+    .menu-text {
+      padding-top: 6px;
+      height: 20px;
+      line-height: 10px;
+    }
   }
 
   .chat-box-text {
