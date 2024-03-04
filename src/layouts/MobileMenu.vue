@@ -102,7 +102,6 @@ const window_height = ref<number>(0);
 
 const selectedItem = computed(() => {
   const { getSelectedItem } = storeToRefs(menuStore());
-  console.log(getSelectedItem, 'getSelectedItem');
   
   return getSelectedItem.value
 })
@@ -121,7 +120,6 @@ const calculateBottomDistance = () => {
     const containerRect = casino_1.value.getBoundingClientRect();
     const windowHeight = window.innerHeight;
     casino_1_bottom.value = windowHeight - containerRect.bottom;
-    console.log(casino_1_bottom.value);
   }
 };
 
@@ -130,16 +128,14 @@ watchEffect(() => {
 });
 
 watch(selectedItem, (new_value, old_value) => {
-  console.log(new_value, old_value);
-  
   switch (old_value) {
     case t("Promo"):
       switch (new_value) {
         case t("Mail"):
-          rotation.value = rotation.value + 120;
+          rotation.value = rotation.value + 240;
           break;
         case t("Casino"):
-          rotation.value = rotation.value + 240;
+          rotation.value = rotation.value + 120;
           break;
       }
       // rotation.value = 270
@@ -182,8 +178,6 @@ watch(selectedItem, (new_value, old_value) => {
       selectedIcon.value = icon_public_55;
       break;
   }
-  console.log(selectedImg.value, selectedIcon.value);
-  console.log(rotation.value);
 })
 
 watch(shareIconIndex, (newValue) => {
@@ -287,7 +281,6 @@ watch(mailMenuShow, async (newValue) => {
   var translateY = -56;
   var opacity = 0.8;
   var zIndex = 100
-  console.log(mailList.value.length);
   if (newValue) {
     for (let item of mailList.value) {
       tempMailList.value.push(item);
