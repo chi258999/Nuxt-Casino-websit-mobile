@@ -818,7 +818,7 @@ onMounted(async () => {
 
       <img src="@/assets/public/svg/icon_public_22.svg" class="ml-auto" width="16" />
     </div>
-    <v-row class="m-deposit-footer-text-position text-600-10 white justify-center mx-2">
+    <v-row style="margin-top: 40px;" class="text-600-10 white justify-center mx-2">
       {{ selectedCurrencyUnit }}{{ depositAmount }} + {{ selectedCurrencyUnit }}
       {{
         depositConfig["bonus"].length > 0 &&
@@ -870,6 +870,8 @@ onMounted(async () => {
 <style lang="scss">
 // container
 .mobile-deposit-container {
+  overflow: auto;
+  
   .form-textfield div.v-field__field {
     box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset !important;
   }
@@ -1027,10 +1029,11 @@ onMounted(async () => {
 }
 
 .m-deposit-btn-position {
-  position: absolute;
-  bottom: 48px;
-  left: 50%;
-  transform: translateX(-50%);
+  // position: absolute;
+  // bottom: 48px;
+  // left: 50%;
+  // transform: translateX(-50%);
+  margin: 10px auto 50px;
   width: 98%;
 }
 

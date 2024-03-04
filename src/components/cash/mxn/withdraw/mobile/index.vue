@@ -688,10 +688,11 @@ onMounted(async () => {
   }
 
   .m-withdraw-btn-position {
-    position: absolute;
-    bottom: 70px;
-    left: 50%;
-    transform: translateX(-50%);
+    // position: absolute;
+    // bottom: 70px;
+    // left: 50%;
+    // transform: translateX(-50%);
+    margin: 40px auto 50px;
     width: 98%;
   }
 
