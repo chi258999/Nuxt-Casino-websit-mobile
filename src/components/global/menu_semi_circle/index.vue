@@ -167,7 +167,7 @@ const handleSelectItem = (item: string) => {
     setMailMenuShow(false);
   } else if (item == 'Search') {
     setSearchDialogShow(true);
-  } else if (item == 'Promo') {
+  } else if (item == 'Mail') {
     setMobileMenuMailToggle(true);
   } else if (item == 'Casino') {
     setCasinoGameShow(casinoGameShow.value);
