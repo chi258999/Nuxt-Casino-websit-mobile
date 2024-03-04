@@ -38,6 +38,9 @@ const onVisibilityChanged = (data:any):void => {
   setLiveChatVisibility(data.visibility)
   console.log(getVisibility, 'getVisibility');
 }
+const handleNewEvent = function () {};
+const handleonReady = function () {};
+const visibilityChanged = function () {};
 </script>
 
 <template>

@@ -300,6 +300,9 @@ const handleAmountInputFocus = (): void => {
     isShowAmountValidation.value = false;
   } else {
     isShowAmountValidation.value = true;
+    setTimeout(() => {
+      isShowAmountValidation.value = false;
+    }, 5000)
   }
 }
 
@@ -308,15 +311,14 @@ const handleAmountInputChange = (): void => {
     isShowAmountValidation.value = false;
   } else {
     isShowAmountValidation.value = true;
+    setTimeout(() => {
+      isShowAmountValidation.value = false;
+    }, 5000)
   }
 }
 
 const handleAmountInputBlur = (): void => {
-  // if (validateAmount()) {
   isShowAmountValidation.value = false;
-  // } else {
-  //     isShowAmountValidation.value = true;
-  // }
 }
 
 const success = computed(() => {
@@ -537,6 +539,9 @@ watch(depositAmount, (newValue) => {
     isDepositBtnReady.value = false;
   }
   isShowAmountValidation.value = !validateAmount();
+    setTimeout(() => {
+      isShowAmountValidation.value = false;
+    }, 5000)
   if (!bonusCheck.value) {
     depositConfig.value["bonus"].map((bonusItem: any) => {
       if (bonusItem["type"] == 0) {
@@ -816,9 +821,9 @@ onMounted(async () => {
         />
       </div>
 
-      <img src="@/assets/public/svg/icon_public_22.svg" class="ml-auto" width="16" />
+      <!-- <img src="@/assets/public/svg/icon_public_22.svg" class="ml-auto" width="16" /> -->
     </div>
-    <v-row style="margin-top: 40px;" class="text-600-10 white justify-center mx-2">
+    <!-- <v-row class="m-deposit-footer-text-position text-600-10 white justify-center mx-2">
       {{ selectedCurrencyUnit }}{{ depositAmount }} + {{ selectedCurrencyUnit }}
       {{
         depositConfig["bonus"].length > 0 &&
@@ -828,10 +833,23 @@ onMounted(async () => {
           : (Number(depositAmount) * depositRate).toFixed(2)
       }}
       {{ t("deposit_dialog.other_text_1") }}
-    </v-row>
+    </v-row> -->
+    <div
+      class="m-deposit-bonus-card mx-4 px-2 py-4"
+      :class="bonusCheck ? '' : 'm-deposit-bonus-card-border'"
+    >
+      <div class="d-flex align-center">
+        <img src="@/assets/vip/image/img_vip_10.png" width="30" />
+        <div class="text-700-12 white">{{ depositConfig.name }}</div>
+      </div>
+      <div class="d-flex align-start ml-6">
+        <img src="@/assets/public/svg/icon_public_03.svg" />
+        <div class="text-400-8 gray">{{ t("deposit_dialog.text_2") }}</div>
+      </div>
+    </div>
     <div class="m-deposit-btn-position">
       <v-btn
-        class="ma-3 m-deposit-btn"
+        class="ma-4 m-deposit-btn"
         :class="isDepositBtnReady ? 'm-deposit-btn-ready' : ''"
         width="-webkit-fill-available"
         height="48px"
@@ -870,8 +888,18 @@ onMounted(async () => {
 <style lang="scss">
 // container
 .mobile-deposit-container {
-  overflow: auto;
-  
+  overflow-y: auto;
+
+  .m-deposit-bonus-card {
+    // height: 83px;
+    border-radius: 8px;
+    background: #23262f;
+  }
+
+  .m-deposit-bonus-card-border {
+    border: 1px solid #009b3a;
+  }
+
   .form-textfield div.v-field__field {
     box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset !important;
   }
