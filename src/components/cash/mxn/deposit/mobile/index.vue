@@ -1061,7 +1061,8 @@ onMounted(async () => {
   // bottom: 48px;
   // left: 50%;
   // transform: translateX(-50%);
-  // width: 98%;
+  margin: 10px auto 50px;
+  width: 98%;
 }
 
 .m-deposit-footer-text-position {
