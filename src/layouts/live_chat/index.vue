@@ -19,10 +19,7 @@ const supportIconTransform = (el: any) => {
 };
 
 onMounted(() => {
-  console.log(LiveChatWidget, "LiveChatWidgetRef");
-  // LiveChatWidget?.init?.();
   LiveChatWidget?.on?.('ready', onReadyHandler);
-  // LiveChatWidget?.on?.('ready', onReadyHandler);
   LiveChatWidget?.on?.('visibility_changed', onVisibilityChanged);
 });
 

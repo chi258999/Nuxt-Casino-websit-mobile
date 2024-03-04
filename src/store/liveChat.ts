@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { authStore } from "@/store/auth";
 
 interface currentState {
   visibility: string;
@@ -18,7 +19,11 @@ declare global {
   }
 }
 
+const { getUserInfo } = authStore()
 const LiveChatWidgetRef: LiveChatWidgetRef = window.LiveChatWidget;
+
+LiveChatWidgetRef?.call?.("set_customer_name", getUserInfo.id);
+LiveChatWidgetRef?.call?.("set_customer_email", getUserInfo.email);
 
 export const liveChatStore = defineStore({
   id: "liveChat",
@@ -42,10 +47,7 @@ export const liveChatStore = defineStore({
       this.currentState.visibility = value;
     },
     setLiveChatMaximize() {
-      console.log(this.currentState.visibility, 'getVisibility1');
       this.LiveChatWidget?.call?.("maximize");
-    //   this.currentState.visibility = "maximize";
-      console.log(this.currentState.visibility, 'getVisibility2');
     },
     setLiveChatHidden() {
       this.LiveChatWidget?.call?.("hide");
