@@ -609,7 +609,7 @@ onMounted(async () => {
     box-shadow: none !important;
 
     .v-btn__content {
-      font-size: 12px;
+      font-size: 10px;
       color: #7782aa;
       font-weight: 700;
     }
@@ -617,7 +617,7 @@ onMounted(async () => {
 
   .button-bright {
     .v-btn__content {
-      font-size: 12px;
+      font-size: 10px;
       // color: #000000;
       color: #fff;
       font-weight: 700;
