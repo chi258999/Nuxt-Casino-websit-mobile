@@ -210,7 +210,7 @@ onMounted(() => {
         <p class="chat-box-text">{{ mailCount }}</p>
       </div>
       <div
-        class="text-600-12"
+        class="text-600-10"
         :class="selectedItem == 'Promo' ? 'white' : 'gray'"
       >
         {{ t("mobile_menu.promo") }}
@@ -230,7 +230,7 @@ onMounted(() => {
         <p class="chat-box-text">{{ mailCount }}</p>
       </div>
       <div
-        class="text-600-12"
+        class="text-600-10"
         :class="selectedItem == 'Mail' ? 'white' : 'gray'"
       >
         {{ t("mobile_menu.mail") }}
@@ -247,7 +247,7 @@ onMounted(() => {
         :transform-source="casinoSvgTransform"
       ></inline-svg>
       <div
-        class="text-600-12"
+        class="text-600-10"
         :class="selectedItem == 'Casino' ? 'white' : 'gray'"
       >
         {{ t("mobile_menu.casino") }}
