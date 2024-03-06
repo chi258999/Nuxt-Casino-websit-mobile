@@ -12,10 +12,12 @@ import { useTimer } from "vue-timer-hook";
 import phones from "@/utils/phoneValidation";
 import currencyList from "@/utils/currencyList";
 import { getPhoneCodeByLocale } from "@/utils/phoneCodes";
+import { authStore } from "@/store/auth";
 
 const { t } = useI18n();
 const { dispatchSmsVerificationCode } = withdrawStore();
 const { dispatchSubmitSMS } = withdrawStore();
+const { dispatchUserProfile } = authStore();
 
 const emit = defineEmits<{
   (e: "submitPhoneBinding"): void;
@@ -61,10 +63,10 @@ const capthcaDisabled = computed((): boolean => {
   if (phone_number.value == "" || timer_value.value != 0) {
     return true;
   }
-  let disabled = (phone_code.value + phone_number.value).match(
-    phones[currencyList[userBalance.value.currency]]
+  let disabled = phones[currencyList[userBalance.value.currency]].test(
+    phone_code.value + phone_number.value
   );
-  return Boolean(disabled);
+  return !disabled;
 });
 
 const submitDisabled = computed(() => {
@@ -101,6 +103,7 @@ const submitSMS = async () => {
   });
   submitLoading.value = false;
   if (success.value) {
+    await dispatchUserProfile();
     emit("submitPhoneBinding");
   } else {
     const toast = useToast();
