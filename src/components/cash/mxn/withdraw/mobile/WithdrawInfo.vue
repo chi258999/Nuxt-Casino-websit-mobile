@@ -118,7 +118,7 @@ onMounted(() => {
         <img src="@/assets/public/svg/icon_public_52.svg" width="18" />
       </v-btn>
     </div>
-    <div class="m-withdraw-info-dialog-body px-4 pt-2 pb-4">
+    <div class="m-withdraw-info-dialog-body px-4 py-2 mb-16">
       <div class="text-700-14 white text-center">
         {{ t("withdraw_info_dialog.text_1") }}
       </div>
@@ -379,7 +379,7 @@ onMounted(() => {
       </template>
 
       <!------------------- add ------------------------>
-      <v-row class="ma-0 pa-0 mt-4 align-center">
+      <v-row class="ma-0 pa-0 mt-4 align-center mb-16">
         <v-col
           cols="6"
           class="text-700-12 gray text-center"
@@ -427,8 +427,7 @@ onMounted(() => {
     top: 36px;
     width: 100%;
     height: calc(100vh - 36px);
-    overflow-y: auto;
-    padding-bottom: 50px !important;
+    overflow-y: scroll;
 
     .m-withdraw-info-input-card {
       box-shadow: 0px 0px 6px 1px #00000059 inset;

@@ -18,11 +18,12 @@ import { mainStore } from "@/store/main";
 const casinoIconColor = ref<string>("#7782AA");
 const rewardIconColor = ref<string>("#7782AA");
 const sportIconColor = ref<string>("#7782AA");
-const promoIconColor = ref<string>("#ffffff");
+const promoIconColor = ref<string>("#7782AA");
 const searchIconColor = ref<string>("#7782AA");
 const mailIconColor = ref<string>("#7782AA");
 const scale = ref<number>(1);
 const bottom = ref<number>(-48);
+const selectedText = ref<string>("");
 
 // mail count
 const mailCount = ref<number>(10);
@@ -43,6 +44,8 @@ const { setOverlayScrimShow } = appBarStore();
 const { setMainBlurEffectShow } = appBarStore();
 const { setSearchDialogShow } = mainStore();
 const { setCasinoGameShow } = mainStore();
+const { setCircleMenuBtnClicked } = menuStore();
+const { setSelectedCircleItem } = menuStore();
 
 const selectedItem = computed(() => {
   const { getSelectedItem } = storeToRefs(menuStore());
@@ -54,27 +57,39 @@ const semiCircleShow = computed(() => {
   return getSemiCircleShow.value;
 });
 
+const homeMenuBtnClicked = computed(() => {
+  const { getHomeMenuBtnClicked } = storeToRefs(menuStore());
+  return getHomeMenuBtnClicked.value;
+});
+
+const circleMenuBtnClicked = computed(() => {
+  const { getCircleMenuBtnClicked } = storeToRefs(menuStore());
+  return getCircleMenuBtnClicked.value;
+});
+
+watch(homeMenuBtnClicked, (value) => {
+  selectedText.value = "";
+  promoIconColor.value = "#7782AA";
+  searchIconColor.value = "#7782AA";
+  mailIconColor.value = "#7782AA";
+  casinoIconColor.value = "#7782AA";
+});
+
 watch(selectedItem, (newValue) => {
   switch (newValue) {
-    case 'Promo':
+    case t("mobile_menu.promo"):
       promoIconColor.value = "#ffffff";
       searchIconColor.value = "#7782AA";
       mailIconColor.value = "#7782AA";
       casinoIconColor.value = "#7782AA";
       break;
-    case 'Search':
-      promoIconColor.value = "#7782AA";
-      searchIconColor.value = "#ffffff";
-      mailIconColor.value = "#7782AA";
-      casinoIconColor.value = "#7782AA";
-      break;
-    case 'Mail':
+    case t("mobile_menu.mail"):
       promoIconColor.value = "#7782AA";
       searchIconColor.value = "#7782AA";
       mailIconColor.value = "#ffffff";
       casinoIconColor.value = "#7782AA";
       break;
-    case 'Casino':
+    case t("mobile_menu.casino"):
       casinoIconColor.value = "#ffffff";
       promoIconColor.value = "#7782AA";
       searchIconColor.value = "#7782AA";
@@ -155,23 +170,44 @@ const mailSvgTransform = (el: any) => {
 };
 
 const handleSelectItem = (item: string) => {
+  setSelectedCircleItem(item);
+  setCircleMenuBtnClicked(circleMenuBtnClicked.value ? false : true);
+  selectedText.value = item;
   casinoGameShow.value = !casinoGameShow.value;
   setSelectedItem(item);
   setSemiCircleShow(false);
   bottom.value = -48;
-  if (item == 'Promo') {
+  if (item == t("mobile_menu.promo")) {
     router.push({ name: "Promo" });
     setRewardNavShow(false);
     setOverlayScrimShow(false);
     setMainBlurEffectShow(false);
     setMailMenuShow(false);
-  } else if (item == 'Search') {
-    setSearchDialogShow(true);
-  } else if (item == 'Mail') {
+  } else if (item == t("Mail")) {
     setMobileMenuMailToggle(true);
-  } else if (item == 'Casino') {
+  } else if (item == t("Casino")) {
     setCasinoGameShow(casinoGameShow.value);
     router.push({ name: "Dashboard", query: { game: "casino" } });
+  }
+  switch (item) {
+    case t("mobile_menu.promo"):
+      promoIconColor.value = "#ffffff";
+      searchIconColor.value = "#7782AA";
+      mailIconColor.value = "#7782AA";
+      casinoIconColor.value = "#7782AA";
+      break;
+    case t("Mail"):
+      promoIconColor.value = "#7782AA";
+      searchIconColor.value = "#7782AA";
+      mailIconColor.value = "#ffffff";
+      casinoIconColor.value = "#7782AA";
+      break;
+    case t("Casino"):
+      casinoIconColor.value = "#ffffff";
+      promoIconColor.value = "#7782AA";
+      searchIconColor.value = "#7782AA";
+      mailIconColor.value = "#7782AA";
+      break;
   }
 };
 
@@ -196,10 +232,7 @@ onMounted(() => {
     :style="{ transform: `translateX(-50%)`, bottom: `${bottom}px` }"
     v-if="route.name !== 'Sports'"
   >
-    <div
-      class="m-semicircle-item m-semicircle-promo"
-      @click="handleSelectItem('Promo')"
-    >
+    <div class="m-semicircle-item m-semicircle-promo" @click="handleSelectItem('Promo')">
       <div class="relative" style="height: 22px">
         <inline-svg
           :src="icon_public_97"
@@ -216,10 +249,7 @@ onMounted(() => {
         {{ t("mobile_menu.promo") }}
       </div>
     </div>
-    <div
-      class="m-semicircle-item m-semicircle-mail"
-      @click="handleSelectItem('Mail')"
-    >
+    <div class="m-semicircle-item m-semicircle-mail" @click="handleSelectItem('Mail')">
       <div class="relative" style="height: 22px">
         <inline-svg
           :src="icon_public_55"

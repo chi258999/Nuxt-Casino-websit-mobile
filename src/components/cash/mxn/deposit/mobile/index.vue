@@ -21,6 +21,9 @@ import { useToast } from "vue-toastification";
 import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
 import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
 import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
+import { getUnitByCurrency } from '@/utils/currencyUnit';
+import currencyListValue from '@/utils/currencyList';
+import Adjust from '@adjustcom/adjust-web-sdk';
 
 const { name, width } = useDisplay();
 const { t } = useI18n();
@@ -44,6 +47,7 @@ const { dispatchUserBalance } = userStore();
 const { setDepositOrderDialog } = depositStore();
 const { setTimerValue } = depositStore();
 const { setDepositOrderTimeRefresh } = depositStore();
+const { setDepositCurrency } = depositStore();
 
 const selectedCurrencyUnit = ref<string>("R$");
 
@@ -55,8 +59,8 @@ const selectedCurrencyItem = ref<GetCurrencyItem>({
 
 const selectedPaymentItem = ref<GetPaymentItem>({
   id: "",
-  icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
-  name: "PIX",
+  icon: "",
+  name: "",
   channel_type: "",
   description: "20~150.000 BRL",
   min: 149,
@@ -168,6 +172,11 @@ const userInfo = computed((): GetUserInfo => {
   return getUserInfo.value;
 })
 
+const userBalance = computed(() => {
+  const { getUserBalance } = storeToRefs(userStore());
+  return getUserBalance.value
+})
+
 const userFundsIdentity = computed(() => {
   const { getUserFundsIdentity } = storeToRefs(userStore());
   return getUserFundsIdentity.value
@@ -203,10 +212,10 @@ const filterByKeyArray = (arr: any, key: any, valueArr: any) => {
 watch(depositConfig, (newValue) => {
   depositAmountList.value = [];
   paymentList.value = [];
-  newValue["cfg"][selectedCurrencyItem.value.name].map((item: any) => {
+  newValue["cfg"][userBalance.value.currency].map((item: any) => {
     paymentList.value.push({
       id: item.channel_id,
-      icon: selectedCurrencyItem.value.name == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
+      icon: userBalance.value.currency == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
       name: item.channel_name,
       channel_type: item.channel_type,
       description: item.min + "~" + item.max + " " + item.currecy_type,
@@ -257,10 +266,10 @@ const handleDepositAmount = (amount: string) => {
 const handleSelectCurrency = (item: GetCurrencyItem) => {
   selectedCurrencyItem.value = item;
   paymentList.value = [];
-  depositConfig.value["cfg"][selectedCurrencyItem.value.name]?.map((item: any) => {
+  depositConfig.value["cfg"][userBalance.value.currency]?.map((item: any) => {
     paymentList.value.push({
       id: item.channel_id,
-      icon: selectedCurrencyItem.value.name == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
+      icon: userBalance.value.currency == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
       name: item.channel_name,
       channel_type: item.channel_type,
       description: item.min + "~" + item.max + " " + item.currecy_type,
@@ -269,14 +278,8 @@ const handleSelectCurrency = (item: GetCurrencyItem) => {
     })
   })
   selectedPaymentItem.value = paymentList.value[0];
-  switch (selectedCurrencyItem.value.name) {
-    case "BRL":
-      selectedCurrencyUnit.value = 'R$';
-      break;
-    case "MXN":
-      selectedCurrencyUnit.value = 'MXN';
-      break;
-  }
+  selectedCurrencyUnit.value = getUnitByCurrency(userBalance.value.currency);
+  setDepositCurrency(userBalance.value.currency);
 }
 
 const formatCurrency = (currency: number, locale: string, currencyUnit: string) => {
@@ -339,16 +342,27 @@ const handleDepositSubmit = async () => {
   }
   loading.value = true
   let formData = {} as any;
-  // if (depositConfig.value.deposit_user_switch) {
-  //   formData.id_number = pixInfo.value.id
-  //   formData.bank_number = pixInfo.value.id
-  //   formData.first_name = pixInfo.value.first_name
-  //   formData.last_name = pixInfo.value.last_name
-  // }
-  formData.id_number = userFundsIdentity.value.identity.pix !== undefined ? userFundsIdentity.value.identity.pix.id_number : userInfo.value.id_number
-  formData.bank_number = userFundsIdentity.value.identity.pix !== undefined ? userFundsIdentity.value.identity.pix.bank_number : userInfo.value.id_number
-  formData.first_name = userFundsIdentity.value.identity.pix !== undefined ? userFundsIdentity.value.identity.pix.user_name : userInfo.value.first_name
-  formData.last_name = userInfo.value.last_name
+  formData.id_number = "";
+  formData.bank_number = "";
+  formData.first_name = "";
+  formData.last_name = "";
+  if (userBalance.value.currency.toLocaleUpperCase() == "BRL") {
+    if (depositConfig.value.deposit_user_switch) {
+      formData.id_number = pixInfo.value.id
+      formData.bank_number = pixInfo.value.id
+      formData.first_name = pixInfo.value.first_name
+      formData.last_name = pixInfo.value.last_name
+    }
+    if (userFundsIdentity.value.identity.pix !== undefined) {
+      formData.id_number = userFundsIdentity.value.identity.pix.id_number
+      formData.bank_number = userFundsIdentity.value.identity.pix.bank_number
+      formData.first_name = userFundsIdentity.value.identity.pix.user_name
+    } else {
+      formData.id_number = userInfo.value.id_number
+      formData.bank_number = userInfo.value.id_number
+      formData.first_name = userInfo.value.first_name
+    }
+  }
   formData.channels_id = selectedPaymentItem.value.id;
   formData.amount = depositConfig.value["bonus"].length > 0 && depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
   formData.is_bonus = bonusCheck.value ? false : true;
@@ -356,7 +370,26 @@ const handleDepositSubmit = async () => {
   loading.value = false;
   if (success.value) {
     if (depositSubmit.value.url != "") {
-      window.open(depositSubmit.value.url, '_blank');
+      // let newWindow = window.open(depositSubmit.value.url, '_blank');
+
+      // if (newWindow) {
+      //   newWindow.focus(); // If the new window is successfully opened, switch the focus to the new window
+      // } else {
+      //   alert('Please allow pop-ups in your browser to view the content.'); // If unable to open a new window, show an alert message
+      // }
+
+      // 处理跳转新窗口浏览器拦截
+      const elementA = document.createElement('a');
+      const elementAid = 'newpage'
+      elementA.setAttribute('href', depositSubmit.value.url);
+      elementA.setAttribute('target', '_blank');
+      elementA.setAttribute('id', elementAid);
+      // 防止反复添加
+      if(!document.getElementById(elementAid)) {
+        document.body.appendChild(elementA);
+      }
+      elementA.click();
+
       const toast = useToast();
       toast.success(t("deposit_dialog.text_1"), {
         timeout: 3000,
@@ -373,17 +406,33 @@ const handleDepositSubmit = async () => {
       depositAmount.value = "";
       return;
     }
-    let depositConfirmItem: any = {
-      deposit_amount: depositAmount.value,
-      bank_name: depositSubmit.value.bank_name,
-      account_number: depositSubmit.value.account_number,
-      account_name: depositSubmit.value.account_name,
+    if (depositSubmit.value.code_url != "") {
+      depositAmountWithBonus.value = depositConfig.value["bonus"].length > 0 && depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
+      let locale = currencyListValue[userBalance.value.currency];
+      depositAmountWithCurrency.value = formatCurrency(Number(depositAmount.value), locale, userBalance.value.currency);
+      codeUrl.value = depositSubmit.value.code_url;
+      setMainBlurEffectShow(false);
+      setOverlayScrimShow(false);
+      setDepositHeaderBlurEffectShow(false);
+      setDepositBlurEffectShow(false);
+      setTimeout(() => {
+        depositInfoDialogVisible.value = true;
+      }, 10)
+      return;
     }
-    localStorage.setItem("spei", JSON.stringify(depositConfirmItem));
-    setDepositOrderTimeRefresh(!depositOrderTimeRefresh.value);
-    setTimerValue(0);
-    setDepositOrderDialog(true);
-    // setDepositAmount(Number(depositAmount.value));
+    if (userBalance.value.currency.toLocaleUpperCase() == "MXN") {
+      let depositConfirmItem: any = {
+        deposit_amount: depositAmount.value,
+        bank_name: depositSubmit.value.bank_name,
+        account_number: depositSubmit.value.account_number,
+        account_name: depositSubmit.value.account_name,
+      }
+      localStorage.setItem("spei", JSON.stringify(depositConfirmItem));
+      setDepositOrderTimeRefresh(!depositOrderTimeRefresh.value);
+      setTimerValue(0);
+      setDepositOrderDialog(true);
+      // setDepositAmount(Number(depositAmount.value));
+    }
     const toast = useToast();
     toast.success(t("deposit_dialog.text_1"), {
       timeout: 3000,
@@ -397,6 +446,9 @@ const handleDepositSubmit = async () => {
       icon: SuccessIcon,
       rtl: false,
     });
+    Adjust.trackEvent({
+      eventToken: 'gmx6cdn8x3pc'
+    })
     await dispatchUserProfile();
     await dispatchUserBalance();
     // if (depositSubmit.value.code_url != "") {
@@ -539,9 +591,9 @@ watch(depositAmount, (newValue) => {
     isDepositBtnReady.value = false;
   }
   isShowAmountValidation.value = !validateAmount();
-    setTimeout(() => {
-      isShowAmountValidation.value = false;
-    }, 5000)
+  setTimeout(() => {
+    isShowAmountValidation.value = false;
+  }, 5000)
   if (!bonusCheck.value) {
     depositConfig.value["bonus"].map((bonusItem: any) => {
       if (bonusItem["type"] == 0) {
@@ -588,45 +640,12 @@ watch(currencyMenuShow, (value) => {
 onMounted(async () => {
   setDepositWithdrawToggle(false);
   await dispatchUserDepositCfg();
-
-  switch (selectedCurrencyItem.value.name) {
-    case "BRL":
-      selectedCurrencyUnit.value = 'R$';
-      break;
-    case "MXN":
-      selectedCurrencyUnit.value = 'MXN';
-      break;
-  }
-
-  // setOverlayScrimShow(true);
-  // setDepositHeaderBlurEffectShow(true);
-  // setDepositBlurEffectShow(true);
-  // setTimeout(() => {let locale = 'pt-BR';
-  //     switch (selectedCurrencyItem.value.name) {
-  //       case "BRL":
-  //         locale = 'pt-BR';
-  //         break;
-  //       case "PHP":
-  //         locale = 'en-PH';
-  //         break;
-  //       case "PEN":
-  //         locale = 'en-PE';
-  //         break;
-  //       case "MXN":
-  //         locale = 'en-MX';
-  //         break;
-  //       case "CLP":
-  //         locale = 'es-CL';
-  //         break;
-  //       case "USD":
-  //         locale = 'en-US';
-  //       case "COP":
-  //         locale = 'es-CO';
-  //         break;
-  //     }
-  //     depositAmountWithCurrency.value = formatCurrency(Number(depositAmount.value), locale, selectedCurrencyItem.value.name);
-  //   depositInfoDialogVisible.value = true;
-  // }, 10)
+  selectedCurrencyUnit.value = userBalance.value.currency;
+  currencyList.value.map(item => {
+    if (item.name == userBalance.value.currency) {
+      selectedCurrencyItem.value = item;
+    }
+  })
 })
 </script>
 
@@ -635,7 +654,7 @@ onMounted(async () => {
     class="mobile-deposit-container"
     :class="depositBlurEffectShow ? 'deposit-bg-blur' : ''"
   >
-    <v-row class="mt-6 mx-6 text-400-12 gray">
+    <v-row class="mt-6 mx-10 text-400-12 gray">
       {{ t("deposit_dialog.deposit_currency") }}
     </v-row>
     <v-menu offset="4" class="mt-1" v-model:model-value="currencyMenuShow">
@@ -643,14 +662,13 @@ onMounted(async () => {
         <v-card
           color="#15161C"
           theme="dark"
-          class="mx-4 mt-4 m-deposit-card-height"
+          class="mx-6 mt-4 m-deposit-card-height"
           style="border-radius: 8px"
         >
           <v-list-item
             v-bind="props"
             class="currency-item m-deposit-card-height"
             value="currency dropdown"
-            :append-icon="currencyMenuShow ? 'mdi-chevron-down' : 'mdi-chevron-right'"
           >
             <template v-slot:prepend>
               <img :src="selectedCurrencyItem.icon" width="20" />
@@ -661,7 +679,7 @@ onMounted(async () => {
           </v-list-item>
         </v-card>
       </template>
-      <v-list theme="dark" bg-color="#15161C" class="px-2">
+      <!-- <v-list theme="dark" bg-color="#15161C" class="px-2">
         <v-list-item
           class="currency-item pl-6"
           :value="currencyItem.name"
@@ -679,24 +697,29 @@ onMounted(async () => {
             {{ currencyItem.name }}
           </v-list-item-title>
         </v-list-item>
-      </v-list>
+      </v-list> -->
     </v-menu>
-    <v-row class="mt-6 mx-6 text-400-12 gray">
+    <v-row class="mt-6 mx-10 text-400-12 gray">
       {{ t("deposit_dialog.choose_payment_method") }}
     </v-row>
-    <v-menu offset="4" class="mt-1" v-model:model-value="paymentMenuShow">
+    <v-menu
+      offset="4"
+      class="mt-1"
+      v-model:model-value="paymentMenuShow"
+      content-class="m-deposit-payment-menu"
+    >
       <template v-slot:activator="{ props }">
         <v-card
           color="#15161C"
           theme="dark"
-          class="mx-4 mt-4 m-deposit-card-height"
+          class="mx-6 mt-4 m-deposit-card-height"
           style="border-radius: 8px"
         >
           <v-list-item
             v-bind="props"
             class="payment-item m-deposit-card-height"
             value="payment dropdown"
-            :append-icon="paymentMenuShow ? 'mdi-chevron-down' : 'mdi-chevron-right'"
+            :append-icon="paymentMenuShow ? 'mdi-chevron-up' : 'mdi-chevron-down'"
           >
             <template v-slot:prepend>
               <img :src="selectedPaymentItem.icon" width="52" />
@@ -707,7 +730,7 @@ onMounted(async () => {
           </v-list-item>
         </v-card>
       </template>
-      <v-list theme="dark" bg-color="#15161C" class="mx-1">
+      <v-list theme="dark" bg-color="#15161C" class="mr-6">
         <v-row class="m-payment-width-370 px-2">
           <v-col
             cols="12"
@@ -749,10 +772,10 @@ onMounted(async () => {
     <div class="mx-4 mt-2">
       <img src="@/assets/public/image/bg_public_02_01.png" style="width: 100%" />
     </div>
-    <v-row class="mt-4 mx-6 text-400-12 gray">
+    <v-row class="mt-4 mx-10 text-400-12 gray">
       {{ t("deposit_dialog.deposit_amount") }}
     </v-row>
-    <v-row class="mt-2 mx-2">
+    <v-row class="mt-2 mx-4">
       <v-col
         cols="4"
         class="py-1 px-2"
@@ -778,14 +801,14 @@ onMounted(async () => {
               {{
                 depositAmountItem.type == 0
                   ? depositAmountItem.bonus
-                  : depositAmountItem.bonus + "%"
+                  : Number(depositAmountItem.bonus) * 100 + "%"
               }}
             </div>
           </div>
         </v-btn>
       </v-col>
     </v-row>
-    <v-row class="mt-4 mx-1 relative">
+    <v-row class="mt-4 mx-3 relative">
       <v-text-field
         :label="`${t('deposit_dialog.amount')}(${selectedCurrencyItem.name})`"
         class="form-textfield dark-textfield m-deposit-amount-text"
@@ -835,11 +858,11 @@ onMounted(async () => {
       {{ t("deposit_dialog.other_text_1") }}
     </v-row> -->
     <div
-      class="m-deposit-bonus-card mx-4 px-2 py-4"
+      class="m-deposit-bonus-card mx-6 px-2 py-2"
       :class="bonusCheck ? '' : 'm-deposit-bonus-card-border'"
     >
       <div class="d-flex align-center">
-        <img src="@/assets/vip/image/img_vip_10.png" width="30" />
+        <img src="@/assets/vip/image/img_vip_10.png" width="21" />
         <div class="text-700-12 white">{{ depositConfig.name }}</div>
       </div>
       <div class="d-flex align-start ml-6">
@@ -849,7 +872,7 @@ onMounted(async () => {
     </div>
     <div class="m-deposit-btn-position">
       <v-btn
-        class="ma-4 m-deposit-btn"
+        class="my-4 mx-6 m-deposit-btn"
         :class="isDepositBtnReady ? 'm-deposit-btn-ready' : ''"
         width="-webkit-fill-available"
         height="48px"
@@ -886,6 +909,10 @@ onMounted(async () => {
 </template>
 
 <style lang="scss">
+.m-deposit-payment-menu {
+  left: 24px !important;
+}
+
 // container
 .mobile-deposit-container {
   overflow-y: auto;
@@ -1061,8 +1088,7 @@ onMounted(async () => {
   // bottom: 48px;
   // left: 50%;
   // transform: translateX(-50%);
-  margin: 10px auto 50px;
-  width: 98%;
+  // width: 98%;
 }
 
 .m-deposit-footer-text-position {
