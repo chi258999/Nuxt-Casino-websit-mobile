@@ -42,6 +42,7 @@ const { dispatchUserWithdrawSubmit } = withdrawStore();
 const { setDepositWithdrawToggle } = appBarStore();
 const { dispatchUserBalance } = userStore();
 const { dispatchCurrencyList } = currencyStore();
+const { setPixInfoToggle } = depositStore();
 import router from '@/router';
 import { currencyStore } from '@/store/currency';
 
@@ -50,8 +51,8 @@ const { setTransactionTab } = bonusTransactionStore();
 
 const selectedPaymentItem = ref<GetPaymentItem>({
   id: "1",
-  icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
-  name: "PIX",
+  icon: "",
+  name: "",
   channel_type: "",
   description: "20~150.000 BRL",
   min: 149,
@@ -155,6 +156,8 @@ const withdrawCheck = ref<boolean>(false);
 
 const selectedCurrencyUnit = ref<string>("R$")
 
+const refreshLoading = ref<boolean>(false);
+
 const userInfo = computed((): GetUserInfo => {
   const { getUserInfo } = storeToRefs(authStore());
   return getUserInfo.value;
@@ -193,12 +196,15 @@ const filterByKeyArray = (arr: any, key: any, valueArr: any) => {
 };
 
 const refreshWithdrawalConfig = async () => {
+  refreshLoading.value = true;
   await dispatchUserWithdrawCfg();
+  await dispatchUserBalance();
+  refreshLoading.value = false;
 }
 
 watch(userBalance, (value) => {
   availableAmount.value = value["availabe_balance"];
-})
+}, { deep: true });
 
 watch(withdrawConfig, (newValue) => {
   paymentList.value = [];
@@ -328,7 +334,11 @@ const handleWithdrawSubmit = async () => {
     });
     return;
   }
-  if (!userInfo.value.phone_confirmd) {
+  if (userFundsIdentity.value.identity.pix == undefined && userBalance.value.currency.toLocaleUpperCase() == "BRL") {
+    setPixInfoToggle(true);
+    return;
+  }
+  if (!userInfo.value.phone_confirmd && userBalance.value.currency.toLocaleUpperCase() != "BRL") {
     phoneBindingDialog.value = true;
     return;
   }
@@ -343,20 +353,38 @@ const handleWithdrawSubmit = async () => {
   formData.amount = Number(withdrawAmount.value)
   const withdrawInfo = localStorage.getItem(userInfo.value.id.toString())
   const phoneCode = getPhoneCodeByLocale(currencyListValue[userBalance.value.currency]);
-  if (withdrawInfo !== null) {
-    let withdrawInfoItem = JSON.parse(withdrawInfo);
-    formData.bank_number = withdrawInfoItem.clabe_number;
-    formData.id_number = withdrawInfoItem.rfc;
-    formData.first_name = withdrawInfoItem.name;
-    formData.last_name = userInfo.value.last_name
-    formData.email = withdrawInfoItem.email;
-    formData.phone = phoneCode.split("+")[1] + userInfo.value.phone;
-    // formData.bank_name = withdrawInfoItem.bank_code;
-    // formData.rfc = withdrawInfoItem.rfc;
+  if (userBalance.value.currency.toLocaleUpperCase() == "BRL") {
+    formData.id_number = pixInfo.value.id
+    formData.bank_number = pixInfo.value.id;
+    formData.first_name = pixInfo.value.first_name
+    formData.last_name = pixInfo.value.last_name
+    if (userFundsIdentity.value.identity.pix !== undefined) {
+      formData.id_number = userFundsIdentity.value.identity.pix.id_number
+      formData.bank_number = userFundsIdentity.value.identity.pix.bank_number
+      formData.first_name = userFundsIdentity.value.identity.pix.user_name
+    } else {
+      // formData.id_number = userInfo.value.id_number
+      // formData.bank_number = userInfo.value.id_number
+      // formData.first_name = userInfo.value.first_name
+    }
+    formData.email = "";
+    formData.phone = "";
   } else {
-    withdraw_type.value = selectedPaymentItem.value.channel_type;
-    withdrawInfoDialog.value = true;
-    return;
+    if (withdrawInfo !== null) {
+      let withdrawInfoItem = JSON.parse(withdrawInfo);
+      formData.bank_number = withdrawInfoItem.clabe_number;
+      formData.id_number = withdrawInfoItem.rfc;
+      formData.first_name = withdrawInfoItem.name;
+      formData.last_name = userInfo.value.last_name
+      formData.email = withdrawInfoItem.email;
+      formData.phone = phoneCode.split("+")[1] + userInfo.value.phone;
+      // formData.bank_name = withdrawInfoItem.bank_code;
+      // formData.rfc = withdrawInfoItem.rfc;
+    } else {
+      withdraw_type.value = selectedPaymentItem.value.channel_type;
+      withdrawInfoDialog.value = true;
+      return;
+    }
   }
   await dispatchUserWithdrawSubmit(formData)
   loading.value = false;
@@ -514,18 +542,21 @@ onMounted(async () => {
     class="mobile-withdraw-container"
     :class="depositBlurEffectShow || phoneBindingDialog ? 'deposit-bg-blur' : ''"
   >
-    <v-row class="mt-6 mx-8 text-500-10 white align-center">
+    <v-row class="mt-6 mx-10 text-500-10 white align-center">
       {{ t("withdraw_dialog.withdraw_amount") }}
       {{ selectedCurrencyUnit }}
       {{ availableAmount }}
-      <img
-        @click="refreshWithdrawalConfig"
-        src="@/assets/public/svg/icon_public_16.svg"
-        style="margin-left: auto"
-        width="16"
-      />
+      <div style="margin-left: auto" class="relative pr-4">
+        <img
+          @click="refreshWithdrawalConfig"
+          src="@/assets/public/svg/icon_public_16.svg"
+          width="12"
+          class="m-withdraw-balance-refresh-img"
+          :class="refreshLoading ? 'm-img-loading' : ''"
+        />
+      </div>
     </v-row>
-    <v-row class="mt-2 mx-2 relative">
+    <v-row class="mt-2 mx-3 relative">
       <v-text-field
         :label="`${t('withdraw_dialog.amount')}(${selectedCurrencyUnit})`"
         class="form-textfield dark-textfield m-withdraw-amount-text mb-0"
@@ -539,19 +570,19 @@ onMounted(async () => {
         @input="handleAmountInputChange"
       />
     </v-row>
-    <div class="mt-3 mx-8 text-400-12 gray d-flex align-center">
+    <div class="mt-3 mx-10 text-400-12 gray d-flex align-center">
       {{ t("withdraw_dialog.text_5") }}
       <span class="text-700-12" style="margin-left: auto">
         {{ feeAmount }}&nbsp;{{ selectedCurrencyUnit }}
       </span>
     </div>
-    <div class="mt-2 mx-8 text-400-12 gray d-flex align-center">
+    <div class="mt-2 mx-10 text-400-12 gray d-flex align-center">
       {{ t("withdraw_dialog.text_6") }}
       <span class="text-700-12" style="margin-left: auto">
         {{ cashableAmount }}&nbsp;{{ selectedCurrencyUnit }}
       </span>
     </div>
-    <div class="mt-2 mx-8 text-400-12 gray d-flex align-center">
+    <div class="mt-2 mx-10 text-400-12 gray d-flex align-center">
       {{ t("withdraw_dialog.text_7") }}
       <span class="text-700-12" style="margin-left: auto">
         {{ residualAmount }}&nbsp;{{ selectedCurrencyUnit }}
@@ -560,22 +591,27 @@ onMounted(async () => {
     <div class="mx-4 mt-2">
       <img src="@/assets/public/image/bg_public_02_01.png" style="width: 100%" />
     </div>
-    <v-row class="mt-2 mx-8 text-400-12 gray">
+    <v-row class="mt-2 mx-10 text-400-12 gray">
       {{ t("withdraw_dialog.withdraw_payment_method") }}
     </v-row>
-    <v-menu offset="4" class="mt-1" v-model:model-value="paymentMenuShow">
+    <v-menu
+      offset="4"
+      class="mt-1"
+      v-model:model-value="paymentMenuShow"
+      content-class="m-withdraw-payment-menu"
+    >
       <template v-slot:activator="{ props }">
         <v-card
           color="#15161C"
           theme="dark"
-          class="mx-4 mt-4 m-deposit-card-height"
+          class="mx-6 mt-4 m-deposit-card-height"
           style="border-radius: 8px"
         >
           <v-list-item
             v-bind="props"
             class="payment-item m-deposit-card-height m-withdraw-currency-item"
             value="payment dropdown"
-            :append-icon="paymentMenuShow ? 'mdi-chevron-down' : 'mdi-chevron-right'"
+            :append-icon="paymentMenuShow ? 'mdi-chevron-up' : 'mdi-chevron-down'"
           >
             <template v-slot:prepend>
               <img :src="selectedPaymentItem.icon" width="52" />
@@ -588,13 +624,14 @@ onMounted(async () => {
                 height="20"
                 :transform-source="(el: any) => svgTransform(el, '#12FF76')"
                 style="margin-left: auto"
+                v-if="userBalance.currency.toLocaleUpperCase() != 'BRL'"
               >
               </inline-svg>
             </v-list-item-title>
           </v-list-item>
         </v-card>
       </template>
-      <v-list theme="dark" bg-color="#15161C">
+      <v-list theme="dark" bg-color="#15161C" class="mr-6">
         <v-row class="m-payment-width-370 px-2">
           <v-col
             cols="12"
@@ -626,7 +663,10 @@ onMounted(async () => {
                       {{ paymentItem.description }}
                     </v-list-item-title>
                   </v-col>
-                  <v-col cols="3">
+                  <v-col
+                    cols="3"
+                    v-if="userBalance.currency.toLocaleUpperCase() != 'BRL'"
+                  >
                     <inline-svg
                       :src="icon_public_09"
                       width="20"
@@ -647,25 +687,26 @@ onMounted(async () => {
         </v-row>
       </v-list>
     </v-menu>
-    <div class="mx-4">
-      <v-checkbox
+    <div class="mx-10 my-4">
+      <!-- <v-checkbox
         hide-details
         icon
         class="deposit-checkbox"
         v-model="withdrawCheck"
         :label="t('withdraw_dialog.text_8')"
-      />
+      /> -->
+      <div class="text-400-12 gray">{{ t("withdraw_dialog.text_8") }}</div>
     </div>
-    <v-row class="mt-0 mx-14 text-400-10 gray">
+    <v-row class="mt-0 mx-10 text-400-10 gray">
       {{ t("withdraw_dialog.text_1") }}{{ Number(withdrawConfig?.fee?.rate) * 100 }}%
     </v-row>
     <!-- <v-row class="mt-4 mx-14 text-400-10 gray">
       {{ t("withdraw_dialog.text_2") }}{{ selectedCurrencyUnit }}0
     </v-row> -->
-    <v-row class="mt-4 mx-14 text-400-10 gray">
+    <v-row class="mt-4 mx-10 text-400-10 gray">
       {{ t("withdraw_dialog.text_3") }}
     </v-row>
-    <v-row class="mt-4 mx-14 text-400-10 gray">
+    <v-row class="mt-4 mx-10 text-400-10 gray">
       {{ t("withdraw_dialog.text_4") }}
     </v-row>
     <!-- <v-row
@@ -677,7 +718,7 @@ onMounted(async () => {
     </v-row> -->
     <div class="m-withdraw-btn-position">
       <v-btn
-        class="ma-3 m-deposit-btn"
+        class="my-3 mx-6 m-deposit-btn"
         :class="isDepositBtnReady ? 'm-deposit-btn-ready' : ''"
         width="-webkit-fill-available"
         height="48px"
@@ -697,6 +738,20 @@ onMounted(async () => {
 </template>
 
 <style lang="scss">
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.m-withdraw-payment-menu {
+  left: 24px !important;
+}
+
 .m-phone-binding-dialog {
   z-index: 2433 !important;
   margin: 0px !important;
@@ -712,6 +767,18 @@ onMounted(async () => {
     .v-list-item__append > .v-icon {
       margin-inline-start: 10px;
     }
+  }
+
+  .m-withdraw-balance-refresh-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center center;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .m-img-loading {
+    animation: rotate 1s linear infinite;
   }
 
   .m-withdraw-btn-position {
