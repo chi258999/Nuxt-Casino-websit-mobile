@@ -29,16 +29,16 @@ import vipLevelGroups from "@/utils/VipLevelGroup";
 
 const { t } = useI18n();
 const { width } = useDisplay();
-const selectedBtnText = ref<string>(t("home.bet_history.text_2"));
+const selectedBtnText = ref<string>("home.bet_history.text_2");
 const betHistoryInterval = ref<any>(null);
 const { dispatchGameBigWin } = gameStore();
 
 const modules = [Pagination, Virtual, Autoplay, Navigation];
 
 const betHistoryTabList = ref<Array<string>>([
-  t("home.bet_history.text_2"),
-  t("home.bet_history.text_3"),
-  t("home.bet_history.text_4"),
+  "home.bet_history.text_2",
+  "home.bet_history.text_3",
+  "home.bet_history.text_4",
 ]);
 
 const imgList = ref<Array<any>>([
@@ -295,7 +295,7 @@ const selectedBetHistoryList = ref<Array<GameBigWinItem>>([]);
 
 const handleBetHistoryTab = (item: string) => {
   selectedBtnText.value = item;
-  if (item == t("home.bet_history.text_4")) {
+  if (item == "home.bet_history.text_4") {
     selectedBetHistoryList.value = gameBigWinItem.value.lucky_bets;
   } else {
     selectedBetHistoryList.value = gameBigWinItem.value.high_rollers;
@@ -320,16 +320,16 @@ const gameBigWinItem = computed(() => {
 watch(token, (value) => {
   if (value != undefined) {
     betHistoryTabList.value = [
-      t("home.bet_history.text_2"),
-      t("home.bet_history.text_3"),
-      t("home.bet_history.text_4"),
-      t("home.bet_history.text_5"),
+      "home.bet_history.text_2",
+      "home.bet_history.text_3",
+      "home.bet_history.text_4",
+      "home.bet_history.text_5",
     ];
   } else {
     betHistoryTabList.value = [
-      t("home.bet_history.text_2"),
-      t("home.bet_history.text_3"),
-      t("home.bet_history.text_4"),
+      "home.bet_history.text_2",
+      "home.bet_history.text_3",
+      "home.bet_history.text_4",
     ];
   }
 });
@@ -337,10 +337,10 @@ watch(token, (value) => {
 onMounted(async () => {
   if (token.value != undefined) {
     betHistoryTabList.value = [
-      t("home.bet_history.text_2"),
-      t("home.bet_history.text_3"),
-      t("home.bet_history.text_4"),
-      t("home.bet_history.text_5"),
+      "home.bet_history.text_2",
+      "home.bet_history.text_3",
+      "home.bet_history.text_4",
+      "home.bet_history.text_5",
     ];
   }
   await dispatchGameBigWin();
@@ -371,7 +371,7 @@ onMounted(async () => {
           style="border-radius: 8px !important"
           @click="handleBetHistoryTab(item)"
         >
-          {{ item }}
+          {{ t(item) }}
         </v-btn>
       </template>
     </div>
@@ -488,7 +488,7 @@ onMounted(async () => {
           style="border-radius: 8px !important"
           @click="handleBetHistoryTab(item)"
         >
-          {{ item }}
+          {{ t(item) }}
         </v-btn>
       </template>
     </div>
