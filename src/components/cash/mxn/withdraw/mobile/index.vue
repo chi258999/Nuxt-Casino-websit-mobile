@@ -27,6 +27,7 @@ import icon_public_150 from "@/assets/public/svg/icon_public_150.svg";
 import { getUnitByCurrency } from '@/utils/currencyUnit';
 import currencyListValue from "@/utils/currencyList";
 import { getPhoneCodeByLocale } from "@/utils/phoneCodes";
+import Adjust from "@adjustcom/adjust-web-sdk";
 
 const { name, width } = useDisplay();
 const { t } = useI18n();
@@ -342,7 +343,6 @@ const handleWithdrawSubmit = async () => {
     phoneBindingDialog.value = true;
     return;
   }
-  loading.value = true
   let formData = {} as any;
   // if (depositConfig.value.deposit_user_switch) {
   //   formData.id_number = pixInfo.value.id
@@ -370,25 +370,30 @@ const handleWithdrawSubmit = async () => {
     formData.email = "";
     formData.phone = "";
   } else {
+    withdraw_type.value = selectedPaymentItem.value.channel_type;
     if (withdrawInfo !== null) {
       let withdrawInfoItem = JSON.parse(withdrawInfo);
-      formData.bank_number = withdrawInfoItem.clabe_number;
-      formData.id_number = withdrawInfoItem.rfc;
-      formData.first_name = withdrawInfoItem.name;
+      formData.bank_number = withdraw_type.value.toLocaleLowerCase() == "spei" ? withdrawInfoItem.spei.clabe_number : withdrawInfoItem.paypal.paypal_account;
+      formData.id_number = withdraw_type.value.toLocaleLowerCase() == "spei" ? withdrawInfoItem.spei.rfc : "";
+      formData.first_name = withdraw_type.value.toLocaleLowerCase() == "spei" ? withdrawInfoItem.spei.name : withdrawInfoItem.paypal.name;
+      formData.email = withdraw_type.value.toLocaleLowerCase() == "spei" ? withdrawInfoItem.spei.email : withdrawInfoItem.paypal.email;
       formData.last_name = userInfo.value.last_name
-      formData.email = withdrawInfoItem.email;
-      formData.phone = phoneCode.split("+")[1] + userInfo.value.phone;
+      // formData.phone = phoneCode.split("+")[1] + userInfo.value.phone;
+      formData.phone = userInfo.value.phone;
       // formData.bank_name = withdrawInfoItem.bank_code;
       // formData.rfc = withdrawInfoItem.rfc;
     } else {
-      withdraw_type.value = selectedPaymentItem.value.channel_type;
       withdrawInfoDialog.value = true;
       return;
     }
   }
+  loading.value = true
   await dispatchUserWithdrawSubmit(formData)
   loading.value = false;
   if (success.value) {
+    Adjust.trackEvent({
+      eventToken: "idmvzd",
+    });
     const toast = useToast();
     toast.success(t("withdraw_dialog.text_11"), {
       timeout: 3000,
