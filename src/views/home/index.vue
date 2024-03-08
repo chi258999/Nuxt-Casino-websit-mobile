@@ -1535,7 +1535,6 @@ export default Dashboard;
             :class="mobileWidth > 600 ? ' mt-12' : ' mt-4'"
             v-if="item.games.length > 0"
             style="margin-bottom: 6px !important"
-            @click="handleGameFilterBtn(item.slug)"
           >
             <!-- <inline-svg
               :src="item.image"
@@ -1555,7 +1554,7 @@ export default Dashboard;
               v-else
             >
             </inline-svg> -->
-            {{ item.name }}
+            <p @click="handleGameFilterBtn(item.slug)">{{ item.name }}</p>
           </v-row>
 
           <v-row class="ml-4 mr-2 mt-2 mb-0 pc-game-row" v-if="mobileWidth > 600">
