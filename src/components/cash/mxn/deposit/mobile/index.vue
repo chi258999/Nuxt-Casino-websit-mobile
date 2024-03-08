@@ -23,7 +23,7 @@ import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
 import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
 import { getUnitByCurrency } from '@/utils/currencyUnit';
 import currencyListValue from '@/utils/currencyList';
-import Adjust from '@adjustcom/adjust-web-sdk';
+import { adjustTrackEvent } from '@/utils/adjust';
 
 const { name, width } = useDisplay();
 const { t } = useI18n();
@@ -380,10 +380,16 @@ const handleDepositSubmit = async () => {
 
       // 处理跳转新窗口浏览器拦截
       const elementA = document.createElement('a');
-      elementA.href = depositSubmit.value.url;
-      document.body.appendChild(elementA);
+      const elementAid = 'newpage'
+      elementA.setAttribute('href', depositSubmit.value.url);
+      elementA.setAttribute('target', '_blank');
+      elementA.setAttribute('id', elementAid);
+      // 防止反复添加
+      if (!document.getElementById(elementAid)) {
+        document.body.appendChild(elementA);
+      }
       elementA.click();
-      elementA.addEventListener('click', function(event) {
+      elementA.addEventListener('click', function (event) {
         event.preventDefault(); // 阻止默认行为
         window.location.href = this.href; // 手动跳转
       });
@@ -444,9 +450,23 @@ const handleDepositSubmit = async () => {
       icon: SuccessIcon,
       rtl: false,
     });
-    Adjust.trackEvent({
-      eventToken: 'gmx6cdn8x3pc'
-    })
+    if (localStorage.getItem("recharge_number") == null) {
+      localStorage.setItem("recharge_number", "1");
+      adjustTrackEvent({
+        eventToken: "r15rr9", // FIRST_RECHARGE
+      });
+    } else {
+      localStorage.setItem("recharge_number", (Number(localStorage.getItem("recharge_number")) + 1).toString());
+      if (Number(localStorage.getItem("recharge_number")) == 2) {
+        adjustTrackEvent({
+          eventToken: "ld7asn", // SECOND_RECHARGE
+        });
+      } else {
+        adjustTrackEvent({
+          eventToken: "gdlh3x", // PAY_RECHARGE
+        });
+      }
+    }
     await dispatchUserProfile();
     await dispatchUserBalance();
     // if (depositSubmit.value.code_url != "") {
