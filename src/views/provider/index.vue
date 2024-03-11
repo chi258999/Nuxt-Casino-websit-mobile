@@ -244,6 +244,12 @@ onMounted(async () => {
                 blur="30"
                 @click="showGameConfirmationDialog(game)"
               />
+
+              <div class="text-overlay">
+                <h2>{{ game.name }}</h2>
+                <p>{{ game.provider }}</p>
+              </div>
+
             </v-col>
           </template>
         </v-row>
@@ -492,6 +498,39 @@ onMounted(async () => {
     border-radius: 16px;
     margin: 0px 4px;
     animation: expandReverseAnimation 0.6s 0.1s ease-in infinite;
+  }
+}
+
+/* 文字叠加在图片上 */
+.text-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 4px 7px 4px;
+  padding-left: 12px;
+  padding-top: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-bottom-left-radius: 8px 8px;
+  border-bottom-right-radius: 8px 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.2;
+  }
+
+  p {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    text-align: left;
+    margin-top: 2px;
+    margin-bottom: 4px;
   }
 }
 </style>

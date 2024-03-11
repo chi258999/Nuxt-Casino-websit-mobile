@@ -1596,6 +1596,11 @@ export default Dashboard;
                     blur="30"
                     @click="showGameConfirmationDialog(gameItem)"
                   />
+
+                  <div class="text-overlay">
+                    <h2>{{ gameItem.name }}</h2>
+                    <p>{{ gameItem.provider }}</p>
+                  </div>
                   <!-- <img
                     v-lazy="gameItem.image"
                     :data-src="gameItem.image"
@@ -1757,6 +1762,10 @@ export default Dashboard;
                     blur="30"
                     @click="showGameConfirmationDialog(gameItem)"
                   />
+                  <div class="text-overlay">
+                    <h2>{{ gameItem.name }}</h2>
+                    <p>{{ gameItem.provider }}</p>
+                  </div>
                   <div
                     v-if="selectedCategoryName == 'favorite'"
                     class="m-home-favorite-icon"
@@ -2518,5 +2527,38 @@ export default Dashboard;
 
 .filter-btn-container::-webkit-scrollbar {
   display: none;
+}
+
+/* 文字叠加在图片上 */
+.text-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 4px 7px 4px;
+  padding-left: 12px;
+  padding-top: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-bottom-left-radius: 8px 8px;
+  border-bottom-right-radius: 8px 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.2;
+  }
+
+  p {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    text-align: left;
+    margin-top: 2px;
+    margin-bottom: 4px;
+  }
 }
 </style>

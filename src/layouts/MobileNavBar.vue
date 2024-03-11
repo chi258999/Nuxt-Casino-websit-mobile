@@ -782,6 +782,7 @@ const handleGameFilter = (filterText: string) => {
   //     break;
   // }
   // router.push({ name: "Dashboard", query: { filter: tempFilterText } });
+  
   router.push({ name: "Dashboard", query: { filter: filterText } });
   setNavBarToggle(false);
   setMainBlurEffectShow(false);
