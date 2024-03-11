@@ -1886,9 +1886,9 @@ export const lang: langType = {
     text_56: "",
   },
   promo: {
-    text_1: "",
-    text_2: "",
-    text_3: "",
+    text_1: "Todos los eventos",
+    text_2: "Incidente de VlP",
+    text_3: "Promoción",
     text_4: "",
     text_5: "",
     text_6: "",
