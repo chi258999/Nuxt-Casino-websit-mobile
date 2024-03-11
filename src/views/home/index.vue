@@ -2536,8 +2536,7 @@ export default Dashboard;
   left: 0;
   right: 0;
   margin: 0 4px 7px 4px;
-  padding-left: 12px;
-  padding-top: 10px;
+  padding: 10px 12px 3px;
   color: white;
   background-color: rgba(0, 0, 0, 0.5);
   border-bottom-left-radius: 8px 8px;
@@ -2548,7 +2547,7 @@ export default Dashboard;
     font-size: 12px;
     font-weight: 700;
     color: #FFFFFF;
-    line-height: 1.2;
+    line-height: 1;
   }
 
   p {
@@ -2557,8 +2556,9 @@ export default Dashboard;
     font-weight: 400;
     line-height: 12px;
     text-align: left;
-    margin-top: 2px;
+    margin-top: 5px;
     margin-bottom: 4px;
+    overflow-wrap: break-word;
   }
 }
 </style>
