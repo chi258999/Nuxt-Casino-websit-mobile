@@ -61,7 +61,7 @@ const handleMenu = (index: number) => {
                                     <div class="text-700-12 text-gray" style="line-height: 20px;">
                                         {{ item.title }}
                                     </div>
-                                    <div class="text-400-10 text-gray" style="line-height: 20px;">
+                                    <div v-if="item.content" class="text-400-10 text-gray" style="line-height: 20px;">
                                         {{ item.content }}
                                     </div>
                                 </div>
@@ -105,6 +105,9 @@ const handleMenu = (index: number) => {
     }
     .m-account-dialog-menu-item {
         min-height: 43px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         // margin-top: 1px;
         // margin-bottom: 1px;
     }
