@@ -123,6 +123,16 @@ const handleMenu = (index: number) => {
 .m-account-divider {
     margin: auto;
     border-width: thin;
-    color: black;
+    border: none !important;
+    position: relative;
+}
+.m-account-divider::after {
+    content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 1px;
+	background: #15161C;
 }
 </style>
