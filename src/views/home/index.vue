@@ -1308,7 +1308,7 @@ export default Dashboard;
       ></component>
 
       <!-- input for search -->
-      <v-row class="mt-4 home-search-bar" :class="mobileWidth < 600 ? 'px-1' : 'px-4'">
+      <!-- <v-row class="mt-4 home-search-bar" :class="mobileWidth < 600 ? 'px-1' : 'px-4'">
         <v-text-field
           :placeholder="t('home.search')"
           class="form-textfield dark-textfield"
@@ -1322,7 +1322,7 @@ export default Dashboard;
           :class="mobileWidth < 600 ? 'home-search-text-height' : ''"
           :onfocus="handleSearchInputFocus"
         />
-      </v-row>
+      </v-row> -->
 
       <!-- Live Win Component -->
       <component :is="liveWinComponent"></component>

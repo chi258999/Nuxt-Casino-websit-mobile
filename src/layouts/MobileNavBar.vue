@@ -1609,7 +1609,7 @@ onMounted(async () => {
             {{ t("navBar.menu_item_1.affiliate") }}
           </v-list-item-title>
         </v-list-item>
-        <v-list-item
+        <!-- <v-list-item
           class="m-avatar-img m-user-item1 m-nav-menu"
           style="
             margin-bottom: -8px !important;
@@ -1631,10 +1631,7 @@ onMounted(async () => {
           >
             {{ t("navBar.menu_item_1.blog") }}
           </v-list-item-title>
-        </v-list-item>
-      </v-list>
-      <v-divider class="divider"></v-divider>
-      <v-list>
+        </v-list-item> -->
         <v-list-item
           class="m-avatar-img m-user-item1 m-nav-menu"
           style="
@@ -1659,6 +1656,10 @@ onMounted(async () => {
           </v-list-item-title>
         </v-list-item>
       </v-list>
+      <!-- <v-divider class="divider"></v-divider> -->
+      <!-- <v-list>
+        
+      </v-list> -->
       <v-list>
         <v-menu
           location="center"
