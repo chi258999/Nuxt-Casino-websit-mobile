@@ -855,8 +855,8 @@ button:active:enabled {
         height: 24px;
     }
     .Vue-Toastification__toast-body {
-        height: 24px;
-        line-height: 24px;
+        min-height: 24px;
+        line-height: 16px;
         font-size: 10px;
         color: #fff;
     }
