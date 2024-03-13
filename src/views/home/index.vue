@@ -2051,6 +2051,7 @@ export default Dashboard;
   background: #29263c;
   border-radius: 24px;
   filter: drop-shadow(0px 2.25px 3px rgba(0, 0, 0, 0.21));
+  z-index: 1000;
 
   svg {
     position: absolute;
