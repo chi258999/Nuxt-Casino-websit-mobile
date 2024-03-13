@@ -81,7 +81,7 @@ const transactionTabs = ref<Array<string>>([
   t("transaction.tab.vip"),
   // t("transaction.tab.referral"),
 ]);
-const pageSize = ref<number>(8);
+const pageSize = ref<number>(9);
 const pageNum = ref<number>(1);
 const vipTimesHistoryIndex = ref<number>(1);
 const selectedTab = ref<any>(t("transaction.tab.transactions"));
