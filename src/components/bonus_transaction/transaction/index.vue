@@ -290,7 +290,7 @@ onMounted(async () => {
   }
   .v-slide-group {
     margin: 10px 20px !important;
-    border-radius: 8px !important;
+    // border-radius: 8px !important;
   }
 
   .transaction-tab-btn {
