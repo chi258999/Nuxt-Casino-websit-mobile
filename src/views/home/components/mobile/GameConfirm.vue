@@ -81,7 +81,7 @@ const addFavoriteGame = async (id: string | number) => {
 
   // 改变处理图标颜色
   favoriteSvgIconColor.value = favoriteSvgIconColor.value == "#7782AA" ? "#F9BC01" : "#7782AA";
-  
+
   if (is_favorite.value) {
     await dispatchFavoriteGame({
       del_game: id,
@@ -143,24 +143,16 @@ watch(gameConfirmDialogShow, (value) => {
 <template>
   <div class="m-game-confirm-body">
     <v-row class="mx-2 my-0">
-      <v-col style="flex: 0 0 27.333333% !important;" cols="4" class="px-1">
-        <div style="position: relative;">
-          <img
-            :src="selectedGameItem.image"
-            style="width: 100%"
-            class="m-game-confirm-img"
-          />
-          <div class="text-overlay" style="margin-bottom: 7px;">
-            <h2>{{ selectedGameItem.name }}</h2>
-            <p>{{ selectedGameItem.provider }}</p>
-          </div>
-        </div>
-        
-
+      <v-col style="flex: 0 0 27.333333% !important" cols="4" class="px-1">
+        <img
+          :src="selectedGameItem.image"
+          style="width: 100%"
+          class="m-game-confirm-img"
+        />
       </v-col>
       <v-col cols="5">
         <div class="text-700-14 white mt-2">{{ selectedGameItem.name }}</div>
-        <div class="text-400-12 gray mt-1">by {{ selectedGameItem.provider }}</div>
+        <div class="text-400-12 gray mt-1">by {{ selectedGameItem.provider_name }}</div>
       </v-col>
       <v-col cols="3" class="px-2 mt-2 d-flex justify-end">
         <inline-svg
@@ -227,7 +219,9 @@ watch(gameConfirmDialogShow, (value) => {
     .v-btn__content {
       color: #fff;
       text-align: center;
-      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
+      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
       font-size: 12px;
       font-style: normal;
       font-weight: 700;
@@ -263,7 +257,7 @@ watch(gameConfirmDialogShow, (value) => {
     margin: 0;
     font-size: 12px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #ffffff;
     line-height: 1;
   }
 
