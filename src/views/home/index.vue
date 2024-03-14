@@ -185,6 +185,7 @@ const Dashboard = defineComponent({
       name: "",
       image: "",
       provider: "",
+      provider_name: '',
       producer: "",
       is_demo: false
     })
@@ -434,7 +435,7 @@ const Dashboard = defineComponent({
 
     const handleGameFilterBtn = async (gamFilterBtn: string) => {
       window.scrollTo({
-        top: 450,
+        top: 380,
         behavior: "smooth",
       });
       console.log(gamFilterBtn, t("home.button.all_game"));
@@ -954,7 +955,7 @@ const Dashboard = defineComponent({
     onMounted(async () => {
       loading.value = true;
       console.log(213123123123);
-      
+
       window.scrollTo({
         top: 0,
         behavior: "smooth",
@@ -1372,7 +1373,7 @@ export default Dashboard;
                 height="48"
                 :class="
                   selectedGameFilterBtn == t('home.button.all_game')
-                    ? 'black button-bright'
+                    ? 'black home-game-filter-btn button-bright'
                     : 'text-gray btn-211f31'
                 "
                 @click="handleGameFilterBtn(t('home.button.all_game'))"
@@ -1399,7 +1400,7 @@ export default Dashboard;
                 height="48"
                 :class="
                   selectedGameFilterBtn == item.slug
-                    ? 'black button-bright'
+                    ? 'black home-game-filter-btn button-bright'
                     : 'text-gray btn-211f31'
                 "
                 @click="handleGameFilterBtn(item.slug)"
@@ -1467,7 +1468,7 @@ export default Dashboard;
               height="36"
               :class="
                 selectedGameFilterBtn == t('home.button.all_game')
-                  ? 'black button-bright'
+                  ? 'black home-game-filter-btn button-bright'
                   : 'text-gray btn-211f31'
               "
               @click="handleGameFilterBtn(t('home.button.all_game'))"
@@ -1493,7 +1494,7 @@ export default Dashboard;
                 height="36"
                 :class="
                   selectedGameFilterBtn == item.slug
-                    ? 'black button-bright'
+                    ? 'black home-game-filter-btn button-bright'
                     : 'text-gray btn-211f31'
                 "
                 @click="handleGameFilterBtn(item.slug)"
@@ -1620,10 +1621,10 @@ export default Dashboard;
                   >
                     <div class="text-overlay">
                       <h2>{{ gameItem.name }}</h2>
-                      <p>{{ gameItem.provider }}</p>
+                      <p>{{ gameItem.provider_name }}</p>
                     </div>
                   </ProgressiveImage>
-                  
+
                   <!-- <img
                     v-lazy="gameItem.image"
                     :data-src="gameItem.image"
@@ -1787,7 +1788,7 @@ export default Dashboard;
                   >
                     <div class="text-overlay">
                       <h2>{{ gameItem.name }}</h2>
-                      <p>{{ gameItem.provider }}</p>
+                      <p>{{ gameItem.provider_name }}</p>
                     </div>
                   </ProgressiveImage>
                   <div
@@ -2180,7 +2181,7 @@ export default Dashboard;
     }
   }
 
-  .button-bright {
+  .home-game-filter-btn {
     border-radius: 8px !important;
 
     .v-btn__content {
@@ -2571,7 +2572,7 @@ export default Dashboard;
     margin: 0;
     font-size: 12px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #ffffff;
     line-height: 1;
   }
 
