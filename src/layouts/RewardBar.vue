@@ -290,7 +290,7 @@ onMounted(async () => {
           <v-btn
             class="text-none m-reward-claim-btn"
             width="100%"
-            height="32"
+            height="40"
             @click="claimClicked"
             v-reset-font-size="{ textNode: 'v-btn__content' }"
           >
