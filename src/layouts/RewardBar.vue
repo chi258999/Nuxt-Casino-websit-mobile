@@ -683,6 +683,7 @@ onMounted(async () => {
       min-height: 40px !important;
       background: $agent_card_notmet_bg !important;
       padding: 0px !important;
+      padding-left: 8px !important;
     }
 
     .v-field__input::placeholder {
