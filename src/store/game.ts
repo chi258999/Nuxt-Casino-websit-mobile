@@ -151,6 +151,7 @@ export const gameStore = defineStore({
                     brand_id: "2331516940205559808",
                     betSlipOffsetTop: 0,
                     betslipZIndex: 999,
+                    stickyTop: 0,
                     themeName: "demo-green-dark-table",
                     onLogin: async () => {
                         if (Cookies.get(CacheKey.TOKEN) == "") {
