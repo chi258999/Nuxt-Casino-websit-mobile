@@ -1760,7 +1760,7 @@ export const lang: langType = {
     },
     "agent": {
       "text_1": "Mis referencias",
-      "text_2": "PREGUNTAS FRECUENTES",
+      "text_2": "Preguntas frecuentes",
       "text_3": "Beneficios",
       "text_4": "Informe",
       "text_5": "Grado",
