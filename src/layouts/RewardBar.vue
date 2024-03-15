@@ -25,7 +25,7 @@ import SuccessIcon from "@/components/global/notification/SuccessIcon.vue";
 import WarningIcon from "@/components/global/notification/WarningIcon.vue";
 import { useToast } from "vue-toastification";
 import { adjustTrackEvent } from "@/utils/adjust";
-import { load } from "webfontloader";
+
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
