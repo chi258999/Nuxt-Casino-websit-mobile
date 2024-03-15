@@ -66,7 +66,7 @@ const moreTransactionHistoryFlag = computed(() => {
 })
 
 const handleNext = async (page_no: number) => {
-  startIndex.value = (page_no - 1) * pageSize.value - 1;
+  startIndex.value = (page_no - 1) * pageSize.value;
   endIndex.value = startIndex.value + pageSize.value;
   currentList.value = transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value);
   if (currentList.value.length == 0) {
@@ -236,7 +236,11 @@ onMounted(async () => {
               class="text-400-12"
               style="padding-top: 21px !important; padding-bottom: 21px !important"
             >
-              {{ item.created_at ? moment(item.created_at * 1000).format("YYYY-MM-DD HH:mm:ss") : '' }}
+              {{
+                item.created_at
+                  ? moment(item.created_at * 1000).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              }}
             </td>
             <td
               class="text-400-12"
