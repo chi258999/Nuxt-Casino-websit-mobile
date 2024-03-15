@@ -67,7 +67,7 @@ const { setDepositWithdrawToggle } = appBarStore();
 const { setBonusDashboardDialogVisible } = appBarStore();
 const { dispatchCurrencyList } = currencyStore();
 const { dispatchUserBonus } = bonusStore();
-const { setDepositOrderDialog } = depositStore();
+const { setSocketDepositConfirmDialog } = depositStore();
 const { setTimerValue } = depositStore();
 
 const { dispatchBannerList } = bannerStore();
@@ -152,6 +152,11 @@ const token = computed(() => {
   const { getToken } = storeToRefs(authStore());
   return getToken.value;
 });
+
+const socketDepositConfirmDialog = computed(() => {
+  const { getSocketDepositConfirmDialog } = storeToRefs(depositStore());
+  return getSocketDepositConfirmDialog.value
+})
 
 console.log(Cookies.get("blue-game-token-key"))
 
@@ -464,7 +469,7 @@ watch(socketBalance, (value) => {
     setTimerValue(0);
     localStorage.removeItem("spei");
     localStorage.removeItem("timer");
-    setDepositOrderDialog(false);
+    setSocketDepositConfirmDialog(!socketDepositConfirmDialog.value);
   }
   let locale = currencyListValue[value.cur];
   if (user.value.currency == value.cur) {
