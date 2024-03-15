@@ -2,8 +2,8 @@ import type { langType } from "./lang-base";
 
 export const lang: langType = {
     "main": {
-      "signupButton": "Regístrese en",
-      "loginButton": "Inicio de sesión",
+      "signupButton": "Regístrese",
+      "loginButton": "Inicio sesión",
       "logo_text_1": "HOY",
       "logo_text_2": "777"
     },
