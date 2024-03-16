@@ -130,6 +130,7 @@ export const authStore = defineStore({
         if (response.code == 200) {
           this.setToken(response.token);
           this.setSuccess(true);
+          location.reload()
         } else {
           this.setErrorMessage(handleException(response.code));
         }
@@ -149,6 +150,7 @@ export const authStore = defineStore({
         if (response.code == 200) {
           this.setToken(response.token);
           this.setSuccess(true);
+          location.reload()
         } else {
           // this.setErrorMessage(handleException(response.code));
           this.setErrorMessage(response.message);
