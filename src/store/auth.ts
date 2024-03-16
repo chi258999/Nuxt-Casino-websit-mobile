@@ -74,6 +74,8 @@ export const authStore = defineStore({
       this.token = undefined;
       const networkData: NetworkData = NetworkData.getInstance();
       networkData.resetData();
+      const network: Network = Network.getInstance();
+      network.refresh()
       this.userInfo = {
         uid: "User6696608024",
         name: "Little Planes",
