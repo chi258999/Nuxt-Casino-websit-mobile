@@ -64,8 +64,10 @@ export const authStore = defineStore({
     setToken(token: string) {
       const networkData: NetworkData = NetworkData.getInstance();
       const netCfg: Netcfg = Netcfg.getInstance();
+      const network: Network = Network.getInstance();
       networkData.setToken(token);
       netCfg.setToken(token);
+      network.refresh()
       this.token = token;
     },
     removeToken() {
@@ -130,7 +132,6 @@ export const authStore = defineStore({
         if (response.code == 200) {
           this.setToken(response.token);
           this.setSuccess(true);
-          location.reload()
         } else {
           this.setErrorMessage(handleException(response.code));
         }
@@ -150,7 +151,6 @@ export const authStore = defineStore({
         if (response.code == 200) {
           this.setToken(response.token);
           this.setSuccess(true);
-          location.reload()
         } else {
           // this.setErrorMessage(handleException(response.code));
           this.setErrorMessage(response.message);
