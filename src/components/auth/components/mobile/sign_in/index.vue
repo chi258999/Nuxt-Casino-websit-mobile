@@ -29,7 +29,7 @@ const Login = defineComponent({
   setup(props, { emit }) {
     // translation
     const { t } = useI18n();
-    const { dispatchSignIn } = authStore();
+    const { dispatchSignIn, dispatchQuickLogin } = authStore();
     const { dispatchUserProfile } = authStore();
     const { setAuthModalType } = authStore();
     const { setAuthDialogVisible } = authStore();
@@ -114,15 +114,7 @@ const Login = defineComponent({
       state.currentPage = state.PAGE_TYPE.LOGIN_FORM;
     };
 
-    // methods
-    const handleLoginFormSubmit = async () => {
-      state.loading = true;
-
-      await dispatchSignIn({
-        uid: state.formData.emailAddress,
-        password: state.formData.password,
-      });
-
+    const loginSuccess = async () => {
       if (success.value) {
         adjustTrackEvent({
           eventToken: "yzv017",
@@ -176,7 +168,16 @@ const Login = defineComponent({
         // ).href;
         // state.notificationText = t("login.submit_result.err_text");
       }
+    }
 
+    // methods
+    const handleLoginFormSubmit = async () => {
+      state.loading = true;
+      await dispatchSignIn({
+        uid: state.formData.emailAddress,
+        password: state.formData.password,
+      });
+      await loginSuccess();
       state.loading = false;
     };
 
@@ -218,7 +219,7 @@ const Login = defineComponent({
       }, 100);
     };
 
-    // google Login  谷歌登录
+    // 一键登录
     const onSignInSuccessGoogle = (index: number) => {
       if (index === 0) {
         FB.login(function (response) {
@@ -232,8 +233,13 @@ const Login = defineComponent({
         googleTokenLogin({
           clientId:
             "315002729492-ij8mt521q04m5hmqmdl1gdgc70oedbsi.apps.googleusercontent.com",
-        }).then((res: any) => {
-          console.log("google登录", res);
+        }).then(async (res: any) => {
+          const params = {
+            id_token: res.access_token,
+            type: 1
+          }
+          await dispatchQuickLogin(params);
+          await loginSuccess();
         });
         adjustTrackEvent({
           eventToken: "ifryfc", // GOOGLE_LOGIN
@@ -319,6 +325,7 @@ const Login = defineComponent({
       testAPI,
       statusChangeCallback,
       checkLoginState,
+      loginSuccess
     };
   },
 });
