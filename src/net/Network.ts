@@ -33,13 +33,14 @@ export class Network {
 
   private service: any
 
-  private request: any
+  public request: any
 
   private noWaitView: string[] = []
 
   constructor() {
     this.netCfg = NetworkData.getInstance()
     this.service = this.createService()
+    this.request = this.createRequestFunction(this.service)
     this.onUnsolicited()
   }
 
@@ -50,6 +51,15 @@ export class Network {
 
     return Network.instance
   }
+
+  /**
+   * Offer refresh
+   */
+  public refresh() {
+    this.service = this.createService()
+    this.request = this.createRequestFunction(this.service)
+  }
+
 
   /**
    * Offer Agreement
@@ -86,8 +96,8 @@ export class Network {
    * @param next
    * @param timeout
    */
-  private async POST(route: string, data: any, next: Function) {
-    this.request = this.createRequestFunction(this.service)
+  public async POST(route: string, data: any, next: Function) {
+    // this.request = this.createRequestFunction(this.service)
     await this.request({
       url: route,
       method: 'POST',
@@ -102,8 +112,8 @@ export class Network {
    * @param route
    * @param msg
    */
-  private GET(route: string, data: any, next: Function) {
-    this.request = this.createRequestFunction(this.service)
+  public GET(route: string, data: any, next: Function) {
+    // this.request = this.createRequestFunction(this.service)
     return this.request({
       url: route,
       method: 'GET',

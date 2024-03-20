@@ -19,7 +19,7 @@ import SuccessIcon from '@/components/global/notification/SuccessIcon.vue';
 import WarningIcon from '@/components/global/notification/WarningIcon.vue';
 import { useToast } from "vue-toastification";
 import { liveChatStore } from "@/store/liveChat";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 const { width } = useDisplay()
@@ -34,6 +34,9 @@ const { dispatchUserEmailSubmit } = userStore();
 const { dispatchUserProfile } = authStore();
 
 const route = useRoute();
+const router = useRouter();
+
+const loading = ref<boolean>(false);
 
 const userInfo = computed((): GetUserInfo => {
   const { getUserInfo } = storeToRefs(authStore());
@@ -154,9 +157,11 @@ const submitNickName = (name: string) => {
 }
 
 const handleVerifyCode = async () => {
+  loading.value = true;
   await dispatchUserEmailSend({
     email: userInfo.value.email
   })
+  loading.value = false;
   if (success.value) {
     const toast = useToast();
     toast.success(t("account.text_2"), {
@@ -286,6 +291,7 @@ onMounted(async () => {
           class="text-none m-email-verify-btn-color"
           @click="handleVerifyCode"
           height="40px"
+          :loading="loading"
           v-if="!userInfo.email_confirmd"
         >
           {{ t("account.verify_code_text") }}

@@ -12,6 +12,12 @@ import * as clipboard from "clipboard-polyfill";
 import { useToast } from "vue-toastification";
 import SuccessIcon from '@/components/global/notification/SuccessIcon.vue';
 import WarningIcon from '@/components/global/notification/WarningIcon.vue';
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -23,11 +29,11 @@ const { pageSize, transactionHistoryItem } = toRefs(props);
 const formsList = ref<Array<any>>([
   {
     date: "2023/1/29 17:50:36",
-    amount: "R$3000000000.00",
+    amount: platformCurrency.value + "3000000000.00",
     type: "Game Win",
     id: "re54er35sgf",
     note: "",
-    balance: "R$ 300000000.00",
+    balance: platformCurrency.value + " 300000000.00",
   },
 ]);
 
@@ -109,12 +115,11 @@ const handleCopyID = async (id: string) => {
   );
 }
 watch(transactionHistoryItem, (value) => {
-  console.log(value);
-  paginationLength.value = moreTransactionHistoryFlag.value && transactionHistoryItem.value.record.length % 8 == 0 ? paginationLength.value + 1 : paginationLength.value
+  paginationLength.value = moreTransactionHistoryFlag.value ? paginationLength.value + 1 : paginationLength.value
 }, { deep: true });
 
 onMounted(async () => {
-  paginationLength.value = moreTransactionHistoryFlag.value && transactionHistoryItem.value.record.length % 8 == 0 ? paginationLength.value + 1 : paginationLength.value
+  // paginationLength.value = moreTransactionHistoryFlag.value ? paginationLength.value + 1 : paginationLength.value
 });
 </script>
 <template>
@@ -231,7 +236,11 @@ onMounted(async () => {
               class="text-400-12"
               style="padding-top: 21px !important; padding-bottom: 21px !important"
             >
-              {{ moment(item.created_at * 1000).format("YYYY-MM-DD HH:mm:ss") }}
+              {{
+                item.created_at
+                  ? moment(item.created_at * 1000).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              }}
             </td>
             <td
               class="text-400-12"
@@ -310,6 +319,7 @@ onMounted(async () => {
                     : item.id
                 }}
                 <img
+                  v-show="item.id"
                   src="@/assets/public/svg/icon_public_71.svg"
                   width="16"
                   class="ml-1"
@@ -331,7 +341,7 @@ onMounted(async () => {
                 padding-bottom: 21px !important;
               "
             >
-              R$ {{ item.balance }}
+              {{ item.balance ? `${ platformCurrency } ${item.balance}` : '' }}
             </td>
           </tr>
         </template>

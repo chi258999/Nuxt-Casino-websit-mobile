@@ -19,10 +19,18 @@ import img_agentemblem_14 from "@/assets/affiliate/achievement/img_agentemblem_1
 import img_agentemblem_15 from "@/assets/affiliate/achievement/img_agentemblem_15.png";
 import { type AchievementItem, type GetAchievementItem } from "@/interface/achievement";
 import { achievementStore } from "@/store/achievement";
+// 获取平台货币
+import { storeToRefs } from "pinia";
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
 const { dispatchAchievementAward } = achievementStore();
+const { dispatchAchievementList } = achievementStore();
 
 const props = defineProps<{ achievementItem: GetAchievementItem }>();
 
@@ -30,78 +38,53 @@ const { achievementItem } = toRefs(props);
 
 const rate = ref(97.8); // 100 is 97.8
 
+const receivedAchievementListShow = ref<boolean>(false);
+
 const realizationItem = ref<Array<any>>([
   {
     img: img_agentemblem_1,
-    grade: 10,
-    realization_grade: 5,
-    rate: 97.8,
-  },
-  {
-    img: img_agentemblem_1,
-    grade: 40,
-    realization_grade: 20,
-    rate: 97.8,
-  },
-  {
-    img: img_agentemblem_1,
-    grade: 100,
-    realization_grade: 50,
-    rate: 97.8,
-  },
-  {
-    img: img_agentemblem_1,
-    grade: 200,
-    realization_grade: 100,
-    rate: 97.8,
+    min: 0,
+    max: 200,
   },
   {
     img: img_agentemblem_5,
-    grade: 1000,
-    realization_grade: 500,
-    rate: 97.8,
+    min: 200,
+    max: 500,
   },
   {
     img: img_agentemblem_6,
-    grade: 2000,
-    realization_grade: 1000,
-    rate: 21.5,
+    min: 500,
+    max: 1000,
   },
   {
     img: img_agentemblem_7,
-    grade: 6000,
-    realization_grade: 3000,
-    rate: 0,
+    min: 1000,
+    max: 3000,
   },
   {
     img: img_agentemblem_8,
-    grade: 12000,
-    realization_grade: 5000,
-    rate: 0,
+    min: 3000,
+    max: 5000,
   },
   {
     img: img_agentemblem_9,
-    grade: 25000,
-    realization_grade: 10000,
-    rate: 0,
+    min: 5000,
+    max: 10000,
   },
   {
     img: img_agentemblem_10,
-    grade: 2000000,
-    realization_grade: 50000,
-    rate: 0,
+    min: 10000,
+    max: 50000,
   },
   {
     img: img_agentemblem_11,
-    grade: 4000000,
-    realization_grade: 100000,
-    rate: 0,
+    min: 50000,
+    max: 100000,
   },
   {
     img: img_agentemblem_11,
-    grade: 8000000,
-    realization_grade: 200000,
-    rate: 0,
+    min: 100000,
+    max: 200000,
   },
 ]);
 
@@ -113,47 +96,165 @@ const achievementAward = async (achievement_item: AchievementItem, achievement_p
   console.log(achievement_item);
   if (achievement_item.num <= achievement_progress && achievement_item.state == 1) {
     await dispatchAchievementAward({ index: achievement_item.index });
+    await dispatchAchievementList();
   }
+}
+
+const showReceivedAchievementList = () => {
+  receivedAchievementListShow.value = true;
+}
+
+const hideReceivedAchievementList = () => {
+  receivedAchievementListShow.value = false;
 }
 </script>
 
 <template>
+  <div
+    class="relative"
+    style="height: 38px"
+    v-if="achievementItem.achievement_explain.filter((item: any) => item.state == 2).length > 0 && !receivedAchievementListShow"
+  >
+    <v-card
+      class="m-achievement-realization-card"
+      style="
+        box-shadow: 0px 4px 6px 1px #0000004d;
+        position: absolute;
+        top: -111px;
+        width: 100%;
+        z-index: -1;
+        scale: 0.92;
+      "
+    ></v-card>
+    <v-card
+      class="m-achievement-realization-card"
+      style="
+        box-shadow: 0px 4px 6px 1px #0000004d;
+        position: absolute;
+        top: -103px;
+        width: 100%;
+        z-index: -2;
+        scale: 0.88;
+        opacity: 0.8;
+      "
+    ></v-card>
+    <v-card
+      class="m-achievement-realization-card"
+      style="
+        box-shadow: 0px 4px 6px 1px #0000004d;
+        position: absolute;
+        top: -94px;
+        width: 100%;
+        z-index: -3;
+        scale: 0.84;
+        opacity: 0.5;
+      "
+    ></v-card>
+    <v-card
+      class="m-achievement-realization-card"
+      style="
+        box-shadow: 0px 4px 6px 1px #0000004d;
+        position: absolute;
+        top: -87px;
+        width: 100%;
+        z-index: -4;
+        scale: 0.8;
+        opacity: 0.3;
+      "
+    ></v-card>
+    <div class="text-center pt-5">
+      <v-icon
+        class="m-achievement-realization-arrow"
+        color="white"
+        @click="showReceivedAchievementList"
+      >
+        mdi-chevron-down
+      </v-icon>
+    </div>
+  </div>
+  <template v-if="receivedAchievementListShow">
+    <v-card
+      v-if="receivedAchievementListShow"
+      class="m-achievement-realization-card mx-4 mt-2"
+      v-for="(item, index) in achievementItem.achievement_explain.filter(
+      (item: any) => item.state == 2
+    )"
+      :key="index"
+    >
+      <v-row class="mx-0">
+        <v-col cols="5" class="text-center">
+          <template v-for="(imageItem, imageIndex) in realizationItem" :key="imageIndex">
+            <img
+              :src="imageItem.img"
+              width="50"
+              class="img-gray opacity-1"
+              v-if="imageItem.min < item.num && imageItem.max >= item.num"
+            />
+          </template>
+          <p class="text-900-18 gray opacity-45">{{ platformCurrency }} {{ item.award }}</p>
+        </v-col>
+        <v-col cols="7" class="text-center">
+          <p class="text-700-12 mt-4 gray opacity-45">
+            {{ t("affiliate.achievement.text_2") }} {{ item.num }}
+          </p>
+          <div class="mt-2 m-achievement-realization-progress-bg">
+            <v-progress-linear
+              v-model="item.rate"
+              height="24"
+              class="m-achievement-realization-progress"
+            >
+              <div class="text-800-10 gray opacity-45">
+                {{
+                  Number(achievementItem.achievement_progress) > Number(item.num)
+                    ? item.num
+                    : achievementItem.achievement_progress
+                }}
+                /
+                {{ item.num }}
+              </div>
+            </v-progress-linear>
+          </div>
+          <v-btn
+            class="mt-3 m-achievement-realization-btn"
+            width="132"
+            height="32"
+            :disabled="true"
+          >
+            {{ t("affiliate.achievement.text_3") }}
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-card>
+    <div class="text-center">
+      <v-icon
+        class="m-achievement-realization-arrow"
+        color="white"
+        @click="hideReceivedAchievementList"
+      >
+        mdi-chevron-up
+      </v-icon>
+    </div>
+  </template>
   <v-card
     class="m-achievement-realization-card mx-4 mt-2"
-    v-for="(item, index) in achievementItem.achievement_explain"
+    v-for="(item, index) in achievementItem.achievement_explain.filter(
+      (item) => item.state != 2
+    )"
     :key="index"
   >
     <v-row class="mx-0">
       <v-col cols="5" class="text-center">
-        <img
-          :src="realizationItem[index].img"
-          width="50"
-          :class="
-            item.num <= achievementItem.achievement_progress && item.state == 1
-              ? ''
-              : 'img-gray opacity-3'
-          "
-        />
-        <p
-          class="text-900-18"
-          :class="
-            item.num <= achievementItem.achievement_progress && item.state == 1
-              ? 'color-F9BC01'
-              : 'color-414968'
-          "
-        >
-          R$ {{ item.award }}
-        </p>
+        <template v-for="(imageItem, imageIndex) in realizationItem" :key="imageIndex">
+          <img
+            :src="imageItem.img"
+            width="50"
+            v-if="imageItem.min < item.num && imageItem.max >= item.num"
+          />
+        </template>
+        <p class="text-900-18 color-F9BC01">{{ platformCurrency }} {{ item.award }}</p>
       </v-col>
       <v-col cols="7" class="text-center">
-        <p
-          class="text-700-12 mt-4"
-          :class="
-            item.num <= achievementItem.achievement_progress && item.state == 1
-              ? 'white'
-              : 'color-414968'
-          "
-        >
+        <p class="text-700-12 mt-4 white">
           {{ t("affiliate.achievement.text_2") }} {{ item.num }}
         </p>
         <div
@@ -169,26 +270,23 @@ const achievementAward = async (achievement_item: AchievementItem, achievement_p
             height="24"
             class="m-achievement-realization-progress"
           >
-            <div
-              class="text-800-10"
-              :class="
-                item.num <= achievementItem.achievement_progress && item.state == 1
-                  ? 'white'
-                  : 'color-414968'
-              "
-            >
-              {{
-                Number(achievementItem.achievement_progress) > Number(item.num)
-                  ? item.num
-                  : achievementItem.achievement_progress
-              }}
-              /
-              {{ item.num }}
+            <div class="text-800-10">
+              <span class="color-F9BC01">
+                {{
+                  Number(achievementItem.achievement_progress) > Number(item.num)
+                    ? item.num
+                    : achievementItem.achievement_progress
+                }}
+                /
+              </span>
+              <span class="white">
+                {{ item.num }}
+              </span>
             </div>
           </v-progress-linear>
         </div>
         <v-btn
-          class="text-none mt-3"
+          class="mt-3"
           width="132"
           height="32"
           :class="
@@ -207,6 +305,10 @@ const achievementAward = async (achievement_item: AchievementItem, achievement_p
 </template>
 
 <style lang="scss">
+.m-achievement-realization-arrow {
+  font-size: 27px;
+}
+
 .m-achievement-realization-card {
   border-radius: 8px;
   background: $agent_card_notmet_bg;
@@ -215,11 +317,15 @@ const achievementAward = async (achievement_item: AchievementItem, achievement_p
 }
 
 .m-achievement-realization-progress-bg {
+  .v-progress-linear__background {
+    background: black !important;
+    opacity: 0.8 !important;
+  }
   .v-progress-linear {
-    width: 180px;
-    border-radius: 30px;
+    width: 180px !important;
+    border-radius: 30px !important;
     background: $agent_card_bg;
-    box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset;
+    box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset !important;
   }
 
   .v-progress-linear__determinate {
@@ -234,10 +340,10 @@ const achievementAward = async (achievement_item: AchievementItem, achievement_p
 
 .m-achievement-realization-progress-active-bg {
   .v-progress-linear {
-    width: 180px;
-    border-radius: 30px;
+    width: 180px !important;
+    border-radius: 30px !important;
     background: $agent_card_bg;
-    box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset;
+    box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset !important;
   }
 
   .v-progress-linear__determinate {
@@ -253,11 +359,13 @@ const achievementAward = async (achievement_item: AchievementItem, achievement_p
 .m-achievement-realization-active-btn {
   border-radius: 8px;
   background: $agent_card_bonuses_text_color;
-  box-shadow: 0px 4px 6px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 4px 6px 1px #0000004d;
 
   .v-btn__content {
     color: #fff;
-    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
     font-size: 10px;
     font-style: normal;
     font-weight: 700;
@@ -272,12 +380,15 @@ const achievementAward = async (achievement_item: AchievementItem, achievement_p
   box-shadow: 0px 4px 6px 1px rgba(0, 0, 0, 0.3) !important;
 
   .v-btn__content {
-    color: #23262F;
-    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
+    color: #7782aa;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
     font-size: 10px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    opacity: 0.45;
   }
 }
 </style>

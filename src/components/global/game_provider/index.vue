@@ -35,9 +35,13 @@ const gameProviders = computed(() => {
   return getGameProviders.value;
 });
 
-const handleGameProviderPage = (slug: string) => {
-  router.push({ name: "Provider", query: { slug: slug } });
-};
+// const handleGameProviderPage = (slug: string) => {
+//   router.push({ name: "Provider", query: { slug: slug } });
+// };
+
+const handleThirdParthVendor = () => {
+  router.push({ name: "Third_Parth_Vendor" });
+}
 
 watch(route, async (to, from) => {
   await dispatchGameCategories("?type=providers");
@@ -53,6 +57,7 @@ onMounted(async () => {
   <v-row
     class="mb-4 white"
     :class="[mobileWidth < 600 ? 'mx-2 mt-8 text-800-16' : 'mx-4 mt-6 text-700-22']"
+    @click="handleThirdParthVendor"
   >
     {{ t("home.game_providers") }}
   </v-row>
@@ -67,7 +72,21 @@ onMounted(async () => {
     </div>
   </v-row>
   <v-row class="ma-2" v-else>
-    <v-slide-group>
+    <div class="m-game-provider-img-container">
+      <div
+        v-for="(gameProviderItem, gameProviderIndex) in gameProviders"
+        :key="gameProviderIndex"
+      >
+        <img
+          :src="gameProviderItem.pictures"
+          width="126"
+          height="49"
+          class="mr-5"
+          @click="handleThirdParthVendor"
+        />
+      </div>
+    </div>
+    <!-- <v-slide-group>
       <v-slide-group-item
         v-for="(gameProviderItem, gameProviderIndex) in gameProviders"
         :key="gameProviderIndex"
@@ -77,10 +96,10 @@ onMounted(async () => {
           width="126"
           height="49"
           class="mr-5"
-          @click="handleGameProviderPage(gameProviderItem.slug)"
+          @click="handleThirdParthVendor"
         />
       </v-slide-group-item>
-    </v-slide-group>
+    </v-slide-group> -->
   </v-row>
 </template>
 
@@ -96,6 +115,21 @@ onMounted(async () => {
   }
   .v-slide-group__next {
     display: none !important;
+  }
+
+  .m-game-provider-img-container {
+    width: 100%;
+    overflow-x: auto;
+    display: flex;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none; /* WebKit */
+    }
+    ::-moz-scrollbar {
+      display: none; /* Firefox */
+    }
   }
 }
 </style>

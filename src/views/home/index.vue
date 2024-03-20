@@ -40,7 +40,8 @@ import { ProgressiveImage } from "vue-progressive-image";
 import { mainStore } from "@/store/main";
 import MOrder from "@/views/home/components/mobile/Order.vue";
 import { adjustTrackEvent } from "@/utils/adjust";
-import { log } from "console";
+import { Network } from "@/net/Network";
+import { NETWORK } from '@/net/NetworkCfg';
 
 const GameProviders = defineAsyncComponent(() => import("@/components/global/game_provider/index.vue"));
 
@@ -185,6 +186,7 @@ const Dashboard = defineComponent({
       name: "",
       image: "",
       provider: "",
+      provider_name: '',
       producer: "",
       is_demo: false
     })
@@ -204,7 +206,7 @@ const Dashboard = defineComponent({
 
     const currentPage = ref<number>(1);
     const moreGameCurrentPage = ref<number>(1);
-    const limit = ref<number>(8);
+    const limit = ref<number>(6);
 
     const moreLoading = ref<boolean>(false);
     const moreIndex = ref<number>(0);
@@ -433,10 +435,10 @@ const Dashboard = defineComponent({
     const gameFilterBtnFlag = ref<boolean>(false);
 
     const handleGameFilterBtn = async (gamFilterBtn: string) => {
-      window.scrollTo({
-        top: 450,
-        behavior: "smooth",
-      });
+      // window.scrollTo({
+      //   top: 450,
+      //   behavior: "smooth",
+      // });
       console.log(gamFilterBtn, t("home.button.all_game"));
       if (gameFilterBtnFlag.value) {
         return;
@@ -606,27 +608,41 @@ const Dashboard = defineComponent({
           }
         });
       }
-      console.log(pagingGames.value);
       gameFilterBtnFlag.value = false;
     };
 
     watch(selectedGameFilterBtn, () => {
       const element = document.getElementsByClassName('filter-btn-container'); // Replace 'your-element-id' with the actual ID of your element
+      const childNodeList = element[0].childNodes; // 获取所有子元素
+      const childNodes = [] // 获取过滤之后的所有子元素
+      for (let i = 0; i < childNodeList.length; i++) {
+        const child = childNodeList[i];
+        if (child.nodeType === 1) { // 过滤掉非元素节点
+          childNodes.push(child)
+        }
+      }
+
       if (element != undefined) {
         let curPos = element[0].scrollLeft;
         let index = gameGroupBtnList.value.findIndex(item => item.slug == selectedGameFilterBtn.value);
-        index = index + 1;
-        let left = 0;
-        let right = 116.48;
-        if (index > 0) {
-          left = 116.48 + 148 * (index - 1);
-          right = left + 148;
-        }
-        console.log((element[0] as any).offsetWidth);
-        const width = (element[0] as any).offsetWidth;
-        if (!(left > curPos && left < curPos + width)) {
-          element[0].scrollLeft = 116.48 + (index - 1) * 148;
-        }
+
+        element[0].scrollTo({
+          left: childNodes[index + 1].offsetLeft - element[0].offsetLeft - (element[0].offsetWidth - childNodes[index + 1].offsetWidth) / 2,
+          behavior: 'smooth'
+        });
+
+        // index = index + 1;
+        // let left = 0;
+        // let right = 116.48;
+        // if (index > 0) {
+        //   left = 116.48 + 148 * (index - 1);
+        //   right = left + 148;
+        // }
+        // console.log((element[0] as any).offsetWidth);
+        // const width = (element[0] as any).offsetWidth;
+        // if (!(left > curPos && left < curPos + width)) {
+        //   element[0].scrollLeft = 116.48 + (index - 1) * 148;
+        // }
       }
     })
     const handleMoreGame = async (
@@ -643,7 +659,7 @@ const Dashboard = defineComponent({
         await dispatchUserGame({
           game_categories_slug: selectedCategoryName.value,
           page: new_page_no,
-          limit: limit.value * new_page_no,
+          limit: limit.value,
         });
       } else {
         await dispatchGameSearch(
@@ -725,12 +741,28 @@ const Dashboard = defineComponent({
       selectedGameItem.value = game_item;
     }
 
+    const getCategoriesFunc = async (sub_api: string) => {
+      let result;
+      const route: string = NETWORK.GAME_INFO.GAME_CATEGORY + sub_api
+      const network: Network = Network.getInstance();
+      try {
+        const res = await network.request({
+          url: route,
+          method: 'GET',
+        })
+        result = res.data || []
+      } catch (err) {
+        result = []
+      }
+      return result
+    }
+
     watch(gameConfirmDialogShow, (value: boolean) => {
       // setMailMenuShow(value);
     })
 
     watch(mailMenuShow, (value) => {
-      handleGameFilterBtn(t('home.button.all_game'))
+      // handleGameFilterBtn(t('home.button.all_game'))
     })
 
     watch(gameFilterText, async (value: any) => {
@@ -934,12 +966,12 @@ const Dashboard = defineComponent({
           selectedCategoryName.value = "live";
           break;
       }
+
+      handleGameFilterBtn(selectedGameFilterBtn.value)
     }, { flush: 'pre', immediate: true, deep: true })
 
     onMounted(async () => {
       loading.value = true;
-      console.log(213123123123);
-      
       window.scrollTo({
         top: 0,
         behavior: "smooth",
@@ -947,14 +979,15 @@ const Dashboard = defineComponent({
       adjustTrackEvent({
         eventToken: "s2jbxh", // PAGE_VIEW
       });
-      await dispatchGameCategories(`?type=sports`);
-      await dispatchGameCategories(`?type=${filterTabText.value}`);
+      // await dispatchGameCategories(`?type=sports`);
+      // await dispatchGameCategories(`?type=${filterTabText.value}`);
+      const categorieList = await getCategoriesFunc(`?type=${filterTabText.value}`)
       // await dispatchUserActivityList({})
       await bannerLoad();
       await liveWinLoad();
       await betHistoryLoad();
       loading.value = false;
-      allGames.value = gameCategories.value;
+      allGames.value = categorieList;
       allGames.value.map(async (item: { slug: string; page_no: number; games: any; }) => {
         await dispatchGameSearch(
           "?game_categories_slug=" +
@@ -987,7 +1020,6 @@ const Dashboard = defineComponent({
           setOriginalGames(gameSearchList.value.list.slice(0, 9));
         }
       });
-
       if (token.value != undefined) {
         await dispatchSocketConnect();
       }
@@ -1357,7 +1389,7 @@ export default Dashboard;
                 height="48"
                 :class="
                   selectedGameFilterBtn == t('home.button.all_game')
-                    ? 'black button-bright'
+                    ? 'black home-game-filter-btn button-bright'
                     : 'text-gray btn-211f31'
                 "
                 @click="handleGameFilterBtn(t('home.button.all_game'))"
@@ -1384,7 +1416,7 @@ export default Dashboard;
                 height="48"
                 :class="
                   selectedGameFilterBtn == item.slug
-                    ? 'black button-bright'
+                    ? 'black home-game-filter-btn button-bright'
                     : 'text-gray btn-211f31'
                 "
                 @click="handleGameFilterBtn(item.slug)"
@@ -1452,7 +1484,7 @@ export default Dashboard;
               height="36"
               :class="
                 selectedGameFilterBtn == t('home.button.all_game')
-                  ? 'black button-bright'
+                  ? 'black home-game-filter-btn button-bright'
                   : 'text-gray btn-211f31'
               "
               @click="handleGameFilterBtn(t('home.button.all_game'))"
@@ -1478,7 +1510,7 @@ export default Dashboard;
                 height="36"
                 :class="
                   selectedGameFilterBtn == item.slug
-                    ? 'black button-bright'
+                    ? 'black home-game-filter-btn button-bright'
                     : 'text-gray btn-211f31'
                 "
                 @click="handleGameFilterBtn(item.slug)"
@@ -1544,7 +1576,7 @@ export default Dashboard;
           <v-row
             class="ml-4 original_game_text"
             :class="mobileWidth > 600 ? ' mt-12' : ' mt-4'"
-            v-if="item.games.length > 0"
+            v-if="item.games != undefined && item.games.length > 0"
             style="margin-bottom: 6px !important"
           >
             <!-- <inline-svg
@@ -1569,7 +1601,7 @@ export default Dashboard;
           </v-row>
 
           <v-row class="ml-4 mr-2 mt-2 mb-0 pc-game-row" v-if="mobileWidth > 600">
-            <template v-if="item.games.length > 0">
+            <template v-if="item.games != undefined && item.games.length > 0">
               <template v-for="(gameItem, gameIndex) in item.games" :key="gameIndex">
                 <div
                   class="original-game-img-width pc-game-img-width"
@@ -1587,7 +1619,7 @@ export default Dashboard;
             </template>
           </v-row>
           <v-row class="mx-1 mt-0 mb-0" v-else>
-            <template v-if="item.games.length > 0">
+            <template v-if="item.games != undefined && item.games.length > 0">
               <template v-for="(gameItem, gameIndex) in item.games" :key="gameIndex">
                 <v-col
                   cols="4"
@@ -1605,10 +1637,10 @@ export default Dashboard;
                   >
                     <div class="text-overlay">
                       <h2>{{ gameItem.name }}</h2>
-                      <p>{{ gameItem.provider }}</p>
+                      <p>{{ gameItem.provider_name }}</p>
                     </div>
                   </ProgressiveImage>
-                  
+
                   <!-- <img
                     v-lazy="gameItem.image"
                     :data-src="gameItem.image"
@@ -1772,7 +1804,7 @@ export default Dashboard;
                   >
                     <div class="text-overlay">
                       <h2>{{ gameItem.name }}</h2>
-                      <p>{{ gameItem.provider }}</p>
+                      <p>{{ gameItem.provider_name }}</p>
                     </div>
                   </ProgressiveImage>
                   <div
@@ -2036,6 +2068,7 @@ export default Dashboard;
   background: #29263c;
   border-radius: 24px;
   filter: drop-shadow(0px 2.25px 3px rgba(0, 0, 0, 0.21));
+  z-index: 1000;
 
   svg {
     position: absolute;
@@ -2142,9 +2175,9 @@ export default Dashboard;
   font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
     Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
     sans-serif;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
+  // font-size: 14px;
+  // font-style: normal;
+  // font-weight: 400;
   line-height: normal;
 }
 
@@ -2164,7 +2197,7 @@ export default Dashboard;
     }
   }
 
-  .button-bright {
+  .home-game-filter-btn {
     border-radius: 8px !important;
 
     .v-btn__content {
@@ -2555,7 +2588,7 @@ export default Dashboard;
     margin: 0;
     font-size: 12px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #ffffff;
     line-height: 1;
   }
 

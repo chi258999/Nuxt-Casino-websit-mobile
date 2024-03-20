@@ -8,6 +8,12 @@ import { vipStore } from "@/store/vip";
 import { storeToRefs } from "pinia";
 import moment from "moment-timezone";
 import { type VipLevelRewardHistoryItem } from "@/interface/vip";
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -124,7 +130,11 @@ const fixPositionShow = computed(() => {
             class="text-400-12"
             style="padding-top: 21px !important; padding-bottom: 21px !important"
           >
-            {{ moment(Number(item.created_at) * 1000).format("YYYY-MM-DD HH:mm:ss") }}
+            {{
+              item.created_at == ""
+                ? ""
+                : moment(Number(item.created_at) * 1000).format("YYYY-MM-DD HH:mm:ss")
+            }}
           </td>
           <td
             class="text-400-12 color-01983A"
@@ -134,7 +144,9 @@ const fixPositionShow = computed(() => {
               min-width: 60px;
             "
           >
-            R$ {{ Number(item.amount).toFixed(2) }}
+            {{
+              item.amount == "" ? "" : platformCurrency + Number(item.amount).toFixed(2)
+            }}
           </td>
           <td
             class="text-400-12"
@@ -144,7 +156,13 @@ const fixPositionShow = computed(() => {
               min-width: 130px;
             "
           >
-            {{ item.type == 2 ? `${vipLevelText(item.vip_level)}` : `VIP ${item.vip_level}` }}
+            {{
+              item.type == ""
+                ? ""
+                : Number(item.type) == 2
+                ? `${vipLevelText(Number(item.vip_level))}`
+                : `VIP ${item.vip_level}`
+            }}
           </td>
           <td
             class="text-400-12"
@@ -155,7 +173,13 @@ const fixPositionShow = computed(() => {
             "
           >
             <div>
-              {{ item.type == 2 ? 'Rank Bonus' : 'Level Bonus' }}
+              {{
+                item.type == ""
+                  ? ""
+                  : Number(item.type) == 2
+                  ? "Rank Bonus"
+                  : "Level Bonus"
+              }}
             </div>
           </td>
         </tr>

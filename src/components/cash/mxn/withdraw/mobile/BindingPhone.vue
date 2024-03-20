@@ -91,15 +91,27 @@ const sendSMSVerificationCode = async () => {
   // const time = new Date();
   // time.setSeconds(time.getSeconds() + timer_value.value);
   // timer.restart(Number(time));
+  const toast = useToast();
+  toast.success(t("phone_binding_dialog.text_9"), {
+    timeout: 3000,
+    closeOnClick: false,
+    pauseOnFocusLoss: false,
+    pauseOnHover: false,
+    draggable: false,
+    showCloseButtonOnHover: false,
+    hideProgressBar: true,
+    closeButton: "button",
+    icon: SuccessIcon,
+    rtl: false,
+  });
   captchaLoading.value = false;
 };
 
 const submitSMS = async () => {
   submitLoading.value = true;
-  emit("submitPhoneBinding");
   await dispatchSubmitSMS({
     phone: "52" + phone_number.value,
-    code: verification_code.value,
+    code: verification_code.value.toString(),
   });
   submitLoading.value = false;
   if (success.value) {

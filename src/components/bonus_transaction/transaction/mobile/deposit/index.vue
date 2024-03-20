@@ -6,15 +6,22 @@ import { useDisplay } from "vuetify";
 import { appBarStore } from "@/store/appBar";
 import { storeToRefs } from "pinia";
 import moment from "moment-timezone";
-import { type DepositHistoryResponse } from "@/interface/deposit";
+import { type DepositHistoryResponse, type DepositHistoryItem } from "@/interface/deposit";
+import { depositStore } from "@/store/deposit";
 import * as clipboard from "clipboard-polyfill";
 import { useToast } from "vue-toastification";
 import SuccessIcon from '@/components/global/notification/SuccessIcon.vue';
 import WarningIcon from '@/components/global/notification/WarningIcon.vue';
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
-
+const { dispatchUserDepositHistory } = depositStore();
 const props = defineProps<{
   pageSize: number;
   depositHistoryItem: DepositHistoryResponse;
@@ -27,7 +34,7 @@ const formsList = ref<Array<any>>([
     date: "2023/1/29 17:50:36",
     id: "re54er35sgf",
     type: "pix",
-    amount: "R$ 150.00",
+    amount: platformCurrency.value + " 150.00",
     status: "Cancelled",
     note: "",
   },
@@ -35,7 +42,7 @@ const formsList = ref<Array<any>>([
     date: "2023/1/29 17:50:36",
     id: "re54er35sgf",
     type: "pix",
-    amount: "R$ 150.00",
+    amount: platformCurrency.value + " 150.00",
     status: "Cancelled",
     note: "",
   },
@@ -43,7 +50,7 @@ const formsList = ref<Array<any>>([
     date: "2023/1/29 17:50:36",
     id: "re54er35sgf",
     type: "pix",
-    amount: "R$ 150.00",
+    amount: platformCurrency.value + " 150.00",
     status: "Cancelled",
     note: "",
   },
@@ -51,7 +58,7 @@ const formsList = ref<Array<any>>([
     date: "2023/1/29 17:50:36",
     id: "re54er35sgf",
     type: "pix",
-    amount: "R$ 150.00",
+    amount: platformCurrency.value + " 150.00",
     status: "Cancelled",
     note: "",
   },
@@ -61,7 +68,10 @@ const formsList = ref<Array<any>>([
   {}
 ]);
 
-const paginationLength = ref<number>(0);
+const paginationLength = ref<number>(1);
+const startIndex = ref<number>(0);
+const endIndex = ref<number>(8);
+const currentList = ref<Array<DepositHistoryItem>>([]);
 
 const notificationText = ref<string>('Successful replication');
 
@@ -73,6 +83,11 @@ const fixPositionShow = computed(() => {
   const { getFixPositionEnable } = storeToRefs(appBarStore());
   return getFixPositionEnable.value;
 });
+
+const moreDepositHistoryFlag = computed(() => {
+  const { getMoreDepositHistoryFlag } = storeToRefs(depositStore());
+  return getMoreDepositHistoryFlag.value
+})
 
 const handleCopyID = async (id: number) => {
   clipboard.writeText(id.toString()).then(
@@ -98,11 +113,41 @@ const handleCopyID = async (id: number) => {
   );
 }
 
+const handleNext = async (page_no: number) => {
+  startIndex.value = (page_no - 1) * pageSize.value;
+  endIndex.value = startIndex.value + pageSize.value;
+  currentList.value = depositHistoryItem.value.record.slice(startIndex.value, endIndex.value);
+  if (currentList.value.length == 0) {
+    await dispatchUserDepositHistory({
+      page_size: pageSize.value,
+      start_time: depositHistoryItem.value.record[depositHistoryItem.value.record.length - 1].created_at,
+      lid: depositHistoryItem.value.record[depositHistoryItem.value.record.length - 1].id.toString(),
+    });
+  }
+}
+
+const handlePrev = async (page_no: number) => {
+  startIndex.value = (page_no - 1) * pageSize.value;
+  endIndex.value = startIndex.value + pageSize.value;
+  currentList.value = depositHistoryItem.value.record.slice(startIndex.value, endIndex.value);
+  if (currentList.value.length == 0) {
+    await dispatchUserDepositHistory({
+      page_size: pageSize.value,
+      end_time: depositHistoryItem.value.record[0].created_at,
+      lid: depositHistoryItem.value.record[0].id.toString(),
+    });
+  }
+}
+
 watch(depositHistoryItem, (value) => {
-  paginationLength.value = Math.ceil(value.total_pages / pageSize.value)
-})
+  paginationLength.value = moreDepositHistoryFlag.value ? paginationLength.value + 1 : paginationLength.value
+}, { deep: true, immediate: true })
 
 const formatCurrency = (currency: number, currencyUnit: string) => {
+  if(!currency && !currencyUnit) {
+    return ''
+  }
+
   let locale = 'pt-BR';
   switch (currencyUnit) {
     case "BRL":
@@ -132,7 +177,6 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
   })
   return fomarttedAmount
 }
-
 </script>
 <template>
   <v-row class="mx-2 mt-1 m-forms-bonus-table1">
@@ -233,12 +277,19 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
           </tr>
         </template>
         <template v-else>
-          <tr v-for="(item, index) in depositHistoryItem.record" :key="index">
+          <tr
+            v-for="(item, index) in depositHistoryItem.record.slice(startIndex, endIndex)"
+            :key="index"
+          >
             <td
               class="text-400-12 text-center"
               style="padding-top: 21px !important; padding-bottom: 21px !important"
             >
-              {{ moment(item.created_at * 1000).format("YYYY-MM-DD HH:mm:ss") }}
+              {{
+                item.created_at
+                  ? moment(item.created_at * 1000).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              }}
             </td>
             <td
               class="text-400-12 text-center color-01983A"
@@ -287,6 +338,7 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
                     : item.id
                 }}
                 <img
+                  v-show="item.id"
                   src="@/assets/public/svg/icon_public_71.svg"
                   width="16"
                   class="ml-1"
@@ -306,7 +358,12 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
     </v-table>
   </v-row>
   <v-row class="m-bonus-transaction-table2">
-    <Pagination style="margin-top: 4px" :length="paginationLength" />
+    <Pagination
+      style="margin-top: 4px"
+      :length="paginationLength"
+      @handlePrev="handlePrev"
+      @handleNext="handleNext"
+    />
   </v-row>
 </template>
 <style lang="scss">

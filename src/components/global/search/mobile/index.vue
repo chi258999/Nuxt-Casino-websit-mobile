@@ -30,7 +30,7 @@ const searchLoading = ref<boolean>(false);
 const page_no = ref<number>(1);
 const currentPage = ref<number>(1);
 const moreCurrentPage = ref<number>(1);
-const limit = ref<number>(7);
+const limit = ref<number>(6);
 const moreLoading = ref<boolean>(false);
 const swiper = ref<any>(null);
 
@@ -287,7 +287,7 @@ onMounted(async () => {
       maxHeight: '643px',
     }"
   > -->
-    <div style="position:absolute; top:50px; width:100dvw">
+    <div style="position: absolute; top: 50px; width: 100dvw">
       <div class="pt-3">
         <v-text-field
           ref="searchRef"
@@ -305,7 +305,10 @@ onMounted(async () => {
           v-model="searchText"
         />
       </div>
-      <div class="m-search-loading-container relative pt-8" v-if="searchLoading">
+      <div
+        class="m-search-loading-container relative pt-8"
+        v-if="searchLoading && searchedGameList.length == 0"
+      >
         <div class="loading-body">
           <div class="dot-0"></div>
           <div class="dot-1"></div>
@@ -368,7 +371,12 @@ onMounted(async () => {
           </div>
           <v-row class="mx-2 my-4">
             <template v-for="(item, index) in searchedGameList" :key="index">
-              <v-col cols="4" class="py-0 px-1" v-if="index < 6 * page_no" style="position: relative;">
+              <v-col
+                cols="4"
+                class="py-0 px-1"
+                v-if="index < 6 * page_no"
+                style="position: relative"
+              >
                 <ProgressiveImage
                   :src="item.image"
                   lazy-placeholder
@@ -378,11 +386,9 @@ onMounted(async () => {
                 >
                   <div class="text-overlay">
                     <h2>{{ item.name }}</h2>
-                    <p>{{ item.provider }}</p>
+                    <p>{{ item.provider_name }}</p>
                   </div>
                 </ProgressiveImage>
-
-                
               </v-col>
             </template>
           </v-row>
@@ -434,13 +440,12 @@ onMounted(async () => {
             />
             <div class="text-overlay--search">
               <h2>{{ gameItem.name }}</h2>
-              <p>{{ gameItem.provider }}</p>
+              <p>{{ gameItem.provider_name }}</p>
             </div>
           </SwiperSlide>
         </Swiper>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -480,7 +485,7 @@ onMounted(async () => {
   transform: translate(-50%, -50%);
   width: 48px;
   height: 46px;
-  background-image: url("@/assets/public/image/img_public_42.png");
+  background-image: url("@/assets/public/image/logo_public_06.png");
   background-repeat: no-repeat;
   background-size: contain;
   animation: opacityAnimation 0.6s ease-in infinite;
@@ -523,7 +528,9 @@ onMounted(async () => {
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   color: var(--Sec-Text-7782AA, #7782aa);
   text-align: center;
-  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
+    sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -560,8 +567,8 @@ onMounted(async () => {
   text-align: center;
   position: absolute;
   width: 100% !important;
-  top:0px;
-  left:0px;
+  top: 0px;
+  left: 0px;
 
   .m-search-header-icon {
     width: 20px;
@@ -590,7 +597,7 @@ onMounted(async () => {
   border-radius: 0px 0px 8px 8px;
   background: var(--Text-Box-1-211F31, #1d2027);
   overflow-y: auto;
-  position:absolute;
+  position: absolute;
 
   .m-home-search-game:active {
     transform: scale(0.9);
@@ -629,11 +636,13 @@ onMounted(async () => {
 
   .v-field__input::placeholder {
     color: var(--Sec-Text-7782AA, #7782aa);
-    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
-    font-size: 10px !important;
-    font-style: normal;
-    font-weight: 400 !important;
-    line-height: normal;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
+    // font-size: 10px !important;
+    // font-style: normal;
+    // font-weight: 400 !important;
+    // line-height: normal;
   }
 
   .more-btn-color {
@@ -775,7 +784,7 @@ onMounted(async () => {
     margin: 0;
     font-size: 12px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #ffffff;
     line-height: 1;
   }
 
@@ -809,7 +818,7 @@ onMounted(async () => {
     margin: 0;
     font-size: 12px;
     font-weight: 700;
-    color: #FFFFFF;
+    color: #ffffff;
     line-height: 1;
   }
 

@@ -26,6 +26,13 @@ import WarningIcon from "@/components/global/notification/WarningIcon.vue";
 import { useToast } from "vue-toastification";
 import { adjustTrackEvent } from "@/utils/adjust";
 
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
+
 const { t } = useI18n();
 const { width } = useDisplay();
 const router = useRouter();
@@ -51,6 +58,8 @@ const { dispatchRewardList, dispatchReceiveAchievementBonus } = rewardStore();
 
 const rewardNavShow = ref<boolean>(false);
 const claimText = ref<string>("");
+const bonusDisableFlag = ref<boolean>(false);
+const myRewardDisableFlag = ref<boolean>(false);
 
 // periodic rewards  周期性奖励
 const vipCycleawardList = computed(() => {
@@ -182,32 +191,37 @@ const handleAhivBonus = async () => {
     .catch(() => {
       alertMessage(t("reward.err_text"), 0);
     });
-
   await getRewardList();
 };
 
 const handleMyReward = async (index: number) => {
+  if (myRewardDisableFlag.value) return;
+  myRewardDisableFlag.value = true;
   if (index === 0) {
-    dispatchVipLevelAwardReceive({ type: 5 });
+    await dispatchVipLevelAwardReceive({ type: 5 });
   }
   if (index === 1) {
     openRefferalDialog();
   }
+  myRewardDisableFlag.value = false;
 };
 
 const handleBonus = async (index: number) => {
+  if (bonusDisableFlag.value) return;
+  bonusDisableFlag.value = true;
   if (index === 0) {
-    dispatchVipBetawardReceive({ type: 7 });
+    await dispatchVipBetawardReceive({ type: 7 });
   }
   if (index === 1) {
-    dispatchVipCycleawardReceive({ type: 3 });
+    await dispatchVipCycleawardReceive({ type: 3 });
   }
   if (index === 2) {
-    dispatchVipCycleawardReceive({ type: 4 });
+    await dispatchVipCycleawardReceive({ type: 4 });
   }
   if (index === 3) {
     openLoginBonusDialog();
   }
+  bonusDisableFlag.value = false;
 };
 const openLoginBonusDialog = () => {
   setLoginBonusDialogVisible(true);
@@ -290,7 +304,7 @@ onMounted(async () => {
           <v-btn
             class="text-none m-reward-claim-btn"
             width="100%"
-            height="32"
+            height="40"
             @click="claimClicked"
             v-reset-font-size="{ textNode: 'v-btn__content' }"
           >
@@ -356,7 +370,7 @@ onMounted(async () => {
                   : 'text-800-14 text-gray'
               "
             >
-              R$
+              {{ platformCurrency }}
               {{
                 rewardList.achievement == undefined
                   ? "0.00"
@@ -406,15 +420,22 @@ onMounted(async () => {
         <template v-for="(item, index) in bonus_items" :key="index">
           <v-row class="ma-0 m-reward-bonus-card" :class="index != 0 ? 'mt-2' : ''">
             <v-col cols="3" class="d-flex align-center justify-center py-1">
-              <img :src="item.image" :class="!token && index != 3 ? 'm-reward-achievement-img' : '' " :width="index == 0 ? 34 : 38" />
+              <img
+                :src="item.image"
+                :class="!token && index != 3 ? 'm-reward-achievement-img' : ''"
+                :width="index == 0 ? 34 : 38"
+              />
             </v-col>
             <v-col cols="6" class="py-1 d-flex align-center">
               <div>
-                <p class="text-400-12 white" :class="!token && index != 3 ? 'text-gray' : '' ">
+                <p
+                  class="text-400-12 white"
+                  :class="!token && index != 3 ? 'text-gray' : ''"
+                >
                   {{ item.content }}
                 </p>
                 <p class="text-800-14 active" v-if="item.value != ''">
-                  R$ {{ Number(item.value).toFixed(2) }}
+                  {{ platformCurrency }} {{ Number(item.value).toFixed(2) }}
                 </p>
               </div>
             </v-col>
@@ -450,7 +471,7 @@ onMounted(async () => {
                   {{ item.content }}
                 </p>
                 <p class="text-700-12 white" v-if="index == 0">
-                  {{ vipLevelAward.upgrade_gift }}
+                  {{ rewardList.level_up_num }}
                   <font class="text-400-10 gray">{{ t("reward.text_16") }}</font>
                 </p>
               </div>
@@ -683,15 +704,16 @@ onMounted(async () => {
       min-height: 40px !important;
       background: $agent_card_notmet_bg !important;
       padding: 0px !important;
+      padding-left: 8px !important;
     }
 
     .v-field__input::placeholder {
-      color: #7782aa;
+      color: white !important;
       text-align: center;
       font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
         DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
         WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
-      font-size: 10px;
+      font-size: 20px !important;
       font-style: normal;
       font-weight: 400;
       line-height: normal;
@@ -718,9 +740,11 @@ onMounted(async () => {
 .m-claim-text {
   ::v-deep(.v-field__input) {
     &::placeholder {
+      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
       color: #7782aa !important;
       text-align: center;
-      font-family: Inter;
       font-size: 10px !important;
       font-style: normal;
       font-weight: 400;

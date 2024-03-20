@@ -24,6 +24,12 @@ import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
 import { getUnitByCurrency } from '@/utils/currencyUnit';
 import currencyListValue from '@/utils/currencyList';
 import { adjustTrackEvent } from '@/utils/adjust';
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed<string>(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { name, width } = useDisplay();
 const { t } = useI18n();
@@ -49,7 +55,7 @@ const { setTimerValue } = depositStore();
 const { setDepositOrderTimeRefresh } = depositStore();
 const { setDepositCurrency } = depositStore();
 
-const selectedCurrencyUnit = ref<string>("R$");
+const selectedCurrencyUnit = ref<string>(platformCurrency.value);
 
 const selectedCurrencyItem = ref<GetCurrencyItem>({
   icon: new URL("@/assets/public/svg/icon_public_84.svg", import.meta.url).href,
@@ -133,6 +139,8 @@ const depositToggleSwitch = ref<boolean>(false);
 const depositRate = ref<number>(0);
 
 const depositAmount = ref<string | number>(0)
+
+const stopCheckDepositAmount = ref<boolean>(false)
 
 const depositAmountWithCurrency = ref<string>("");
 
@@ -295,6 +303,10 @@ const handleSelectPayment = (item: GetPaymentItem) => {
 }
 
 const validateAmount = (): boolean => {
+  // if submit end, don't check
+  if (stopCheckDepositAmount.value) {
+    return true;
+  }
   return Number(depositAmount.value) >= Number(selectedPaymentItem.value.min) && Number(depositAmount.value) <= Number(selectedPaymentItem.value.max);
 }
 
@@ -364,7 +376,8 @@ const handleDepositSubmit = async () => {
     }
   }
   formData.channels_id = selectedPaymentItem.value.id;
-  formData.amount = depositConfig.value["bonus"].length > 0 && depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
+  // formData.amount = depositConfig.value["bonus"].length > 0 && depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
+  formData.amount = Number(depositAmount.value)
   formData.is_bonus = bonusCheck.value ? false : true;
   await dispatchUserDepositSubmit(formData);
   loading.value = false;
@@ -407,6 +420,7 @@ const handleDepositSubmit = async () => {
         icon: SuccessIcon,
         rtl: false,
       });
+      stopCheckDepositAmount.value = true;
       depositAmount.value = "";
       return;
     }
@@ -426,7 +440,7 @@ const handleDepositSubmit = async () => {
     }
     if (userBalance.value.currency.toLocaleUpperCase() == "MXN") {
       let depositConfirmItem: any = {
-        deposit_amount: depositAmount.value,
+        deposit_amount: Number(depositAmount.value),
         bank_name: depositSubmit.value.bank_name,
         account_number: depositSubmit.value.account_number,
         account_name: depositSubmit.value.account_name,

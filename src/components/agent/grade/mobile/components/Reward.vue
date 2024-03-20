@@ -6,10 +6,18 @@ import img_agent_6 from "@/assets/affiliate/invite/image/img_agent_6.png";
 import { type GetAchievementItem } from "@/interface/achievement";
 import { type ExplainItem } from "@/interface/achievement";
 import { achievementStore } from "@/store/achievement";
+// 获取平台货币
+import { storeToRefs } from "pinia";
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
 const { dispatchStageAward } = achievementStore();
+const { dispatchAchievementList } = achievementStore();
 
 const props = defineProps<{ achievementItem: GetAchievementItem }>()
 
@@ -47,6 +55,7 @@ const mobileWidth = computed(() => {
 const achievementAward = async (award_item: ExplainItem, award_progress: number) => {
   if (award_item.num <= award_progress && award_item.status == 1) {
     await dispatchStageAward({ index: award_item.index });
+    await dispatchAchievementList();
   }
 }
 </script>
@@ -58,22 +67,36 @@ const achievementAward = async (award_item: ExplainItem, award_progress: number)
     <v-row class="mx-3 mt-6">
       <template v-for="(item, index) in achievementItem.award_explain" :key="index">
         <v-col cols="3" class="px-0">
-          <img :src="rewardGrades[index].img" :class="item.num <= achievementItem.award_progress && item.status == 1
-            ? ''
-            : 'img-gray'
-            " width="64" @click="achievementAward(item, achievementItem.award_progress)" />
-          <p class="text-900-11" :class="item.num <= achievementItem.award_progress && item.status == 1
-            ? 'color-F9BC01'
-            : 'gray'
-            ">
-            R$ {{ item.award }}
+          <img
+            :src="rewardGrades[index].img"
+            :class="
+              item.num <= achievementItem.award_progress && item.status == 1
+                ? ''
+                : 'img-gray'
+            "
+            width="64"
+            @click="achievementAward(item, achievementItem.award_progress)"
+          />
+          <p
+            class="text-900-11"
+            :class="
+              item.num <= achievementItem.award_progress && item.status == 1
+                ? 'color-F9BC01'
+                : 'gray'
+            "
+          >
+            {{ platformCurrency }} {{ item.award }}
           </p>
           <div class="m-achievement-reward-bar"></div>
         </v-col>
       </template>
     </v-row>
     <div class="m-achievement-reward-progress-bg mx-3 mb-2">
-      <v-progress-linear v-model="achievementItem.rate" height="24" class="m-achievement-reward-progress">
+      <v-progress-linear
+        v-model="achievementItem.rate"
+        height="24"
+        class="m-achievement-reward-progress"
+      >
       </v-progress-linear>
       <v-row class="m-achievement-progress-grade">
         <template v-for="(item, index) in achievementItem.award_explain" :key="index">
@@ -93,7 +116,11 @@ const achievementAward = async (award_item: ExplainItem, award_progress: number)
   text-align: center;
   box-shadow: none;
   border: 1px solid $agent_color_3;
-  background: conic-gradient(from 45deg at 50.17% 49.69%, $agent_card_notmet_bg 0deg, $agent_color_3 360deg);
+  background: conic-gradient(
+    from 45deg at 50.17% 49.69%,
+    $agent_card_notmet_bg 0deg,
+    $agent_color_3 360deg
+  );
 }
 
 .m-achievement-reward-bar {

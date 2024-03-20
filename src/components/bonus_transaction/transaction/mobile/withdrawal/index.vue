@@ -39,6 +39,10 @@ const withdrawalStatus = [
     value: "Waiting for manual processing.",
     color: "white",
   },
+  {
+    value: "Refunded",
+    color: "gray",
+  },
 ]
 
 const props = defineProps<{
@@ -48,7 +52,7 @@ const props = defineProps<{
 
 const { pageSize, withdrawHistoryItem } = toRefs(props);
 
-const paginationLength = ref<number>(0);
+const paginationLength = ref<number>(1);
 
 const notificationText = ref<string>('Successful replication');
 
@@ -122,14 +126,15 @@ const success = computed(() => {
   return getSuccess.value
 })
 
-const mobileWidth = computed(() => {
-  return width.value;
-});
-
 const fixPositionShow = computed(() => {
   const { getFixPositionEnable } = storeToRefs(appBarStore());
   return getFixPositionEnable.value;
 });
+
+const moreWithdrawHistoryFlag = computed(() => {
+  const { moreWithdrawHistoryFlag } = storeToRefs(withdrawStore());
+  return moreWithdrawHistoryFlag.value
+})
 
 const refundWithdrawalSubmit = async (id: number, index: number) => {
   loadingIndex.value = index;
@@ -202,14 +207,18 @@ const handleCopyID = async (id: number) => {
 }
 
 watch(withdrawHistoryItem, (value) => {
-  paginationLength.value = withdrawHistoryItem.value.total_pages
-})
+  // paginationLength.value = withdrawHistoryItem.value.total_pages
+    paginationLength.value = moreWithdrawHistoryFlag.value ? paginationLength.value + 1 : paginationLength.value
+}, { deep: true, immediate: true })
 
 onMounted(async () => {
-  paginationLength.value = withdrawHistoryItem.value.total_pages
+  // paginationLength.value = withdrawHistoryItem.value.total_pages
 });
 
 const formatCurrency = (currency: number, currencyUnit: string) => {
+  if(!currency && !currencyUnit) {
+    return ''
+  }
   let locale = 'pt-BR';
   switch (currencyUnit) {
     case "BRL":
@@ -365,7 +374,11 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
               class="text-400-12"
               style="padding-top: 21px !important; padding-bottom: 21px !important"
             >
-              {{ moment(item.created_at * 1000).format("YYYY-MM-DD HH:mm:ss") }}
+              {{
+                item.created_at
+                  ? moment(item.created_at * 1000).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              }}
             </td>
             <td
               class="text-400-12 color-D42763"
@@ -379,7 +392,7 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
             </td>
             <td
               class="text-400-12"
-              :class="withdrawalStatus[Number(item.status)].color"
+              :class="item.status ? withdrawalStatus[Number(item.status)].color : ''"
               style="
                 padding-top: 21px !important;
                 padding-bottom: 21px !important;
@@ -387,7 +400,7 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
               "
             >
               <div>
-                {{ withdrawalStatus[Number(item.status)].value }}
+                {{ item.status ? withdrawalStatus[Number(item.status)].value : "" }}
               </div>
             </td>
             <td
@@ -411,6 +424,7 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
                     : item.id
                 }}
                 <img
+                  v-show="item.id"
                   src="@/assets/public/svg/icon_public_71.svg"
                   width="16"
                   class="ml-1"
@@ -456,21 +470,13 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
     </v-table>
   </v-row>
   <v-row class="m-bonus-transaction-table3">
-    <v-col cols="4" class="d-flex" style="margin-left: -12px; margin-top: 4px">
-      <!-- <v-btn icon width="24" height="24" class="m-withdraw-info-icon">
-        <v-icon>
-          <img src="@/assets/public/svg/icon_public_53.svg" />
-        </v-icon>
-      </v-btn> -->
-    </v-col>
+    <v-col cols="4" class="d-flex" style="margin-left: -12px; margin-top: 4px"> </v-col>
     <v-col cols="8" class="d-flex justify-end" style="padding-right: 10px">
-      <!-- <div style="width: 100%"> -->
-        <Pagination
-          :length="paginationLength"
-          @handlePrev="handlePrev"
-          @handleNext="handleNext"
-        />
-      <!-- </div> -->
+      <Pagination
+        :length="paginationLength"
+        @handlePrev="handlePrev"
+        @handleNext="handleNext"
+      />
     </v-col>
   </v-row>
 </template>

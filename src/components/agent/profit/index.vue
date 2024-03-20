@@ -5,6 +5,12 @@ import { useDisplay } from "vuetify";
 import { inviteStore } from "@/store/invite";
 import { storeToRefs } from "pinia";
 import { type StatisticsItem } from "@/interface/invite";
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -121,7 +127,7 @@ onMounted(async () => {
         {{ t("affiliate.statistics.text_7") }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 yellow">
-        R$ {{ Number(selectedItem.deposit_bonus).toFixed(2) }}
+        {{ platformCurrency }} {{ Number(selectedItem.deposit_bonus).toFixed(2) }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray"> -- </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray"> -- </v-col>
@@ -133,13 +139,13 @@ onMounted(async () => {
         {{ t("affiliate.statistics.text_7") }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        R$ {{ selectedItem.deposit_amount[0] }}
+        {{ platformCurrency }} {{ selectedItem.deposit_amount[0] }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        R$ {{ selectedItem.deposit_amount[1] }}
+        {{ platformCurrency }} {{ selectedItem.deposit_amount[1] }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        R$ {{ selectedItem.deposit_amount[2] }}
+        {{ platformCurrency }} {{ selectedItem.deposit_amount[2] }}
       </v-col>
     </v-row>
     <v-row class="mx-1 my-1 px-6 m-agent-profit-user-card">
@@ -149,13 +155,13 @@ onMounted(async () => {
         {{ t("affiliate.statistics.text_7") }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        R$ {{ selectedItem.bet_amount[0] }}
+        {{ platformCurrency }} {{ selectedItem.bet_amount[0] }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        R$ {{ selectedItem.bet_amount[1] }}
+        {{ platformCurrency }} {{ selectedItem.bet_amount[1] }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        R$ {{ selectedItem.bet_amount[2] }}
+        {{ platformCurrency }} {{ selectedItem.bet_amount[2] }}
       </v-col>
     </v-row>
     <v-row class="mx-1 my-1 px-6 m-agent-profit-commission-card">
@@ -165,13 +171,13 @@ onMounted(async () => {
         {{ t("affiliate.statistics.text_7") }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 yellow">
-        R$ {{ selectedItem.bet_bonus[0] }}
+        {{ platformCurrency }} {{ selectedItem.bet_bonus[0] }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 yellow">
-        R$ {{ selectedItem.bet_bonus[1] }}
+        {{ platformCurrency }} {{ selectedItem.bet_bonus[1] }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 yellow">
-        R$ {{ selectedItem.bet_bonus[2] }}
+        {{ platformCurrency }} {{ selectedItem.bet_bonus[2] }}
       </v-col>
     </v-row>
     <v-row class="mx-1 my-1 px-6 m-agent-profit-user-card">
@@ -181,7 +187,7 @@ onMounted(async () => {
         {{ t("affiliate.statistics.text_11") }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        R$ {{ selectedItem.achievement_award }}
+        {{ platformCurrency }} {{ selectedItem.achievement_award }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray"> -- </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray"> -- </v-col>
@@ -190,7 +196,7 @@ onMounted(async () => {
   <v-row class="mx-6 m-agent-profit-summary-tab my-0">
     <v-col
       cols="4"
-      class="text-center text-500-13"
+      class="text-center text-500-13 m-agent-profit-summary-tab-item"
       style="height: 100%"
       :class="
         summaryTabText == 'today' ? 'm-agent-profit-summary-tab-active white' : 'gray'
@@ -201,7 +207,7 @@ onMounted(async () => {
     </v-col>
     <v-col
       cols="4"
-      class="text-center text-500-13"
+      class="text-center text-500-13 m-agent-profit-summary-tab-item"
       style="height: 100%"
       :class="
         summaryTabText == 'week' ? 'm-agent-profit-summary-tab-active white' : 'gray'
@@ -212,7 +218,7 @@ onMounted(async () => {
     </v-col>
     <v-col
       cols="4"
-      class="text-center text-500-13"
+      class="text-center text-500-13 m-agent-profit-summary-tab-item"
       style="height: 100%"
       :class="
         summaryTabText == 'month' ? 'm-agent-profit-summary-tab-active white' : 'gray'
@@ -272,6 +278,11 @@ onMounted(async () => {
   background: $agent_card_notmet_bg;
   align-items: center;
   justify-content: center;
+  line-height: 15px;
+}
+.m-agent-profit-summary-tab-item {
+  display: flex;
+  align-items: center;
 }
 
 .m-agent-profit-summary-tab-active {
