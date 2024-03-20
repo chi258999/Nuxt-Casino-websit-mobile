@@ -397,27 +397,47 @@ const MSignup = defineComponent({
       });
     };
 
+    const loginState = async(response: any) => {
+      if (response.access_token) {
+        const params = {
+          id_token: response.access_token,
+          type: 2
+        }
+        await dispatchQuickRegister(params);
+        await registerSuccess();
+      }
+    }
+
     // 一键注册
     const onSignInSuccessGoogle = (index: number) => {
       if (index === 0) {
-        window.FB.init({
-          appId: import.meta.env.VITE_FACEBOOK_APP_ID,
-          cookie: true,
-          xfbml: true,
-          version: "v19.0",
-        });
-        window.FB.login(async (authResponse: any) => {
-          const params = {
-            id_token: authResponse.access_token,
-            type: 2
+        window.FB.getLoginStatus((statusResponse: any) => {
+          if(statusResponse.status=="unknown"){
+            window.FB.login((response: any) => {
+              loginState(response);
+            }, {scope: 'public_profile,email,user_likes', return_scopes: true, auth_type: 'reauthenticate', auth_nonce: '{random-nonce}'});
+          } else {
+            // onSignInSuccess(statusResponse);
           }
-          await dispatchQuickRegister(params);
-          await registerSuccess();
-        });
-        // event tracking
-        adjustTrackEvent({
-          eventToken: "9mc4lb", // FACEBOOK_LOGIN
-        });
+        }, {scope: 'public_profile,email,user_likes', return_scopes: true, auth_type: 'reauthenticate', auth_nonce: '{random-nonce}'});  
+        // window.FB.init({
+        //   appId: import.meta.env.VITE_FACEBOOK_APP_ID,
+        //   cookie: true,
+        //   xfbml: true,
+        //   version: "v19.0",
+        // });
+        // window.FB.login(async (authResponse: any) => {
+        //   const params = {
+        //     id_token: authResponse.access_token,
+        //     type: 2
+        //   }
+        //   await dispatchQuickRegister(params);
+        //   await registerSuccess();
+        // });
+        // // event tracking
+        // adjustTrackEvent({
+        //   eventToken: "9mc4lb", // FACEBOOK_LOGIN
+        // });
       }
       if (index === 1) {
         googleTokenLogin({
