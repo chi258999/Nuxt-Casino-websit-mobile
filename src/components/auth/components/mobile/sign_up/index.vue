@@ -400,11 +400,23 @@ const MSignup = defineComponent({
     // 一键注册
     const onSignInSuccessGoogle = (index: number) => {
       if (index === 0) {
-        FB.login(function (response) {
-          console.log("facebook登录", response);
+        window.FB.init({
+          appId: import.meta.env.VITE_FACEBOOK_APP_ID,
+          cookie: true,
+          xfbml: true,
+          version: "v19.0",
         });
+        window.FB.login(async (authResponse: any) => {
+          const params = {
+            id_token: authResponse.access_token,
+            type: 2
+          }
+          await dispatchQuickRegister(params);
+          await registerSuccess();
+        });
+        // event tracking
         adjustTrackEvent({
-          eventToken: "9mc4lb", // 9mc4lb
+          eventToken: "9mc4lb", // FACEBOOK_LOGIN
         });
       }
       if (index === 1) {

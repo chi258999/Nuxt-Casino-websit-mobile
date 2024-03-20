@@ -220,9 +220,15 @@ const Login = defineComponent({
           appId: import.meta.env.VITE_FACEBOOK_APP_ID,
           cookie: true,
           xfbml: true,
-          version: "v8.0",
+          version: "v19.0",
         });
-        window.FB.login((authResponse: any) => {
+        window.FB.login(async (authResponse: any) => {
+          const params = {
+            id_token: authResponse.access_token,
+            type: 2
+          }
+          await dispatchQuickLogin(params);
+          await loginSuccess();
           console.log("facebook登录", authResponse);
         });
         // event tracking
