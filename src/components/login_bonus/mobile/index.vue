@@ -15,6 +15,7 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import MConfirm from "@/components/global/confirm/mobile/index.vue";
 import { adjustTrackEvent } from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -135,9 +136,13 @@ const submitConfirm = async () => {
 };
 
 onMounted(async () => {
-  adjustTrackEvent({
-    eventToken: "s2jbxh", // PAGE_VIEW
-  });
+  adjustTrackEvent(
+    "PAGE_VIEW",
+    {
+      eventToken: EventToken.PAGE_VIEW, // PAGE_VIEW
+    },
+    ""
+  );
   if (localStorage.getItem("signin_day") == undefined) {
     localStorage.setItem("signin_day", "0");
   } else {
@@ -543,7 +548,9 @@ onMounted(async () => {
           <p class="text-center" style="line-height: normal">
             <font class="text-900-10 white">
               If you recharge
-              <font class="text-900-10 purple"> {{ platformCurrency }} {{ vipSignIn.limited_deposit }} </font>
+              <font class="text-900-10 purple">
+                {{ platformCurrency }} {{ vipSignIn.limited_deposit }}
+              </font>
               today,
             </font>
           </p>
@@ -556,7 +563,9 @@ onMounted(async () => {
           <p class="text-center" style="line-height: normal">
             <font class="text-900-10 white">
               If you bet
-              <font class="text-900-10 purple"> {{ platformCurrency }} {{ vipSignIn.limited_bet }} </font>
+              <font class="text-900-10 purple">
+                {{ platformCurrency }} {{ vipSignIn.limited_bet }}
+              </font>
               today,
             </font>
           </p>
@@ -569,12 +578,16 @@ onMounted(async () => {
           <p class="text-center" style="line-height: normal">
             <font class="text-900-10 white">
               If you recharge
-              <font class="text-900-10 purple"> {{ platformCurrency }} {{ vipSignIn.limited_deposit }} </font>
+              <font class="text-900-10 purple">
+                {{ platformCurrency }} {{ vipSignIn.limited_deposit }}
+              </font>
               &nbsp;and&nbsp;
             </font>
             <font class="text-900-10 white">
               bet
-              <font class="text-900-10 purple"> {{ platformCurrency }} {{ vipSignIn.limited_bet }} </font>
+              <font class="text-900-10 purple">
+                {{ platformCurrency }} {{ vipSignIn.limited_bet }}
+              </font>
               today,
             </font>
           </p>

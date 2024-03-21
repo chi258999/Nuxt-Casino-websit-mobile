@@ -19,6 +19,7 @@ import { bannerStore } from "@/store/banner";
 import { currencyStore } from "@/store/currency";
 import { googleTokenLogin } from "vue3-google-login";
 import { adjustTrackEvent } from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
 
 const Login = defineComponent({
   components: {
@@ -29,7 +30,7 @@ const Login = defineComponent({
   setup(props, { emit }) {
     // translation
     const { t } = useI18n();
-    const { dispatchSignIn } = authStore();
+    const { dispatchSignIn, dispatchQuickLogin } = authStore();
     const { dispatchUserProfile } = authStore();
     const { setAuthModalType } = authStore();
     const { setAuthDialogVisible } = authStore();
@@ -95,6 +96,11 @@ const Login = defineComponent({
       return getErrMessage.value;
     });
 
+    const userInfo = computed(() => {
+      const { getUserInfo } = storeToRefs(authStore());
+      return getUserInfo.value;
+    });
+
     // forgot password function when password fogot
 
     const handleForgotPassword = () => {
@@ -114,19 +120,15 @@ const Login = defineComponent({
       state.currentPage = state.PAGE_TYPE.LOGIN_FORM;
     };
 
-    // methods
-    const handleLoginFormSubmit = async () => {
-      state.loading = true;
-
-      await dispatchSignIn({
-        uid: state.formData.emailAddress,
-        password: state.formData.password,
-      });
-
+    const loginSuccess = async () => {
       if (success.value) {
-        adjustTrackEvent({
-          eventToken: "yzv017",
-        });
+        adjustTrackEvent(
+          "LOGIN",
+          {
+            eventToken: EventToken.LOGIN, // LOGIN
+          },
+          userInfo.value.id
+        );
         await dispatchUserProfile();
         await dispatchUserBalance();
         await dispatchCurrencyList();
@@ -169,14 +171,17 @@ const Login = defineComponent({
           icon: WarningIcon,
           rtl: false,
         });
-        // state.notificationShow = !state.notificationShow;
-        // state.checkIcon = new URL(
-        //   "@/assets/public/svg/icon_public_17.svg",
-        //   import.meta.url
-        // ).href;
-        // state.notificationText = t("login.submit_result.err_text");
       }
+    };
 
+    // methods
+    const handleLoginFormSubmit = async () => {
+      state.loading = true;
+      await dispatchSignIn({
+        uid: state.formData.emailAddress,
+        password: state.formData.password,
+      });
+      await loginSuccess();
       state.loading = false;
     };
 
@@ -218,75 +223,90 @@ const Login = defineComponent({
       }, 100);
     };
 
-    // google Login  谷歌登录
-    const onSignInSuccessGoogle = (index: number) => {
+    const loginState = async (response: any) => {
+      if (response.access_token) {
+        const params = {
+          id_token: response.access_token,
+          type: 2,
+        };
+        await dispatchQuickLogin(params);
+        await loginSuccess();
+      }
+    };
+
+    // social login function
+    const handleSocialSigin = (index: number) => {
       if (index === 0) {
-        FB.login(function (response) {
-          console.log("facebook登录", response);
-        });
-        adjustTrackEvent({
-          eventToken: "9mc4lb", // 9mc4lb
-        });
+        window.FB.getLoginStatus(
+          (statusResponse: any) => {
+            if (statusResponse.status == "unknown") {
+              window.FB.login(
+                (response: any) => {
+                  loginState(response);
+                },
+                {
+                  scope: "public_profile,email,user_likes",
+                  return_scopes: true,
+                  auth_type: "reauthenticate",
+                  auth_nonce: "{random-nonce}",
+                }
+              );
+            } else {
+              // onSignInSuccess(statusResponse);
+            }
+          },
+          {
+            scope: "public_profile,email,user_likes",
+            return_scopes: true,
+            auth_type: "reauthenticate",
+            auth_nonce: "{random-nonce}",
+          }
+        );
+        // login();
+        // window.FB.init({
+        //   appId: import.meta.env.VITE_FACEBOOK_APP_ID,
+        //   cookie: true,
+        //   xfbml: true,
+        //   version: "v19.0",
+        // });
+        // FB.getLoginStatus((statusResponse: any) => {
+        // if(statusResponse.status=="unknown"){
+        //   FB.login(async (authResponse: any) => {
+        // const params = {
+        //   id_token: authResponse.access_token,
+        //   type: 2
+        // }
+        // await dispatchQuickLogin(params);
+        // await loginSuccess();
+        //     console.log("facebook登录", authResponse);
+        //   },{scope: 'public_profile,email,user_likes', return_scopes: true, auth_type: 'reauthenticate', auth_nonce: '{random-nonce}'});
+        //   // event tracking
+        //   adjustTrackEvent("FACEBOOK_LOGIN",{
+        //     eventToken: EventToken.FACEBOOK_LOGIN, // FACEBOOK_LOGIN
+        //   }, userInfo.value.id);
+        // }
+        // })
       }
       if (index === 1) {
         googleTokenLogin({
-          clientId:
-            "315002729492-ij8mt521q04m5hmqmdl1gdgc70oedbsi.apps.googleusercontent.com",
-        }).then((res: any) => {
-          console.log("google登录", res);
+          clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        }).then(async (res: any) => {
+          const params = {
+            id_token: res.access_token,
+            type: 1,
+          };
+          await dispatchQuickLogin(params);
+          await loginSuccess();
         });
-        adjustTrackEvent({
-          eventToken: "ifryfc", // GOOGLE_LOGIN
-        });
+        // event tracking
+        adjustTrackEvent(
+          "GOOGLE_LOGIN",
+          {
+            eventToken: EventToken.GOOGLE_LOGIN, // GOOGLE_LOGIN
+          },
+          userInfo.value.id
+        );
       }
-    };
-
-    const statusChangeCallback = (response) => {
-      console.log("statusChangeCallback");
-      console.log(response); // The current login status of the person.
-      if (response.status === "connected") {
-        // Logged into your webpage and Facebook.
-        testAPI();
-      } else {
-        // Not logged into your webpage or we are unable to tell.
-        console.log("报错了");
-      }
-    };
-
-    const onSignInSuccess = () => {
-      FB.login(function (response) {
-        console.log(response);
-      });
-      // FB.init({
-      //   appId: '1782039332218801',
-      //   xfbml: true,
-      //   version: 'v18.0'
-      // });
-      // FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
-      //   statusChangeCallback(response);       // Returns the login status.
-      // // get your auth token and info
-      // })
-    };
-
-    const testAPI = () => {
-      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-      console.log("Welcome!  Fetching your information.... ");
-      FB.api("/me", function (response) {
-        console.log("Successful login for: " + response.name);
-      });
-    };
-
-    const onSignInError = (err: any) => {
-      console.log("失败了吗", err);
-      // logic if auth failed
-    };
-
-    const checkLoginState = () => {
-      // Called when a person is finished with the Login Button.
-      FB.getLoginStatus(function (response) {
-        // See the onlogin handler
-        statusChangeCallback(response);
-      });
     };
 
     watch(
@@ -298,9 +318,7 @@ const Login = defineComponent({
       { deep: true }
     );
 
-    onMounted(() => {
-      // onSignInSuccess()
-    });
+    onMounted(() => {});
 
     return {
       t,
@@ -313,12 +331,8 @@ const Login = defineComponent({
       handleEmailChange,
       handleEmailFocus,
       mergeEmail,
-      onSignInSuccessGoogle,
-      onSignInSuccess,
-      onSignInError,
-      testAPI,
-      statusChangeCallback,
-      checkLoginState,
+      loginSuccess,
+      handleSocialSigin,
     };
   },
 });
@@ -453,15 +467,11 @@ export default Login;
                 icon=""
                 width="36px"
                 height="36px"
-                @click="onSignInSuccessGoogle(index)"
+                @click="handleSocialSigin(index)"
               >
                 <img :src="item" width="36" />
               </v-btn>
             </v-sheet>
-            <!-- <div @click="onSignInSuccessGoogle">谷歌登录</div> -->
-            <!-- <button id="loginBtn" @click="onSignInSuccess" >登录</button>  -->
-            <!-- <div @click="onSignInSuccess">facebook登录</div> -->
-            <!-- <fb:login-button scope="public_profile,email" @click="checkLoginState();"></fb:login-button> -->
           </div>
         </v-col>
       </v-row>

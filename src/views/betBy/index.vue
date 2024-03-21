@@ -4,6 +4,7 @@ import { gameStore } from "@/store/game";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { adjustTrackEvent } from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
 
 const route = useRoute();
 const { dispatchGameEnter, getGameBetbyInit, closeKill } = gameStore();
@@ -36,9 +37,15 @@ watch(
 );
 
 onMounted(async () => {
-  adjustTrackEvent({
-    eventToken: "s2jbxh", // PAGE_VIEW
-  });
+
+  adjustTrackEvent(
+    "PAGE_VIEW",
+    {
+      eventToken: EventToken.PAGE_VIEW, // PAGE_VIEW
+    },
+    ""
+  );
+
   window.addEventListener("resize", handleResize);
   betbyHeight.value = window.innerHeight;
   betbyShow.value = true;

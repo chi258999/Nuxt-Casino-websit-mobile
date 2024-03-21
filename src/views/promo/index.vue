@@ -17,6 +17,7 @@ import { agentStore } from "@/store/agent";
 import { storeToRefs } from "pinia";
 import { type PromoListData } from "@/interface/promo";
 import { adjustTrackEvent } from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
 
 const { setAuthModalType } = authStore();
 const { setAuthDialogVisible } = authStore();
@@ -204,9 +205,11 @@ const handleContent = (item: PromoListData) => {
 }
 
 onMounted(async () => {
-  adjustTrackEvent({
-    eventToken: "s2jbxh", // PAGE_VIEW
-  });
+
+  adjustTrackEvent("PAGE_VIEW", {
+    eventToken: EventToken.PAGE_VIEW, // PAGE_VIEW
+  }, "");
+
   window.scrollTo({
     top: 0,
     behavior: "smooth",
@@ -228,11 +231,7 @@ const i18nButtonText = (eng: string) => {
     <v-navigation-drawer class="m-promo-navigation-drawer" :width="76">
       <div
         class="text-center relative ml-2 m-promo-navigation-event-card"
-        :class="
-          activeIndex == 0
-            ? 'm-promo-navigation-event-card-active'
-            : ''
-        "
+        :class="activeIndex == 0 ? 'm-promo-navigation-event-card-active' : ''"
         style="margin-top: 96px !important"
         @click="handleBtnTab(0)"
       >
@@ -243,20 +242,13 @@ const i18nButtonText = (eng: string) => {
           class="mt-1"
           :transform-source="allSvgTransform"
         ></inline-svg>
-        <div
-          class="text-600-8"
-          :class="activeIndex == 0 ? 'white' : 'gray'"
-        >
+        <div class="text-600-8" :class="activeIndex == 0 ? 'white' : 'gray'">
           {{ t("promo.text_1") }}
         </div>
       </div>
       <div
         class="mt-8 text-center relative ml-2 m-promo-navigation-event-card"
-        :class="
-          activeIndex == 1
-            ? 'm-promo-navigation-event-card-active'
-            : ''
-        "
+        :class="activeIndex == 1 ? 'm-promo-navigation-event-card-active' : ''"
         @click="handleBtnTab(1)"
       >
         <inline-svg
@@ -266,20 +258,13 @@ const i18nButtonText = (eng: string) => {
           class="mt-1"
           :transform-source="vipSvgTransform"
         ></inline-svg>
-        <div
-          class="text-600-8"
-          :class="activeIndex == 1 ? 'white' : 'gray'"
-        >
+        <div class="text-600-8" :class="activeIndex == 1 ? 'white' : 'gray'">
           {{ t("promo.text_2") }}
         </div>
       </div>
       <div
         class="mt-8 text-center relative ml-2 m-promo-navigation-event-card"
-        :class="
-          activeIndex == 2
-            ? 'm-promo-navigation-event-card-active'
-            : ''
-        "
+        :class="activeIndex == 2 ? 'm-promo-navigation-event-card-active' : ''"
         @click="handleBtnTab(2)"
       >
         <inline-svg
@@ -289,10 +274,7 @@ const i18nButtonText = (eng: string) => {
           class="mt-1"
           :transform-source="promotionSvgTransform"
         ></inline-svg>
-        <div
-          class="text-600-8"
-          :class="activeIndex == 2 ? 'white' : 'gray'"
-        >
+        <div class="text-600-8" :class="activeIndex == 2 ? 'white' : 'gray'">
           {{ t("promo.text_3") }}
         </div>
       </div>
@@ -418,6 +400,7 @@ const i18nButtonText = (eng: string) => {
     scale: 0.8;
   }
 }
+
 .m-promo-navigation-layout {
   margin-top: -100px;
   z-index: 13 !important;

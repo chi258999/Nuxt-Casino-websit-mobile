@@ -40,6 +40,7 @@ import { ProgressiveImage } from "vue-progressive-image";
 import { mainStore } from "@/store/main";
 import MOrder from "@/views/home/components/mobile/Order.vue";
 import { adjustTrackEvent } from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
 import { Network } from "@/net/Network";
 import { NETWORK } from '@/net/NetworkCfg';
 
@@ -627,7 +628,7 @@ const Dashboard = defineComponent({
         let index = gameGroupBtnList.value.findIndex(item => item.slug == selectedGameFilterBtn.value);
 
         element[0].scrollTo({
-          left: childNodes[index + 1].offsetLeft - element[0].offsetLeft - (element[0].offsetWidth - childNodes[index + 1].offsetWidth) / 2,
+          left: (childNodes[index + 1] as any).offsetLeft - (element[0] as any).offsetLeft - ((element[0] as any).offsetWidth - (childNodes[index + 1] as any).offsetWidth) / 2,
           behavior: 'smooth'
         });
 
@@ -972,13 +973,22 @@ const Dashboard = defineComponent({
 
     onMounted(async () => {
       loading.value = true;
+
+      if(route.query.mobile && route.query.mobile == "android") {
+        localStorage.setItem("isMobile", "true");
+      } else {
+        localStorage.setItem("isMobile", "false");
+      }
+
       window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
-      adjustTrackEvent({
-        eventToken: "s2jbxh", // PAGE_VIEW
-      });
+
+      adjustTrackEvent("PAGE_VIEW", {
+        eventToken: EventToken.PAGE_VIEW, // PAGE_VIEW
+      }, "");
+
       // await dispatchGameCategories(`?type=sports`);
       // await dispatchGameCategories(`?type=${filterTabText.value}`);
       const categorieList = await getCategoriesFunc(`?type=${filterTabText.value}`)
@@ -2177,9 +2187,9 @@ export default Dashboard;
   font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
     Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
     sans-serif;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
+  // font-size: 14px;
+  // font-style: normal;
+  // font-weight: 400;
   line-height: normal;
 }
 

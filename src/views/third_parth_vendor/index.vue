@@ -5,6 +5,7 @@ import { adjustTrackEvent } from "@/utils/adjust";
 import { useRouter, useRoute } from "vue-router";
 import { gameStore } from "@/store/game";
 import { storeToRefs } from "pinia";
+import EventToken from "@/constants/EventToken";
 
 const router = useRouter();
 const route = useRoute();
@@ -35,10 +36,14 @@ const handleGameProviderPage = (slug: string) => {
 
 onMounted(async () => {
   loading.value = true;
-  adjustTrackEvent({
-    eventToken: "s2jbxh", // PAGE_VIEW
-  });
-  
+  adjustTrackEvent(
+    "PAGE_VIEW",
+    {
+      eventToken: EventToken.PAGE_VIEW, // PAGE_VIEW
+    },
+    ""
+  );
+
   await dispatchGameCategories("?type=providers");
   window.scrollTo({
     top: 0,
@@ -79,7 +84,7 @@ onMounted(async () => {
       </div>
 
       <div class="mt-2 m-third-parth-vendor">
-        <div 
+        <div
           v-for="(gameProviderItem, gameProviderIndex) in gameProviders"
           :key="gameProviderIndex"
           class="ma-2"
@@ -92,7 +97,6 @@ onMounted(async () => {
               @click="handleGameProviderPage(gameProviderItem.slug)"
             />
           </div>
-          
         </div>
       </div>
     </div>
@@ -154,6 +158,4 @@ onMounted(async () => {
     justify-content: center;
   }
 }
-
-
 </style>

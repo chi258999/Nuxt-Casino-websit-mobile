@@ -15,6 +15,7 @@ import "swiper/css/virtual";
 import { Pagination, Virtual, Autoplay, Navigation } from "swiper/modules";
 import { useRoute, useRouter } from "vue-router";
 import { adjustTrackEvent } from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -378,9 +379,13 @@ const handleResize = () => {
 };
 
 onMounted(async () => {
-  adjustTrackEvent({
-    eventToken: "s2jbxh", // PAGE_VIEW
-  });
+  adjustTrackEvent(
+    "PAGE_VIEW",
+    {
+      eventToken: EventToken.PAGE_VIEW, // PAGE_VIEW
+    },
+    ""
+  );
   window.addEventListener("resize", handleResize);
   mobileHeight.value = window.innerHeight;
   setMobileMenuShow(false);
