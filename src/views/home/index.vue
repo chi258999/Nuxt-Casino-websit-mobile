@@ -39,7 +39,7 @@ import MGameConfirm from "@/views/home/components/mobile/GameConfirm.vue";
 import { ProgressiveImage } from "vue-progressive-image";
 import { mainStore } from "@/store/main";
 import MOrder from "@/views/home/components/mobile/Order.vue";
-import { adjustTrackEvent } from "@/utils/adjust";
+import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import { Network } from "@/net/Network";
 import { NETWORK } from '@/net/NetworkCfg';
@@ -64,7 +64,7 @@ const Dashboard = defineComponent({
     MOrder,
     ProgressiveImage,
   },
-  setup(props,context) {
+  setup(props, context) {
     const { t } = useI18n();
     const { name, width } = useDisplay();
     const { dispatchGameCategories } = gameStore();
@@ -308,15 +308,15 @@ const Dashboard = defineComponent({
 
     watch(homeMenuBtnClicked, (newValue) => {
       window.scrollTo({
-      top: 0,
-      behavior: "smooth",
+        top: 0,
+        behavior: "smooth",
       });
     })
 
     watch(casinoGameShow, (newValue) => {
       window.scrollTo({
-      top: 450,
-      behavior: "smooth",
+        top: 450,
+        behavior: "smooth",
       });
     })
 
@@ -974,20 +974,14 @@ const Dashboard = defineComponent({
     onMounted(async () => {
       loading.value = true;
 
-      if(route.query.mobile && route.query.mobile == "android") {
-        localStorage.setItem("isMobile", "true");
-      } else {
-        localStorage.setItem("isMobile", "false");
-      }
-
       window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
 
-      adjustTrackEvent("PAGE_VIEW", {
-        eventToken: EventToken.PAGE_VIEW, // PAGE_VIEW
-      }, "");
+      let isMobile: boolean = !!route.query.mobile && route.query.mobile == "android"
+
+      AdjustClass.getInstance(isMobile).adjustTrackEvent({ key: "PAGE_VIEW", value: "home", params: "" });
 
       // await dispatchGameCategories(`?type=sports`);
       // await dispatchGameCategories(`?type=${filterTabText.value}`);
