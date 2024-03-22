@@ -928,6 +928,7 @@ export default MSignup;
   width: 100%;
   background: $color_1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 80px;
 
   .v-field--variant-solo {
