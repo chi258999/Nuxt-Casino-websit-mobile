@@ -2309,7 +2309,7 @@ export default Dashboard;
 }
 
 .m-carousel-img-border {
-  border-radius: 16px 6px;
+  // border-radius: 16px 6px;
 }
 
 .v-carousel__controls {
