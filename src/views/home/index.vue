@@ -979,10 +979,6 @@ const Dashboard = defineComponent({
         behavior: "smooth",
       });
 
-      let isMobile: boolean = !!route.query.mobile && route.query.mobile == "android"
-
-      AdjustClass.getInstance(isMobile).adjustTrackEvent({ key: "PAGE_VIEW", value: "home", params: "" });
-
       // await dispatchGameCategories(`?type=sports`);
       // await dispatchGameCategories(`?type=${filterTabText.value}`);
       const categorieList = await getCategoriesFunc(`?type=${filterTabText.value}`)
@@ -1220,6 +1216,10 @@ const Dashboard = defineComponent({
         });
       }
 
+      let isMobile: boolean = !!route.query.mobile && route.query.mobile == "android"
+
+      AdjustClass.getInstance(isMobile).adjustTrackEvent({ key: "PAGE_VIEW", value: "home", params: "" });
+      
       context.emit('inited')
     });
 
