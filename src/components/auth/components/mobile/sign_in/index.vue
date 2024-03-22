@@ -18,8 +18,10 @@ import { throwStatement } from "@babel/types";
 import { bannerStore } from "@/store/banner";
 import { currencyStore } from "@/store/currency";
 import { googleTokenLogin } from "vue3-google-login";
-import { adjustTrackEvent } from "@/utils/adjust";
+import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
+import { useRoute } from "vue-router";
+import { gameStore } from "@/store/game";
 
 const Login = defineComponent({
   components: {
@@ -30,6 +32,7 @@ const Login = defineComponent({
   setup(props, { emit }) {
     // translation
     const { t } = useI18n();
+    const route = useRoute();
     const { dispatchSignIn, dispatchQuickLogin } = authStore();
     const { dispatchUserProfile } = authStore();
     const { setAuthModalType } = authStore();
@@ -45,6 +48,8 @@ const Login = defineComponent({
     const { dispatchVipLevelAward } = vipStore();
     const { width } = useDisplay();
     const { dispatchCurrencyList } = currencyStore();
+    const {  getGameBetbyInit, closeKill } = gameStore();
+  
     // initiate component state
     const state = reactive({
       currentPage: 0, // default login form
@@ -122,13 +127,11 @@ const Login = defineComponent({
 
     const loginSuccess = async () => {
       if (success.value) {
-        adjustTrackEvent(
-          "LOGIN",
-          {
-            eventToken: EventToken.LOGIN, // LOGIN
-          },
-          userInfo.value.id
-        );
+        AdjustClass.getInstance().adjustTrackEvent({
+          key: "LOGIN",
+          value: String(userInfo.value.id),
+          params: "",
+        });
         await dispatchUserProfile();
         await dispatchUserBalance();
         await dispatchCurrencyList();
@@ -156,6 +159,10 @@ const Login = defineComponent({
           setAuthModalType("");
           setAuthDialogVisible(false);
         }, 100);
+        if (route.name == 'Sports') {
+          await closeKill();
+          await getGameBetbyInit();
+        }
         await dispatchSocketConnect();
       } else {
         const toast = useToast();
@@ -280,10 +287,13 @@ const Login = defineComponent({
         // await loginSuccess();
         //     console.log("facebook登录", authResponse);
         //   },{scope: 'public_profile,email,user_likes', return_scopes: true, auth_type: 'reauthenticate', auth_nonce: '{random-nonce}'});
-        //   // event tracking
-        //   adjustTrackEvent("FACEBOOK_LOGIN",{
-        //     eventToken: EventToken.FACEBOOK_LOGIN, // FACEBOOK_LOGIN
-        //   }, userInfo.value.id);
+
+        // AdjustClass.getInstance().adjustTrackEvent({
+        //   key: "FACEBOOK_LOGIN",
+        //   value: userInfo.value.id.toString(),
+        //   params: "",
+        // });
+
         // }
         // })
       }
@@ -298,14 +308,11 @@ const Login = defineComponent({
           await dispatchQuickLogin(params);
           await loginSuccess();
         });
-        // event tracking
-        adjustTrackEvent(
-          "GOOGLE_LOGIN",
-          {
-            eventToken: EventToken.GOOGLE_LOGIN, // GOOGLE_LOGIN
-          },
-          userInfo.value.id
-        );
+        AdjustClass.getInstance().adjustTrackEvent({
+          key: "GOOGLE_LOGIN",
+          value: userInfo.value.id.toString(),
+          params: "",
+        });
       }
     };
 
@@ -318,7 +325,36 @@ const Login = defineComponent({
       { deep: true }
     );
 
-    onMounted(() => {});
+    const loginWithFacebook = () => {
+      // 调用Facebook登录API
+      window.FB.login((response: any) => {
+        if (response.authResponse) {
+          // 用户已登录并授权
+          // 这里可以根据需要执行进一步的操作，例如向服务器发送令牌进行验证等
+          console.log('Login successful:', response.authResponse);
+        } else {
+          // 用户取消登录或发生错误
+          console.log('Login cancelled or encountered an error');
+        }
+      }, { scope: 'email' }); // 可以在这里指定您需要的权限
+    }
+
+    onMounted(() => {
+      // window.FB.init({
+      //   appId: import.meta.env.VITE_FACEBOOK_APP_ID,
+      //   autoLogAppEvents: true,
+      //   xfbml: true,
+      //   version: 'v18.0'
+      // });
+      // (function(d, s, id){
+      //   let js:any = d.getElementsByTagName(s)[0];
+      //   let fjs:any = d.getElementsByTagName(s)[0];
+      //   if (d.getElementById(id)) {return;}
+      //   js = d.createElement(s); js.id = id;
+      //   js.src = "https://connect.facebook.net/en_US/sdk.js";
+      //   fjs.parentNode.insertBefore(js, fjs);
+      // }(document, 'script', 'facebook-jssdk'));
+    });
 
     return {
       t,

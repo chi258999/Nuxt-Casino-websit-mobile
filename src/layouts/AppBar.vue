@@ -392,6 +392,7 @@ watch(currencyList, (() => {
 
 const handleSelectCurrency = async (item: GetCurrencyBalanceList) => {
   selectedCurrencyItem.value = item;
+  sessionStorage.setItem('currency', item.currency);
   await dispatchSetUserCurrency(item.currency);
   if (route.name == 'Sports') {
     await closeKill();
@@ -428,6 +429,7 @@ const showUserNavBar = async () => {
 
 watch(userBalance, (value) => {
   console.log("userbalance================", value);
+  sessionStorage.setItem('currency', value.currency);
   let locale = 'pt-BR';
   const currencyUnit = value.currency
   switch (currencyUnit) {

@@ -28,7 +28,7 @@ import icon_public_22 from "@/assets/public/svg/icon_public_22.svg";
 import { getUnitByCurrency } from '@/utils/currencyUnit';
 import currencyListValue from "@/utils/currencyList";
 import { getPhoneCodeByLocale } from "@/utils/phoneCodes";
-import { adjustTrackEvent } from '@/utils/adjust';
+import AdjustClass from '@/utils/adjust';
 import EventToken from '@/constants/EventToken';
 import router from '@/router';
 import { currencyStore } from '@/store/currency';
@@ -242,7 +242,14 @@ const validateAmount = (): boolean => {
 const handleAmountInputFocus = (): void => {
 }
 
-const handleAmountInputChange = (): void => {
+const handleAmountInputChange = (event: any): void => {
+  const input = event.target as HTMLInputElement;
+  const newValue = input.value;
+  // 如果输入的值第一个字符为 0，则阻止输入
+  if (newValue.length === 1 && String(newValue[0]) === '0') {
+    withdrawAmount.value = ''
+    input.value = '';
+  }
 }
 
 const handleAmountInputBlur = (): void => {
@@ -379,9 +386,6 @@ const handleWithdrawSubmit = async () => {
   await dispatchUserWithdrawSubmit(formData)
   loading.value = false;
   if (success.value) {
-    adjustTrackEvent("WITHDRAW", {
-      eventToken: EventToken.WITHDRAW, // WITHDRAW
-    }, withdrawAmount.value.toString());
     const toast = useToast();
     toast.success(t("withdraw_dialog.text_11"), {
       timeout: 3000,
@@ -505,9 +509,11 @@ const goWithdrawPage = () => {
 }
 
 onMounted(async () => {
-  adjustTrackEvent("PAGE_VIEW", {
-    eventToken: EventToken.PAGE_VIEW, // PAGE_VIEW
-  }, "");
+  AdjustClass.getInstance().adjustTrackEvent({
+    key: "PAGE_VIEW",
+    value: "withdraw",
+    params: "",
+  });
   setDepositWithdrawToggle(false);
   await dispatchUserWithdrawCfg();
   await dispatchUserBalance();
