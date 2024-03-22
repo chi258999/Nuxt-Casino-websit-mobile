@@ -974,18 +974,12 @@ const Dashboard = defineComponent({
     onMounted(async () => {
       loading.value = true;
 
-      if (route.query.mobile && route.query.mobile == "android") {
-        localStorage.setItem("isMobile", "true");
-      } else {
-        localStorage.setItem("isMobile", "false");
-      }
-
       window.scrollTo({
         top: 0,
         behavior: "smooth",
       });
 
-      let isMobile: boolean = localStorage.getItem("isMobile") == "true" ? true : false
+      let isMobile: boolean = !!route.query.mobile && route.query.mobile == "android"
 
       AdjustClass.getInstance(isMobile).adjustTrackEvent({ key: "PAGE_VIEW", value: "home", params: "" });
 
