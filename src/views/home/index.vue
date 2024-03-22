@@ -2592,7 +2592,6 @@ export default Dashboard;
   margin: 0;
   padding: 10px 12px 3px;
   color: white;
-  background-color: rgba(0, 0, 0, 0.5);
   border-bottom-left-radius: 8px 8px;
   border-bottom-right-radius: 8px 8px;
 
