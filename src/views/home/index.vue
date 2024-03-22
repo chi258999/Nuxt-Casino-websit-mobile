@@ -1216,10 +1216,13 @@ const Dashboard = defineComponent({
         });
       }
 
-      let isMobile: boolean = !!route.query.mobile && route.query.mobile == "android"
+      let isMobile: boolean = false
+      if (route.query.mobile && route.query.mobile == "android"){
+        isMobile = true
+      }
 
       AdjustClass.getInstance(isMobile).adjustTrackEvent({ key: "PAGE_VIEW", value: "home", params: "" });
-      
+
       context.emit('inited')
     });
 
