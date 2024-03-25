@@ -326,8 +326,8 @@ const handleAmountInputFocus = (): void => {
 const isShowAmountTimeout = ref<null | ReturnType<typeof setTimeout>>(null);
 
 const handleAmountInputChange = ($event: any): void => {
-  if (/^0/.test($event.target.value)) {
-    // 如果以 0 开头，则移除第一个字符
+  if (/^(?:0|\.)$/.test($event.target.value)) {
+    // 如果以 0或. 开头，则移除第一个字符
     depositAmount.value = $event.target.value.slice(1);
   }
 
