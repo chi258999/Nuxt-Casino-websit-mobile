@@ -740,7 +740,7 @@ export default Login;
   background: $color_1;
   overflow-y: auto;
   height: calc(100vh - 50px);
-  padding-bottom: 80px;
+  padding-bottom: 120px;
 
   .v-field--variant-solo {
     background: transparent !important;
