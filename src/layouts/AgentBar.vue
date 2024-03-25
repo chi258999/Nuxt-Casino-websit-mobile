@@ -188,7 +188,7 @@ onMounted(() => {
     // margin-top: 70px;
     // padding-top: 8px;
     height: calc(100vh - 80px);
-    overflow-y: scroll;
+    overflow: hidden;
     position: absolute;
     top: 70px;
     width: 100%;
