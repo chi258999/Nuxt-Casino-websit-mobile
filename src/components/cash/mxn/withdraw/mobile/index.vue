@@ -32,6 +32,7 @@ import AdjustClass from '@/utils/adjust';
 import EventToken from '@/constants/EventToken';
 import router from '@/router';
 import { currencyStore } from '@/store/currency';
+import { BtTabEnum } from '@/enums/bonusTransactionEnum';
 
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
@@ -505,7 +506,7 @@ const goWithdrawPage = () => {
   cashDialogShow();
   router.push({ name: 'Bonuses And Transactions' });
   setBonusTabIndex(1);
-  setTransactionTab(t('transaction.tab.withdrawal'));
+  setTransactionTab(BtTabEnum.withdrawal);
 }
 
 onMounted(async () => {

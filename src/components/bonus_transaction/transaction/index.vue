@@ -20,13 +20,7 @@ import { gameStore } from "@/store/game";
 import { vipStore } from "@/store/vip";
 import { bonusTransactionStore } from "@/store/bonusTransaction";
 import moment from "moment-timezone";
-
-enum Tab {
-  transactions = 'transactions',
-  deposit = 'deposit',
-  withdrawal = 'withdrawal',
-  vip = 'vip',
-}
+import { BtTabEnum } from '@/enums/bonusTransactionEnum';
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -81,19 +75,19 @@ const vipTimesHistory = computed(() => {
 
 const transactionTabs = ref<any[]>([
   {
-    value: Tab.transactions,
+    value: BtTabEnum.transactions,
     label: 'transaction.tab.transactions'
   },
   {
-    value: Tab.deposit,
+    value: BtTabEnum.deposit,
     label: 'transaction.tab.deposit'
   },
     {
-    value: Tab.withdrawal,
+    value: BtTabEnum.withdrawal,
     label: 'transaction.tab.withdrawal'
   },
   {
-    value: Tab.vip,
+    value: BtTabEnum.vip,
     label: 'transaction.tab.vip'
   },
   // t("transaction.tab.game_history"),
@@ -106,7 +100,7 @@ const transactionTabs = ref<any[]>([
 const pageSize = ref<number>(9);
 const pageNum = ref<number>(1);
 const vipTimesHistoryIndex = ref<number>(1);
-const selectedTab = ref<any>(Tab.transactions);
+const selectedTab = ref<any>(BtTabEnum.transactions);
 
 const transactionTab = computed(() => {
   const { getTransactionTab } = storeToRefs(bonusTransactionStore());
@@ -128,21 +122,21 @@ const touchless = () => {
 const transactionTabToggle = async (item: string) => {
   selectedTab.value = item;
   switch(selectedTab.value) {
-    case Tab.transactions :
+    case BtTabEnum.transactions :
       setTransactionHistoryItemEmpty()
        await dispatchTransactionHistory({
         page_size: pageSize.value,
         start_time: Math.ceil(moment().valueOf() / 1000),
       });
       break;
-    case Tab.deposit :
+    case BtTabEnum.deposit :
         setDepositHistoryIteEmpty()
         await dispatchUserDepositHistory({
           page_size: pageSize.value,
           start_time: Math.ceil(moment().valueOf() / 1000),
         });
       break;
-    case Tab.withdrawal :
+    case BtTabEnum.withdrawal :
       setWithdrawHistoryItemEmpty()
       await dispatchWithdrawalHistory({
         page_size: pageSize.value,
@@ -167,9 +161,11 @@ watch(selectedTab, async (value) => {
 });
 
 onMounted(async () => {
+  console.log(selectedTab.value);
+  console.log(transactionTab.value);
   selectedTab.value = route.query.tab
     ? route.query.tab
-    : Tab.transactions;
+    : BtTabEnum.transactions;
   selectedTab.value =
     transactionTab.value == "" ? selectedTab.value : transactionTab.value;
   // await dispatchGameHistory({
@@ -243,10 +239,10 @@ onMounted(async () => {
       <MGameHistory v-else />
     </v-window-item> -->
     <v-window-item
-      :value="Tab.transactions"
+      :value="BtTabEnum.transactions"
       style="margin-left: 10px; margin-right: 10px"
     >
-      <div v-if="selectedTab == Tab.transactions">
+      <div v-if="selectedTab == BtTabEnum.transactions">
         <Transactions v-if="mobileWidth > 600" />
         <MTransactions
           :pageSize="pageSize"
@@ -256,10 +252,10 @@ onMounted(async () => {
       </div>
     </v-window-item>
     <v-window-item
-      :value="Tab.deposit"
+      :value="BtTabEnum.deposit"
       style="margin-left: 10px; margin-right: 10px"
     >
-      <div v-if="selectedTab == Tab.deposit">
+      <div v-if="selectedTab == BtTabEnum.deposit">
 
       <Deposit v-if="mobileWidth > 600" />
       <MDeposit :pageSize="pageSize" :depositHistoryItem="depositHistoryItem" v-else />
@@ -267,10 +263,10 @@ onMounted(async () => {
 
     </v-window-item>
     <v-window-item
-      :value="Tab.withdrawal"
+      :value="BtTabEnum.withdrawal"
       style="margin-left: 10px; margin-right: 10px"
     >
-      <div v-if="selectedTab == Tab.withdrawal">
+      <div v-if="selectedTab == BtTabEnum.withdrawal">
         <Withdrawal
           :pageSize="pageSize"
           :withdrawHistoryItem="withdrawHistoryItem"
@@ -284,10 +280,10 @@ onMounted(async () => {
       </div>
     </v-window-item>
     <v-window-item
-      :value="Tab.vip"
+      :value="BtTabEnum.vip"
       style="margin-left: 10px; margin-right: 10px"
     >
-      <div v-if="selectedTab == Tab.vip">
+      <div v-if="selectedTab == BtTabEnum.vip">
         <Vip
           :pageSize="pageSize"
           :withdrawHistoryItem="withdrawHistoryItem"
