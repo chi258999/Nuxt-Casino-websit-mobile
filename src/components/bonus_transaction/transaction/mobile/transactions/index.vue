@@ -49,6 +49,10 @@ const tempHistoryList = [{},{},{},{},{},{},{},{}];
 const mobileWidth = computed(() => {
   return width.value;
 });
+// 用于页码计算 一页八个 pageSize.value=9
+const realPageSize = computed(() => {
+  return pageSize.value - 1
+})
 
 const success = computed(() => {
   const { getSuccess } = storeToRefs(bonusTransactionStore());
@@ -66,9 +70,10 @@ const moreTransactionHistoryFlag = computed(() => {
 })
 
 const handleNext = async (page_no: number) => {
-  startIndex.value = (page_no - 1) * (pageSize.value - 1);
-  endIndex.value = startIndex.value + pageSize.value;
+  startIndex.value = (page_no - 1) * realPageSize.value;
+  endIndex.value = startIndex.value + realPageSize.value;
   currentList.value = transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value);
+  
   if (currentList.value.length == 0) {
     await dispatchTransactionHistory({
       page_size: pageSize.value,
@@ -79,9 +84,10 @@ const handleNext = async (page_no: number) => {
 }
 
 const handlePrev = async (page_no: number) => {
-  startIndex.value = (page_no - 1) * pageSize.value;
-  endIndex.value = startIndex.value + pageSize.value;
+  startIndex.value = (page_no - 1) * realPageSize.value;
+  endIndex.value = startIndex.value + realPageSize.value;
   currentList.value = transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value);
+
   if (currentList.value.length == 0) {
     await dispatchTransactionHistory({
       page_size: pageSize.value,
