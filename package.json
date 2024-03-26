@@ -24,6 +24,7 @@
     "element-plus": "^2.3.6",
     "esbuild": "^0.17.19",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "lodash-es": "^4.17.21",
     "moment-timezone": "^0.5.43",
     "nprogress": "^0.2.0",

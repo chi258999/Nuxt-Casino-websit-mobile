@@ -22,6 +22,8 @@ import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import { useRoute } from "vue-router";
 import { gameStore } from "@/store/game";
+import { jwtDecode } from "jwt-decode";
+import { loginWithSocialMedia, LoginType } from "@/plugins/third-party-login";
 
 const Login = defineComponent({
   components: {
@@ -241,80 +243,125 @@ const Login = defineComponent({
       }
     };
 
-    // social login function
-    const handleSocialSigin = (index: number) => {
-      if (index === 0) {
-        loginWithFacebook();
-        // window.FB.getLoginStatus(
-        //   (statusResponse: any) => {
-        //     if (statusResponse.status == "unknown") {
-        //       window.FB.login(
-        //         (response: any) => {
-        //           loginState(response);
-        //         },
-        //         {
-        //           scope: "public_profile,email,user_likes",
-        //           return_scopes: true,
-        //           auth_type: "reauthenticate",
-        //           auth_nonce: "{random-nonce}",
-        //         }
-        //       );
-        //     } else {
-        //       // onSignInSuccess(statusResponse);
-        //     }
-        //   },
-        //   {
-        //     scope: "public_profile,email,user_likes",
-        //     return_scopes: true,
-        //     auth_type: "reauthenticate",
-        //     auth_nonce: "{random-nonce}",
-        //   }
-        // );
-        // login();
-        // window.FB.init({
-        //   appId: import.meta.env.VITE_FACEBOOK_APP_ID,
-        //   cookie: true,
-        //   xfbml: true,
-        //   version: "v19.0",
-        // });
-        // FB.getLoginStatus((statusResponse: any) => {
-        // if(statusResponse.status=="unknown"){
-        //   FB.login(async (authResponse: any) => {
-        // const params = {
-        //   id_token: authResponse.access_token,
-        //   type: 2
-        // }
-        // await dispatchQuickLogin(params);
-        // await loginSuccess();
-        //     console.log("facebook登录", authResponse);
-        //   },{scope: 'public_profile,email,user_likes', return_scopes: true, auth_type: 'reauthenticate', auth_nonce: '{random-nonce}'});
-
-        // AdjustClass.getInstance().adjustTrackEvent({
-        //   key: "FACEBOOK_LOGIN",
-        //   value: userInfo.value.id.toString(),
-        //   params: "",
-        // });
-
-        // }
-        // })
-      }
-      if (index === 1) {
-        googleTokenLogin({
-          clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-        }).then(async (res: any) => {
+    // 第三方登录点击事件方法
+    const loginOtherChange = async (type: LoginType) => {
+      try {
+        const data = await loginWithSocialMedia(type);
+        // 处理不同回调函数
+        if (type === LoginType.Google) {
+          const res: any = jwtDecode(data.credential);
           const params = {
             id_token: res.access_token,
             type: 1,
           };
           await dispatchQuickLogin(params);
           await loginSuccess();
-        });
-        AdjustClass.getInstance().adjustTrackEvent({
-          key: "GOOGLE_LOGIN",
-          value: userInfo.value.id.toString(),
-          params: "",
-        });
+          AdjustClass.getInstance().adjustTrackEvent({
+            key: "GOOGLE_LOGIN",
+            value: userInfo.value.id.toString(),
+            params: "",
+          });
+        } else if (type === LoginType.Facebook) {
+          (window as any).FB.api("/me?fields=email,name", async (response: any) => {
+            const params = {
+              id_token: response.access_token,
+              type: 2,
+            };
+            await dispatchQuickLogin(params);
+            await loginSuccess();
+          });
+          AdjustClass.getInstance().adjustTrackEvent({
+            key: "FACEBOOK_LOGIN",
+            value: userInfo.value.id.toString(),
+            params: "",
+          });
+        }
+      } catch (error) {
+        console.error(`Login error with ${type}:`, error);
       }
+    };
+
+
+    // social login function
+    const handleSocialSigin = (index: number) => {
+      if (index === 0) {
+        loginOtherChange(LoginType.Facebook);
+      }
+      if (index === 1) {
+        loginOtherChange(LoginType.Google);
+      }
+      // if (index === 0) {
+      //   loginWithFacebook();
+      //   // window.FB.getLoginStatus(
+      //   //   (statusResponse: any) => {
+      //   //     if (statusResponse.status == "unknown") {
+      //   //       window.FB.login(
+      //   //         (response: any) => {
+      //   //           loginState(response);
+      //   //         },
+      //   //         {
+      //   //           scope: "public_profile,email,user_likes",
+      //   //           return_scopes: true,
+      //   //           auth_type: "reauthenticate",
+      //   //           auth_nonce: "{random-nonce}",
+      //   //         }
+      //   //       );
+      //   //     } else {
+      //   //       // onSignInSuccess(statusResponse);
+      //   //     }
+      //   //   },
+      //   //   {
+      //   //     scope: "public_profile,email,user_likes",
+      //   //     return_scopes: true,
+      //   //     auth_type: "reauthenticate",
+      //   //     auth_nonce: "{random-nonce}",
+      //   //   }
+      //   // );
+      //   // login();
+      //   // window.FB.init({
+      //   //   appId: import.meta.env.VITE_FACEBOOK_APP_ID,
+      //   //   cookie: true,
+      //   //   xfbml: true,
+      //   //   version: "v19.0",
+      //   // });
+      //   // FB.getLoginStatus((statusResponse: any) => {
+      //   // if(statusResponse.status=="unknown"){
+      //   //   FB.login(async (authResponse: any) => {
+      //   // const params = {
+      //   //   id_token: authResponse.access_token,
+      //   //   type: 2
+      //   // }
+      //   // await dispatchQuickLogin(params);
+      //   // await loginSuccess();
+      //   //     console.log("facebook登录", authResponse);
+      //   //   },{scope: 'public_profile,email,user_likes', return_scopes: true, auth_type: 'reauthenticate', auth_nonce: '{random-nonce}'});
+
+      //   // AdjustClass.getInstance().adjustTrackEvent({
+      //   //   key: "FACEBOOK_LOGIN",
+      //   //   value: userInfo.value.id.toString(),
+      //   //   params: "",
+      //   // });
+
+      //   // }
+      //   // })
+      // }
+      // if (index === 1) {
+      //   googleTokenLogin({
+      //     clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      //   }).then(async (res: any) => {
+      //     const params = {
+      //       id_token: res.access_token,
+      //       type: 1,
+      //     };
+      //     await dispatchQuickLogin(params);
+      //     await loginSuccess();
+      //   });
+      //   AdjustClass.getInstance().adjustTrackEvent({
+      //     key: "GOOGLE_LOGIN",
+      //     value: userInfo.value.id.toString(),
+      //     params: "",
+      //   });
+      // }
     };
 
     watch(
@@ -351,20 +398,20 @@ const Login = defineComponent({
     
 
     onMounted(() => {
-      (function(d, s, id){
-        let js:any = d.getElementsByTagName(s)[0];
-        let fjs:any = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
-      window.FB.init({
-        appId: import.meta.env.VITE_FACEBOOK_APP_ID,
-        autoLogAppEvents: true,
-        xfbml: true,
-        version: 'v19.0'
-      });
+      // (function(d, s, id){
+      //   let js:any = d.getElementsByTagName(s)[0];
+      //   let fjs:any = d.getElementsByTagName(s)[0];
+      //   if (d.getElementById(id)) {return;}
+      //   js = d.createElement(s); js.id = id;
+      //   js.src = "//connect.facebook.net/en_US/sdk.js";
+      //   fjs.parentNode.insertBefore(js, fjs);
+      // }(document, 'script', 'facebook-jssdk'));
+      // window.FB.init({
+      //   appId: import.meta.env.VITE_FACEBOOK_APP_ID,
+      //   autoLogAppEvents: true,
+      //   xfbml: true,
+      //   version: 'v19.0'
+      // });
     });
 
     return {
@@ -380,7 +427,8 @@ const Login = defineComponent({
       mergeEmail,
       loginSuccess,
       handleSocialSigin,
-      loginWithFacebook
+      loginWithFacebook,
+      loginOtherChange
     };
   },
 });

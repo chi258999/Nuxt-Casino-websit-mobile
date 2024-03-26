@@ -382,6 +382,8 @@ const handleMessageFromIframe = (event: any) => {
 };
 
 const handleResize = () => {
+  const doc = document.documentElement
+  doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
   mobileHeight.value = window.innerHeight;
 };
 
@@ -399,6 +401,7 @@ onMounted(async () => {
     params: "",
   });
   window.addEventListener("resize", handleResize);
+  handleResize()
   mobileHeight.value = window.innerHeight;
   setMobileMenuShow(false);
   window.scrollTo({
