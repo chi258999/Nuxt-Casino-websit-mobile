@@ -23,7 +23,7 @@ import EventToken from "@/constants/EventToken";
 import { useRoute } from "vue-router";
 import { gameStore } from "@/store/game";
 import { jwtDecode } from "jwt-decode";
-import { loginWithSocialMedia, LoginType } from "@/plugins/third-party-login";
+import { loginWithSocialMedia, loginType } from "@/plugins/third-party-login";
 
 const Login = defineComponent({
   components: {
@@ -243,125 +243,11 @@ const Login = defineComponent({
       }
     };
 
-    // 第三方登录点击事件方法
-    const loginOtherChange = async (type: LoginType) => {
-      try {
-        const data = await loginWithSocialMedia(type);
-        // 处理不同回调函数
-        if (type === LoginType.Google) {
-          const res: any = jwtDecode(data.credential);
-          const params = {
-            id_token: res.access_token,
-            type: 1,
-          };
-          await dispatchQuickLogin(params);
-          await loginSuccess();
-          AdjustClass.getInstance().adjustTrackEvent({
-            key: "GOOGLE_LOGIN",
-            value: userInfo.value.id.toString(),
-            params: "",
-          });
-        } else if (type === LoginType.Facebook) {
-          (window as any).FB.api("/me?fields=email,name", async (response: any) => {
-            const params = {
-              id_token: response.access_token,
-              type: 2,
-            };
-            await dispatchQuickLogin(params);
-            await loginSuccess();
-          });
-          AdjustClass.getInstance().adjustTrackEvent({
-            key: "FACEBOOK_LOGIN",
-            value: userInfo.value.id.toString(),
-            params: "",
-          });
-        }
-      } catch (error) {
-        console.error(`Login error with ${type}:`, error);
-      }
-    };
-
-
     // social login function
-    const handleSocialSigin = (index: number) => {
-      if (index === 0) {
-        loginOtherChange(LoginType.Facebook);
-      }
-      if (index === 1) {
-        loginOtherChange(LoginType.Google);
-      }
-      // if (index === 0) {
-      //   loginWithFacebook();
-      //   // window.FB.getLoginStatus(
-      //   //   (statusResponse: any) => {
-      //   //     if (statusResponse.status == "unknown") {
-      //   //       window.FB.login(
-      //   //         (response: any) => {
-      //   //           loginState(response);
-      //   //         },
-      //   //         {
-      //   //           scope: "public_profile,email,user_likes",
-      //   //           return_scopes: true,
-      //   //           auth_type: "reauthenticate",
-      //   //           auth_nonce: "{random-nonce}",
-      //   //         }
-      //   //       );
-      //   //     } else {
-      //   //       // onSignInSuccess(statusResponse);
-      //   //     }
-      //   //   },
-      //   //   {
-      //   //     scope: "public_profile,email,user_likes",
-      //   //     return_scopes: true,
-      //   //     auth_type: "reauthenticate",
-      //   //     auth_nonce: "{random-nonce}",
-      //   //   }
-      //   // );
-      //   // login();
-      //   // window.FB.init({
-      //   //   appId: import.meta.env.VITE_FACEBOOK_APP_ID,
-      //   //   cookie: true,
-      //   //   xfbml: true,
-      //   //   version: "v19.0",
-      //   // });
-      //   // FB.getLoginStatus((statusResponse: any) => {
-      //   // if(statusResponse.status=="unknown"){
-      //   //   FB.login(async (authResponse: any) => {
-      //   // const params = {
-      //   //   id_token: authResponse.access_token,
-      //   //   type: 2
-      //   // }
-      //   // await dispatchQuickLogin(params);
-      //   // await loginSuccess();
-      //   //     console.log("facebook登录", authResponse);
-      //   //   },{scope: 'public_profile,email,user_likes', return_scopes: true, auth_type: 'reauthenticate', auth_nonce: '{random-nonce}'});
-
-      //   // AdjustClass.getInstance().adjustTrackEvent({
-      //   //   key: "FACEBOOK_LOGIN",
-      //   //   value: userInfo.value.id.toString(),
-      //   //   params: "",
-      //   // });
-
-      //   // }
-      //   // })
-      // }
-      // if (index === 1) {
-      //   googleTokenLogin({
-      //     clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-      //   }).then(async (res: any) => {
-      //     const params = {
-      //       id_token: res.access_token,
-      //       type: 1,
-      //     };
-      //     await dispatchQuickLogin(params);
-      //     await loginSuccess();
-      //   });
-      //   AdjustClass.getInstance().adjustTrackEvent({
-      //     key: "GOOGLE_LOGIN",
-      //     value: userInfo.value.id.toString(),
-      //     params: "",
-      //   });
-      // }
+    const handleSocialSigin = async (index: number) => {
+      await loginWithSocialMedia(index, 'login');
+      await loginSuccess();
+      loginType(index);
     };
 
     watch(
@@ -372,47 +258,8 @@ const Login = defineComponent({
       },
       { deep: true }
     );
-
-    const loginWithFacebook = () => {
-      // 调用Facebook登录API
-      window.FB.login((response: any) => {
-        if (response.authResponse) {
-          // 用户已登录并授权
-          // 这里可以根据需要执行进一步的操作，例如向服务器发送令牌进行验证等
-          window.FB.api('/me', async function(authResponse: any) {
-            console.log('Successful login for: ' + response.name);
-            const params = {
-              id_token: authResponse.access_token,
-              type: 2
-            }
-            await dispatchQuickLogin(params);
-            await loginSuccess();
-          });
-          console.log('Login successful:', response.authResponse);
-        } else {
-          // 用户取消登录或发生错误
-          console.log('Login cancelled or encountered an error');
-        }
-      }, { scope: 'email' }); // 可以在这里指定您需要的权限
-    }
     
-
-    onMounted(() => {
-      // (function(d, s, id){
-      //   let js:any = d.getElementsByTagName(s)[0];
-      //   let fjs:any = d.getElementsByTagName(s)[0];
-      //   if (d.getElementById(id)) {return;}
-      //   js = d.createElement(s); js.id = id;
-      //   js.src = "//connect.facebook.net/en_US/sdk.js";
-      //   fjs.parentNode.insertBefore(js, fjs);
-      // }(document, 'script', 'facebook-jssdk'));
-      // window.FB.init({
-      //   appId: import.meta.env.VITE_FACEBOOK_APP_ID,
-      //   autoLogAppEvents: true,
-      //   xfbml: true,
-      //   version: 'v19.0'
-      // });
-    });
+    onMounted(() => {});
 
     return {
       t,
@@ -426,9 +273,7 @@ const Login = defineComponent({
       handleEmailFocus,
       mergeEmail,
       loginSuccess,
-      handleSocialSigin,
-      loginWithFacebook,
-      loginOtherChange
+      handleSocialSigin
     };
   },
 });
