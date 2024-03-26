@@ -1626,6 +1626,7 @@ onMounted(async () => {
 
 .refer-friend-background {
   background-image: url("@/assets/public/image/bg_public_28.png") !important;
+  background-size: 100% 100% !important;
 }
 
 .refer-friend-img-position {
@@ -1647,6 +1648,7 @@ onMounted(async () => {
 
 .app-background {
   background-image: url("@/assets/public/image/bg_public_29.png") !important;
+  background-size: 100% 100% !important;
 }
 
 .app-img-position {
