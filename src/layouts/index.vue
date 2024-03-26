@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
 
@@ -32,6 +32,7 @@ const RewardBarLayout = defineAsyncComponent(() => import("./RewardBar.vue"));
 const AgentBarLayout = defineAsyncComponent(() => import("./AgentBar.vue"));
 const RefferalLayout = defineAsyncComponent(() => import("./RefferalBar.vue"));
 const VipBar = defineAsyncComponent(() => import("./VipBar.vue"));
+const screen = defineAsyncComponent(() => import("./screen.vue"));
 const MBonusDashboardDialog = defineAsyncComponent(
   () => import("@/components/vip/mobile/MBonusDashboard.vue")
 );
@@ -39,6 +40,7 @@ const LiveChat = defineAsyncComponent(() => import("./live_chat/index.vue"));
 
 const route = useRoute();
 const { width } = useDisplay();
+const isScroll = ref(false);
 
 const refferalAppBarShow = computed(() => {
   const { getRefferalAppBarShow } = storeToRefs(refferalStore());
@@ -61,13 +63,36 @@ const bonusDashboardDialogShow = computed(() => {
   return getBonusDashboardDialogVisible.value;
 });
 
+const judgeScreen = () => {
+  if (window.orientation == 90 || window.orientation == -90) {
+    isScroll.value = true;
+  }
+  window.addEventListener(
+    "onorientationchange" in window ? "orientationchange" : "resize",
+    function () {
+      if (window.orientation === 180 || window.orientation === 0) {
+        isScroll.value = false;
+      }
+      if (window.orientation === 90 || window.orientation === -90) {
+        isScroll.value = true;
+      }
+    },
+    false
+  );
+};
+
 const handleScroll = () => {
   console.log("scroll");
 };
+
+onMounted(() => {
+  judgeScreen();
+});
 </script>
 
 <template>
-  <v-app :class="fixPositionShow ? 'appbar-position-fix' : ''">
+  <screen v-if="isScroll" />
+  <v-app v-else :class="fixPositionShow ? 'appbar-position-fix' : ''">
     <RefferalLayout v-if="refferalAppBarShow" />
     <AppBarLayout />
     <template v-if="mobileWidth > 600">
@@ -130,9 +155,9 @@ const handleScroll = () => {
 
 .Vue-Toastification__toast-body {
   color: var(--sec-text, #7782aa);
-  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
-    sans-serif;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+    DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+    WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
