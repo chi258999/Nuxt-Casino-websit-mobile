@@ -10,35 +10,31 @@ const bscrollRef:any = ref(null)
 const BS:any = ref(null)
 
 onMounted(async() => {
-        await nextTick()
-      console.log('nextTick');
-      
-      // 实例和配置
-      BS.value = new BScroll(bscrollRef.value,{
-        scrollY: true,   //纵向滚动
-        // mouseWheel: true,  //可以用鼠标滚轮滚动
-        probeType: 3,    //开启滚动事件
-        click: false,  //点击事件,默认false
-        // 鼠标滑轮配置
-			  mouseWheel: {
-		      speed: 10,
-		      invert: false,
-		      easeTime: 300
-	      },
-	      	// 监听内容变化，自动执行bs.refresh()方法
-			  observeDOM : true
-      })
-      console.log(BS.value);
-      
-      BS.value.on('scroll',(position:any)=>{
-        console.log(position.x)   //打印x轴距离，是负数
-        console.log(position.y)  //打印y轴距离，是负数
-        // Math.abs(position.y)  改为正数
-      })
-      BS.value.on('scrollEnd', () => {
-        console.log('scrollingEnd')
-      })
-      // BS.value.refresh()  //重新计算滚动盒子的宽高
+  await nextTick()
+  // 实例和配置
+  BS.value = new BScroll(bscrollRef.value,{
+    scrollY: true,   //纵向滚动
+    // mouseWheel: true,  //可以用鼠标滚轮滚动
+    probeType: 3,    //开启滚动事件
+    click: false,  //点击事件,默认false
+    // 鼠标滑轮配置
+	  mouseWheel: {
+	    speed: 10,
+	    invert: false,
+	    easeTime: 300
+	  },
+	  	// 监听内容变化，自动执行bs.refresh()方法
+	  observeDOM : true
+  })
+  BS.value.on('scroll',(position:any)=>{
+    // console.log(position.x)   //打印x轴距离，是负数
+    // console.log(position.y)  //打印y轴距离，是负数
+    // // Math.abs(position.y)  改为正数
+  })
+  BS.value.on('scrollEnd', () => {
+    // console.log('scrollingEnd')
+  })
+  // BS.value.refresh()  //重新计算滚动盒子的宽高
 })
 </script>
 
