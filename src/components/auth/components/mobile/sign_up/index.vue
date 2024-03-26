@@ -24,6 +24,7 @@ import { currencyStore } from "@/store/currency";
 import AdjustClass from "@/utils/adjust";
 import { googleTokenLogin } from "vue3-google-login";
 import EventToken from "@/constants/EventToken";
+import { loginWithSocialMedia, loginType } from "@/plugins/third-party-login";
 
 const MSignup = defineComponent({
   components: {
@@ -421,71 +422,10 @@ const MSignup = defineComponent({
     };
 
     // 一键注册
-    const onSignInSuccessGoogle = (index: number) => {
-      if (index === 0) {
-        window.FB.getLoginStatus(
-          (statusResponse: any) => {
-            if (statusResponse.status == "unknown") {
-              window.FB.login(
-                (response: any) => {
-                  loginState(response);
-                },
-                {
-                  scope: "public_profile,email,user_likes",
-                  return_scopes: true,
-                  auth_type: "reauthenticate",
-                  auth_nonce: "{random-nonce}",
-                }
-              );
-            } else {
-              // onSignInSuccess(statusResponse);
-            }
-          },
-          {
-            scope: "public_profile,email,user_likes",
-            return_scopes: true,
-            auth_type: "reauthenticate",
-            auth_nonce: "{random-nonce}",
-          }
-        );
-        // window.FB.init({
-        //   appId: import.meta.env.VITE_FACEBOOK_APP_ID,
-        //   cookie: true,
-        //   xfbml: true,
-        //   version: "v19.0",
-        // });
-        // window.FB.login(async (authResponse: any) => {
-        //   const params = {
-        //     id_token: authResponse.access_token,
-        //     type: 2
-        //   }
-        //   await dispatchQuickRegister(params);
-        //   await registerSuccess();
-        // AdjustClass.getInstance().adjustTrackEvent({
-        //   key: "FACEBOOK_LOGIN",
-        //   value: userInfo.value.id.toString(),
-        //   params: "",
-        // });
-        // });
-      }
-      if (index === 1) {
-        googleTokenLogin({
-          clientId:
-            "315002729492-ij8mt521q04m5hmqmdl1gdgc70oedbsi.apps.googleusercontent.com",
-        }).then(async (res: any) => {
-          const params = {
-            id_token: res.access_token,
-            type: 1,
-          };
-          await dispatchQuickRegister(params);
-          await registerSuccess();
-          AdjustClass.getInstance().adjustTrackEvent({
-            key: "GOOGLE_LOGIN",
-            value: userInfo.value.id.toString(),
-            params: "",
-          });
-        });
-      }
+    const onSignInSuccessGoogle = async (index: number) => {
+      await loginWithSocialMedia(index, 'register');
+      await registerSuccess();
+      loginType(index);
     };
 
     return {
