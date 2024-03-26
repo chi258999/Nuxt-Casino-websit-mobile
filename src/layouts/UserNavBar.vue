@@ -27,6 +27,7 @@ import img_vipemblem_100_149 from "@/assets/vip/image/img_vipemblem_100-149.png"
 import img_vipemblem_159_199 from "@/assets/vip/image/img_vipemblem_159-199.png";
 import img_vipemblem_200 from "@/assets/vip/image/img_vipemblem_200.png";
 import { menuStore } from "@/store/menu";
+import { BtTabEnum } from '@/enums/bonusTransactionEnum';
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -249,28 +250,28 @@ const goBonusPage = () => {
 const goTransactionPage = () => {
   router.push({ name: 'Bonuses And Transactions' });
   setBonusTabIndex(1);
-  setTransactionTab(t('transaction.tab.transactions'));
+  setTransactionTab(BtTabEnum.transactions);
   setUserNavBarToggle(false);
 }
 
 const goDepositPage = () => {
   router.push({ name: 'Bonuses And Transactions' });
   setBonusTabIndex(1);
-  setTransactionTab(t('transaction.tab.transactions'));
+  setTransactionTab(BtTabEnum.transactions);
   setUserNavBarToggle(false);
 }
 
 const goWithdrawPage = () => {
   router.push({ name: 'Bonuses And Transactions' });
   setBonusTabIndex(1);
-  setTransactionTab(t('transaction.tab.withdrawal'));
+  setTransactionTab(BtTabEnum.withdrawal);
   setUserNavBarToggle(false);
 }
 
 const goGameHistoryPage = () => {
   /*router.push({ name: 'Bonuses And Transactions' });
   setBonusTabIndex(1);
-  setTransactionTab(t('transaction.tab.game_history'));
+  setTransactionTab(t('transaction.tab.game_history'));  以后启用要用BtTabEnum里面的作为传值
   setUserNavBarToggle(false);*/
   router.push({ name: "Dashboard", query: { filter: 'history' } });
   setNavBarToggle(false);
