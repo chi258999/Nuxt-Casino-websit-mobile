@@ -152,7 +152,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
+  <div class="myReferral">
     <div class="relative">
       <img src="@/assets/public/svg/img_public_26.svg" style="width: 100%" />
       <div class="m-my-referral-report-card">
@@ -247,6 +247,14 @@ onMounted(async () => {
     <MInviteFooter />
   </div>
 </template>
+
+<style lang="scss" scoped>
+.myReferral {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+</style>
 
 <style lang="scss">
 .m-my-referral-report-card {
