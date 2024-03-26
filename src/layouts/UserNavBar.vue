@@ -631,6 +631,12 @@ onMounted(async () => {
             t("appBar.transactions")
           }}</v-list-item-title>
         </v-list-item>
+        <v-list-item class="m-user-item" value="withdraw" @click="withdrawDialogShow">
+          <template v-slot:prepend>
+            <img src="@/assets/public/svg/icon_public_65.svg" width="18" />
+          </template>
+          <v-list-item-title class="ml-2">{{ t("appBar.withdraw") }}</v-list-item-title>
+        </v-list-item>
         <v-list-item
           class="m-user-item refer-friend-background"
           height="36"
@@ -653,11 +659,15 @@ onMounted(async () => {
             <p class="m-refer-friend-text-position">{{ t("appBar.earn_money") }}</p>
           </template>
         </v-list-item>
-        <v-list-item class="m-user-item" value="withdraw" @click="withdrawDialogShow">
+        <v-list-item
+          value="affiliate"
+          router
+          :to="{ name: 'Affiliate' }"
+        >
           <template v-slot:prepend>
-            <img src="@/assets/public/svg/icon_public_65.svg" width="18" />
+            <img src="@/assets/public/svg/icon_public_43.svg" width="18" />
           </template>
-          <v-list-item-title class="ml-2">{{ t("appBar.withdraw") }}</v-list-item-title>
+          <v-list-item-title class="ml-2">{{ t('navBar.menu_item_1.affiliate') }}</v-list-item-title>
         </v-list-item>
         <v-list-item class="m-user-item app-background" value="app" height="36">
           <template v-slot:prepend>
@@ -674,38 +684,38 @@ onMounted(async () => {
             <p class="m-app-text-position">{{ t("appBar.install") }}</p>
           </template>
         </v-list-item>
-        <v-list-item class="m-user-item" value="fairness">
+        <!-- <v-list-item class="m-user-item" value="fairness">
           <template v-slot:prepend>
             <img src="@/assets/public/svg/icon_public_72.svg" width="18" />
           </template>
           <v-list-item-title class="ml-2">{{ t("appBar.fairness") }}</v-list-item-title>
-        </v-list-item>
+        </v-list-item> -->
         <v-list-item class="m-user-item" value="rewards" @click="goReward">
           <template v-slot:prepend>
             <img src="@/assets/public/svg/icon_public_67.svg" width="18" />
           </template>
           <v-list-item-title class="ml-2">{{ t("appBar.rewards") }}</v-list-item-title>
         </v-list-item>
-        <v-list-item class="m-user-item" value="preferences">
+        <!-- <v-list-item class="m-user-item" value="preferences">
           <template v-slot:prepend>
             <img src="@/assets/public/svg/icon_public_68.svg" width="18" />
           </template>
           <v-list-item-title class="ml-2">{{
             t("appBar.preferences")
           }}</v-list-item-title>
-        </v-list-item>
-        <v-list-item class="m-user-item" value="statistics">
+        </v-list-item> -->
+        <!-- <v-list-item class="m-user-item" value="statistics">
           <template v-slot:prepend>
             <img src="@/assets/public/svg/icon_public_69.svg" width="18" />
           </template>
           <v-list-item-title class="ml-2">{{ t("appBar.statistics") }}</v-list-item-title>
-        </v-list-item>
+        </v-list-item> -->
         <div
-          class="d-flex justify-center align-center m-sign-out-btn text-400-12 white"
+          class="d-flex justify-center align-center m-sign-out-btn text-400-12"
           v-ripple.center
           @click="showSignoutDialog"
         >
-          <img src="@/assets/public/svg/icon_public_70.svg" class="mr-4" width="20" />
+          <!-- <img src="@/assets/public/svg/icon_public_70.svg" class="mr-4" width="20" /> -->
           {{ t("appBar.sign_out") }}
         </div>
       </v-list>
@@ -749,12 +759,15 @@ onMounted(async () => {
   width: 157px;
   height: 36px;
   flex-shrink: 0;
-  border-radius: 8px;
-  background: var(--secondary-button-353652, #23262f);
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #7782AA;
+  // border-radius: 8px;
+  // background: var(--secondary-button-353652, #23262f);
 
   /* Button Shadow */
-  box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
-  margin: auto;
+  // box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
+  margin: 43.5px auto 0;
 }
 
 .m-refer-friend-img-position {
@@ -788,7 +801,7 @@ onMounted(async () => {
 }
 
 .v-navigation-drawer__content {
-  // height: 100vh;
+  height: auto;
   overflow-y: auto;
   overflow-x: hidden !important;
 

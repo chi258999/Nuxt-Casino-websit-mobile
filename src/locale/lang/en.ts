@@ -226,7 +226,7 @@ export const lang: langType = {
     install: "Install",
     app: "APP",
     fairness: "Fairness",
-    rewards: "Rewards",
+    rewards: "Reward",
     preferences: "Preferences",
     statistics: "Statistics",
     sign_out: "Sign Out",
