@@ -86,6 +86,7 @@ export const vipStore = defineStore({
     },
     setVipRebateHistory(vipRebateHistory: Vip.VipRebateHistoryData) {
       let tempResData = vipRebateHistory
+      this.vipRebateHistory.list = []
       const baseArr = [0, 1, 2, 3, 4, 5, 6, 7]
       let record = tempResData.list.slice(0, 8)
       baseArr.forEach((item) => {
@@ -109,6 +110,7 @@ export const vipStore = defineStore({
     },
     setVipLevelRewardHistory(vipLevelRewardHistory: Vip.VipLevelRewardHistoryData) {
       let tempResData = vipLevelRewardHistory
+      this.vipLevelRewardHistory.list = []
       const baseArr = [0, 1, 2, 3, 4, 5, 6, 7]
       let record = tempResData.list.slice(0, 8)
       baseArr.forEach((item) => {
@@ -130,6 +132,7 @@ export const vipStore = defineStore({
     },
     setVipTimesHistory(vipTimesHistory: Vip.VipTimesHistoryData) {
       let tempResData = vipTimesHistory
+      this.vipTimesHistory.list = []
       const baseArr = [0, 1, 2, 3, 4, 5, 6, 7, 8]
       let record = tempResData.list.slice(0, 9)
       baseArr.forEach((item) => {
@@ -179,6 +182,7 @@ export const vipStore = defineStore({
     },
     setVipSigninHistory(vipSigninHistoryList: Vip.VipSigninHistoryData, reset: boolean = false) {
       let tempResData = vipSigninHistoryList
+      this.vipSigninHistoryList.list = []
       const baseArr = [0, 1, 2, 3, 4, 5, 6, 7]
       let record = tempResData.list.slice(0, 8)
       baseArr.forEach((item) => {

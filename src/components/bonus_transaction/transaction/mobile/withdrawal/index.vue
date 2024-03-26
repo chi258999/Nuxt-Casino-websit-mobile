@@ -136,6 +136,11 @@ const moreWithdrawHistoryFlag = computed(() => {
   return moreWithdrawHistoryFlag.value
 })
 
+// 用于页码计算 一页八个 pageSize.value=9
+const realPageSize = computed(() => {
+  return pageSize.value - 1
+})
+
 const refundWithdrawalSubmit = async (id: number, index: number) => {
   loadingIndex.value = index;
   loading.value = true;
@@ -159,8 +164,8 @@ const refundWithdrawalSubmit = async (id: number, index: number) => {
 }
 
 const handleNext = async (page_no: number) => {
-  startIndex.value = (page_no - 1) * (pageSize.value - 1);
-  endIndex.value = startIndex.value + pageSize.value;
+  startIndex.value = (page_no - 1) * realPageSize.value;
+  endIndex.value = startIndex.value + realPageSize.value;
   currentList.value = withdrawHistoryItem.value.record.slice(startIndex.value, endIndex.value);
   if (currentList.value.length == 0) {
     await dispatchWithdrawalHistory({
@@ -171,8 +176,8 @@ const handleNext = async (page_no: number) => {
 }
 
 const handlePrev = async (page_no: number) => {
-  startIndex.value = (page_no - 1) * pageSize.value;
-  endIndex.value = startIndex.value + pageSize.value;
+  startIndex.value = (page_no - 1) * realPageSize.value;
+  endIndex.value = startIndex.value + realPageSize.value;
   currentList.value = withdrawHistoryItem.value.record.slice(startIndex.value, endIndex.value);
   if (currentList.value.length == 0) {
     await dispatchWithdrawalHistory({
@@ -568,6 +573,14 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
 .table-position-overflow {
   .v-table__wrapper {
     overflow: hidden !important;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+@media (max-width: 600px) {
+  ::v-deep(.v-pagination__item--is-active) {
+    display: block;
   }
 }
 </style>
