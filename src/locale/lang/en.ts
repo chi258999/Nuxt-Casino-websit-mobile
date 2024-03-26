@@ -831,11 +831,11 @@ export const lang: langType = {
       text_4: "Share your referral link and code with friends or promote your referral offer on social networks, forums, and other communication channels.",
       text_5: "Every new player who joins the HOY777.com with your offer becomes your referral and will earn you commissions and bonus rewards for every casino and sports bet.",
       text_6: "2. Invitation bonus",
-      text_7: "Invite friends who aren't on HOY777 yet. You will receive 12.00 BRL for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
+      text_7: "Invite friends who aren't on HOY777 yet. You will receive 12.00 {0} for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
       text_8: "Invitation bonus Terms:",
       text_9: "Balance is paid out directly in your Cash Balance, which you can play with on HOY777 or withdraw.",
       text_10: "Your friend must sign up through your personal invitation link.",
-      text_11: "Your friend must have deposited at least 50.00 BRL in order for you to receive the invitation reward.",
+      text_11: "Your friend must have deposited at least 50.00 {0} in order for you to receive the invitation reward.",
       text_12: "If a friend that you have invited is not from the same country as you, you will receive a default reward of €2.00 converted to your local currency at the fair exchange rate.",
       text_13: "You cannot create new HOY777 accounts and sign up through your own link to receive the reward. The Refer A Friend program is made for our players to invite friends to the HOY777 platform. Any other use of this program is strictly prohibited.",
       text_14: "HOY777 may suspend or terminate the Refer A Friend program or the user's ability to participate in it at any time for any reason. We reserve the right to suspend accounts or remove Cash Balance if we notice any activity that we believe is abusive, fraudulent, or in violation of the HOY777.com Terms of Service or Refer A Friend Terms. We reserve the right to review and investigate all referral activities and to suspend accounts or modify referrals in our sole discretion as deemed fair and appropriate.",
@@ -1474,10 +1474,10 @@ export const lang: langType = {
     earn_btn_text: "Earn",
     dialog: {
       header: {
-        title_text: "Refer a friend and earn 20 BRL immediately",
+        title_text: "Refer a friend and earn 20 {0} immediately",
         body_text: "Invite Friends, Earn Money",
         body_text_1: " users have already participated in the Invite. New Users campaign and they have earned a combined total of ",
-        body_text_2: "BRL in cash rewards on the ",
+        body_text_2: "{0} in cash rewards on the ",
         body_text_3: " platform.",
         body_text_4: "How invitations work"
       },
@@ -1491,9 +1491,9 @@ export const lang: langType = {
     copy_success_text: "Copied to the clipboard.",
     description: {
       text_1: "Invite your friends",
-      text_2: "Invite friends who aren't on HOY777.com yet. You will receive 20.00 BRL for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
+      text_2: "Invite friends who aren't on HOY777.com yet. You will receive 20.00 {0} for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
       term_text: "Terms:",
-      text_3: "Balance is paid out directly in your Cash Balance, which you can play with on HOY777 or withdraw. Your friend must sign up through your personal invitation link. Your friend must have deposited at least 50.00 BRL in order for you to receive the invitation reward. If a friend that you have invited is not from the same country as you, you will receive a default reward of 20 BRL converted to your local currency at the fair exchange rate. You cannot create new HOY777 accounts and sign up through your own link to receive the reward. The Refer A Friend program is made for our players to invite friends to the HOY777 platform. Any other use of this program is strictly prohibited. HOY777 may suspend or terminate the Refer A Friend program or the user's ability to participate in it at any time for any reason. We reserve the right to suspend accounts or remove Cash Balance if we notice any activity that we believe is abusive, fraudulent, or in violation of the HOY777.com Terms of Service or Refer A Friend Terms. We reserve the right to review and investigate all referral activities and to suspend accounts or modify referrals in our sole discretion as deemed fair and appropriate.",
+      text_3: "Balance is paid out directly in your Cash Balance, which you can play with on HOY777 or withdraw. Your friend must sign up through your personal invitation link. Your friend must have deposited at least 50.00 {0} in order for you to receive the invitation reward. If a friend that you have invited is not from the same country as you, you will receive a default reward of 20 {0} converted to your local currency at the fair exchange rate. You cannot create new HOY777 accounts and sign up through your own link to receive the reward. The Refer A Friend program is made for our players to invite friends to the HOY777 platform. Any other use of this program is strictly prohibited. HOY777 may suspend or terminate the Refer A Friend program or the user's ability to participate in it at any time for any reason. We reserve the right to suspend accounts or remove Cash Balance if we notice any activity that we believe is abusive, fraudulent, or in violation of the HOY777.com Terms of Service or Refer A Friend Terms. We reserve the right to review and investigate all referral activities and to suspend accounts or modify referrals in our sole discretion as deemed fair and appropriate.",
       back_btn_text: "Back"
     }
   },
@@ -1629,7 +1629,7 @@ export const lang: langType = {
         text_2: "Place your bets in the game every day and spin our Lucky Roulette for real cash prizes and the iPhone 14, 1BTC Super Prize!",
         text_3: "Lucky Roulette Rules.",
         text_4: "1. Business hours are 00:00-24:00 every day.",
-        text_5: "2. Members may spin Lucky Roulette once for every 1000 BRL wagered in the game, the more bets placed, the more times you win, there is no maximum limit!",
+        text_5: "2. Members may spin Lucky Roulette once for every 1000 {0} wagered in the game, the more bets placed, the more times you win, there is no maximum limit!",
         text_6: "3. Members who win a physical prize (iPhone 14) will receive an internal letter from BETFIERY and a VIP customer service manager will contact the customer to send the prize.",
         text_7: "Terms and Conditions.",
         text_8: "1. Each player may only have one account.",
