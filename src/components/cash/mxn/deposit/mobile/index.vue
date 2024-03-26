@@ -394,6 +394,9 @@ const handleDepositSubmit = async () => {
   // formData.amount = depositConfig.value["bonus"].length > 0 && depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
   formData.amount = Number(depositAmount.value)
   formData.is_bonus = bonusCheck.value ? false : true;
+
+  // 先打开一个新页面，成功请求有url再赋值，不成功则关闭
+  let winRef = window.open('url', '_blank')
   await dispatchUserDepositSubmit(formData);
   loading.value = false;
   if (success.value) {
@@ -407,20 +410,24 @@ const handleDepositSubmit = async () => {
       // }
 
       // 处理跳转新窗口浏览器拦截
-      const elementA = document.createElement('a');
-      const elementAid = 'newpage'
-      elementA.setAttribute('href', depositSubmit.value.url);
-      elementA.setAttribute('target', '_blank');
-      elementA.setAttribute('id', elementAid);
-      // 防止反复添加
-      if (!document.getElementById(elementAid)) {
-        document.body.appendChild(elementA);
-      }
-      elementA.click();
-      elementA.addEventListener('click', function (event) {
-        event.preventDefault(); // 阻止默认行为
-        window.location.href = this.href; // 手动跳转
-      });
+      // const elementA = document.createElement('a');
+      // const elementAid = 'newpage'
+      // elementA.setAttribute('href', depositSubmit.value.url);
+      // elementA.setAttribute('target', '_blank');
+      // elementA.setAttribute('id', elementAid);
+      // // 防止反复添加
+      // if (!document.getElementById(elementAid)) {
+      //   document.body.appendChild(elementA);
+      // }
+      // elementA.click();
+      // elementA.addEventListener('click', function (event) {
+      //   event.preventDefault(); // 阻止默认行为
+      //   window.location.href = this.href; // 手动跳转
+      // });
+
+      setTimeout(() => {
+        winRef.location = depositSubmit.value.url
+      }, 0)
 
       const toast = useToast();
       toast.success(t("deposit_dialog.text_1"), {
@@ -438,6 +445,9 @@ const handleDepositSubmit = async () => {
       stopCheckDepositAmount.value = true;
       depositAmount.value = "";
       return;
+    } else {
+      // 不成功关闭
+      winRef.close()
     }
     if (depositSubmit.value.code_url != "") {
       depositAmountWithBonus.value = depositConfig.value["bonus"].length > 0 && depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
