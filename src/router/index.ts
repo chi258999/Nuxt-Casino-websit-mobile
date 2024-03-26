@@ -157,6 +157,11 @@ const router = createRouter({
         }
       }
     }
+    if(from.path === '/') {
+      if (to.path === '/about-us') {
+        return { top: 0, left: 0 }
+      }
+    }
 
     // if(from.hash){ //先判断目标路由有没有hash值
     //   console.log(111);
