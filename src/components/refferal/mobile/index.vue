@@ -29,7 +29,7 @@ const { dispatchUserInvite } = inviteStore();
 
 const invitedUser = ref<number>(28560);
 const earnMoney = ref<number>(85601479);
-const host = ref<string>("xxx.com");
+const host = ref<string>("HOY777.com");
 const refferalCode = ref<string>("xxxxxxxxxx");
 const siteUrl = ref<string>("https://HOY777.com/xxxxxxxxxx");
 const refferalContainerHeight = ref<number>(333);
@@ -189,7 +189,7 @@ onMounted(async () => {
             class="m-refferal-header-img"
           />
           <div class="mt-2 mx-10 text-center text-700-14 yellow">
-            {{ t("refferal.dialog.header.title_text") }}
+            {{ t("refferal.dialog.header.title_text", [platformCurrency]) }}
           </div>
           <div class="mt-2 text-center text-700-18 white">
             {{ t("refferal.dialog.header.body_text") }}
@@ -200,7 +200,7 @@ onMounted(async () => {
             <Font color="#F9BC01">{{ invitedUser.toLocaleString() }}</Font>
             {{ t("refferal.dialog.header.body_text_1") }}
             <Font color="#F9BC01">{{ earnMoney.toLocaleString() }}</Font>
-            {{ t("refferal.dialog.header.body_text_2") }}
+            {{ t("refferal.dialog.header.body_text_2", [platformCurrency]) }}
             <Font color="#F9BC01">{{ host }}</Font>
             {{ t("refferal.dialog.header.body_text_3") }}
           </div>

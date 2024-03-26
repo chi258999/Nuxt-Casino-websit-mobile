@@ -60,7 +60,7 @@ const selectedCurrencyUnit = ref<string>(platformCurrency.value);
 
 const selectedCurrencyItem = ref<GetCurrencyItem>({
   icon: new URL("@/assets/public/svg/icon_public_84.svg", import.meta.url).href,
-  name: "MXN",
+  name: platformCurrency.value,
   value: 5.25
 })
 
@@ -69,7 +69,7 @@ const selectedPaymentItem = ref<GetPaymentItem>({
   icon: "",
   name: "",
   channel_type: "",
-  description: "20~150.000 BRL",
+  description: "20~150.000 " + platformCurrency.value,
   min: 149,
   max: 588.88
 })
@@ -120,7 +120,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_1",
     channel_type: "",
-    description: "20~150.000 BRL",
+    description: "20~150.000 " + platformCurrency.value,
     min: 149,
     max: 588.88
   },
