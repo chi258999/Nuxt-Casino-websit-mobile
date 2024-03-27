@@ -1474,10 +1474,10 @@ export const lang: langType = {
     earn_btn_text: "Earn",
     dialog: {
       header: {
-        title_text: "Refer a friend and earn 20 {0} immediately",
+        title_text: "Refer a friend and earn 20 BRL  immediately",
         body_text: "Invite Friends, Earn Money",
-        body_text_1: " users have already participated in the Invite. New Users campaign and they have earned a combined total of ",
-        body_text_2: "{0} in cash rewards on the ",
+        body_text_1: " users have already participated in the Invite New Users campaign and they have earned a combined total of ",
+        body_text_2: "MXN in cash rewards on the",
         body_text_3: " platform.",
         body_text_4: "How invitations work"
       },
@@ -1491,9 +1491,9 @@ export const lang: langType = {
     copy_success_text: "Copied to the clipboard.",
     description: {
       text_1: "Invite your friends",
-      text_2: "Invite friends who aren't on HOY777.com yet. You will receive 20.00 {0} for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
+      text_2: "Invite friends who aren't on Blue.game yet. You will receive 20.00 BRL for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
       term_text: "Terms:",
-      text_3: "Balance is paid out directly in your Cash Balance, which you can play with on HOY777 or withdraw. Your friend must sign up through your personal invitation link. Your friend must have deposited at least 50.00 {0} in order for you to receive the invitation reward. If a friend that you have invited is not from the same country as you, you will receive a default reward of 20 {0} converted to your local currency at the fair exchange rate. You cannot create new HOY777 accounts and sign up through your own link to receive the reward. The Refer A Friend program is made for our players to invite friends to the HOY777 platform. Any other use of this program is strictly prohibited. HOY777 may suspend or terminate the Refer A Friend program or the user's ability to participate in it at any time for any reason. We reserve the right to suspend accounts or remove Cash Balance if we notice any activity that we believe is abusive, fraudulent, or in violation of the HOY777.com Terms of Service or Refer A Friend Terms. We reserve the right to review and investigate all referral activities and to suspend accounts or modify referrals in our sole discretion as deemed fair and appropriate.",
+      text_3: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centur ies, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
       back_btn_text: "Back"
     }
   },
