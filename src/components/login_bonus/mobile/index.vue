@@ -220,6 +220,8 @@ onMounted(async () => {
             <p class="text-900-12 white m-login-bonus-card-money-position">
               $ {{ vipSignIn.award[0] }}
             </p>
+            <img class="absolute m-login-bonus-card-select" src="@/assets/vip/image/img_vip_select.png">
+            <img class="absolute m-login-bonus-card-finger" src="@/assets/vip/image/img_vip_finger.jpg">
           </div>
         </v-col>
         <v-col cols="4" class="pa-0 d-flex justify-center">
@@ -725,6 +727,23 @@ onMounted(async () => {
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   cursor: pointer;
   overflow: hidden;
+}
+
+.m-login-bonus-card-select {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: 5px;
+    left: 7px;
+}
+
+.m-login-bonus-card-finger {
+  width: 58px;
+  height: 58px;
+  position: absolute;
+  top: 40%;
+  right: -7%;
+  z-index: 999999;
 }
 
 .m-login-bonus-card-bg-3 {
