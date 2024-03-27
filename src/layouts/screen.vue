@@ -1,4 +1,13 @@
 <script lang="ts" setup>
+import { computed } from "vue";
+import { useDisplay } from "vuetify";
+
+const { width } = useDisplay();
+
+const mobileWidth = computed(() => {
+  return width.value;
+});
+
 const downLoadApp = () => {
   console.log("downLoadApp");
 };
@@ -6,11 +15,16 @@ const downLoadApp = () => {
 
 <template>
   <div class="screen">
+    <template v-if="mobileWidth < 600">
     <div class="screen-tips">
       <img class="screen-img" src="@/assets/common/screen-phone.jpg" />
       <span class="tips-text">Rotate phone screen</span>
     </div>
     <div class="down-btn" @click="downLoadApp"></div>
+  </template>
+  <template v-else>
+      <div class="pc-down-btn" @click="downLoadApp"></div>
+  </template>
   </div>
 </template>
 
@@ -49,6 +63,16 @@ const downLoadApp = () => {
     left: 50%;
     bottom: 50px;
     transform: translate(-50%,0);
+  }
+  .pc-down-btn {
+    width: 490px;
+    height: 117px;
+    background: url("@/assets/common/pc-downLoad.jpg");
+    background-size: cover;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
   }
 }
 </style>
