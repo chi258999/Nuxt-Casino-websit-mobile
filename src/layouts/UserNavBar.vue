@@ -8,6 +8,7 @@ import { appBarStore } from "@/store/appBar";
 import { authStore } from "@/store/auth";
 import { mailStore } from "@/store/mail";
 import { vipStore } from "@/store/vip";
+import { agentStore } from "@/store/agent";
 import { storeToRefs } from "pinia";
 import { useDisplay } from 'vuetify';
 import { useRouter } from "vue-router";
@@ -58,7 +59,7 @@ const { setVipNavBarToggle } = vipStore();
 const { setNavBarToggle } = appBarStore();
 const { dispatchVipLevelAward } = vipStore();
 const { setRewardNavShow } = menuStore();
-
+const { setAgentNavBarToggle } = agentStore();
 // mobile version name
 const { name, width } = useDisplay()
 const { t } = useI18n();
@@ -289,6 +290,16 @@ const handleRefferalDialogShow = () => {
   setHeaderBlurEffectShow(true);
   setMenuBlurEffectShow(true);
   setOverlayScrimShow(drawer.value);
+  setUserNavBarToggle(false);
+}
+
+const handleAgentNavBarShow = () => {
+  referPageShow.value = true;
+  setAgentNavBarToggle(true);
+  setMainBlurEffectShow(false);
+  setHeaderBlurEffectShow(false);
+  setMenuBlurEffectShow(false);
+  setOverlayScrimShow(false);
   setUserNavBarToggle(false);
 }
 
@@ -685,8 +696,8 @@ onMounted(async () => {
             </v-list-item>
             <v-list-item
               value="affiliate"
-              router
-              :to="{ name: 'Affiliate' }"
+              height="36"
+              @click="handleAgentNavBarShow"
             >
               <template v-slot:prepend>
                 <img src="@/assets/public/svg/icon_public_43.svg" width="18" />
