@@ -253,16 +253,10 @@ const MSignup = defineComponent({
 
     const registerSuccess = async () => {
       if (success.value) {
-        AdjustClass.getInstance().adjustTrackEvent({
-          key: "REGISTER",
-          value: userInfo.value.id.toString(),
-          params: "",
-        });
         await dispatchUserProfile();
         await dispatchUserBalance();
         await dispatchSocketConnect();
         await dispatchCurrencyList();
-
         setAuthDialogVisible(false);
         setNickNameDialogVisible(true);
         const toast = useToast();
@@ -278,8 +272,14 @@ const MSignup = defineComponent({
           icon: SuccessIcon,
           rtl: false,
         });
+
+        // 数据埋点
+        AdjustClass.getInstance().adjustTrackEvent({
+          key: "REGISTER",
+          value: userInfo.value.id.toString(),
+          params: "",
+        });
       } else {
-        console.log;
         if (
           errMessage.value ==
           "The account you entered has been used by someone else, please input again"
