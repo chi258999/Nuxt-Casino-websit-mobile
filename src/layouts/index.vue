@@ -91,7 +91,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <screen v-if="isScroll" />
+  <screen v-if="isScroll||mobileWidth > 1024" />
   <v-app v-else :class="fixPositionShow ? 'appbar-position-fix' : ''">
     <RefferalLayout v-if="refferalAppBarShow" />
     <AppBarLayout />
