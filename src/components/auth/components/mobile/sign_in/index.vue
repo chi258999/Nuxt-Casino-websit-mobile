@@ -248,7 +248,6 @@ const Login = defineComponent({
     const handleSocialSigin = async (index: number) => {
       await loginWithSocialMedia(index, 'login');
       await loginSuccess();
-      console.log(userInfo.value, 'userInfo.valueq123123123');
       loginType(index);
     };
 
