@@ -412,7 +412,7 @@ onMounted(async () => {
     scrollY: true,   //纵向滚动
     // mouseWheel: true,  //可以用鼠标滚轮滚动
     probeType: 3,    //开启滚动事件
-    click: false,  //点击事件,默认false
+    click: true,  //点击事件,默认false
     // 鼠标滑轮配置
 	  mouseWheel: {
 	    speed: 10,
