@@ -129,11 +129,6 @@ const Login = defineComponent({
 
     const loginSuccess = async () => {
       if (success.value) {
-        AdjustClass.getInstance().adjustTrackEvent({
-          key: "LOGIN",
-          value: String(userInfo.value.id),
-          params: "",
-        });
         await dispatchUserProfile();
         await dispatchUserBalance();
         await dispatchCurrencyList();
@@ -156,6 +151,12 @@ const Login = defineComponent({
           closeButton: "button",
           icon: SuccessIcon,
           rtl: false,
+        });
+        // 埋点统计
+        AdjustClass.getInstance().adjustTrackEvent({
+          key: "LOGIN",
+          value: String(userInfo.value.id),
+          params: "",
         });
         setTimeout(() => {
           setAuthModalType("");
@@ -247,6 +248,7 @@ const Login = defineComponent({
     const handleSocialSigin = async (index: number) => {
       await loginWithSocialMedia(index, 'login');
       await loginSuccess();
+      console.log(userInfo.value, 'userInfo.valueq123123123');
       loginType(index);
     };
 
