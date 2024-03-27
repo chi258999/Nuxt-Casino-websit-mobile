@@ -14,8 +14,10 @@ import "swiper/css/pagination";
 // import Swiper core and required modules
 import { Pagination } from "swiper/modules";
 import MConfirm from "@/components/global/confirm/mobile/index.vue";
+import GiftIcon from '@/components/global/notification/GiftIcon.vue';
 import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
+import { useToast } from "vue-toastification";
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -114,6 +116,19 @@ const handleLoginBonus = async (day: number) => {
   }
   if (vipSignIn.value.signin_day === day && vipSignIn.value.is_signin === 1) {
     await dispatchVipSigninawardReceive();
+    const toast = useToast();
+    toast.success(`Congratulations on your prize:R$${Number(userBalance.value.amount)}`, {
+      timeout: 3000,
+      closeOnClick: false,
+      pauseOnFocusLoss: false,
+      pauseOnHover: false,
+      draggable: false,
+      showCloseButtonOnHover: false,
+      hideProgressBar: true,
+      closeButton: "button",
+      icon: GiftIcon,
+      rtl: false,
+    });
   }
   // if (
   //   Number(vipSignIn.value.signin_day) == day &&
@@ -220,8 +235,8 @@ onMounted(async () => {
             <p class="text-900-12 white m-login-bonus-card-money-position">
               $ {{ vipSignIn.award[0] }}
             </p>
-            <img class="absolute m-login-bonus-card-select" src="@/assets/vip/image/img_vip_select.png">
-            <img class="absolute m-login-bonus-card-finger" src="@/assets/vip/image/img_vip_finger.jpg">
+            <!-- <img class="absolute m-login-bonus-card-select" src="@/assets/vip/image/img_vip_select.png">
+            <img class="absolute m-login-bonus-card-finger" src="@/assets/vip/image/img_vip_finger.jpg"> -->
           </div>
         </v-col>
         <v-col cols="4" class="pa-0 d-flex justify-center">
@@ -527,6 +542,7 @@ onMounted(async () => {
       <!-- </SwiperSlide>
       </Swiper> -->
     </div>
+    <font class="text-900-10 m-login-bonus-bottom-text"> {{ t("vip.login_bonus.footer_text_8") }}</font>
     <v-row class="m-login-bonus-footer mx-0 align-center">
       <v-col cols="2" class="pa-0 ma-0">
         <!-- <v-btn
@@ -641,7 +657,7 @@ onMounted(async () => {
 
 .m-login-bonus-dialog-container {
   width: 340px;
-  height: 428px;
+  height: 400px;
   border-radius: 16px;
   background: #1d2027;
   position: relative;
@@ -680,6 +696,15 @@ onMounted(async () => {
   background: #15161c;
   box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset;
   z-index: 20;
+}
+
+.m-login-bonus-bottom-text {
+  width: 220px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  color: #7782AA;
 }
 
 .m-login-bonus-card-checkout-bg {

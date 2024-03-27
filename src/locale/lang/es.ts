@@ -1603,10 +1603,14 @@ export const lang: langType = {
       "day_6_text": "El sexto dia",
       "day_7_text": "Día 7",
       "day_8_text": "Día ∞",
-      "footer_text_1": "Si recargas",
-      "footer_text_2": "Dentro",
-      "footer_text_3": "7 días",
-      "footer_text_4": "Recibirás un bono de inicio de sesión"
+      "footer_text_1": "Sorry, your current ",
+      "footer_text_2": "VIP level is 0",
+      "footer_text_3": ".Complete the first recharge of any amount to upgrade to ",
+      "footer_text_4": "VIP1 andstart receiving bonuses.",
+      "footer_text_5": "Upgrade to become a ",
+      "footer_text_6": "VIP ",
+      "footer_text_7": "and receive higher rewards!",
+      "footer_text_8": "Turn the page to see more VIP awards"
     },
     "roulette_bonus": {
       "paid_text": "Bono de ruleta",
