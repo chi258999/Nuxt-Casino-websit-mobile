@@ -71,7 +71,9 @@ const judgeScreen = () => {
     "onorientationchange" in window ? "orientationchange" : "resize",
     function () {
       if (window.orientation === 180 || window.orientation === 0) {
-        isScroll.value = false;
+        setTimeout(() => {
+          isScroll.value = false;
+        }, 200);
       }
       if (window.orientation === 90 || window.orientation === -90) {
         isScroll.value = true;
@@ -99,7 +101,7 @@ onMounted(() => {
       <NavBarLayout />
       <RightBarLayout />
     </template>
-    <template >
+    <template v-else>
       <MNavBarLayout />
       <RewardBarLayout v-if="route.name !== 'Sports'" />
       <AgentBarLayout />
