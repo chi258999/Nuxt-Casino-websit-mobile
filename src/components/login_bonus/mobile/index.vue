@@ -14,8 +14,11 @@ import "swiper/css/pagination";
 // import Swiper core and required modules
 import { Pagination } from "swiper/modules";
 import MConfirm from "@/components/global/confirm/mobile/index.vue";
+import GiftIcon from "@/components/global/notification/GiftIcon.vue";
+import ValidationBox from '@/components/cash/mxn/deposit/ValidationBox.vue';
 import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
+import { useToast } from "vue-toastification";
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -39,6 +42,7 @@ const { dispatchVipSignIn } = vipStore();
 const { dispatchVipSigninawardReceive } = vipStore();
 
 const vipGrade = ref("VIP1");
+const isShowReceiveValidation=ref(true)
 const loginBonusItem = ref({
   award: [8, 10, 12, 14, 16, 18, 20, 22], // reward list
   signin_day: 0, // The number of days that have been signed in
@@ -114,6 +118,22 @@ const handleLoginBonus = async (day: number) => {
   }
   if (vipSignIn.value.signin_day === day && vipSignIn.value.is_signin === 1) {
     await dispatchVipSigninawardReceive();
+    const toast = useToast();
+    toast.success(
+      `Congratulations on your prize:R$${Number(userBalance.value.amount)}`,
+      {
+        timeout: 3000,
+        closeOnClick: false,
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+        draggable: false,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: GiftIcon,
+        rtl: false,
+      }
+    );
   }
   // if (
   //   Number(vipSignIn.value.signin_day) == day &&
@@ -144,14 +164,19 @@ onMounted(async () => {
   if (localStorage.getItem("signin_day") == undefined) {
     localStorage.setItem("signin_day", "0");
   } else {
-    loginBonusItem.value.signin_day = Number(localStorage.getItem("signin_day"));
+    loginBonusItem.value.signin_day = Number(
+      localStorage.getItem("signin_day")
+    );
   }
   await dispatchVipSignIn();
 });
 </script>
 
 <template>
-  <div class="m-login-bonus-dialog-container" :class="confirmDialog ? 'blur-effect' : ''">
+  <div
+    class="m-login-bonus-dialog-container"
+    :class="confirmDialog ? 'blur-effect' : ''"
+  >
     <img
       src="@/assets/public/image/bg_public_03_01.png"
       class="m-header-bar-img-position"
@@ -165,16 +190,30 @@ onMounted(async () => {
     >
       <img src="@/assets/public/svg/icon_public_52.svg" width="20" />
     </v-btn>
-    <img src="@/assets/vip/image/img_agent_02.png" class="m-login-bonus-agent-img" />
+    <img
+      src="@/assets/vip/image/img_agent_02.png"
+      class="m-login-bonus-agent-img"
+    />
     <div class="m-login-bonus-body">
+      <!-- <ValidationBox  validationText2="You have already claimed today's sign-up bonus, so please remember to log in tomorrow to claim a new day's bonus consecutively."/> -->
       <!-- <Swiper :modules="modules" :slidesPerView="1" :loop="true" @swiper="getSwiperRef">
         <SwiperSlide
           v-for="(item, index) in vipLevels"
           :key="index"
           :virtualIndex="index"
         > -->
+      <img
+        class="absolute m-login-bonus-card-select"
+        src="@/assets/vip/svg/img_vip_select.svg"
+      />
+      <img
+        class="absolute m-login-bonus-card-finger"
+        src="@/assets/vip/image/img_vip_finger.png"
+      />
       <div class="mt-2 text-center">
-        <Font class="color-F9BC01 text-900-18">VIP{{ vipSignIn.vip_level }}</Font>
+        <Font class="color-F9BC01 text-900-18"
+          >VIP{{ vipSignIn.vip_level }}</Font
+        >
         <Font class="text-900-18 white">
           {{ t("vip.login_bonus.title_text") }}
         </Font>
@@ -486,7 +525,9 @@ onMounted(async () => {
             <p class="text-900-14 gray m-login-bonus-text-position-1">
               {{ t("vip.login_bonus.day_8_text") }}
             </p>
-            <p class="text-900-14 gray mt-2 m-login-bonus-card-money-position-1">
+            <p
+              class="text-900-14 gray mt-2 m-login-bonus-card-money-position-1"
+            >
               $ {{ vipSignIn.award[7] }}
             </p>
             <img
@@ -499,7 +540,11 @@ onMounted(async () => {
             class="m-login-bonus-card-bg-5 relative"
             :class="vipSignIn.signin_day >= 7 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(vipSignIn.signin_day > 7 ? vipSignIn.signin_day : 7)"
+            @click="
+              handleLoginBonus(
+                vipSignIn.signin_day > 7 ? vipSignIn.signin_day : 7
+              )
+            "
             v-else
           >
             <img
@@ -510,7 +555,9 @@ onMounted(async () => {
             <p class="text-900-12 white m-login-bonus-text-position-1">
               {{ t("vip.login_bonus.day_8_text") }}
             </p>
-            <p class="text-900-12 white mt-2 m-login-bonus-card-money-position-1">
+            <p
+              class="text-900-12 white mt-2 m-login-bonus-card-money-position-1"
+            >
               $ {{ vipSignIn.award[7] }}
             </p>
             <img
@@ -525,6 +572,9 @@ onMounted(async () => {
       <!-- </SwiperSlide>
       </Swiper> -->
     </div>
+    <font class="text-900-10 m-login-bonus-bottom-text">
+      {{ t("vip.login_bonus.footer_text_8") }}</font
+    >
     <v-row class="m-login-bonus-footer mx-0 align-center">
       <v-col cols="2" class="pa-0 ma-0">
         <!-- <v-btn
@@ -540,7 +590,8 @@ onMounted(async () => {
       <v-col cols="8" class="pa-0 ma-0">
         <template
           v-if="
-            Number(vipSignIn.limited_bet) == 0 && Number(vipSignIn.limited_deposit) != 0
+            Number(vipSignIn.limited_bet) == 0 &&
+            Number(vipSignIn.limited_deposit) != 0
           "
         >
           <p class="text-center" style="line-height: normal">
@@ -555,7 +606,8 @@ onMounted(async () => {
         </template>
         <template
           v-if="
-            Number(vipSignIn.limited_bet) != 0 && Number(vipSignIn.limited_deposit) == 0
+            Number(vipSignIn.limited_bet) != 0 &&
+            Number(vipSignIn.limited_deposit) == 0
           "
         >
           <p class="text-center" style="line-height: normal">
@@ -570,7 +622,8 @@ onMounted(async () => {
         </template>
         <template
           v-if="
-            Number(vipSignIn.limited_bet) != 0 && Number(vipSignIn.limited_deposit) != 0
+            Number(vipSignIn.limited_bet) != 0 &&
+            Number(vipSignIn.limited_deposit) != 0
           "
         >
           <p class="text-center" style="line-height: normal">
@@ -600,10 +653,13 @@ onMounted(async () => {
           class="text-center"
           style="line-height: normal"
           v-if="
-            Number(vipSignIn.limited_bet) != 0 || Number(vipSignIn.limited_deposit) != 0
+            Number(vipSignIn.limited_bet) != 0 ||
+            Number(vipSignIn.limited_deposit) != 0
           "
         >
-          <font class="text-900-10 white">{{ t("vip.login_bonus.footer_text_4") }}</font>
+          <font class="text-900-10 white">{{
+            t("vip.login_bonus.footer_text_4")
+          }}</font>
         </p>
       </v-col>
       <v-col cols="2" class="pa-0 ma-0 text-right">
@@ -621,6 +677,7 @@ onMounted(async () => {
     <v-dialog v-model="confirmDialog" width="280">
       <MConfirm @submitConfirm="submitConfirm" :selectedAward="selectedAward" />
     </v-dialog>
+    
   </div>
 </template>
 
@@ -639,7 +696,7 @@ onMounted(async () => {
 
 .m-login-bonus-dialog-container {
   width: 340px;
-  height: 428px;
+  height: 400px;
   border-radius: 16px;
   background: #1d2027;
   position: relative;
@@ -678,6 +735,15 @@ onMounted(async () => {
   background: #15161c;
   box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset;
   z-index: 20;
+}
+
+.m-login-bonus-bottom-text {
+  width: 220px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  color: #7782aa;
 }
 
 .m-login-bonus-card-checkout-bg {
@@ -725,6 +791,24 @@ onMounted(async () => {
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   cursor: pointer;
   overflow: hidden;
+}
+
+.m-login-bonus-card-select {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: 47px;
+  left: 18px;
+  z-index: 9999;
+}
+
+.m-login-bonus-card-finger {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 65px;
+  left: 27px;
+  z-index: 9999;
 }
 
 .m-login-bonus-card-bg-3 {

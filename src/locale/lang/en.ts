@@ -1612,10 +1612,14 @@ export const lang: langType = {
       day_6_text: "DAY 6",
       day_7_text: "DAY 7",
       day_8_text: "DAY ∞ ",
-      footer_text_1: "If you recharge ",
-      footer_text_2: "within ",
-      footer_text_3: "7 days",
-      footer_text_4: "you will get a login bonus",
+      footer_text_1: "Sorry, your current ",
+      footer_text_2: "VIP level is 0 ",
+      footer_text_3: ".Complete the first recharge of any amount to upgrade to s",
+      footer_text_4: "VIP1 andstart receiving bonuses.",
+      footer_text_5: "Upgrade to become a ",
+      footer_text_6: "VIP ",
+      footer_text_7: "and receive higher rewards!",
+      footer_text_8: "Turn the page to see more VIP awards"
     },
     roulette_bonus: {
       paid_text: "ROULETTE PAID BOUNS",

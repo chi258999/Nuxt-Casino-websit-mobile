@@ -50,7 +50,7 @@ const refferalAppBarShow = computed(() => {
 const agentNavBarToggle = computed(() => {});
 
 const mobileWidth = computed(() => {
-  return width.value;
+  return width.value||300;
 });
 
 const fixPositionShow = computed(() => {
@@ -99,7 +99,7 @@ onMounted(() => {
       <NavBarLayout />
       <RightBarLayout />
     </template>
-    <template v-else>
+    <template >
       <MNavBarLayout />
       <RewardBarLayout v-if="route.name !== 'Sports'" />
       <AgentBarLayout />

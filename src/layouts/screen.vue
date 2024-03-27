@@ -15,7 +15,7 @@ const downLoadApp = () => {
 
 <template>
   <div class="screen">
-    <template v-if="mobileWidth < 600">
+    <template v-if="mobileWidth < 1000">
     <div class="screen-tips">
       <img class="screen-img" src="@/assets/common/screen-phone.jpg" />
       <span class="tips-text">Rotate phone screen</span>
