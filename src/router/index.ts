@@ -141,7 +141,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_PUBLIC_PATH),
+  history: createWebHistory(),
+  // history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),
   routes,
   async scrollBehavior(to, from, savePosition) {
     // console.log(to) // to：要进入的目标路由对象，到哪里去
