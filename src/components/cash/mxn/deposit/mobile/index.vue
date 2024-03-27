@@ -396,7 +396,11 @@ const handleDepositSubmit = async () => {
   formData.is_bonus = bonusCheck.value ? false : true;
 
   // 先打开一个新页面，成功请求有url再赋值，不成功则关闭
-  let winRef = window.open('url', '_blank')
+  let winRef:any = null
+  // oxxo 7 codi 8 都会返回url，打开页面
+  if(selectedPaymentItem.value.id === '7' || selectedPaymentItem.value.id === '8') {
+   winRef = window.open('about:blank', '_blank')
+  }
   await dispatchUserDepositSubmit(formData);
   loading.value = false;
   if (success.value) {
@@ -424,9 +428,15 @@ const handleDepositSubmit = async () => {
       //   event.preventDefault(); // 阻止默认行为
       //   window.location.href = this.href; // 手动跳转
       // });
+      // const form = document.createElement('form');
+      // form.action = depositSubmit.value.url;
+      // form.target = '_blank';
+      // form.method = 'POST';
+      // document.body.appendChild(form);
+      // form.submit();
 
       setTimeout(() => {
-        winRef.location = depositSubmit.value.url
+        if(winRef) winRef.location = depositSubmit.value.url
       }, 0)
 
       const toast = useToast();
@@ -447,7 +457,7 @@ const handleDepositSubmit = async () => {
       return;
     } else {
       // 不成功关闭
-      winRef.close()
+      if(winRef) winRef.close()
     }
     if (depositSubmit.value.code_url != "") {
       depositAmountWithBonus.value = depositConfig.value["bonus"].length > 0 && depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
@@ -770,6 +780,8 @@ onMounted(async () => {
     <v-row class="mt-6 mx-10 text-400-12 gray">
       {{ t("deposit_dialog.choose_payment_method") }}
     </v-row>
+
+    <!-- 付款方式 -->
     <v-menu
       offset="4"
       class="mt-1"
@@ -837,6 +849,7 @@ onMounted(async () => {
         </v-row>
       </v-list>
     </v-menu>
+    
     <div class="mx-4 mt-2">
       <img src="@/assets/public/image/bg_public_02_01.png" style="width: 100%" />
     </div>
