@@ -1,26 +1,44 @@
-// ElLoading 为elementplus的loading加载动画，不需要自行去除！！
+import { computed } from "vue";
 import { ElLoading } from "element-plus";
+import { googleTokenLogin } from "vue3-google-login";
+import { authStore } from "@/store/auth";
+import { storeToRefs } from "pinia";
+import AdjustClass from "@/utils/adjust";
 
-// 登录类型枚举
-enum LoginType {
-  Google = "google",
-  Facebook = "facebook",
+let indexValue = 0;
+let typeValue = "";
+
+// 接受android傳遞的token
+(window as any).googleLogin = (token: string) => {
+    loginOrRegister(token, indexValue, typeValue);
 }
 
 // 全局 window 对象
 const globalWindow: any = window;
 
-// 封装登录函数
-const loginWithSocialMedia = async (type: LoginType): Promise<any> => {
+const { dispatchQuickLogin, dispatchQuickRegister } = authStore();
+
+// 获取用户信息
+const userInfo = computed(() => {
+    const { getUserInfo } = storeToRefs(authStore());
+    return getUserInfo.value;
+});
+
+/**
+ * 封装登录函数
+ * @param index 0:facebook  1:google
+ * @returns 
+ */
+const loginWithSocialMedia = async (index: number, type: string): Promise<any> => {
   // 显示 loading 动画
   const loading = ElLoading.service({ lock: true });
   try {
     // 根据不同的登录类型执行相应的登录逻辑
-    switch (type) {
-      case LoginType.Google:
-        return await loginWithGoogle();
-      case LoginType.Facebook:
-        return await loginWithFacebook();
+    switch (index) {
+      case 0:
+        return await loginWithFacebook(index, type);
+      case 1:
+        return await loginWithGoogle(index, type);
       default:
         throw new Error("Unsupported login type");
     }
@@ -33,16 +51,50 @@ const loginWithSocialMedia = async (type: LoginType): Promise<any> => {
   }
 };
 
+/**
+ * 判断登录和注册
+ * @param type 
+ */
+const loginOrRegister = async (token: string, index: number, type: string) => {
+    let val = 1;
+    if (index === 0) {
+        val = 2;
+    }
+    if (index === 1) {
+        val = 1;
+    }
+    let params = { 
+        id_token: token,
+        type: val,
+    }
+    if (type === "login") {
+        await dispatchQuickLogin(params);
+    } else {
+        await dispatchQuickRegister(params);
+    }
+}
+
+const startAndroid = (index: number, type: string) => {
+
+}
+
 // Google 登录逻辑封装
-const loginWithGoogle = (): Promise<any> => {
+const loginWithGoogle = (index: number, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
-      globalWindow.google.accounts.id.initialize({
-        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-        scope: "email",
-        callback: resolve,
-      });
-      globalWindow.google.accounts.id.prompt();
+        if (AdjustClass.getInstance().isMobileWebview) {
+            // 啟動android原生登錄流程 
+            (window as any)["AndroidWebView"].googleLogin();
+            indexValue = index;
+            typeValue = type;
+        } else {
+            googleTokenLogin({
+                clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+            }).then(async (res: any) => {
+                await loginOrRegister(res.access_token, index, type);
+                resolve(res);
+            });
+        }
     } catch (error) {
       reject(error);
     }
@@ -50,7 +102,7 @@ const loginWithGoogle = (): Promise<any> => {
 };
 
 // Facebook 登录逻辑封装
-const loginWithFacebook = (): Promise<any> => {
+const loginWithFacebook = (index: number, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
       globalWindow.FB.init({
@@ -62,7 +114,10 @@ const loginWithFacebook = (): Promise<any> => {
       globalWindow.FB.getLoginStatus((response: any) => {
         if (response.status !== "connected") {
           globalWindow.FB.login((res: any) => {
-            resolve(res.authResponse);
+            (window as any).FB.api("/me?fields=email,name", async (response: any) => {
+                await loginOrRegister(res.access_token, index, type);
+                resolve(res);
+              });
           });
         } else {
           resolve(response.authResponse);
@@ -74,4 +129,23 @@ const loginWithFacebook = (): Promise<any> => {
   });
 };
 
-export { loginWithSocialMedia, LoginType };
+/**
+ * 登录方式
+ * @param index 0:facebook  1:google
+ */
+const loginType = (index: number) => {
+    let type = "";
+    if (index === 0) {
+        type = "FACEBOOK_LOGIN";
+    }
+    if (index === 1) {
+        type = "GOOGLE_LOGIN";
+    }
+    AdjustClass.getInstance().adjustTrackEvent({
+        key: type,
+        value: String(userInfo.value.id),
+        params: "",
+    });
+}
+
+export { loginWithSocialMedia, loginType };

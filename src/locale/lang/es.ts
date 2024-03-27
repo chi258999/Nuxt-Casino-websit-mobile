@@ -1465,12 +1465,12 @@ export const lang: langType = {
     "earn_btn_text": "Ganar",
     "dialog": {
       "header": {
-        "title_text": "Recomiende a un amigo y gane 20 {0} al instante",
+        "title_text": "Recomienda a un amigo y gana 25 MXN inmediatamente",
         "body_text": "Invita amigos y gana dinero.",
-        "body_text_1": "El usuario ya participó en la invitación. Nueva actividad de usuario, obtuvieron un total de",
-        "body_text_2": "Recompensas en efectivo en reales brasileños",
+        "body_text_1": "usuarios ya han participado en la campaña Invita a Nuevos Usuarios y han ganado un total combinado de",
+        "body_text_2": "MXN en recompensas en efectivo en la plataforma",
         "body_text_3": "Plataforma.",
-        "body_text_4": "Cómo funcionan las invitaciones"
+        "body_text_4": "Así funcionan las invitaciones"
       },
       "body": {
         "text_1": "Comparte tu código de invitación",
@@ -1482,10 +1482,10 @@ export const lang: langType = {
     "copy_success_text": "Copiar al portapapeles.",
     "description": {
       "text_1": "Invita a tus amigos",
-      "text_2": "Invita a amigos que aún no se han unido a HOY777.com. Recibirás 20,00 {0} por cada amigo que se registre y deposite. No hay límite para la cantidad de amigos que puedes invitar. ¡Esto significa que tampoco hay límite en cuanto a cuánto puedes ganar!",
+      "text_2": "Invita a amigos que aún no estén en Blue.game. Recibirás 20,00 BRL por cada amigo que se registre y haga un depósito. No hay límite en el número de amigos que puedes invitar. Eso significa que tampoco hay límite para lo que puedes ganar.",
       "term_text": "Términos:",
-      "text_3": "El saldo se paga directamente en su Saldo en efectivo, con el que puede jugar en HOY777 o retirarlo. Tu amigo debe registrarse a través de tu enlace de invitación personal. Tu amigo debe haber depositado al menos 50,00 {0} para que puedas recibir la recompensa de invitación. Si un amigo que ha invitado no es del mismo país que usted, recibirá una recompensa predeterminada de 20 {0} convertidos a su moneda local al tipo de cambio justo. No puede crear nuevas cuentas de HOY777 y registrarse a través de su propio enlace para recibir la recompensa. El programa Refer A Friend está diseñado para que nuestros jugadores inviten amigos a la plataforma HOY777. Cualquier otro uso de este programa está estrictamente prohibido. HOY777 puede suspender o cancelar el programa Recomienda a un amigo o la capacidad del usuario para participar en él en cualquier momento y por cualquier motivo. Nos reservamos el derecho de suspender cuentas o eliminar el saldo de efectivo si notamos alguna actividad que creemos que es abusiva, fraudulenta o que viola los Términos de servicio de HOY777.com o los Términos de Referir a un amigo. Nos reservamos el derecho de revisar e investigar todas las actividades de referencia y suspender cuentas o modificar referencias a nuestro exclusivo criterio según lo consideremos justo y apropiado.",
-      "back_btn_text": "Devolver"
+      "text_3": "Lorem Ipsum es simplemente el texto ficticio de la industria tipográfica. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y la desordenó para hacer un libro de muestras tipográficas. Ha sobrevivido no sólo a cinco siglos, sino también al salto a la composición electrónica, permaneciendo esencialmente inalterado. Se popularizó en los años 60 con la aparición de las hojas Letraset, que contenían pasajes de Lorem Ipsum, y más recientemente con programas de autoedición como Aldus PageMaker, que incluían versiones de Lorem Ipsum. Lorem Ipsum es simplemente el texto ficticio de la industria de la impresión y la composición tipográfica. Lorem Ipsum no es más que el texto ficticio de la industria de la impresión y la composición tipográfica. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y la mezcló para hacer un libro de muestras tipográficas. Ha sobrevivido no sólo a cinco siglos, sino también al salto a la composición electrónica, permaneciendo esencialmente inalterado. Se popularizó en los años 60 con la aparición de las hojas Letraset, que contenían pasajes de Lorem Ipsum, y más recientemente con programas de autoedición como Aldus PageMaker, que incluían versiones de Lorem Ipsum. Lorem Ipsum no es más que el texto ficticio de la industria tipográfica.",
+      "back_btn_text": "ATRÁS"
     }
   },
   "vip": {
