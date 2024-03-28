@@ -243,11 +243,11 @@ onMounted(async () => {
       style="margin-left: 10px; margin-right: 10px"
     >
       <div v-if="selectedTab == BtTabEnum.transactions">
-        <Transactions v-if="mobileWidth > 600" />
+        <!-- <Transactions v-show="mobileWidth > 600" /> -->
         <MTransactions
           :pageSize="pageSize"
           :transactionHistoryItem="transactionHistoryItem"
-          v-else
+          v-show="mobileWidth <= 600"
         />
       </div>
     </v-window-item>

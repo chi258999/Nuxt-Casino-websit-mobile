@@ -44,8 +44,17 @@ const currentList = ref<Array<TransactionHistoryItem>>([]);
 
 const notificationText = ref<string>('Successful replication');
 
-const tempHistoryList = [{},{},{},{},{},{},{},{}];
-
+// const tempHistoryList = [{},{},{},{},{},{},{},{}];
+const tempHistoryList = ref(Array(8).fill({
+  amount: '' as unknown as number,
+  balance: 0,
+  created_at: 0,
+  id: "",
+  note: "",
+  type: 0,
+  status: ''
+}));
+const loading = ref(false)
 const mobileWidth = computed(() => {
   return width.value;
 });
@@ -68,18 +77,26 @@ const moreTransactionHistoryFlag = computed(() => {
   const { getMoreTransactionHistoryFlag } = storeToRefs(bonusTransactionStore());
   return getMoreTransactionHistoryFlag.value
 })
+const TransactionHistoryList = computed(() => {
+  // console.log(transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value), 'transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value)');
+  
+  return transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value)
+})
 
 const handleNext = async (page_no: number) => {
+
   startIndex.value = (page_no - 1) * realPageSize.value;
   endIndex.value = startIndex.value + realPageSize.value;
   currentList.value = transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value);
   
   if (currentList.value.length == 0) {
+    loading.value = true
     await dispatchTransactionHistory({
       page_size: pageSize.value,
       start_time: transactionHistoryItem.value.record[transactionHistoryItem.value.record.length - 1].created_at,
       lid: transactionHistoryItem.value.record[transactionHistoryItem.value.record.length - 1].id.toString(),
     });
+    loading.value = false
   }
 }
 
@@ -126,6 +143,8 @@ watch(transactionHistoryItem, (value) => {
 }, { deep: true });
 
 onMounted(async () => {
+  console.log(tempHistoryList, 'transactionHistoryItem - tempHistoryList');
+
   // paginationLength.value = moreTransactionHistoryFlag.value ? paginationLength.value + 1 : paginationLength.value
 });
 </script>
@@ -137,6 +156,7 @@ onMounted(async () => {
       theme="dark"
       fixed-header
       style="padding: 16px"
+      height="300px"
     >
       <thead class="forms-table-header">
         <tr>
@@ -191,7 +211,7 @@ onMounted(async () => {
         </tr>
       </thead>
       <tbody class="forms-table-body">
-        <template v-if="transactionHistoryItem.record.length == 0">
+        <!-- <template v-if="transactionHistoryItem.record.length == 0">
           <tr v-for="(item, index) in tempHistoryList" :key="index">
             <td
               class="text-400-12"
@@ -230,13 +250,129 @@ onMounted(async () => {
               "
             ></td>
           </tr>
+        </template> -->
+        <template v-if="!loading">
+          <tr
+            v-for="(item, index) in transactionHistoryItem.record.slice(startIndex, endIndex)"
+            :key="index"
+          >
+            <td
+              class="text-400-12"
+              style="padding-top: 21px !important; padding-bottom: 21px !important"
+            >
+              {{
+                item.created_at
+                  ? moment(item.created_at * 1000).format("YYYY-MM-DD HH:mm:ss")
+                  : ""
+              }}
+            </td>
+            <td
+              class="text-400-12"
+              style="
+                min-width: 160px;
+                padding-top: 21px !important;
+                padding-bottom: 21px !important;
+              "
+              :class="
+                Number(item.type) != -102 && item.type != -202
+                  ? 'color-01983A'
+                  : 'color-D42763'
+              "
+            >
+              <!-- {{ item.amount }} -->
+              {{ TransactionHistoryList[index].amount }}
+            </td>
+            <td
+              class="text-400-12"
+              style="padding-top: 21px !important; padding-bottom: 21px !important"
+            >
+              <template v-if="Number(item.type) == 101">
+                {{ t("transaction_history.type.text_1") }}
+              </template>
+              <template v-if="Number(item.type) == -102">
+                {{ t("transaction_history.type.text_2") }}
+              </template>
+              <template v-if="Number(item.type) == 103">
+                {{ t("transaction_history.type.text_3") }}
+              </template>
+              <template v-if="Number(item.type) == 104">
+                {{ t("transaction_history.type.text_4") }}
+              </template>
+              <template v-if="Number(item.type) == 201">
+                {{ t("transaction_history.type.text_5") }}
+              </template>
+              <template v-if="Number(item.type) == -202">
+                {{ t("transaction_history.type.text_6") }}
+              </template>
+              <template v-if="Number(item.type) == -203">
+                {{ t("transaction_history.type.text_7") }}
+              </template>
+              <template v-if="Number(item.type) == 204">
+                {{ t("transaction_history.type.text_8") }}
+              </template>
+              <template v-if="Number(item.type) == 301">
+                {{ t("transaction_history.type.text_9") }}
+              </template>
+              <template v-if="Number(item.type) == 401">
+                {{ t("transaction_history.type.text_10") }}
+              </template>
+              <template v-if="Number(item.type) == 901">
+                {{ t("transaction_history.type.text_11") }}
+              </template>
+              <template v-if="Number(item.type) == -902">
+                {{ t("transaction_history.type.text_12") }}
+              </template>
+              <template v-if="Number(item.type) == 801">
+                {{ t("transaction_history.type.text_13") }}
+              </template>
+              <template v-if="Number(item.type) == -802">
+                {{ t("transaction_history.type.text_14") }}
+              </template>
+            </td>
+            <td
+              class="text-400-12"
+              style="
+                min-width: 60px;
+                padding-top: 21px !important;
+                padding-bottom: 21px !important;
+              "
+            >
+              <div class="d-flex justify-center">
+                {{
+                  item.id.toString().length > 11
+                    ? item.id.toString().slice(0, 11) + "..."
+                    : item.id
+                }}
+                <img
+                  v-show="item.id"
+                  src="@/assets/public/svg/icon_public_71.svg"
+                  width="16"
+                  class="ml-1"
+                  @click="handleCopyID(item.id)"
+                />
+              </div>
+            </td>
+            <td
+              class="text-400-12"
+              style="padding-top: 21px !important; padding-bottom: 21px !important"
+            >
+              {{ item.note }}
+            </td>
+            <td
+              class="text-400-12"
+              style="
+                min-width: 130px;
+                padding-top: 21px !important;
+                padding-bottom: 21px !important;
+              "
+            >
+              {{ item.balance ? `${ platformCurrency } ${item.balance}` : '' }}
+            </td>
+          </tr>
         </template>
         <template v-else>
           <tr
-            v-for="(item, index) in transactionHistoryItem.record.slice(
-              startIndex,
-              endIndex
-            )"
+            v-for="(item, index) in tempHistoryList"
             :key="index"
           >
             <td
@@ -263,6 +399,7 @@ onMounted(async () => {
               "
             >
               {{ item.amount }}
+              <!-- {{ TransactionHistoryList[index].amount }} -->
             </td>
             <td
               class="text-400-12"
@@ -405,6 +542,7 @@ onMounted(async () => {
     line-height: 19px;
     color: #ffffff;
     text-align: center;
+    min-height: 500px;
   }
 
   .forms-table-border0 {
