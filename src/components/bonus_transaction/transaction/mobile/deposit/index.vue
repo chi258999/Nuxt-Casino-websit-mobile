@@ -87,7 +87,7 @@ const fixPositionShow = computed(() => {
   const { getFixPositionEnable } = storeToRefs(appBarStore());
   return getFixPositionEnable.value;
 });
-
+// 是否显示下一页
 const moreDepositHistoryFlag = computed(() => {
   const { getMoreDepositHistoryFlag } = storeToRefs(depositStore());
   return getMoreDepositHistoryFlag.value
@@ -191,6 +191,7 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
       theme="dark"
       fixed-header
       style="padding: 16px"
+      height="570px"
     >
       <thead class="forms-table-header">
         <tr>
@@ -249,35 +250,31 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
           <tr v-for="(item, index) in formsList" :key="index">
             <td
               class="text-400-12 text-center"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             ></td>
             <td
               class="text-400-12 text-center"
               style="
                 min-width: 60px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             ></td>
             <td
               class="text-400-12 text-center"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             ></td>
             <td
               class="text-400-12 text-center color-01983A"
               style="
                 min-width: 130px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             ></td>
             <td
               class="text-400-12 text-center"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             ></td>
             <td
               class="text-400-12 text-center"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             ></td>
           </tr>
         </template>
@@ -288,7 +285,7 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
           >
             <td
               class="text-400-12 text-center"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             >
               {{
                 item.created_at
@@ -300,15 +297,13 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
               class="text-400-12 text-center color-01983A"
               style="
                 min-width: 130px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             >
               {{ formatCurrency(Number(item.amount), item.currency) }}
             </td>
             <td
               class="text-400-12 text-center"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             >
               <div v-if="item.status == -2" class="white">Closed</div>
               <div v-if="item.status == -1" class="red">Failed</div>
@@ -322,8 +317,6 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
               class="text-400-12 text-center"
               style="
                 min-width: 40px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             >
               {{ item.type }}
@@ -332,8 +325,6 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
               class="text-400-12 text-center"
               style="
                 min-width: 60px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             >
               <div class="d-flex justify-center">
@@ -353,7 +344,7 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
             </td>
             <td
               class="text-400-12 text-center"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             >
               {{ item.note }}
             </td>
@@ -385,31 +376,31 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
     height: 46px !important;
   }
 
-  .v-table > .v-table__wrapper > table > tbody > tr > td,
-  .v-table > .v-table__wrapper > table > tbody > tr > th,
-  .v-table > .v-table__wrapper > table > thead > tr > td,
-  .v-table > .v-table__wrapper > table > thead > tr > th,
-  .v-table > .v-table__wrapper > table > tfoot > tr > td,
-  .v-table > .v-table__wrapper > table > tfoot > tr > th {
-    padding: 0px !important;
-  }
+  // .v-table > .v-table__wrapper > table > tbody > tr > td,
+  // .v-table > .v-table__wrapper > table > tbody > tr > th,
+  // .v-table > .v-table__wrapper > table > thead > tr > td,
+  // .v-table > .v-table__wrapper > table > thead > tr > th,
+  // .v-table > .v-table__wrapper > table > tfoot > tr > td,
+  // .v-table > .v-table__wrapper > table > tfoot > tr > th {
+  //   padding: 0px !important;
+  // }
 
-  .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > td,
-  .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > th {
-    border-bottom: 1px solid #23262f;
-  }
+  // .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > td,
+  // .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > th {
+  //   border-bottom: 1px solid #23262f;
+  // }
 
-  .forms-table-header {
-    border-radius: 8px !important;
-  }
+  // .forms-table-header {
+  //   border-radius: 8px !important;
+  // }
 
-  .forms-table-body {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-    color: #ffffff;
-    text-align: center;
-  }
+  // .forms-table-body {
+  //   font-weight: 500;
+  //   font-size: 16px;
+  //   line-height: 19px;
+  //   color: #ffffff;
+  //   text-align: center;
+  // }
 
   .forms-table-border0 {
     border-right: 1px solid #7782aa !important;
@@ -442,12 +433,4 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
     overflow: hidden !important;
   }
 }
-</style>
-
-<style lang="scss" scoped>
-// @media (max-width: 600px) {
-  // ::v-deep(.v-pagination__item--is-active) {
-  //   display: block;
-  // }
-// }
 </style>

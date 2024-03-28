@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, watch, toRefs, onMounted } from "vue";
 import Pagination from "@/components/global/pagination/index.vue";
-import TableDisplay from "./table.vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { appBarStore } from "@/store/appBar";
@@ -45,7 +44,6 @@ const currentList = ref<Array<TransactionHistoryItem>>([]);
 
 const notificationText = ref<string>('Successful replication');
 
-// const tempHistoryList = [{},{},{},{},{},{},{},{}];
 const tempHistoryList = ref(Array(8).fill({
   amount: '' as unknown as number,
   balance: 0,
@@ -55,7 +53,6 @@ const tempHistoryList = ref(Array(8).fill({
   type: 0,
   status: ''
 }));
-const loading = ref(false)
 const mobileWidth = computed(() => {
   return width.value;
 });
@@ -74,13 +71,13 @@ const fixPositionShow = computed(() => {
   return getFixPositionEnable.value;
 });
 
+// 是否显示下一页
 const moreTransactionHistoryFlag = computed(() => {
   const { getMoreTransactionHistoryFlag } = storeToRefs(bonusTransactionStore());
   return getMoreTransactionHistoryFlag.value
 })
+// 用于展示的数组
 const TransactionHistoryList = computed(() => {
-  // console.log(transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value), 'transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value)');
-  
   return transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value)
 })
 
@@ -91,13 +88,11 @@ const handleNext = async (page_no: number) => {
   currentList.value = transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value);
   
   if (currentList.value.length == 0) {
-    loading.value = true
     await dispatchTransactionHistory({
       page_size: pageSize.value,
       start_time: transactionHistoryItem.value.record[transactionHistoryItem.value.record.length - 1].created_at,
       lid: transactionHistoryItem.value.record[transactionHistoryItem.value.record.length - 1].id.toString(),
     });
-    loading.value = false
   }
 }
 
@@ -144,8 +139,6 @@ watch(transactionHistoryItem, (value) => {
 }, { deep: true });
 
 onMounted(async () => {
-  console.log(tempHistoryList, 'transactionHistoryItem - tempHistoryList');
-
   // paginationLength.value = moreTransactionHistoryFlag.value ? paginationLength.value + 1 : paginationLength.value
 });
 </script>
@@ -157,6 +150,7 @@ onMounted(async () => {
       theme="dark"
       fixed-header
       style="padding: 16px"
+      height="570px"
     >
       <thead class="forms-table-header">
         <tr>
@@ -211,54 +205,48 @@ onMounted(async () => {
         </tr>
       </thead>
       <tbody class="forms-table-body">
-        <!-- <template v-if="transactionHistoryItem.record.length == 0">
+        <template v-if="transactionHistoryItem.record.length == 0">
           <tr v-for="(item, index) in tempHistoryList" :key="index">
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             ></td>
             <td
               class="text-400-12"
               style="
                 min-width: 160px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             ></td>
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             ></td>
             <td
               class="text-400-12"
               style="
                 min-width: 60px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             ></td>
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             ></td>
             <td
               class="text-400-12"
               style="
                 min-width: 130px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             ></td>
           </tr>
-        </template> -->
-        <template v-if="false">
+        </template>
+        <template v-else>
           <tr
             v-for="(item, index) in transactionHistoryItem.record.slice(startIndex, endIndex)"
             :key="index"
           >
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             >
               {{
                 item.created_at
@@ -270,8 +258,6 @@ onMounted(async () => {
               class="text-400-12"
               style="
                 min-width: 160px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
               :class="
                 Number(item.type) != -102 && item.type != -202
@@ -279,12 +265,11 @@ onMounted(async () => {
                   : 'color-D42763'
               "
             >
-              <!-- {{ item.amount }} -->
-              {{ TransactionHistoryList[index].amount }}
+              {{ item.amount }}
             </td>
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             >
               <template v-if="Number(item.type) == 101">
                 {{ t("transaction_history.type.text_1") }}
@@ -333,8 +318,6 @@ onMounted(async () => {
               class="text-400-12"
               style="
                 min-width: 60px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             >
               <div class="d-flex justify-center">
@@ -354,7 +337,7 @@ onMounted(async () => {
             </td>
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             >
               {{ item.note }}
             </td>
@@ -362,20 +345,11 @@ onMounted(async () => {
               class="text-400-12"
               style="
                 min-width: 130px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             >
               {{ item.balance ? `${ platformCurrency } ${item.balance}` : '' }}
             </td>
           </tr>
-        </template>
-        <template v-if="!loading">
-          <TableDisplay :table-data="TransactionHistoryList">
-          </TableDisplay>
-        </template>
-        <template v-else>
-          <TableDisplay :table-data="[]"></TableDisplay>
         </template>
       </tbody>
     </v-table>
@@ -395,7 +369,6 @@ onMounted(async () => {
   box-shadow: inset 2px 0px 4px 1px rgba(0, 0, 0, 0.12) !important;
   // border-radius: 8px !important;
   width: 100% !important;
-  min-height: 640px;
 }
 
 .m-forms-bonus-table1 {
@@ -406,6 +379,9 @@ onMounted(async () => {
     background: #23262f;
     height: 46px !important;
   }
+  .v-table > .v-table__wrapper {
+    padding-bottom: 0px;
+  }
 
   .v-table > .v-table__wrapper > table > tbody > tr > td,
   .v-table > .v-table__wrapper > table > tbody > tr > th,
@@ -414,11 +390,15 @@ onMounted(async () => {
   .v-table > .v-table__wrapper > table > tfoot > tr > td,
   .v-table > .v-table__wrapper > table > tfoot > tr > th {
     padding: 0px !important;
+    max-height: 64px !important;
+    height: 64px !important;
   }
 
   .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > td,
   .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > th {
     border-bottom: 1px solid #23262f;
+    max-height: 64px !important;
+    height: 64px !important;
   }
 
   .forms-table-header {
@@ -431,7 +411,6 @@ onMounted(async () => {
     line-height: 19px;
     color: #ffffff;
     text-align: center;
-    min-height: 500px;
   }
 
   .forms-table-border0 {
