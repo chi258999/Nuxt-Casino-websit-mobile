@@ -44,8 +44,15 @@ const currentList = ref<Array<TransactionHistoryItem>>([]);
 
 const notificationText = ref<string>('Successful replication');
 
-const tempHistoryList = [{},{},{},{},{},{},{},{}];
-
+const tempHistoryList = ref(Array(8).fill({
+  amount: '' as unknown as number,
+  balance: 0,
+  created_at: 0,
+  id: "",
+  note: "",
+  type: 0,
+  status: ''
+}));
 const mobileWidth = computed(() => {
   return width.value;
 });
@@ -64,12 +71,18 @@ const fixPositionShow = computed(() => {
   return getFixPositionEnable.value;
 });
 
+// 是否显示下一页
 const moreTransactionHistoryFlag = computed(() => {
   const { getMoreTransactionHistoryFlag } = storeToRefs(bonusTransactionStore());
   return getMoreTransactionHistoryFlag.value
 })
+// 用于展示的数组
+const TransactionHistoryList = computed(() => {
+  return transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value)
+})
 
 const handleNext = async (page_no: number) => {
+
   startIndex.value = (page_no - 1) * realPageSize.value;
   endIndex.value = startIndex.value + realPageSize.value;
   currentList.value = transactionHistoryItem.value.record.slice(startIndex.value, endIndex.value);
@@ -137,6 +150,7 @@ onMounted(async () => {
       theme="dark"
       fixed-header
       style="padding: 16px"
+      height="570px"
     >
       <thead class="forms-table-header">
         <tr>
@@ -195,53 +209,44 @@ onMounted(async () => {
           <tr v-for="(item, index) in tempHistoryList" :key="index">
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             ></td>
             <td
               class="text-400-12"
               style="
                 min-width: 160px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             ></td>
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             ></td>
             <td
               class="text-400-12"
               style="
                 min-width: 60px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             ></td>
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             ></td>
             <td
               class="text-400-12"
               style="
                 min-width: 130px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             ></td>
           </tr>
         </template>
         <template v-else>
           <tr
-            v-for="(item, index) in transactionHistoryItem.record.slice(
-              startIndex,
-              endIndex
-            )"
+            v-for="(item, index) in transactionHistoryItem.record.slice(startIndex, endIndex)"
             :key="index"
           >
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             >
               {{
                 item.created_at
@@ -253,8 +258,6 @@ onMounted(async () => {
               class="text-400-12"
               style="
                 min-width: 160px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
               :class="
                 Number(item.type) != -102 && item.type != -202
@@ -266,7 +269,7 @@ onMounted(async () => {
             </td>
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             >
               <template v-if="Number(item.type) == 101">
                 {{ t("transaction_history.type.text_1") }}
@@ -315,8 +318,6 @@ onMounted(async () => {
               class="text-400-12"
               style="
                 min-width: 60px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             >
               <div class="d-flex justify-center">
@@ -336,7 +337,7 @@ onMounted(async () => {
             </td>
             <td
               class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
+              style=""
             >
               {{ item.note }}
             </td>
@@ -344,8 +345,6 @@ onMounted(async () => {
               class="text-400-12"
               style="
                 min-width: 130px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
               "
             >
               {{ item.balance ? `${ platformCurrency } ${item.balance}` : '' }}
@@ -380,6 +379,9 @@ onMounted(async () => {
     background: #23262f;
     height: 46px !important;
   }
+  .v-table > .v-table__wrapper {
+    padding-bottom: 0px;
+  }
 
   .v-table > .v-table__wrapper > table > tbody > tr > td,
   .v-table > .v-table__wrapper > table > tbody > tr > th,
@@ -388,11 +390,15 @@ onMounted(async () => {
   .v-table > .v-table__wrapper > table > tfoot > tr > td,
   .v-table > .v-table__wrapper > table > tfoot > tr > th {
     padding: 0px !important;
+    max-height: 64px !important;
+    height: 64px !important;
   }
 
   .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > td,
   .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > th {
     border-bottom: 1px solid #23262f;
+    max-height: 64px !important;
+    height: 64px !important;
   }
 
   .forms-table-header {

@@ -5817,9 +5817,9 @@ vue3-lazyload@^0.3.8:
     vue-demi "^0.12.5"
 
 vuetify@^3.0.0, vuetify@^3.0.0-beta.4:
-  version "3.2.5"
-  resolved "https://registry.npmjs.org/vuetify/-/vuetify-3.2.5.tgz"
-  integrity sha512-HuLIydRkigGIfqDbwEjFw5LEtWCw8lV4K1isMv/7vAt8n5fns+8kKqVnktIQkfzSxQgPD6Lve/58j4dEKA/vTA==
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/vuetify/-/vuetify-3.0.0.tgz"
+  integrity sha512-0olLmKWb+oTaebGTM02+1fWaAgnGDuIt86K3jDv2LnALQ2atSzhDS1SSASJsJCZ2PgFBdDAeJVLcNWWavRYAlQ==
 
 webfontloader@^1.0.0:
   version "1.6.28"
