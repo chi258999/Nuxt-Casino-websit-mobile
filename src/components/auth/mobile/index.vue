@@ -3,12 +3,14 @@ import { ref, toRefs, watch, onMounted, onUnmounted, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { authStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
+import { useRoute } from 'vue-router';
 import MSignIn from "@/components/auth/components/mobile/sign_in/index.vue";
 import MSignUp from "@/components/auth/components/mobile/sign_up/index.vue";
 
 type dialogType = "login" | "signup" | "signout";
 
 const { t } = useI18n();
+const route = useRoute();
 
 const { setAuthModalType } = authStore();
 const { setAuthDialogVisible } = authStore();
@@ -39,6 +41,12 @@ watch(dialogCheckBox, (value) => {
 });
 
 onMounted(() => {
+  console.log(route.query.code,'2222222222222')
+  if(route.query.code){
+    // 带有邀请注册码的，直接打开注册弹窗
+    setAuthModalType('signup');
+    dialogCheckBox.value=true
+  }
   dialogCheckBox.value = authModalType.value == "signup" ? true : false;
 });
 </script>

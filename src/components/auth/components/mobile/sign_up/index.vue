@@ -109,6 +109,7 @@ const MSignup = defineComponent({
       loading: false,
       mailCardHeight: 0,
       emailPartName: "",
+      promoCodeDisabled:false
     });
 
     watch(
@@ -385,6 +386,9 @@ const MSignup = defineComponent({
     onMounted(() => {
       console.log("promo code::::::::::::::::::::", route.query.code);
       state.formData.promoCode = route.query.code ? route.query.code.toString() : "";
+      if(route.query.code){
+        state.promoCodeDisabled=true
+      }
     });
 
     const router = useRouter();
@@ -571,6 +575,7 @@ export default MSignup;
           variant="solo"
           density="comfortable"
           v-model="formData.promoCode"
+          :disabled="promoCodeDisabled"
         />
       </v-row>
       <div class="mt-2" style="display: flex; align-items: center; height: 46px">

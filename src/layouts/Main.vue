@@ -91,7 +91,7 @@ const { setAccountDialogShow } = appBarStore();
 const { setActiveAccountIndex } = appBarStore();
 // const { setBonusDashboardDialogVisible } = appBarStore();
 const { setAuthModalType } = authStore();
-const { setNickNameDialogVisible } = authStore();
+const { setNickNameDialogVisible,setAuthDialogVisible } = authStore();
 const { setRefferalDialogShow } = refferalStore();
 const { setLoginBonusDialogVisible } = loginBonusStore();
 const { setRouletteBonusDialogVisible } = loginBonusStore();
@@ -520,7 +520,11 @@ watch(route, (to) => {
 }, { flush: 'pre', immediate: true, deep: true })
 
 onMounted(() => {
-  console.log(route.query.code);
+  // console.log(route.query.code);
+  // 带有邀请注册码的，直接打开注册弹窗
+  if(route.query.code){
+    setAuthDialogVisible(true)
+  }
   window.addEventListener("resize", handleResize);
   // window.addEventListener('scroll', (e) => {
   //         // 获取滚动的值并打印出来
