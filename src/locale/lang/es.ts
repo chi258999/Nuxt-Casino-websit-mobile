@@ -1465,6 +1465,8 @@ export const lang: langType = {
     "earn_btn_text": "Ganar",
     "dialog": {
       "header": {
+        "tabs_text1":"Recomendar a un amigo",
+        "tabs_text2":"Promotion details and bonus withdrawal",
         "title_text": "Recomienda a un amigo y gana 25 MXN inmediatamente",
         "body_text": "Invita amigos y gana dinero.",
         "body_text_1": "usuarios ya han participado en la campaña Invita a Nuevos Usuarios y han ganado un total combinado de",
@@ -1610,7 +1612,8 @@ export const lang: langType = {
       "footer_text_5": "Upgrade to become a ",
       "footer_text_6": "VIP ",
       "footer_text_7": "and receive higher rewards!",
-      "footer_text_8": "Turn the page to see more VIP awards"
+      "footer_text_8": "Turn the page to see more VIP awards",
+      "validation_text_1":"You have already claimed today's sign-up bonus, so please remember to log in tomorrow to claim a new day's bonus consecutively."
     },
     "roulette_bonus": {
       "paid_text": "Bono de ruleta",

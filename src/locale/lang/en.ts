@@ -1474,6 +1474,8 @@ export const lang: langType = {
     earn_btn_text: "Earn",
     dialog: {
       header: {
+        tabs_text1:"Invitation Link",
+        tabs_text2:"Promotion Details & Bonus Withdrawal",
         title_text: "Refer a friend and earn 20 BRL  immediately",
         body_text: "Invite Friends, Earn Money",
         body_text_1: " users have already participated in the Invite New Users campaign and they have earned a combined total of ",
@@ -1619,7 +1621,8 @@ export const lang: langType = {
       footer_text_5: "Upgrade to become a ",
       footer_text_6: "VIP ",
       footer_text_7: "and receive higher rewards!",
-      footer_text_8: "Turn the page to see more VIP awards"
+      footer_text_8: "Turn the page to see more VIP awards",
+      validation_text_1:"You have already claimed today's sign-up bonus, so please remember to log in tomorrow to claim a new day's bonus consecutively."
     },
     roulette_bonus: {
       paid_text: "ROULETTE PAID BOUNS",

@@ -1472,7 +1472,9 @@ export type langType = {
     earn_btn_text: string
     dialog: {
       header: {
-        title_text: string
+        tabs_text1: string,
+        tabs_text2:string
+        title_text: string,
         body_text: string
         body_text_1: string
         body_text_2: string
@@ -1617,7 +1619,8 @@ export type langType = {
       footer_text_5: string
       footer_text_6: string
       footer_text_7: string
-      footer_text_8: string
+      footer_text_8: string,
+      validation_text_1: string
     }
     roulette_bonus: {
       paid_text: string

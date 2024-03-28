@@ -135,7 +135,7 @@ const closeReferDialog = () => {
 
 onMounted(async () => {
   setTimeout(() => {
-    refferalContainerHeight.value = 564;
+    refferalContainerHeight.value = 554;
   }, 800);
   setTimeout(() => {
     refferalContainerBackground.value = "#1D2027";
@@ -156,13 +156,15 @@ onMounted(async () => {
       <img src="@/assets/public/svg/icon_public_10.svg" />
     </v-btn>
     <div class="refferal-header-tabs">
-      <div class="tab-item text-700-10">Invitation Link</div>
+      <div class="tab-item text-700-10"> 
+        {{ t("refferal.dialog.header.tabs_text1") }}
+      </div>
       <div class="tab-item-jump" @click="handleTabJump">
         <span class="junm-text text-700-10 white"
-          >Promotion Details & Bonus Withdrawal</span
+          >{{ t("refferal.dialog.header.tabs_text2") }}</span
         >
         <img
-          src="@/assets/public/image/img-public-right.jpg"
+          src="@/assets/public/svg/img-public-right.svg"
           class="jump-img full-width"
         />
       </div>
@@ -262,12 +264,12 @@ onMounted(async () => {
           <div class="mt-2 mx-10 text-center text-700-14 yellow">
             {{ t("refferal.dialog.header.title_text", [platformCurrency]) }}
           </div>
-          <div class="mt-2 text-center text-700-18 white">
+          <div class="mt-2 text-center text-700-18 white" style="line-height:17px">
             {{ t("refferal.dialog.header.body_text") }}
           </div>
           <div
             class="mx-7 mt-2 text-400-12 white"
-            style="word-break: break-all"
+            style="word-break: break-all;line-height:17px"
           >
             <Font color="#F9BC01">{{ invitedUser.toLocaleString() }}</Font>
             {{ t("refferal.dialog.header.body_text_1") }}
@@ -289,7 +291,7 @@ onMounted(async () => {
           </div>
         </div>
         <div class="refferal-dialog-body">
-          <div class="text-center mt-6 text-700-18 white">
+          <div class="text-center mt-4 text-700-18 white">
             {{ t("refferal.dialog.body.text_1") }}
           </div>
           <div
@@ -300,14 +302,14 @@ onMounted(async () => {
             {{ inviteItem.invite_code }}
             {{ t("refferal.dialog.body.text_3") }}
           </div>
-          <div class="text-center mt-6 mx-6">
+          <div class="text-center mt-4 mx-6">
             <v-card theme="dark" color="#15161C" height="40">
               <div class="text-400-14 text-gray mt-2">
                 {{ inviteItem.web_invite_url }}
               </div>
             </v-card>
           </div>
-          <div class="text-center mt-8 mx-6">
+          <div class="text-center mt-4 mx-6">
             <v-btn
               class="button-bright m-reffer-btn-font text-none"
               width="-webkit-fill-available"
@@ -368,14 +370,16 @@ onMounted(async () => {
     margin-right: auto;
     width: 288px;
     .tab-item {
-      width: 100px;
+      width: 105px;
       height: 44px;
       border-radius: 8px 8px 0 0;
+      padding: 0 15px;
       background: #5ead1f;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
+      line-height: 12px;
     }
     .tab-item-jump {
       border-radius: 8px 8px 0 0;
@@ -386,13 +390,14 @@ onMounted(async () => {
       justify-content: center;
       background: rgba(29, 32, 39, 1);
       .junm-text {
-        width: 100px;
-        margin-left: 35px;
+        width: 115px;
+        margin-left: 30px;
+        line-height: 12px;
       }
       .jump-img {
         width: 18px;
         height: 18px;
-        margin-left: 20px;
+        margin-left: 10px;
       }
     }
   }
@@ -421,17 +426,18 @@ onMounted(async () => {
   .refferal-dialog-header-animation {
     background: linear-gradient(180deg, #5ead1f 0%, #1b5a65 100%);
     border-radius: 16px;
-    height: 333px;
+    height: 340px;
     animation-name: scaling;
     animation-duration: 0.4s;
     animation-timing-function: linear;
     animation-iteration-count: 1;
+    position: relative;
   }
 
   .refferal-dialog-header {
     background: linear-gradient(180deg, #5ead1f 0%, #1b5a65 100%);
     border-radius: 16px;
-    height: 333px;
+    height: 340px;
 
     .m-refferal-header-img1 {
       margin-top: -10px;
@@ -469,7 +475,7 @@ onMounted(async () => {
   }
   .refferal-qrcode {
     position: absolute;
-    top: 70px;
+    top: 30px;
     left: 50%;
     transform: translate(-50%, 0);
     z-index: 9999;
