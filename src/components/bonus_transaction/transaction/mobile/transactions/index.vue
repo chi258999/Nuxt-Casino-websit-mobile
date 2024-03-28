@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed, watch, toRefs, onMounted } from "vue";
 import Pagination from "@/components/global/pagination/index.vue";
+import TableDisplay from "./table.vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { appBarStore } from "@/store/appBar";
@@ -156,7 +157,6 @@ onMounted(async () => {
       theme="dark"
       fixed-header
       style="padding: 16px"
-      height="300px"
     >
       <thead class="forms-table-header">
         <tr>
@@ -251,7 +251,7 @@ onMounted(async () => {
             ></td>
           </tr>
         </template> -->
-        <template v-if="!loading">
+        <template v-if="false">
           <tr
             v-for="(item, index) in transactionHistoryItem.record.slice(startIndex, endIndex)"
             :key="index"
@@ -370,124 +370,12 @@ onMounted(async () => {
             </td>
           </tr>
         </template>
+        <template v-if="!loading">
+          <TableDisplay :table-data="TransactionHistoryList">
+          </TableDisplay>
+        </template>
         <template v-else>
-          <tr
-            v-for="(item, index) in tempHistoryList"
-            :key="index"
-          >
-            <td
-              class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
-            >
-              {{
-                item.created_at
-                  ? moment(item.created_at * 1000).format("YYYY-MM-DD HH:mm:ss")
-                  : ""
-              }}
-            </td>
-            <td
-              class="text-400-12"
-              style="
-                min-width: 160px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
-              "
-              :class="
-                Number(item.type) != -102 && item.type != -202
-                  ? 'color-01983A'
-                  : 'color-D42763'
-              "
-            >
-              {{ item.amount }}
-              <!-- {{ TransactionHistoryList[index].amount }} -->
-            </td>
-            <td
-              class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
-            >
-              <template v-if="Number(item.type) == 101">
-                {{ t("transaction_history.type.text_1") }}
-              </template>
-              <template v-if="Number(item.type) == -102">
-                {{ t("transaction_history.type.text_2") }}
-              </template>
-              <template v-if="Number(item.type) == 103">
-                {{ t("transaction_history.type.text_3") }}
-              </template>
-              <template v-if="Number(item.type) == 104">
-                {{ t("transaction_history.type.text_4") }}
-              </template>
-              <template v-if="Number(item.type) == 201">
-                {{ t("transaction_history.type.text_5") }}
-              </template>
-              <template v-if="Number(item.type) == -202">
-                {{ t("transaction_history.type.text_6") }}
-              </template>
-              <template v-if="Number(item.type) == -203">
-                {{ t("transaction_history.type.text_7") }}
-              </template>
-              <template v-if="Number(item.type) == 204">
-                {{ t("transaction_history.type.text_8") }}
-              </template>
-              <template v-if="Number(item.type) == 301">
-                {{ t("transaction_history.type.text_9") }}
-              </template>
-              <template v-if="Number(item.type) == 401">
-                {{ t("transaction_history.type.text_10") }}
-              </template>
-              <template v-if="Number(item.type) == 901">
-                {{ t("transaction_history.type.text_11") }}
-              </template>
-              <template v-if="Number(item.type) == -902">
-                {{ t("transaction_history.type.text_12") }}
-              </template>
-              <template v-if="Number(item.type) == 801">
-                {{ t("transaction_history.type.text_13") }}
-              </template>
-              <template v-if="Number(item.type) == -802">
-                {{ t("transaction_history.type.text_14") }}
-              </template>
-            </td>
-            <td
-              class="text-400-12"
-              style="
-                min-width: 60px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
-              "
-            >
-              <div class="d-flex justify-center">
-                {{
-                  item.id.toString().length > 11
-                    ? item.id.toString().slice(0, 11) + "..."
-                    : item.id
-                }}
-                <img
-                  v-show="item.id"
-                  src="@/assets/public/svg/icon_public_71.svg"
-                  width="16"
-                  class="ml-1"
-                  @click="handleCopyID(item.id)"
-                />
-              </div>
-            </td>
-            <td
-              class="text-400-12"
-              style="padding-top: 21px !important; padding-bottom: 21px !important"
-            >
-              {{ item.note }}
-            </td>
-            <td
-              class="text-400-12"
-              style="
-                min-width: 130px;
-                padding-top: 21px !important;
-                padding-bottom: 21px !important;
-              "
-            >
-              {{ item.balance ? `${ platformCurrency } ${item.balance}` : '' }}
-            </td>
-          </tr>
+          <TableDisplay :table-data="[]"></TableDisplay>
         </template>
       </tbody>
     </v-table>
@@ -507,6 +395,7 @@ onMounted(async () => {
   box-shadow: inset 2px 0px 4px 1px rgba(0, 0, 0, 0.12) !important;
   // border-radius: 8px !important;
   width: 100% !important;
+  min-height: 640px;
 }
 
 .m-forms-bonus-table1 {
