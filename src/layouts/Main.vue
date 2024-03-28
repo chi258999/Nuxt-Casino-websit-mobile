@@ -798,7 +798,7 @@ const routeInited = () => {
       :width="mobileWidth < 600 ? '340' : '471'"
       @click:outside="closeLoginBonusDialog"
       :class="mobileWidth < 600 ? 'm-login-bonus-dialog' : ''"
-      style="z-index: 10000000000000020"
+      style="z-index: 2000000"
     >
       <LoginBonusDialog
         v-if="mobileWidth > 600"

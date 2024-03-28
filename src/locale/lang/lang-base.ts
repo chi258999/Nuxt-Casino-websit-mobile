@@ -1619,7 +1619,8 @@ export type langType = {
       footer_text_5: string
       footer_text_6: string
       footer_text_7: string
-      footer_text_8: string
+      footer_text_8: string,
+      validation_text_1: string
     }
     roulette_bonus: {
       paid_text: string
