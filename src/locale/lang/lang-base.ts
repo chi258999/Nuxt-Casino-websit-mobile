@@ -1472,7 +1472,9 @@ export type langType = {
     earn_btn_text: string
     dialog: {
       header: {
-        title_text: string
+        tabs_text1: string,
+        tabs_text2:string
+        title_text: string,
         body_text: string
         body_text_1: string
         body_text_2: string

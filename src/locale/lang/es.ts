@@ -1465,6 +1465,8 @@ export const lang: langType = {
     "earn_btn_text": "Ganar",
     "dialog": {
       "header": {
+        "tabs_text1":"Recomendar a un amigo",
+        "tabs_text2":"Promotion details and bonus withdrawal",
         "title_text": "Recomienda a un amigo y gana 25 MXN inmediatamente",
         "body_text": "Invita amigos y gana dinero.",
         "body_text_1": "usuarios ya han participado en la campaña Invita a Nuevos Usuarios y han ganado un total combinado de",
