@@ -291,7 +291,7 @@ onMounted(async () => {
           </div>
         </div>
         <div class="refferal-dialog-body">
-          <div class="text-center mt-6 text-700-18 white">
+          <div class="text-center mt-4 text-700-18 white">
             {{ t("refferal.dialog.body.text_1") }}
           </div>
           <div
@@ -302,7 +302,7 @@ onMounted(async () => {
             {{ inviteItem.invite_code }}
             {{ t("refferal.dialog.body.text_3") }}
           </div>
-          <div class="text-center mt-6 mx-6">
+          <div class="text-center mt-4 mx-6">
             <v-card theme="dark" color="#15161C" height="40">
               <div class="text-400-14 text-gray mt-2">
                 {{ inviteItem.web_invite_url }}
@@ -390,8 +390,8 @@ onMounted(async () => {
       justify-content: center;
       background: rgba(29, 32, 39, 1);
       .junm-text {
-        width: 110px;
-        margin-left: 35px;
+        width: 115px;
+        margin-left: 30px;
         line-height: 12px;
       }
       .jump-img {
@@ -426,7 +426,7 @@ onMounted(async () => {
   .refferal-dialog-header-animation {
     background: linear-gradient(180deg, #5ead1f 0%, #1b5a65 100%);
     border-radius: 16px;
-    height: 325px;
+    height: 340px;
     animation-name: scaling;
     animation-duration: 0.4s;
     animation-timing-function: linear;
@@ -437,7 +437,7 @@ onMounted(async () => {
   .refferal-dialog-header {
     background: linear-gradient(180deg, #5ead1f 0%, #1b5a65 100%);
     border-radius: 16px;
-    height: 325px;
+    height: 340px;
 
     .m-refferal-header-img1 {
       margin-top: -10px;
