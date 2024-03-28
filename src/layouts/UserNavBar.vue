@@ -833,6 +833,7 @@ onMounted(async () => {
 .m-nav-drawer-content {
   height: 100%;
   overflow-y: auto;
+  padding-bottom: 80px;
 
   &::-webkit-scrollbar {
     width: 0px;
