@@ -385,6 +385,7 @@ const MSignup = defineComponent({
 
     onMounted(() => {
       console.log("promo code::::::::::::::::::::", route.query.code);
+        // 带有邀请注册码的自动填入，并且邀请注册码输入框不让填写
       state.formData.promoCode = route.query.code ? route.query.code.toString() : "";
       if(route.query.code){
         state.promoCodeDisabled=true
