@@ -777,14 +777,13 @@ const routeInited = () => {
       <MLevelUpDialog v-else />
     </v-dialog>
 
-    <!----------------------------------- refferal dialog --------------------------------->
+    <!----------------------------------- refferal dialog @click:outside="closeReferDialog"--------------------------------->
 
     <v-dialog
       v-model="refferalDialog"
       persistent
       :width="mobileWidth < 600 ? '360' : '471'"
       :scrim="true"
-      @click:outside="closeReferDialog"
       style="z-index: 2147483646"
     >
       <RefferalDialog v-if="mobileWidth > 600" />

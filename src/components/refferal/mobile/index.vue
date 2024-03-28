@@ -237,7 +237,7 @@ onMounted(async () => {
           <div class="m-agent-referral-qrcode refferal-qrcode">
             <QrcodeVue
               :value="inviteItem.web_invite_url"
-              size="64"
+              :size=64
               style="margin: 6px"
             />
           </div>
@@ -438,6 +438,7 @@ onMounted(async () => {
     background: linear-gradient(180deg, #5ead1f 0%, #1b5a65 100%);
     border-radius: 16px;
     height: 340px;
+    position: relative;
 
     .m-refferal-header-img1 {
       margin-top: -10px;
