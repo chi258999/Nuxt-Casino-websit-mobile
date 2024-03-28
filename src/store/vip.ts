@@ -46,7 +46,8 @@ export const vipStore = defineStore({
     vipSigninHistoryList: {
       total: 0,
       list: []
-    } as Vip.VipSigninHistoryData
+    } as Vip.VipSigninHistoryData,
+    timerValue: 0 as number, //10分钟倒计时存储
   }),
   getters: {
     getSuccess: (state) => state.success,
@@ -65,7 +66,8 @@ export const vipStore = defineStore({
     getVipCycleawardList: (state) => state.vipCycleawardList,
     getVipLevelAward: (state) => state.vipLevelAward,
     getVipBetawardList: (state) => state.vipBetawardList,
-    getVipSigninHistoryList: (state) => state.vipSigninHistoryList
+    getVipSigninHistoryList: (state) => state.vipSigninHistoryList,
+    getTimerValue: (state) => state.timerValue,
   },
   actions: {
     // set functions
@@ -179,6 +181,9 @@ export const vipStore = defineStore({
     // Storage coding rebate  存储打码返利
     setVipBetawardList(vipBetawardList: Vip.vipBetawardListData) {
       this.vipBetawardList = vipBetawardList;
+    },
+    setTimerValue(timerValue: number) {
+      this.timerValue = timerValue
     },
     setVipSigninHistory(vipSigninHistoryList: Vip.VipSigninHistoryData, reset: boolean = false) {
       let tempResData = vipSigninHistoryList

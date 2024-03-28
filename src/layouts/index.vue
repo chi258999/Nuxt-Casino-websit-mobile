@@ -50,7 +50,7 @@ const refferalAppBarShow = computed(() => {
 const agentNavBarToggle = computed(() => {});
 
 const mobileWidth = computed(() => {
-  return width.value;
+  return width.value||300;
 });
 
 const fixPositionShow = computed(() => {
@@ -71,7 +71,9 @@ const judgeScreen = () => {
     "onorientationchange" in window ? "orientationchange" : "resize",
     function () {
       if (window.orientation === 180 || window.orientation === 0) {
-        isScroll.value = false;
+        setTimeout(() => {
+          isScroll.value = false;
+        }, 200);
       }
       if (window.orientation === 90 || window.orientation === -90) {
         isScroll.value = true;
