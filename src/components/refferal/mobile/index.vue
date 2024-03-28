@@ -370,7 +370,7 @@ onMounted(async () => {
     margin-right: auto;
     width: 288px;
     .tab-item {
-      width: 100px;
+      width: 105px;
       height: 44px;
       border-radius: 8px 8px 0 0;
       padding: 0 15px;
