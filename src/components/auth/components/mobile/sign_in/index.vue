@@ -192,6 +192,11 @@ const Login = defineComponent({
         password: state.formData.password,
       });
       await loginSuccess();
+      if(!localStorage.getItem("loginTag")){
+        localStorage.setItem("loginTag",'0');
+      }else{
+        localStorage.setItem("loginTag",'1');
+      }
       state.loading = false;
     };
 

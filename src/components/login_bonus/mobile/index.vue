@@ -148,6 +148,10 @@ const handleLoginBonus = async (day: number) => {
   // }
 };
 
+const showGuide = computed(() => {
+  return localStorage.getItem("loginTag")
+});
+
 const submitConfirm = async () => {
   await dispatchVipSignInReward();
   if (success.value) {
@@ -205,10 +209,14 @@ onMounted(async () => {
       <img
         class="absolute m-login-bonus-card-select"
         src="@/assets/vip/svg/img_vip_select.svg"
+        v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 0&&showGuide==='0'"
+        @click="handleLoginBonus(0)"
       />
       <img
         class="absolute m-login-bonus-card-finger"
-        src="@/assets/vip/image/img_vip_finger.png"
+        src="@/assets/vip/svg/img_vip_finger.svg"
+        v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 0&&showGuide&&showGuide==='0'"
+        @click="handleLoginBonus(0)"
       />
       <div class="mt-2 text-center">
         <Font class="color-F9BC01 text-900-18"
@@ -803,12 +811,24 @@ onMounted(async () => {
 }
 
 .m-login-bonus-card-finger {
-  width: 100px;
-  height: 100px;
+  width: 58px;
+  height: 58px;
   position: absolute;
-  top: 65px;
-  left: 27px;
+  top: 84px;
+  left: 54px;
   z-index: 9999;
+  // animation: moveRight 1s linear infinite;
+  // animation-iteration-count: 1;
+}
+
+@keyframes moveRight  {
+  0% {
+    transform: translateX(-54px);
+  }
+
+  100% {
+    transform:  translateX(0);
+  }
 }
 
 .m-login-bonus-card-bg-3 {

@@ -1474,6 +1474,8 @@ export const lang: langType = {
     earn_btn_text: "Earn",
     dialog: {
       header: {
+        tabs_text1:"Invitation Link",
+        tabs_text2:"Promotion Details & Bonus Withdrawal",
         title_text: "Refer a friend and earn 20 BRL  immediately",
         body_text: "Invite Friends, Earn Money",
         body_text_1: " users have already participated in the Invite New Users campaign and they have earned a combined total of ",
