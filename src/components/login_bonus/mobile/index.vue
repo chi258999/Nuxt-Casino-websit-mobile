@@ -41,6 +41,7 @@ const { setMenuBlurEffectShow } = appBarStore();
 const { dispatchVipSignInReward } = vipStore();
 const { dispatchVipSignIn } = vipStore();
 const { dispatchVipSigninawardReceive } = vipStore();
+const { dispatchUserBalance } = userStore();
 
 const vipGrade = ref("VIP1");
 const isShowReceiveValidation = ref(false);
@@ -108,7 +109,7 @@ const getSwiperRef = (swiperInstance: any) => {
   swiper.value = swiperInstance;
 };
 
-const handleLoginBonus = async (day: number, moeny: number) => {
+const handleLoginBonus = async (day: number, moeny: any) => {
   if (token.value == undefined) {
     setAuthModalType("login");
     setAuthDialogVisible(true);
@@ -125,7 +126,6 @@ const handleLoginBonus = async (day: number, moeny: number) => {
     setMenuBlurEffectShow(true);
     return;
   }
-  const toast = useToast();
   if (vipSignIn.value.signin_day === day && vipSignIn.value.is_signin === 1) {
     await dispatchVipSigninawardReceive();
     const toast = useToast();
@@ -194,6 +194,7 @@ onMounted(async () => {
     );
   }
   await dispatchVipSignIn();
+  await dispatchUserBalance();
 });
 </script>
 
@@ -235,7 +236,7 @@ onMounted(async () => {
           vipSignIn.signin_day === 0 &&
           showGuide === '0'
         "
-        @click="handleLoginBonus(0, 2)"
+        @click="handleLoginBonus(0, vipSignIn.award[0])"
       />
       <img
         class="absolute m-login-bonus-card-finger"
@@ -245,7 +246,7 @@ onMounted(async () => {
           vipSignIn.signin_day === 0 &&
           showGuide === '0'
         "
-        @click="handleLoginBonus(0, 2)"
+        @click="handleLoginBonus(0, vipSignIn.award[0])"
       />
       <div class="mt-2 text-center">
         <Font class="color-F9BC01 text-900-18"
@@ -275,10 +276,10 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-2 relative"
-            :class="vipSignIn.signin_day === 0 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 0&&vipSignIn.is_signin===1? 'select_bg' : ''"
             v-ripple.center
             v-else
-            @click="handleLoginBonus(0, 2)"
+            @click="handleLoginBonus(0, vipSignIn.award[0])"
           >
             <img
               src="@/assets/vip/image/img_vip_32.png"
@@ -317,9 +318,9 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-2 relative"
-            :class="vipSignIn.signin_day === 1 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 1&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(1, 3)"
+            @click="handleLoginBonus(1, vipSignIn.award[1])"
             v-else
           >
             <img
@@ -359,9 +360,9 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-3 relative"
-            :class="vipSignIn.signin_day === 2 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 2&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(2, 2)"
+            @click="handleLoginBonus(2, vipSignIn.award[2])"
             v-else
           >
             <img
@@ -403,9 +404,9 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
-            :class="vipSignIn.signin_day === 3 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 3&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(3, 3)"
+            @click="handleLoginBonus(3, vipSignIn.award[3])"
             v-else
           >
             <img
@@ -445,9 +446,9 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
-            :class="vipSignIn.signin_day === 4 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 4&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(4, 2)"
+            @click="handleLoginBonus(4, vipSignIn.award[4] )"
             v-else
           >
             <img
@@ -487,9 +488,9 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
-            :class="vipSignIn.signin_day === 5 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 5&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(5, 2)"
+            @click="handleLoginBonus(5, vipSignIn.award[5])"
             v-else
           >
             <img
@@ -531,9 +532,9 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
-            :class="vipSignIn.signin_day === 6 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 6&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(6, 3)"
+            @click="handleLoginBonus(6, vipSignIn.award[6])"
             v-else
           >
             <img
@@ -575,12 +576,12 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-5 relative"
-            :class="vipSignIn.signin_day >= 7 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day >= 7&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
             v-ripple.center
             @click="
               handleLoginBonus(
                 vipSignIn.signin_day > 7 ? vipSignIn.signin_day : 7,
-                2
+                vipSignIn.award[7]
               )
             "
             v-else
@@ -612,7 +613,6 @@ onMounted(async () => {
     </div>
     <font
       v-if="
-        vipSignIn.vip_level === 0 &&
         Number(vipSignIn.limited_bet) == 0 &&
         Number(vipSignIn.limited_deposit) == 0
       "
