@@ -31,6 +31,11 @@ const Login = defineComponent({
     WarningIcon,
   },
   emits: ["close", "switch"],
+  props: {
+    signInForm: {
+      type: Object as any,
+    },
+  },
   setup(props, { emit }) {
     // translation
     const { t } = useI18n();
@@ -264,8 +269,13 @@ const Login = defineComponent({
       },
       { deep: true }
     );
-    
-    onMounted(() => {});
+
+    onMounted(() => {
+      if(props.signInForm.emailAddress){
+        state.formData.emailAddress=props.signInForm.emailAddress
+        state.formData.password=props.signInForm.password
+      }
+    });
 
     return {
       t,

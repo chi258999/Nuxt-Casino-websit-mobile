@@ -32,7 +32,7 @@ const MSignup = defineComponent({
     SuccessIcon,
     WarningIcon,
   },
-  emits: ["close", "switchAuthDialog"],
+  emits: ["close", "switchAuthDialog","setSignInForm"],
   props: {
     signUpDialogCheck: {
       type: Boolean,
@@ -250,6 +250,7 @@ const MSignup = defineComponent({
 
     const goSignInPage = (): void => {
       emit("switchAuthDialog", "login");
+      emit("setSignInForm", state.formData);
     };
 
     const registerSuccess = async () => {
@@ -346,7 +347,18 @@ const MSignup = defineComponent({
       });
       state.loading = false;
       await registerSuccess();
+      if(route.query.code){
+        funcUrlDel()
+      }
     };
+    // 带有邀请码进来注册完后去掉url上的参数
+   const funcUrlDel=()=>{
+    let url = window.location.href;
+    if (url.indexOf("?") != -1) {
+      url = url.replace(/(\?|#)[^'"]*/, '');
+      window.history.pushState({}, '0', url);
+    }
+   }
 
     const goRegisterPage = (): void => {
       state.currentPage = state.PAGE_TYPE.SIGNUP_FORM;
