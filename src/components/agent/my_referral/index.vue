@@ -12,7 +12,7 @@ import { useToast } from "vue-toastification";
 import { authStore } from "@/store/auth";
 import SuccessIcon from "@/components/global/notification/SuccessIcon.vue";
 import { appCurrencyStore } from "@/store/app";
-
+import { toFormatNum } from '@/utils/numFormat';
 const { dispatchUserInvite } = inviteStore();
 const { dispatchInviteAward } = inviteStore();
 // 获取平台货币
@@ -185,7 +185,7 @@ onMounted(async () => {
         </v-col>
       </v-row>
       <div class="m-referral-reward-card-1 mx-7 text-700-18 text-white">
-        {{ platformCurrency }} {{ inviteItem.available_bonus }}
+        {{ platformCurrency }} {{ toFormatNum(inviteItem.available_bonus) }}
       </div>
     </div>
     <v-card class="mx-2 m-agent-referral-partner-card">

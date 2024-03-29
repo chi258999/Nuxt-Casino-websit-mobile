@@ -5,6 +5,7 @@ import { useDisplay } from "vuetify";
 import { inviteStore } from "@/store/invite";
 import { storeToRefs } from "pinia";
 import { type StatisticsItem } from "@/interface/invite";
+import { toFormatNum } from '@/utils/numFormat';
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -139,13 +140,13 @@ onMounted(async () => {
         {{ t("affiliate.statistics.text_7") }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        {{ platformCurrency }} {{ selectedItem.deposit_amount[0] }}
+        {{ platformCurrency }} {{ toFormatNum(selectedItem.deposit_amount[0]) }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        {{ platformCurrency }} {{ selectedItem.deposit_amount[1] }}
+        {{ platformCurrency }} {{ toFormatNum(selectedItem.deposit_amount[1]) }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        {{ platformCurrency }} {{ selectedItem.deposit_amount[2] }}
+        {{ platformCurrency }} {{ toFormatNum(selectedItem.deposit_amount[2]) }}
       </v-col>
     </v-row>
     <v-row class="mx-1 my-1 px-6 m-agent-profit-user-card">
@@ -155,13 +156,13 @@ onMounted(async () => {
         {{ t("affiliate.statistics.text_7") }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        {{ platformCurrency }} {{ selectedItem.bet_amount[0] }}
+        {{ platformCurrency }} {{ toFormatNum(selectedItem.bet_amount[0]) }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        {{ platformCurrency }} {{ selectedItem.bet_amount[1] }}
+        {{ platformCurrency }} {{ toFormatNum(selectedItem.bet_amount[1]) }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        {{ platformCurrency }} {{ selectedItem.bet_amount[2] }}
+        {{ platformCurrency }} {{ toFormatNum(selectedItem.bet_amount[2]) }}
       </v-col>
     </v-row>
     <v-row class="mx-1 my-1 px-6 m-agent-profit-commission-card">
@@ -171,13 +172,13 @@ onMounted(async () => {
         {{ t("affiliate.statistics.text_7") }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 yellow">
-        {{ platformCurrency }} {{ selectedItem.bet_bonus[0] }}
+        {{ platformCurrency }} {{ toFormatNum(selectedItem.bet_bonus[0]) }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 yellow">
-        {{ platformCurrency }} {{ selectedItem.bet_bonus[1] }}
+        {{ platformCurrency }} {{ toFormatNum(selectedItem.bet_bonus[1]) }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 yellow">
-        {{ platformCurrency }} {{ selectedItem.bet_bonus[2] }}
+        {{ platformCurrency }} {{ toFormatNum(selectedItem.bet_bonus[2]) }}
       </v-col>
     </v-row>
     <v-row class="mx-1 my-1 px-6 m-agent-profit-user-card">
@@ -187,7 +188,7 @@ onMounted(async () => {
         {{ t("affiliate.statistics.text_11") }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray">
-        {{ platformCurrency }} {{ selectedItem.achievement_award }}
+        {{ platformCurrency }} {{ toFormatNum(selectedItem.achievement_award) }}
       </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray"> -- </v-col>
       <v-col cols="3" class="pa-0 text-700-12 gray"> -- </v-col>
