@@ -15,7 +15,7 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import MConfirm from "@/components/global/confirm/mobile/index.vue";
 import GiftIcon from "@/components/global/notification/GiftIcon.vue";
-import ReceiveValidationBox from '@/components/cash/mxn/deposit/ReceiveValidationBox.vue';
+import ReceiveValidationBox from "@/components/cash/mxn/deposit/ReceiveValidationBox.vue";
 import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import { useToast } from "vue-toastification";
@@ -42,7 +42,7 @@ const { dispatchVipSignIn } = vipStore();
 const { dispatchVipSigninawardReceive } = vipStore();
 
 const vipGrade = ref("VIP1");
-const isShowReceiveValidation=ref(false)
+const isShowReceiveValidation = ref(false);
 const loginBonusItem = ref({
   award: [8, 10, 12, 14, 16, 18, 20, 22], // reward list
   signin_day: 0, // The number of days that have been signed in
@@ -55,7 +55,6 @@ const selectedAward = ref<number>(0);
 
 // 保存定时器
 const isShowReceiveTimeout = ref<null | ReturnType<typeof setTimeout>>(null);
-
 
 const modules = [Pagination];
 
@@ -91,6 +90,11 @@ const success = computed(() => {
   return getSuccess.value;
 });
 
+const userInfo = computed(() => {
+  const { getUserInfo } = storeToRefs(authStore());
+  return getUserInfo.value;
+});
+
 const goToPrev = () => {
   swiper.value.slidePrev();
 };
@@ -103,7 +107,7 @@ const getSwiperRef = (swiperInstance: any) => {
   swiper.value = swiperInstance;
 };
 
-const handleLoginBonus = async (day: number,moeny:number) => {
+const handleLoginBonus = async (day: number, moeny: number) => {
   if (token.value == undefined) {
     setAuthModalType("login");
     setAuthDialogVisible(true);
@@ -124,23 +128,21 @@ const handleLoginBonus = async (day: number,moeny:number) => {
   if (vipSignIn.value.signin_day === day && vipSignIn.value.is_signin === 1) {
     await dispatchVipSigninawardReceive();
     const toast = useToast();
-    toast.success(
-      `Congratulations on your prize:R$${Number(moeny)}`,
-      {
-        timeout: 3000,
-        closeOnClick: false,
-        pauseOnFocusLoss: false,
-        pauseOnHover: false,
-        draggable: false,
-        showCloseButtonOnHover: false,
-        hideProgressBar: true,
-        closeButton: "button",
-        icon: GiftIcon,
-        rtl: false,
-      }
-    );
-  }else { //点击的不是当天可领取的弹窗警告
-    isShowReceiveValidation.value=true
+    toast.success(`Congratulations on your prize:R$${Number(moeny)}`, {
+      timeout: 3000,
+      closeOnClick: false,
+      pauseOnFocusLoss: false,
+      pauseOnHover: false,
+      draggable: false,
+      showCloseButtonOnHover: false,
+      hideProgressBar: true,
+      closeButton: "button",
+      icon: GiftIcon,
+      rtl: false,
+    });
+  } else if(vipSignIn.value.signin_day !== day||vipSignIn.value.is_signin === 2) {
+    //点击的不是当天可领取的弹窗警告
+    isShowReceiveValidation.value = true;
     // 摧毁定时器，防止多次创建
     if (isShowReceiveTimeout.value) {
       clearTimeout(isShowReceiveTimeout.value);
@@ -163,7 +165,11 @@ const handleLoginBonus = async (day: number,moeny:number) => {
 };
 
 const showGuide = computed(() => {
-  return localStorage.getItem("loginTag")
+  if (userInfo.value) {
+    return localStorage.getItem(userInfo.value.name);
+  } else {
+    return "1";
+  }
 });
 
 const submitConfirm = async () => {
@@ -213,7 +219,7 @@ onMounted(async () => {
       class="m-login-bonus-agent-img"
     />
     <div class="m-login-bonus-body">
-      <ReceiveValidationBox  v-if="isShowReceiveValidation" />
+      <ReceiveValidationBox v-if="isShowReceiveValidation" />
       <!-- <Swiper :modules="modules" :slidesPerView="1" :loop="true" @swiper="getSwiperRef">
         <SwiperSlide
           v-for="(item, index) in vipLevels"
@@ -223,14 +229,22 @@ onMounted(async () => {
       <img
         class="absolute m-login-bonus-card-select"
         src="@/assets/vip/svg/img_vip_select.svg"
-        v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 0&&showGuide==='0'"
-        @click="handleLoginBonus(0,2)"
+        v-if="
+          vipSignIn.is_signin === 1 &&
+          vipSignIn.signin_day === 0 &&
+          showGuide === '0'
+        "
+        @click="handleLoginBonus(0, 2)"
       />
       <img
         class="absolute m-login-bonus-card-finger"
         src="@/assets/vip/svg/img_vip_finger.svg"
-        v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 0&&showGuide&&showGuide==='0'"
-        @click="handleLoginBonus(0,2)"
+        v-if="
+          vipSignIn.is_signin === 1 &&
+          vipSignIn.signin_day === 0 &&
+          showGuide === '0'
+        "
+        @click="handleLoginBonus(0, 2)"
       />
       <div class="mt-2 text-center">
         <Font class="color-F9BC01 text-900-18"
@@ -263,7 +277,7 @@ onMounted(async () => {
             :class="vipSignIn.signin_day === 0 ? 'select_bg' : ''"
             v-ripple.center
             v-else
-            @click="handleLoginBonus(0,2)"
+            @click="handleLoginBonus(0, 2)"
           >
             <img
               src="@/assets/vip/image/img_vip_32.png"
@@ -304,7 +318,7 @@ onMounted(async () => {
             class="m-login-bonus-card-bg-2 relative"
             :class="vipSignIn.signin_day === 1 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(1,3)"
+            @click="handleLoginBonus(1, 3)"
             v-else
           >
             <img
@@ -346,7 +360,7 @@ onMounted(async () => {
             class="m-login-bonus-card-bg-3 relative"
             :class="vipSignIn.signin_day === 2 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(2,2)"
+            @click="handleLoginBonus(2, 2)"
             v-else
           >
             <img
@@ -390,7 +404,7 @@ onMounted(async () => {
             class="m-login-bonus-card-bg-4 relative"
             :class="vipSignIn.signin_day === 3 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(3,3)"
+            @click="handleLoginBonus(3, 3)"
             v-else
           >
             <img
@@ -432,7 +446,7 @@ onMounted(async () => {
             class="m-login-bonus-card-bg-4 relative"
             :class="vipSignIn.signin_day === 4 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(4,2)"
+            @click="handleLoginBonus(4, 2)"
             v-else
           >
             <img
@@ -474,7 +488,7 @@ onMounted(async () => {
             class="m-login-bonus-card-bg-4 relative"
             :class="vipSignIn.signin_day === 5 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(5,2)"
+            @click="handleLoginBonus(5, 2)"
             v-else
           >
             <img
@@ -518,7 +532,7 @@ onMounted(async () => {
             class="m-login-bonus-card-bg-4 relative"
             :class="vipSignIn.signin_day === 6 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus(6,3)"
+            @click="handleLoginBonus(6, 3)"
             v-else
           >
             <img
@@ -562,7 +576,12 @@ onMounted(async () => {
             class="m-login-bonus-card-bg-5 relative"
             :class="vipSignIn.signin_day >= 7 ? 'select_bg' : ''"
             v-ripple.center
-            @click="handleLoginBonus( vipSignIn.signin_day > 7 ? vipSignIn.signin_day : 7,2)"
+            @click="
+              handleLoginBonus(
+                vipSignIn.signin_day > 7 ? vipSignIn.signin_day : 7,
+                2
+              )
+            "
             v-else
           >
             <img
@@ -590,8 +609,14 @@ onMounted(async () => {
       <!-- </SwiperSlide>
       </Swiper> -->
     </div>
-    <font class="text-900-10 m-login-bonus-bottom-text">
-      {{ t("vip.login_bonus.footer_text_8") }}</font
+    <font
+      v-if="
+        vipSignIn.vip_level === 0 &&
+        Number(vipSignIn.limited_bet) == 0 &&
+        Number(vipSignIn.limited_deposit) == 0
+      "
+      class="text-900-10 m-login-bonus-bottom-text"
+      >{{ t("vip.login_bonus.footer_text_8") }}</font
     >
     <v-row class="m-login-bonus-footer mx-0 align-center">
       <v-col cols="2" class="pa-0 ma-0">
@@ -695,7 +720,6 @@ onMounted(async () => {
     <v-dialog v-model="confirmDialog" width="280">
       <MConfirm @submitConfirm="submitConfirm" :selectedAward="selectedAward" />
     </v-dialog>
-    
   </div>
 </template>
 
@@ -706,7 +730,7 @@ onMounted(async () => {
 }
 .m-login-bonus-footer {
   position: absolute;
-  bottom: 34px;
+  bottom: 24px;
   width: 300px;
   left: 50%;
   transform: translateX(-50%);
@@ -827,17 +851,17 @@ onMounted(async () => {
   top: 84px;
   left: 54px;
   z-index: 9999;
-  // animation: moveRight 1s linear infinite;
+  animation: moveRight 2s linear infinite;
   // animation-iteration-count: 1;
 }
 
-@keyframes moveRight  {
+@keyframes moveRight {
   0% {
-    transform: translateX(-54px);
+    transform: translateX(-84px);
   }
 
   100% {
-    transform:  translateX(0);
+    transform: translateX(0);
   }
 }
 
@@ -902,6 +926,8 @@ onMounted(async () => {
   top: 4px;
   left: 50%;
   transform: translateX(-50%);
+  width: 100px;
+  text-align: center;
 }
 
 .m-login-bonus-text-position-1 {

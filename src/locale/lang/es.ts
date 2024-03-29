@@ -1612,8 +1612,8 @@ export const lang: langType = {
       "footer_text_5": "Upgrade to become a ",
       "footer_text_6": "VIP ",
       "footer_text_7": "and receive higher rewards!",
-      "footer_text_8": "Turn the page to see more VIP awards",
-      "validation_text_1":"You have already claimed today's sign-up bonus, so please remember to log in tomorrow to claim a new day's bonus consecutively."
+      "footer_text_8": "Pasar página para ver más recompensas VIP",
+      "validation_text_1":"Usted ha recibido el bono de registro de hoy,Así que recuerda iniciar sesión mañana para recogerlo.Bonificación por un día consecutivo."
     },
     "roulette_bonus": {
       "paid_text": "Bono de ruleta",
