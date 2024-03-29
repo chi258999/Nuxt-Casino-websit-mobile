@@ -198,6 +198,7 @@ onMounted(() => {
 
   .v-navigation-drawer__content {
     height: calc(100vh - 10px);
+    overflow-y: hidden;
   }
 }
 </style>
