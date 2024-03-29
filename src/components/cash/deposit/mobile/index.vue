@@ -21,6 +21,7 @@ import MDepositInfoDialog from "@/components/cash/deposit/mobile/MDepositInfoDia
 import store from '@/store';
 import { load } from 'webfontloader';
 import { useToast } from "vue-toastification";
+import { toFormatNum } from '@/utils/numFormat';
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -719,7 +720,7 @@ onMounted(async () => {
           ]"
           @click="handleDepositAmount(depositAmountItem.depositSelect)"
         >
-          {{ platformCurrency }} {{ depositAmountItem.depositSelect }}
+          {{ platformCurrency }} {{ toFormatNum(depositAmountItem.depositSelect) }}
           <div
             class="m-deposit-amount-area"
             v-if="!bonusCheck && depositAmountItem.bonus != 0"
@@ -774,7 +775,7 @@ onMounted(async () => {
       <img src="@/assets/public/svg/icon_public_22.svg" class="ml-auto" width="16" />
     </div>
     <v-row class="m-deposit-footer-text-position text-600-10 white justify-center mx-2">
-      {{ platformCurrency }}{{ depositAmount }} + {{ platformCurrency }}{{
+      {{ platformCurrency }}{{ toFormatNum(depositAmount) }} + {{ platformCurrency }}{{
         depositConfig["bonus"][0]["type"] == 0 && depositConfig["bonus"] != undefined
           ? depositRate
           : (Number(depositAmount) * depositRate).toFixed(2)

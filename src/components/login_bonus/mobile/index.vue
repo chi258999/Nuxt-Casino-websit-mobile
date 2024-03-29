@@ -19,6 +19,7 @@ import ReceiveValidationBox from '@/components/cash/mxn/deposit/ReceiveValidatio
 import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import { useToast } from "vue-toastification";
+import { toFormatNum } from '@/utils/numFormat';
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -616,7 +617,7 @@ onMounted(async () => {
             <font class="text-900-10 white">
               If you recharge
               <font class="text-900-10 purple">
-                {{ platformCurrency }} {{ vipSignIn.limited_deposit }}
+                {{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_deposit) }}
               </font>
               today,
             </font>
@@ -632,7 +633,7 @@ onMounted(async () => {
             <font class="text-900-10 white">
               If you bet
               <font class="text-900-10 purple">
-                {{ platformCurrency }} {{ vipSignIn.limited_bet }}
+                {{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_bet) }}
               </font>
               today,
             </font>
@@ -648,14 +649,14 @@ onMounted(async () => {
             <font class="text-900-10 white">
               If you recharge
               <font class="text-900-10 purple">
-                {{ platformCurrency }} {{ vipSignIn.limited_deposit }}
+                {{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_deposit) }}
               </font>
               &nbsp;and&nbsp;
             </font>
             <font class="text-900-10 white">
               bet
               <font class="text-900-10 purple">
-                {{ platformCurrency }} {{ vipSignIn.limited_bet }}
+                {{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_bet) }}
               </font>
               today,
             </font>
