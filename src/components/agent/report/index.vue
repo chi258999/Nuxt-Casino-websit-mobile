@@ -201,6 +201,7 @@ watch(
       first_time: moment(value[0]).valueOf() / 1000,
       last_time: moment(value[1]).valueOf() / 1000,
     });
+    if(BS.value) BS.value.refresh()
   },
   { deep: true }
 );
@@ -210,6 +211,21 @@ const handlePrev = () => {};
 const handleNext = () => {};
 
 onMounted(async () => {
+  await nextTick()
+  // 实例和配置
+  BS.value = new BScroll(bscrollRef.value,{
+    scrollY: true,   //纵向滚动
+    // mouseWheel: true,  //可以用鼠标滚轮滚动
+    probeType: 3,    //开启滚动事件
+    click: true,
+    // preventDefault:
+    // bounce: false,
+    // 鼠标滑轮配置
+	  // 监听内容变化，自动执行bs.refresh()方法
+	  observeDOM : true
+  })
+
+
   await dispatchInviteHistoryCfg();
   await dispatchUserInviteHistory({
     index: inviteHistoryConfig.value.list[0].index,
@@ -218,197 +234,189 @@ onMounted(async () => {
     last_time: moment(selectedDate.value[1]).valueOf() / 1000,
   });
 
-  await nextTick()
-  // 实例和配置
-  BS.value = new BScroll(bscrollRef.value,{
-    scrollY: true,   //纵向滚动
-    // mouseWheel: true,  //可以用鼠标滚轮滚动
-    probeType: 3,    //开启滚动事件
-    click: true,  //点击事件,默认false
-    // 鼠标滑轮配置
-	  mouseWheel: {
-	    speed: 10,
-	    invert: false,
-	    easeTime: 300
-	  },
-	  // 监听内容变化，自动执行bs.refresh()方法
-	  observeDOM : true
-  })
+  setTimeout(() => {
+    BS.value.refresh()
+  }, 500)
 });
 </script>
 <template>
   <div class="report">
-    <!-- <div class="content"> -->
-      <v-row class="mx-2 mt-0">
-        <div class="m-agent-report-date-picker relative" @click="datePickerShow = true">
-          <el-date-picker
-            v-model="selectedDate"
-            popper-class="m-agent-report-date-picker-background"
-            type="daterange"
-            value-format="YYYY/MM/DD"
-            :format="dateFormat"
-            :prefix-icon="customPrefix"
-            :visible="datePickerShow"
-            :clear-icon="customClear"
-            start-placeholder="Start date"
-            end-placeholder="End date"
-            :popper-options="popperOptions"
-            day-name-format="short"
-            :start-day-of-week="1"
-            @change="datePickerShow = false"
-            @blur="datePickerShow = false"
-            size="small"
-          >
-            <template #range-separator>
-              <img src="@/assets/public/svg/icon_public_83.svg" width="18" />
-            </template>
-          </el-date-picker>
-          <img
-            src="@/assets/public/svg/icon_public_23.svg"
-            class="date-icon-position"
-            width="20"
-          />
-        </div>
-      </v-row>
-      <v-row class="mt-6 mx-3">
-        <v-menu
-          offset="10"
-          content-class="m-agent-report-bonus-menu"
-          v-model="bonusMenuShow"
-          style="z-index: 1000000000000000"
-        >
-          <template v-slot:activator="{ props }">
-            <v-card theme="dark" class="m-agent-report-bonus-menu-card" style="width: 180px">
-              <v-list-item
-                class="bonus-item"
-                v-bind="props"
-                :title="selectedBonusItem"
-                append-icon="mdi-chevron-down"
-                value=""
-              >
-              </v-list-item>
-            </v-card>
-          </template>
-          <v-list theme="dark" class="m-agent-report-bonus-menu-list">
-            <v-list-item
-              v-for="(item, i) in inviteHistoryConfig.list"
-              :key="i"
-              :value="item.name"
-              class="bonus-item mx-2"
-              @click="handleHistoryConfigDropdown(item)"
-              :class="
-                selectedBonusItem == item.name
-                  ? 'm-agent-report-bonus-menu-selected-item'
-                  : ''
-              "
+    <div class="scroll-wrapper" ref='bscrollRef'>
+      <div class="content">
+      <!-- <div class="content"> -->
+        <!-- 日期 -->
+        <v-row class="mx-2 mt-0">
+          <div class="m-agent-report-date-picker relative" @click="datePickerShow = true">
+            <el-date-picker
+              v-model="selectedDate"
+              popper-class="m-agent-report-date-picker-background"
+              type="daterange"
+              value-format="YYYY/MM/DD"
+              :format="dateFormat"
+              :prefix-icon="customPrefix"
+              :visible="datePickerShow"
+              :clear-icon="customClear"
+              start-placeholder="Start date"
+              end-placeholder="End date"
+              :popper-options="popperOptions"
+              day-name-format="short"
+              :start-day-of-week="1"
+              @change="datePickerShow = false"
+              @blur="datePickerShow = false"
+              size="small"
             >
-              <v-list-item-title>{{ item.name }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <v-menu
-          offset="10"
-          content-class="m-agent-report-bonus-menu"
-          v-model="cashMenuShow"
-          style="z-index: 1000000000000000"
-        >
-          <template v-slot:activator="{ props }">
-            <v-card
-              theme="dark"
-              class="ml-auto m-agent-report-bonus-menu-card"
-              style="width: 100px"
-            >
-              <v-list-item
-                class="bonus-item"
-                v-bind="props"
-                :title="selectedPageSize"
-                append-icon="mdi-chevron-down"
-                value=""
-              >
-              </v-list-item>
-            </v-card>
-          </template>
-          <v-list theme="dark" class="m-agent-report-bonus-menu-list">
-            <v-list-item
-              v-for="(item, i) in cashItems"
-              :key="i"
-              :value="item"
-              class="bonus-item mx-1"
-              :class="
-                selectedPageSize == item ? 'm-agent-report-bonus-menu-selected-item' : ''
-              "
-              @click="handlePageDropdown(item)"
-            >
-              <v-list-item-title>{{ item }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-row>
-      <div class="scroll-wrapper" ref='bscrollRef'>
-        <div class="content">
-          <v-row class="mx-2 m-agent-forms-bonus-table">
-            <v-table
-              class="m-agent-forms-bonus-table-bg"
-              :class="fixPositionShow ? 'table-position-overflow' : ''"
-              theme="dark"
-              fixed-header
-            >
-              <thead class="forms-table-header">
-                <tr>
-                  <th
-                    class="m-forms-table-header-text px-0"
-                    style="border-radius: 8px 0px 0px 8px"
-                  >
-                    {{ t("affiliate.forms.table.time") }}
-                  </th>
-                  <th class="m-forms-table-header-text px-0">
-                    <div class="forms-table-border">{{ t("affiliate.forms.table.user") }}</div>
-                  </th>
-                  <th class="m-forms-table-header-text px-0">
-                    <div class="forms-table-border-1">
-                      {{ t("affiliate.forms.table.event") }}
-                    </div>
-                  </th>
-                  <th
-                    class="m-forms-table-header-text px-0"
-                    style="border-radius: 0px 8px 8px 0px"
-                  >
-                    {{ t("affiliate.forms.table.bonus") }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="m-forms-table-body">
-                <template v-if="inviteHistoryItem.list.length > 0" >
-                  <tr
-                    v-for="(item, index) in inviteHistoryItem.list"
-                    :key="index"
-                  >
-                    <td class="text-500-12">
-                      {{ moment(Number(item.time) * 1000).format("MM/DD HH:mm:ss") }}
-                    </td>
-                    <td class="text-500-12">{{ item.user }}</td>
-                    <td class="text-500-12">{{ selectedHistoryConfig.name }}</td>
-                    <td class="text-500-12">{{ item.bonus }}</td>
-                  </tr>
-                </template>
-                <tr v-for="(item, formIndex) in formsList" :key="formIndex" v-else>
-                  <td class="text-500-12"></td>
-                  <td class="text-500-12"></td>
-                  <td class="text-500-12"></td>
-                  <td class="text-500-12"></td>
-                </tr>
-              </tbody>
-            </v-table>
-          </v-row>
-          <v-row class="mt-4 justify-center mx-4 pb-2">
-            <Pagination
-              :length="inviteHistoryItem.total_pages"
-              @handlePrev="handlePrev"
-              @handleNext="handleNext"
+              <template #range-separator>
+                <img src="@/assets/public/svg/icon_public_83.svg" width="18" />
+              </template>
+            </el-date-picker>
+            <img
+              src="@/assets/public/svg/icon_public_23.svg"
+              class="date-icon-position"
+              width="20"
             />
-          </v-row>
-        </div>
-      <!-- </div> -->
+          </div>
+        </v-row>
+
+        <!-- 菜单筛选 -->
+        <v-row class="mt-6 mx-3">
+          <v-menu
+            offset="10"
+            content-class="m-agent-report-bonus-menu"
+            v-model="bonusMenuShow"
+            style="z-index: 1000000000000000"
+          >
+            <template v-slot:activator="{ props }">
+              <v-card theme="dark" class="m-agent-report-bonus-menu-card" style="width: 180px">
+                <v-list-item
+                  class="bonus-item"
+                  v-bind="props"
+                  :title="selectedBonusItem"
+                  append-icon="mdi-chevron-down"
+                  value=""
+                >
+                </v-list-item>
+              </v-card>
+            </template>
+            <v-list theme="dark" class="m-agent-report-bonus-menu-list">
+              <v-list-item
+                v-for="(item, i) in inviteHistoryConfig.list"
+                :key="i"
+                :value="item.name"
+                class="bonus-item mx-2"
+                @click="handleHistoryConfigDropdown(item)"
+                :class="
+                  selectedBonusItem == item.name
+                    ? 'm-agent-report-bonus-menu-selected-item'
+                    : ''
+                "
+              >
+                <v-list-item-title>{{ item.name }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <v-menu
+            offset="10"
+            content-class="m-agent-report-bonus-menu"
+            v-model="cashMenuShow"
+            style="z-index: 1000000000000000"
+          >
+            <template v-slot:activator="{ props }">
+              <v-card
+                theme="dark"
+                class="ml-auto m-agent-report-bonus-menu-card"
+                style="width: 100px"
+              >
+                <v-list-item
+                  class="bonus-item"
+                  v-bind="props"
+                  :title="selectedPageSize"
+                  append-icon="mdi-chevron-down"
+                  value=""
+                >
+                </v-list-item>
+              </v-card>
+            </template>
+            <v-list theme="dark" class="m-agent-report-bonus-menu-list">
+              <v-list-item
+                v-for="(item, i) in cashItems"
+                :key="i"
+                :value="item"
+                class="bonus-item mx-1"
+                :class="
+                  selectedPageSize == item ? 'm-agent-report-bonus-menu-selected-item' : ''
+                "
+                @click="handlePageDropdown(item)"
+              >
+                <v-list-item-title>{{ item }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-row>
+        <!-- 列表 -->
+        <v-row class="mt-6 mx-2 m-agent-forms-bonus-table">
+          <v-table
+            class="m-agent-forms-bonus-table-bg"
+            :class="fixPositionShow ? 'table-position-overflow' : ''"
+            theme="dark"
+            fixed-header
+            height="570px"
+          >
+            <thead class="forms-table-header">
+                  <tr>
+                    <th
+                      class="m-forms-table-header-text px-0"
+                      style="border-radius: 8px 0px 0px 8px"
+                    >
+                      {{ t("affiliate.forms.table.time") }}
+                    </th>
+                    <th class="m-forms-table-header-text px-0">
+                      <div class="forms-table-border">{{ t("affiliate.forms.table.user") }}</div>
+                    </th>
+                    <th class="m-forms-table-header-text px-0">
+                      <div class="forms-table-border-1">
+                        {{ t("affiliate.forms.table.event") }}
+                      </div>
+                    </th>
+                    <th
+                      class="m-forms-table-header-text px-0"
+                      style="border-radius: 0px 8px 8px 0px"
+                    >
+                      {{ t("affiliate.forms.table.bonus") }}
+                    </th>
+                  </tr>
+            </thead>
+            <tbody class="m-forms-table-body">
+              <template v-if="inviteHistoryItem.list.length > 0" >
+                <tr
+                  v-for="(item, index) in inviteHistoryItem.list"
+                  :key="index"
+                >
+                  <td class="text-500-12">
+                    {{ moment(Number(item.time) * 1000).format("MM/DD HH:mm:ss") }}
+                  </td>
+                  <td class="text-500-12">{{ item.user }}</td>
+                  <td class="text-500-12">{{ selectedHistoryConfig.name }}</td>
+                  <td class="text-500-12">{{ item.bonus }}</td>
+                </tr>
+              </template>
+              <tr v-for="(item, formIndex) in formsList" :key="formIndex" v-else>
+                <td class="text-500-12"></td>
+                <td class="text-500-12"></td>
+                <td class="text-500-12"></td>
+                <td class="text-500-12"></td>
+              </tr>
+            </tbody>
+          </v-table>
+        </v-row>
+        <v-row class="mt-4 justify-center mx-4 pb-2">
+              <Pagination
+                :length="inviteHistoryItem.total_pages"
+                @handlePrev="handlePrev"
+                @handleNext="handleNext"
+              />
+        </v-row>
+        <!-- </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -512,6 +520,7 @@ onMounted(async () => {
   .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > td,
   .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > th {
     border-bottom: 1px solid $agent_card_bg;
+    height: 54px !important;
     // border-bottom: 1px solid #23262f;
     // border-bottom: none !important;
   }
@@ -684,20 +693,27 @@ onMounted(async () => {
 }
 </style>
 
-<style lang="scss"  scoped>
+<style lang="scss" scoped>
+body {
+  overflow: hidden;
+}
 .report {
-  height: 100%;
+  height: 99%;
   width: 100%;
+  padding-bottom: 20px;
 }
 .scroll-wrapper {
-  position: relative;
-  height: calc(100% - 100px);
-  overflow: hidden;
-  margin-top: 20px;
-  padding-top: 10px;
+  height: 100%;
+  width: 100%;
+  webkit-overflow-scrolling: touch;
+  // position: relative;
+  // height: calc(100% - 100px);
+  // overflow: hidden;
+  // margin-top: 20px;
+  // padding-top: 10px;
 
   .content {
-    padding-bottom: 60px;
+    padding-bottom: 100px;
   }
 }
 </style>
