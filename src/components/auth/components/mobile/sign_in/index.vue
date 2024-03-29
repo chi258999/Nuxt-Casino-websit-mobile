@@ -31,6 +31,11 @@ const Login = defineComponent({
     WarningIcon,
   },
   emits: ["close", "switch"],
+  props: {
+    signInForm: {
+      type: Object as any,
+    },
+  },
   setup(props, { emit }) {
     // translation
     const { t } = useI18n();
@@ -192,10 +197,10 @@ const Login = defineComponent({
         password: state.formData.password,
       });
       await loginSuccess();
-      if(!localStorage.getItem("loginTag")){
-        localStorage.setItem("loginTag",'0');
+      if(!localStorage.getItem(userInfo.value.name)){
+        localStorage.setItem(userInfo.value.name,'0');
       }else{
-        localStorage.setItem("loginTag",'1');
+        localStorage.setItem(userInfo.value.name,'1');
       }
       state.loading = false;
     };
@@ -264,8 +269,13 @@ const Login = defineComponent({
       },
       { deep: true }
     );
-    
-    onMounted(() => {});
+
+    onMounted(() => {
+      if(props.signInForm.emailAddress){
+        state.formData.emailAddress=props.signInForm.emailAddress
+        state.formData.password=props.signInForm.password
+      }
+    });
 
     return {
       t,

@@ -17,6 +17,10 @@ const { setAuthDialogVisible } = authStore();
 
 const dialogCheckBox = ref<boolean>(false);
 const signUpDialogCheck = ref<boolean>(false);
+const signInForm = ref({
+  emailAddress: "",
+  password: "",
+});
 
 const authModalType = computed(() => {
   const { getAuthModalType } = storeToRefs(authStore());
@@ -34,6 +38,11 @@ const closeDialog = () => {
 const switchAuthDialog = (type: string) => {
   dialogCheckBox.value = type == "signup" ? true : false;
 };
+
+const setSignInForm=(from:any)=>{
+  signInForm.value.emailAddress=from.emailAddress
+  signInForm.value.password=from.password
+}
 
 watch(dialogCheckBox, (value) => {
   let type = value ? "signup" : "signin";
@@ -70,9 +79,10 @@ onMounted(() => {
       <MSignUp
         v-if="dialogCheckBox"
         @switchAuthDialog="switchAuthDialog"
+        @setSignInForm="setSignInForm"
         :signUpDialogCheck="signUpDialogCheck"
       />
-      <MSignIn v-else />
+      <MSignIn v-else  :signInForm="signInForm"/>
     </div>
     <v-btn class="m-close-btn" icon="true" width="30" height="30" @click="closeDialog">
       <img src="@/assets/public/svg/icon_public_10.svg" />

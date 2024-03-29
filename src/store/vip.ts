@@ -156,6 +156,9 @@ export const vipStore = defineStore({
     },
     setVipSignIn(vipSignIn: Vip.VipSignInData) {
       this.vipSignIn = vipSignIn;
+      // if(this.vipSignIn.signin_day===0&&this.vipSignIn.vip_level===0){
+
+      // }
     },
     setLevelUpDialogVisible(levelUpDialogVisible: boolean) {
       this.levelUpDialogVisible = levelUpDialogVisible;
