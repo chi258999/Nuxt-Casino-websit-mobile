@@ -13,6 +13,7 @@ import { useDisplay } from 'vuetify';
 import { ElNotification } from 'element-plus'
 import { storeToRefs } from 'pinia';
 import ParticipatingDialog from "@/components/cash/deposit/ParticipatingDialog.vue";
+import { toFormatNum } from '@/utils/numFormat';
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -410,7 +411,7 @@ const overlayScrimShow = computed(() => {
           ]"
           @click="handleDepositAmount(depositAmountItem)"
         >
-          {{ platformCurrency }} {{ depositAmountItem }}
+          {{ platformCurrency }} {{ toFormatNum(depositAmountItem) }}
           <div class="deposit-amount-area" v-if="!bonusCheck"></div>
           <div class="deposit-amount-rate-text" v-if="!bonusCheck">{{ depositRate }}</div>
         </v-btn>
