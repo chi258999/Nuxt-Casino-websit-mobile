@@ -18,13 +18,31 @@ export function toThousandFilter(num: string | number): string {
  */
 export function keepNDecimalPlaces(num: string | number, place: number = 2): string {
   const numStr: string = typeof num === 'string' ? num : (+num || 0).toString();
-  if (place! < 1) { // 使用非空断言排除 null 的可能性
+  if (place < 0) {
     return numStr;
-  } else if (place.toString().indexOf('.') !== -1) {
-    place = parseInt(place.toString().split('.')[0]);
   }
-  const result = new RegExp(`^\\-?\\d+(?:\\.\\d{1,${place}})?`).exec(numStr);
-  return result ? result[0] : numStr; // 检查是否有匹配结果，避免访问 null
+
+  let result = '';
+  const decimalIndex = numStr.indexOf('.');
+  
+  if (decimalIndex === -1) {
+    // 如果没有小数点，则直接在末尾添加两个零
+    result = numStr + '.00';
+  } else {
+    const decimalPart = numStr.substring(decimalIndex + 1);
+    if (decimalPart.length === 1) {
+      // 如果小数点后只有一位，则在末尾添加一个零
+      result = numStr + '0';
+    } else if (decimalPart.length === 2) {
+      // 如果小数点后有两位，则直接返回原始数字
+      result = numStr;
+    } else {
+      // 如果小数点后超过两位，则截取两位小数
+      result = numStr.substring(0, decimalIndex + 3);
+    }
+  }
+  
+  return result;
 }
 
 /**
