@@ -3,6 +3,7 @@ import { ref, computed,onMounted,watchEffect,onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { vipStore } from "@/store/vip";
 import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 import { appBarStore } from "@/store/appBar";
 import { useTimer } from "vue-timer-hook";
 // 获取平台货币
@@ -13,6 +14,7 @@ const platformCurrency = computed(() => {
 });
 
 const { t } = useI18n();
+const router = useRouter();
 const emit = defineEmits<{ (e: "closeGetBonusDialog"): void }>();
 const { setDepositWithdrawToggle } = appBarStore();
 const { setDepositDialogToggle } = appBarStore();
@@ -34,6 +36,12 @@ const depositDialogShow = () => {
   setDepositDialogToggle(true);
   setCashDialogToggle(true);
 };
+
+// 点击图片调整活动详情页
+const jumpActivityDetails=()=>{
+  router.push({name: "Promo_Detail",query:{id:'2'}})
+  emit("closeGetBonusDialog");
+}
 
 onMounted(()=>{
   if (timerValue.value == 0) {
@@ -131,6 +139,7 @@ onUnmounted(() => {
       width="320"
       height="123"
       class="m-get-bonus-dialog-img-register mx-3 mt-2"
+      @click="jumpActivityDetails"
     />
     <div class="m-get-bonus-dialog-bottom  mx-3">
       <div class="bottom-text-container">
