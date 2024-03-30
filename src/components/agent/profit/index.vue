@@ -37,8 +37,9 @@ const mobileWidth = computed(() => {
     return width.value;
 });
 
-const handleSummaryTab = (tabText: string) => {
+const handleSummaryTab = async(tabText: string) => {
     summaryTabText.value = tabText;
+    await dispatchStatisticsList();
     switch (tabText) {
         case "today":
             selectedItem.value = statisticsItem.value.today_profit
