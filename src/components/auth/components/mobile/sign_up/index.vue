@@ -25,6 +25,7 @@ import AdjustClass from "@/utils/adjust";
 import { googleTokenLogin } from "vue3-google-login";
 import EventToken from "@/constants/EventToken";
 import { loginWithSocialMedia, loginType } from "@/plugins/third-party-login";
+import { ThirdPartyWayEnum } from '@/enums/userEnum'
 
 const MSignup = defineComponent({
   components: {
@@ -60,8 +61,16 @@ const MSignup = defineComponent({
       dialog: true,
       isAgreed: true,
       socialIconList: [
-        new URL("@/assets/public/svg/icon_public_28.svg", import.meta.url).href,
-        new URL("@/assets/public/svg/icon_public_29.svg", import.meta.url).href,
+        {
+          url: new URL("@/assets/public/svg/icon_public_28.svg", import.meta.url).href,
+          value: ThirdPartyWayEnum.FACEBOOK_LOGIN
+        },
+        {
+          url: new URL("@/assets/public/svg/icon_public_29.svg", import.meta.url).href,
+          value: ThirdPartyWayEnum.GOOGLE_LOGIN
+        },
+        // new URL("@/assets/public/svg/icon_public_28.svg", import.meta.url).href,
+        // new URL("@/assets/public/svg/icon_public_29.svg", import.meta.url).href,
         // new URL("@/assets/public/svg/icon_public_30.svg", import.meta.url).href,
         // new URL("@/assets/public/svg/icon_public_31.svg", import.meta.url).href,
       ],
@@ -439,10 +448,10 @@ const MSignup = defineComponent({
     };
 
     // 一键注册
-    const onSignInSuccessGoogle = async (index: number) => {
-      await loginWithSocialMedia(index, 'register');
+    const onSignInSuccessGoogle = async (value: string) => {
+      await loginWithSocialMedia(value, 'register');
       await registerSuccess();
-      loginType(index);
+      loginType(value);
     };
 
     return {
@@ -640,9 +649,9 @@ export default MSignup;
                 icon=""
                 height="36px"
                 width="36px"
-                @click="onSignInSuccessGoogle(index)"
+                @click="onSignInSuccessGoogle(item.value)"
               >
-                <img :src="item" width="36" />
+                <img :src="item.url" width="36" />
               </v-btn>
             </v-sheet>
           </div>
