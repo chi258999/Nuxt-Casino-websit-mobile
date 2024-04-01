@@ -58,6 +58,8 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
  * @param type 
  */
 const loginOrRegister = async (token: string, value: string, type: string) => {
+  console.log(value, type, 'loginOrRegister');
+
     let val = 1;
     if (value === ThirdPartyWayEnum.FACEBOOK_LOGIN) {
         val = 2;
@@ -122,7 +124,10 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
       globalWindow.FB.getLoginStatus((response: any) => {
         if (response.status !== "connected") {
           globalWindow.FB.login((res: any) => {
+            console.log(res, 'FB.login');
+            
             (window as any).FB.api("/me?fields=email,name", async (response: any) => {
+                console.log(response, 'FB.api');
                 await loginOrRegister(res.access_token, value, type);
                 resolve(res);
               });
