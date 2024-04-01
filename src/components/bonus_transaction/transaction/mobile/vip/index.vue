@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted, toRefs } from "vue";
+import { ref, computed, watch, onMounted, toRefs, nextTick } from "vue";
 import Pagination from "@/components/global/pagination/index.vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
@@ -24,6 +24,8 @@ enum History {
   monthly = 'vipMonthlyHistory',
   login = 'vipSigninHistory',
 }
+
+const emit = defineEmits(['inited'])
 
 const platformCurrency = computed(() => {
   const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
@@ -297,6 +299,9 @@ onMounted(async () => {
     start_time: startTime.value,
   });
   paginationLength.value = vipRebateHistory.value.total
+
+  // 初始化完成
+  emit('inited')
 });
 // 计算页数
 // function getTotalPages(total:number, pageSize: number) {
