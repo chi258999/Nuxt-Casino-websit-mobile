@@ -9,7 +9,7 @@ import { onMounted } from "vue";
 import { onActivated } from "vue";
 import { getCurrentInstance } from "vue";
 import { defineAsyncComponent } from "vue";
-import { RouteLocationNormalized, RouteLocationNormalizedLoaded } from 'vue-router'
+import { RouteLocationNormalized, RouteLocationNormalizedLoaded, onBeforeRouteLeave } from 'vue-router'
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 // import GameProviders from "@/components/global/game_provider/index.vue";
@@ -1223,9 +1223,24 @@ const Dashboard = defineComponent({
 
       AdjustClass.getInstance(isMobile).adjustTrackEvent({ key: "PAGE_VIEW", value: "home", params: "" });
 
-      context.emit('inited')
+      // context.emit('inited')
     });
 
+    // 跳转条款， 缓存home页面，返回到跳转前的位置
+    const placeScroll = ref()
+    onBeforeRouteLeave((to, from, next) => {
+      //在路由跳转之前，对当前浏览位置进行保存
+      placeScroll.value = document.documentElement.scrollTop;
+      next();
+    });
+    //组件激活
+    onActivated(() => {
+      if (placeScroll.value != null && placeScroll.value > 0) {
+        //组件激活后进行浏览位置的赋值
+        document.documentElement.scrollTop = placeScroll.value;
+        document.body.scrollTop = placeScroll.value;
+      }
+    });
     return {
       t,
       ...toRefs(state),

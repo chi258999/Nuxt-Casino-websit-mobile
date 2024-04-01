@@ -9,6 +9,9 @@ const routes = [
         path: '',
         name: 'Dashboard',
         component: () => import('@/views/home/index.vue'),
+        meta: {
+          keepAlive: true
+        }
       },
     ],
   },
