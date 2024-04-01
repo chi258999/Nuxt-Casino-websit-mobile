@@ -202,6 +202,7 @@ onMounted(async () => {
           <div
             class="text-700-10 text-black text-center mt-2"
             @click="inviteUrlCopy(inviteItem.web_invite_url)"
+            style="line-height: 10px;"
           >
             {{ t("agent.text_10") }}
           </div>

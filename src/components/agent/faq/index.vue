@@ -112,7 +112,7 @@ onMounted(async() => {
   // padding-bottom: 40px;
   // overflow: hidden;
   .content {
-    padding-bottom: 150px;
+    padding-bottom: 80px;
   }
 }
 .m-agent-faq-card {
