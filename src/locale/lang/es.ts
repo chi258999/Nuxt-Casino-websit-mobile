@@ -79,7 +79,7 @@ export const lang: langType = {
       "username": "Nombre de usuario",
       "validation": {
         "username": {
-          "title": "Este es el nombre que otros verán en HOY777.COM",
+          "title": "Este es el nombre que otros verán en Hoy777.com",
           "items": {
             "0": "2-20 caracteres de longitud",
             "1": "El apodo no debe ser como tu correo electrónico"
@@ -356,7 +356,7 @@ export const lang: langType = {
       "text_118": "7.2. You will be notified that we will start charging you the fees on the eleventh month of inactivity and you will always have the option to log in and withdraw your funds.",
       "text_119": "7.3. The Inactive Account Fee will be withdrawn from your Account on a monthly basis to the extent that your Account remains in credit and only for the period during which there remains no Account Activity after the initial twelve month period has passed. If the Inactive Account Fee is due to be withdrawn from your Account and the balance of your Account is less than €5 (or equivalent currency), the Inactive Account Fee shall comprise the remaining funds in your Account.",
       "text_120": "8. Deposit of Funds",
-      "text_121": "8.1. Fees and charges may apply to customer deposits and withdrawals, which can be found on the Website. In most cases we absorb transaction fees for deposits to your HOY777.COM Account. You are responsible for your own bank charges that you may incur due to depositing funds with us.",
+      "text_121": "8.1. Fees and charges may apply to customer deposits and withdrawals, which can be found on the Website. In most cases we absorb transaction fees for deposits to your  Account. You are responsible for your own bank charges that you may incur due to depositing funds with us.",
       "text_122": "8.2. Company is not a financial institution and uses a third party electronic payment processor to process credit and debit card deposits; they are not processed directly by us. If you deposit funds by either a credit card or a debit card, your Account will only be credited if we receive an approval and authorization code from the payment issuing institution. If your card issuer gives no such authorisation, your Account will not be credited with those funds.",
       "text_123": "8.3. You agree to fully pay any and all payments and charges due to us or to payment providers in connection with your use of the Service. You further agree not to make any charge-backs or renounce or cancel or otherwise reverse any of your deposits, and in any such event you will refund and compensate us for such unpaid deposits including any expenses incurred by us in the process of collecting your deposit, and you agree that any winnings from wagers utilizing those charged back funds will be forfeited. You acknowledge and agree that your player account is not a bank account and is therefore not guaranteed, insured or otherwise protected by any deposit or banking insurance system or by any other similar insurance system of any other jurisdiction, including but not limited to your local jurisdiction. Furthermore, the player account does not bear interest on any of the funds held in it.",
       "text_124": "8.4. If you decide to accept any of our promotional or bonus offers by entering a bonus code during deposit, you agree to the Terms of Bonuses and terms of each specific bonus.",
@@ -441,7 +441,7 @@ export const lang: langType = {
       "text_204": "13.2. All communications and notices to be given under these Terms by us to you shall, unless otherwise specified in these Terms, be either posted on the Website and/or sent to ",
       "text_205": "the Registered Email Address we hold on our system for the relevant Customer. The method of such communication shall be in our sole and exclusive discretion.",
       "text_206": "13.3. All communications and notices to be given under these Terms by either you or us shall be in writing in the English language and must be given to and from the Registered Email Address in your Account.",
-      "text_207": "13.4. From time to time, we may contact you by email for the purpose of offering you information about betting, unique promotional offerings, and other information from HOY777.COM. You agree to receive such emails when you agree to these Terms when registering at the Website. You can choose to opt out of receiving such promotional offerings from us at any time by submitting a request to the Customer Support.",
+      "text_207": "13.4. From time to time, we may contact you by email for the purpose of offering you information about betting, unique promotional offerings, and other information from Hoy777.com. You agree to receive such emails when you agree to these Terms when registering at the Website. You can choose to opt out of receiving such promotional offerings from us at any time by submitting a request to the Customer Support.",
       "text_208": "14. Matters Beyond Our Control",
       "text_209": "We cannot be held liable for any failure or delay in providing the Service due to an event of Force Majeure which could reasonably be considered to be outside our control despite our execution of reasonable preventative measures such as: an act of God; trade or labour dispute; power cut; act, failure or omission of any government or authority; obstruction or failure of telecommunication services; or any other delay or failure caused by a third party, and we will not be liable for any resulting loss or damage that you may suffer. In such an event, we reserve the right to cancel or suspend the Service without incurring any liability.",
       "text_210": "15. Liability",
@@ -452,7 +452,7 @@ export const lang: langType = {
       "text_215": "16.1. If we suspect that you are or receive notification that you are currently under 18 years or were under 18 years (or below the age of majority as stipulated in the laws of the jurisdiction applicable to you) when you placed any bets through the Service your Account will be suspended (locked) to prevent you placing any further bets or making any withdrawals from your Account. We will then investigate the matter, including whether you have been betting as an agent for, or otherwise on behalf, of a person under 18 years (or below the age of majority as stipulated in the laws of the jurisdiction applicable to you). If having found that you: (a) are currently; (b) were under 18 years or below the majority age which applies to you at the relevant time; or (c) have been betting as an agent for or at the behest of a person under 18 years or below the majority age which applies:",
       "text_216": "all winnings currently or due to be credited to your Account will be retained;",
       "text_217": "all winnings gained from betting through the Service whilst under age must be paid to us on demand (if you fail to comply with this  provision we will seek to recover all costs associated with recovery of such sums); and/or",
-      "text_218": "any monies deposited in your Account which are not winnings will be returned to you OR retained until you turn 18 years old at our sole discretion. We reserve the right to deduct payment transaction fees from the amount to return, including transaction fees for deposits to your HOY777.COM account which we covered.",
+      "text_218": "any monies deposited in your Account which are not winnings will be returned to you OR retained until you turn 18 years old at our sole discretion. We reserve the right to deduct payment transaction fees from the amount to return, including transaction fees for deposits to your Hoy777.com account which we covered.",
       "text_219": "16.2. This condition also applies to you if you are over the age of 18 years but you are placing your bets within a jurisdiction which specifies a higher age than 18 years for legal betting and you are below that legal minimum age in that jurisdiction.",
       "text_220": "16.3. In the event we suspect you are in breach of the provisions of this Clause or are attempting to rely on them for a fraudulent purpose, we reserve the right to take any action necessary in order to investigate the matter, including informing the relevant law enforcement agencies.",
       "text_221": "17. Fraud",
@@ -515,13 +515,13 @@ export const lang: langType = {
       "text_278": "21.11.6. Every user has the right to abandon the bonuses by making the request to Website customer support in order to zero the bonus balance.",
       "text_279": "21.12. Free Spins With free spins, you get to play free on a game on the Website with the same chance of winning as when you play with your real money. Winnings on free spins are converted to bonus money or real money. When converted to bonus money you will need to wager the bonus money 35 times before it is transferred to your cash balance after which it can be withdrawn.",
       "text_280": "22. Complaints",
-      "text_281": "22.1. If you have a complaint, you can email the Website customer support at support@HOY777.COM.",
+      "text_281": "22.1. If you have a complaint, you can email the Website customer support at support@Hoy777.com.",
       "text_283": "22.2. Pistis Trade N.V. will use best efforts to resolve a reported matter promptly.",
-      "text_284": "22.3. If you have a query with regard to any transaction you may contact Pistis Trade N.V. at support@HOY777.COM with details of the query. We will review any queried or disputed transactions. Our judgment is final.",
+      "text_284": "22.3. If you have a query with regard to any transaction you may contact Pistis Trade N.V. at support@Hoy777.com with details of the query. We will review any queried or disputed transactions. Our judgment is final.",
       "text_285": "22.4. NOTWITHSTANDING THE FOREGOING, WE TAKE NO LIABILITY WHATSOEVER TO YOU OR TO ANY THIRD PARTY WHEN RESPONDING TO ANY COMPLAINT THAT WE RECEIVED OR TOOK ACTION IN CONNECTION THEREWITH.",
       "text_286": "23. Intellectual Property",
       "text_287": "23.1. We are the sole owners of the trademark Pistis Trade N.V. and the Pistis Trade N.V. logo. Any unauthorized use of the Pistis Trade N.V. trademark and the Pistis Trade N.V. logo may result in prosecution.",
-      "text_288": "23.2. HOY777.COM is the uniform resource locator of the Website operated by Pistis Trade N.V. and no unauthorized use may be made of this URL on another website or digital platform without our prior written consent.",
+      "text_288": "23.2. Hoy777.com is the uniform resource locator of the Website operated by Pistis Trade N.V. and no unauthorized use may be made of this URL on another website or digital platform without our prior written consent.",
       "text_289": "23.3. Pistis Trade N.V. is the owner or the rightful licensee of the rights to the technology, software and business systems used within this Website.",
       "text_290": "23.4. The contents and structure of the Pistis Trade N.V. ́s Website pages belong to Pistis Trade N.V., all rights reserved. The copyright in this Website including all text, graphics, code, files, and links belongs to Pistis Trade N.V. and the site may not be reproduced, transmitted or stored in whole or in part without our written consent. Your registration and use of our system do therefore not confer any rights whatsoever to the intellectual property contained in our system.",
       "text_291": "23.5. Links to the Website and any of the pages therein may not be included in any other website without the prior written consent of Pistis Trade N.V..",
@@ -654,13 +654,13 @@ export const lang: langType = {
       "text_13": "2. Controller details",
       "text_14": "References in this document to “us”, “our”, “we” or “HOY777” are references to the following data controllers:Pistis Trade N.V. , a company registered in accordance with Curaçao Law, registration No. 162576 Address: Zuikertuintjeweg Z/N (Zuikertuin Tower), Curacao.",
       "text_15": "Pistis Trade N.V. is committed to protecting your personal information. This Privacy Policy lets you know what information we collect when you use our services, why we collect this information and how we use the collected information.",
-      "text_16": "Please note that this Privacy Policy will be agreed between you and HOY777.COM. (‘We’, ‘Us’ or ‘Our’, as appropriate). This Privacy Policy is an integrated part of HOY777. com's Terms and Conditions.",
-      "text_17": "The website HOY777.COM ('Casino', 'Website', 'Company', 'We', 'Us', 'Our') is owned and operated Pistis Trade N.V. , a company registered in accordance with Curaçao Law, registration No. 162576 Address: Zuikertuintjeweg Z/N (Zuikertuin Tower), Curacao. Pistis Trade N.V. is licensed and regulated by the Curacao Gaming Authority and operates under the License No. 365/JAZ issued to Gaming Services Provider, Authorized and Regulated by the Government of Curaçao.",
+      "text_16": "Please note that this Privacy Policy will be agreed between you and Hoy777.com. (‘We’, ‘Us’ or ‘Our’, as appropriate). This Privacy Policy is an integrated part of HOY777. com's Terms and Conditions.",
+      "text_17": "The website Hoy777.com ('Casino', 'Website', 'Company', 'We', 'Us', 'Our') is owned and operated Pistis Trade N.V. , a company registered in accordance with Curaçao Law, registration No. 162576 Address: Zuikertuintjeweg Z/N (Zuikertuin Tower), Curacao. Pistis Trade N.V. is licensed and regulated by the Curacao Gaming Authority and operates under the License No. 365/JAZ issued to Gaming Services Provider, Authorized and Regulated by the Government of Curaçao.",
       "text_18": "We may periodically make changes to this Privacy Policy and will notify you of these changes by posting the modified terms on our platforms. We recommend that you revisit this Privacy Policy regularly.",
       "text_19": "3. Contact Us",
       "text_20": "(including contact details for the Data Protection Officer (\"DPO\")",
       "text_21": "If you have any concerns about how Betfair handles your personal data, you can contact our HOY777 International Data Protection Officers (DPO) and Data Protection Teams at:",
-      "text_22": "dataprotection@HOY777.COM If you wish to exercise your Data Protection rights, please see the 'Your Rights' section below.",
+      "text_22": "dataprotection@Hoy777.com If you wish to exercise your Data Protection rights, please see the 'Your Rights' section below.",
       "text_23": "4. Information we collect",
       "text_24": "When you use our Services, we collect the following types of information:",
       "text_25": "Information you provide us:",
@@ -683,7 +683,7 @@ export const lang: langType = {
       "text_42": "Not all the personal information we hold about you will always come directly from you. We may also collect information from third parties such as our partners, service providers and publicly available websites (i.e. social media platforms), to comply with our legal and regulatory obligations, offer Services we think may be of interest, to help us maintain data accuracy and provide and enhance the Services.",
       "text_43": "If you log into one of our products through Facebook or Google, Facebook or Google provides us with some of your Facebook or Google user details. We may use these details for the purposes of our registration process and to market our products and Services to you on Facebook or Google.",
       "text_44": "5. MEANS OF COLLECTING AND PROCESSING DATA",
-      "text_45": "We may automatically collect certain data as discussed above and receive Personal Information about you where you provide such information through the services or other communications and interactions on the HOY777.COM site. We may also receive Personal Information from online vendors and service providers, and from customer lists lawfully acquired from third-party vendors. In addition, we may engage the services of third-party service providers to provide technical support to process your online transactions and maintain your account. We will have access to any information you provide to such vendors, service providers and third-party e-commerce services, and we will use the Personal Information as set out in this Privacy Policy below. This information will only be disclosed to third parties outside the company in accordance with this Privacy Policy. We take steps to ensure that our arrangements with third-party service providers and online vendors protect your privacy.",
+      "text_45": "We may automatically collect certain data as discussed above and receive Personal Information about you where you provide such information through the services or other communications and interactions on the Hoy777.com site. We may also receive Personal Information from online vendors and service providers, and from customer lists lawfully acquired from third-party vendors. In addition, we may engage the services of third-party service providers to provide technical support to process your online transactions and maintain your account. We will have access to any information you provide to such vendors, service providers and third-party e-commerce services, and we will use the Personal Information as set out in this Privacy Policy below. This information will only be disclosed to third parties outside the company in accordance with this Privacy Policy. We take steps to ensure that our arrangements with third-party service providers and online vendors protect your privacy.",
       "text_46": "4. INFORMATION USE",
       "text_47": "We use the Personal Information we collect from you to deliver our Services, to provide customer support, to undertake necessary security and identity verification checks, to process any of your online transactions, to assist your participation in third-party promotions, meet certain business requirements and for any other purpose related to the operation of the Services. As such, we may share your Personal Information with our carefully selected partners (including any other parties that have data sharing arrangements with the latter).",
       "text_48": "Your Personal Information may also be used by us to provide you with: (1) promotional offers and information regarding our products and services; and (2) promotional offers and information regarding the products and services of our partners, in order to enlarge the range of provided products and improve our customer service. From time-to-time, we may request information from you via surveys or contests. Participation in these surveys or contests is completely voluntary and you have the choice of whether or not to disclose such information. Information requested may include contact information (such as name, correspondence address and telephone number), and demographic information (such as zip or postal code or age). By accepting any contest prize or winnings from us, you consent to use of your name for advertising and promotional purposes without additional compensation, except where prohibited by law. Unless you have elected not to receive promotional information, we may also use your Personal Information (including your email address and phone number) to provide you with information regarding our products, services and promotions, including other gaming products (including online poker, casino, betting, backgammon) and products and services from third parties carefully selected by us.",
@@ -726,7 +726,7 @@ export const lang: langType = {
       "text_85": "17. Other websites",
       "text_86": "Our web site may contain links to other web sites, which are outside our control and are not covered by this Privacy Policy. If you access other sites using the links provided, the operators of these sites may collect information from you, which will be used by them in accordance with their privacy policy, which may differ from ours. We are not responsible. Solely the operators of these websites shall be responsible for their functionality or possible errors on the linked sites.",
       "text_87": "18. Data Deletion",
-      "text_88": "To request for your data to be deleted please contact support@HOY777.COM. Please note under GDPR Article 17(3)(b) legal requirements take precedence over the right to be forgotten. Therefore in order to comply with AML regulations, we will retain your data for five years. After this we will be able to process your request."
+      "text_88": "To request for your data to be deleted please contact support@Hoy777.com. Please note under GDPR Article 17(3)(b) legal requirements take precedence over the right to be forgotten. Therefore in order to comply with AML regulations, we will retain your data for five years. After this we will be able to process your request."
     },
     "responsible_gambling": {
       "text_1": "Gambling with responsibility",
@@ -797,8 +797,8 @@ export const lang: langType = {
       "text_12": "7. The maximum bet with bonus money is R$25 or the equivalent in your local currency. Any attempt to circumvent the R$25 maximum bet is strictly      prohibited.",
       "text_13": "8. Before any withdrawals are processed, your play will be reviewed for any irregular playing patterns. For fair gaming purposes, equal, zero or low margin bets, hedge betting, or high variance betting strategies shall all be considered irregular gaming for Bonus playthrough requirement purposes. Should HOY777 deem that irregular game play has occurred, it reserves the right to withhold any withdrawals and/or confiscate all winnings, and if applicable, after canceling bonuses, to reinstate the deposit on the player’s account, without necessarily informing the player.",
       "text_14": "9. R$25 is the maximum bet allowed when playing with bonus money. If, after gameplay is reviewed, HOY777 finds that a player is in breach of this condition, their bonus and winnings will be forfeit.",
-      "text_15": "10. HOY777.COM management reserves the right to void any bonuses and/or winnings obtained by fraudulent behavior as described above.",
-      "text_16": "11. HOY777.COM management has the right to update these rules at any time.",
+      "text_15": "10. Hoy777.com management reserves the right to void any bonuses and/or winnings obtained by fraudulent behavior as described above.",
+      "text_16": "11. Hoy777.com management has the right to update these rules at any time.",
       "text_17": "12. Your Real Money will be used before your Bonus Money when placing wagers on our games. Your wager may include both Real and Bonus Money if your wager exceeds your Real Money balance.",
       "text_18": "13. You can click on the “Bonus details” on the Bonus card and find a “Cancel Bonus” button in the bottom. In case you lose the Bonus balance and got it below the amount of 0.01 USD, your Bonus will be automatically canceled. The initiating of the withdrawal funds from the platform or sending a tip in the currency in which you have the active Bonus will lead to Bonus cancellation and the Bonus amount deduction.Transferring funds to the Vault in the currency in which you have the active Bonus will not be available until the Bonus is fully unlocked or canceled. Please note, that after the cancellation, the Bonus can’t be re-activated.",
       "text_19": "14. You can complete the wagering requirement only if selected by the casino In-house games and Slots. These games can be found in the “Bonus wagering” category or on the bonus card in the side panel. Note that your wager in In-house games will be counted with 0.2 multiplier. For Slots, the wager multiplier is always 1."
@@ -829,7 +829,7 @@ export const lang: langType = {
       "text_2": "Last updated: 10.10.2023",
       "text_3": "1. How does the referral program work?",
       "text_4": "Share your referral link and code with friends or promote your referral offer on social networks, forums, and other communication channels.",
-      "text_5": "Every new player who joins the HOY777.COM with your offer becomes your referral and will earn you commissions and bonus rewards for every casino and sports bet.",
+      "text_5": "Every new player who joins the Hoy777.com with your offer becomes your referral and will earn you commissions and bonus rewards for every casino and sports bet.",
       "text_6": "2. Invitation bonus",
       "text_7": "Invite friends who aren't on HOY777 yet. You will receive 12.00 {0} for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
       "text_8": "Invitation bonus Terms:",
@@ -838,7 +838,7 @@ export const lang: langType = {
       "text_11": "Your friend must have deposited at least 50.00 {0} in order for you to receive the invitation reward.",
       "text_12": "If a friend that you have invited is not from the same country as you, you will receive a default reward of €2.00 converted to your local currency at the fair exchange rate.",
       "text_13": "You cannot create new HOY777 accounts and sign up through your own link to receive the reward. The Refer A Friend program is made for our players to invite friends to the HOY777 platform. Any other use of this program is strictly prohibited.",
-      "text_14": "HOY777 may suspend or terminate the Refer A Friend program or the user's ability to participate in it at any time for any reason. We reserve the right to suspend accounts or remove Cash Balance if we notice any activity that we believe is abusive, fraudulent, or in violation of the HOY777.COM Terms of Service or Refer A Friend Terms. We reserve the right to review and investigate all referral activities and to suspend accounts or modify referrals in our sole discretion as deemed fair and appropriate.",
+      "text_14": "HOY777 may suspend or terminate the Refer A Friend program or the user's ability to participate in it at any time for any reason. We reserve the right to suspend accounts or remove Cash Balance if we notice any activity that we believe is abusive, fraudulent, or in violation of the Hoy777.com Terms of Service or Refer A Friend Terms. We reserve the right to review and investigate all referral activities and to suspend accounts or modify referrals in our sole discretion as deemed fair and appropriate.",
       "text_15": "3. How much do I earn per one referral?",
       "text_16": "In addition to the invite bonus, you can also get 30% commission for each referral's bet.",
       "text_17": "Commission rewards",
@@ -985,7 +985,7 @@ export const lang: langType = {
     "kyc_policy": {
       "text_1": "KYC Policy of Pistis Trade N.V.",
       "text_2": "Last updated: 10.10.2023",
-      "text_3": "When a user makes an aggregate lifetime total of deposits exceeding EUR 2000 or requests a withdrawal of any amount inside the https://HOY777.COM Platform, then it is compulsory for them to perform a full KYC process",
+      "text_3": "When a user makes an aggregate lifetime total of deposits exceeding EUR 2000 or requests a withdrawal of any amount inside the https://Hoy777.com Platform, then it is compulsory for them to perform a full KYC process",
       "text_4": "During this process, the user will have to input some basic details about themselves and then upload",
       "text_5": "1) A copy of Government Issued Photo ID (in some cases front and back depending on the doc)",
       "text_6": "2) A selfie of themselves holding the ID doc",
@@ -1102,14 +1102,14 @@ export const lang: langType = {
         "text_8": "Política KYC"
       },
       "footer_4": {
-        "text": "El sitio web HOY777.com ofrece juegos de aventuras propiedad directamente de Pistis Trade NV. Para convertirse en usuario de nuestro sitio web, debe tener 18 años de edad o más. No somos responsables de las violaciones de las leyes locales relacionadas con los juegos en línea. Juega responsablemente y diviértete en HOY777.COM."
+        "text": "El sitio web HOY777.com ofrece juegos de aventuras propiedad directamente de Pistis Trade NV. Para convertirse en usuario de nuestro sitio web, debe tener 18 años de edad o más. No somos responsables de las violaciones de las leyes locales relacionadas con los juegos en línea. Juega responsablemente y diviértete en Hoy777.com."
       },
       "logo": {
-        "text_1": "HOY777.COM es operado por Pistis Trade NV, número de registro de empresa 162576, con domicilio social en Zuikertuintjeweg Z/N (Zuikertuin Tower), Curazao, con licencia y autorización del Gobierno de Curazao y opera bajo la Licencia maestra de proveedor de servicios de juego, NV # Número de licencia 365/JAZ: GLH-OCCHKTWxxxxxxxxxx.",
-        "text_2": "El juego puede ser adictivo. Por favor, juega responsablemente. HOY777.COM sólo acepta clientes mayores de 18 años."
+        "text_1": "Hoy777.com es operado por Pistis Trade NV, número de registro de empresa 162576, con domicilio social en Zuikertuintjeweg Z/N (Zuikertuin Tower), Curazao, con licencia y autorización del Gobierno de Curazao y opera bajo la Licencia maestra de proveedor de servicios de juego, NV # Número de licencia 365/JAZ: GLH-OCCHKTWxxxxxxxxxx.",
+        "text_2": "El juego puede ser adictivo. Por favor, juega responsablemente. Hoy777.com sólo acepta clientes mayores de 18 años."
       },
       "footer_6": {
-        "text": "2023 HOY777.COM Todos los derechos reservados."
+        "text": "2023 Hoy777.com Todos los derechos reservados."
       }
     }
   },
@@ -1358,7 +1358,7 @@ export const lang: langType = {
     "text_4": "Bono",
     "text_5": "Confiscado",
     "dialog": {
-      "title_text": "Exposición HOY777.COM",
+      "title_text": "Exposición Hoy777.com",
       "content_text_1": "¿Estás seguro de que deseas eliminar esta tarea?",
       "determine_btn_text": "Decidir",
       "cancel_btn_text": "Cancelar"
@@ -1453,7 +1453,7 @@ export const lang: langType = {
       "minimum_duration_text": "Estancia mínima: 1 día",
       "confirm_text": "Confirmar",
       "dialog": {
-        "title_text": "Exposición HOY777.COM",
+        "title_text": "Exposición Hoy777.com",
         "content_text_1": "¿Estás seguro de que quieres congelar tu cuenta?",
         "content_text_2": "¿días?",
         "determine_btn_text": "Decidir",
