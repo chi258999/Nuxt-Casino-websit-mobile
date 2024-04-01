@@ -546,7 +546,7 @@ onMounted(() => {
 
 // 监听路由页面 home 初始化时间
 const routeInited = () => {
-  scrollTo()
+  // scrollTo()
 }
 </script>
 
@@ -855,8 +855,22 @@ const routeInited = () => {
 
     <!------------------------------ Main Page ------------------------------------------->
 
-    <router-view @inited="routeInited" />
-
+    <router-view v-slot="{ Component, route }">
+      <!-- 缓存路由 -->
+      <keep-alive>
+        <component
+          v-if="route.meta.keepAlive"
+          :is="Component"
+          :key="route.path"
+        />
+      </keep-alive>
+      <!-- 正常路由 -->
+      <component
+        v-if="!route.meta.keepAlive"
+        :is="Component"
+        :key="route.path"
+      />
+    </router-view>
     <!-- back top -->
 
     <el-backtop :right="16" :bottom="70">
