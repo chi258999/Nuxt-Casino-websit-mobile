@@ -276,7 +276,7 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-2 relative"
-            :class="vipSignIn.signin_day === 0&&vipSignIn.is_signin===1? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 0&&vipSignIn.is_signin!==2? 'select_bg' : ''"
             v-ripple.center
             v-else
             @click="handleLoginBonus(0, vipSignIn.award[0])"
@@ -318,7 +318,7 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-2 relative"
-            :class="vipSignIn.signin_day === 1&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 1&&vipSignIn.is_signin!==2 ? 'select_bg' : ''"
             v-ripple.center
             @click="handleLoginBonus(1, vipSignIn.award[1])"
             v-else
@@ -360,7 +360,7 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-3 relative"
-            :class="vipSignIn.signin_day === 2&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 2&&vipSignIn.is_signin!==2 ? 'select_bg' : ''"
             v-ripple.center
             @click="handleLoginBonus(2, vipSignIn.award[2])"
             v-else
@@ -404,7 +404,7 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
-            :class="vipSignIn.signin_day === 3&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 3&&vipSignIn.is_signin!==2 ? 'select_bg' : ''"
             v-ripple.center
             @click="handleLoginBonus(3, vipSignIn.award[3])"
             v-else
@@ -446,7 +446,7 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
-            :class="vipSignIn.signin_day === 4&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 4&&vipSignIn.is_signin!==2 ? 'select_bg' : ''"
             v-ripple.center
             @click="handleLoginBonus(4, vipSignIn.award[4] )"
             v-else
@@ -488,7 +488,7 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
-            :class="vipSignIn.signin_day === 5&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 5&&vipSignIn.is_signin!==2 ? 'select_bg' : ''"
             v-ripple.center
             @click="handleLoginBonus(5, vipSignIn.award[5])"
             v-else
@@ -532,7 +532,7 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
-            :class="vipSignIn.signin_day === 6&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day === 6&&vipSignIn.is_signin!==2 ? 'select_bg' : ''"
             v-ripple.center
             @click="handleLoginBonus(6, vipSignIn.award[6])"
             v-else
@@ -576,7 +576,7 @@ onMounted(async () => {
           </div>
           <div
             class="m-login-bonus-card-bg-5 relative"
-            :class="vipSignIn.signin_day >= 7&&vipSignIn.is_signin===1 ? 'select_bg' : ''"
+            :class="vipSignIn.signin_day >= 7&&vipSignIn.is_signin!==2 ? 'select_bg' : ''"
             v-ripple.center
             @click="
               handleLoginBonus(
