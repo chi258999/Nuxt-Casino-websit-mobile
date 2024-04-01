@@ -101,6 +101,7 @@ const pageSize = ref<number>(9);
 const pageNum = ref<number>(1);
 const vipTimesHistoryIndex = ref<number>(1);
 const selectedTab = ref<any>(BtTabEnum.transactions);
+const loading = ref(false)
 
 const transactionTab = computed(() => {
   const { getTransactionTab } = storeToRefs(bonusTransactionStore());
@@ -119,15 +120,18 @@ const touchless = () => {
   return false;
 };
 
+// 交易记录tab栏切换
 const transactionTabToggle = async (item: string) => {
   selectedTab.value = item;
+  loading.value = true
   switch(selectedTab.value) {
     case BtTabEnum.transactions :
-      setTransactionHistoryItemEmpty()
-       await dispatchTransactionHistory({
-        page_size: pageSize.value,
-        start_time: Math.ceil(moment().valueOf() / 1000),
-      });
+        setTransactionHistoryItemEmpty()
+        await dispatchTransactionHistory({
+          page_size: pageSize.value,
+          start_time: Math.ceil(moment().valueOf() / 1000),
+        });
+        inited()
       break;
     case BtTabEnum.deposit :
         setDepositHistoryIteEmpty()
@@ -135,16 +139,22 @@ const transactionTabToggle = async (item: string) => {
           page_size: pageSize.value,
           start_time: Math.ceil(moment().valueOf() / 1000),
         });
+        inited()
       break;
     case BtTabEnum.withdrawal :
-      setWithdrawHistoryItemEmpty()
-      await dispatchWithdrawalHistory({
-        page_size: pageSize.value,
-        start_time: Math.ceil(moment().valueOf() / 1000),
-      });
+        setWithdrawHistoryItemEmpty()
+        await dispatchWithdrawalHistory({
+          page_size: pageSize.value,
+          start_time: Math.ceil(moment().valueOf() / 1000),
+        });
+        inited()
       break;
   }
 };
+
+const inited = () => {
+  loading.value = false
+}
 
 watch(selectedTab, async (value) => {
   // if (value == t("transaction.tab.withdrawal")) {
@@ -230,7 +240,16 @@ onMounted(async () => {
       </v-btn>
     </v-slide-group-item>
   </v-slide-group>
-  <v-window v-model="selectedTab" :disable-swipe="true" :touch="touchless()">
+
+  <!-- 用于tab栏切换时显示loading, 不能用v-if，因为VIP是在里面请求的 -->
+  <div class="m-home-loading" v-show="loading">
+    <div class="loading-body">
+      <div class="dot-0"></div>
+      <div class="dot-1"></div>
+      <div class="dot-0"></div>
+    </div>
+  </div>
+  <v-window v-show="!loading" v-model="selectedTab" :disable-swipe="true" :touch="touchless()">
     <!-- <v-window-item
       :value="t('transaction.tab.game_history')"
       style="margin-left: 10px; margin-right: 10px"
@@ -238,6 +257,7 @@ onMounted(async () => {
       <GameHistory v-if="mobileWidth > 600" />
       <MGameHistory v-else />
     </v-window-item> -->
+    <!--  -->
     <v-window-item
       :value="BtTabEnum.transactions"
       style="margin-left: 10px; margin-right: 10px"
@@ -251,6 +271,8 @@ onMounted(async () => {
         />
       </div>
     </v-window-item>
+
+    <!-- 存款 -->
     <v-window-item
       :value="BtTabEnum.deposit"
       style="margin-left: 10px; margin-right: 10px"
@@ -262,6 +284,8 @@ onMounted(async () => {
       </div>
 
     </v-window-item>
+
+    <!-- 取款 -->
     <v-window-item
       :value="BtTabEnum.withdrawal"
       style="margin-left: 10px; margin-right: 10px"
@@ -279,6 +303,8 @@ onMounted(async () => {
         />
       </div>
     </v-window-item>
+
+    <!-- VIP -->
     <v-window-item
       :value="BtTabEnum.vip"
       style="margin-left: 10px; margin-right: 10px"
@@ -294,6 +320,7 @@ onMounted(async () => {
           :vipRebateHistory="vipRebateHistory"
           :vipLevelRewardHistory="vipLevelRewardHistory"
           :vipTimesHistory="vipTimesHistory"
+          @inited="inited"
           v-else
         />
       </div>
