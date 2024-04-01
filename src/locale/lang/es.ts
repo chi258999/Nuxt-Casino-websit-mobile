@@ -1461,12 +1461,12 @@ export const lang: langType = {
     }
   },
   "refferal": {
-    "app_bar_title": "Los usuarios pueden ganar hasta $20 por depósito de invitado.",
+    "app_bar_title": "Cada usuario de recarga podrá obtener al menos $12 por cada invitación.",
     "earn_btn_text": "Ganar",
     "dialog": {
       "header": {
-        "tabs_text1":"Recomendar a un amigo",
-        "tabs_text2":"Promotion details and bonus withdrawal",
+        "tabs_text1": "Recomendar a un amigo",
+        "tabs_text2": "Promotion details and bonus withdrawal",
         "title_text": "Recomienda a un amigo y gana 25 MXN inmediatamente",
         "body_text": "Invita amigos y gana dinero.",
         "body_text_1": "usuarios ya han participado en la campaña Invita a Nuevos Usuarios y han ganado un total combinado de",
@@ -1612,8 +1612,8 @@ export const lang: langType = {
       "footer_text_5": "Upgrade to become a ",
       "footer_text_6": "VIP ",
       "footer_text_7": "and receive higher rewards!",
-      "footer_text_8": "Pasar página para ver más recompensas VIP",
-      "validation_text_1":"Usted ha recibido el bono de registro de hoy,Así que recuerda iniciar sesión mañana para recogerlo.Bonificación por un día consecutivo."
+      "footer_text_8": "Turn the page to see more VIP awards",
+      "validation_text_1": "You have already claimed today's sign-up bonus, so please remember to log in tomorrow to claim a new day's bonus consecutively."
     },
     "roulette_bonus": {
       "paid_text": "Bono de ruleta",
@@ -1685,52 +1685,51 @@ export const lang: langType = {
         "text_1": "Progreso",
         "text_2": "¡Felicitaciones por tu mejora de rango!"
       },
-      "black_iron": {},
       "bronze": {
         "week": "Recompensas semanales de nivel Bronce",
         "moon": "Recompensas mensuales de nivel Bronce",
         "cash": "Premio en efectivo de medalla de bronce para los niveles 1 ~ 24",
-        "mosaic": "Reembolso de código (2% ~ 2,4%)"
+        "mosaic": "Reembolso de código (0.2%)"
       },
       "silver": {
         "week": "Recompensas semanales de nivel Plata",
         "moon": "Recompensas mensuales de plata",
         "cash": "Premio en efectivo de plata de nivel 25 ~ 49",
-        "mosaic": "Reembolso de código (2,6%)"
+        "mosaic": "Reembolso de código (0.3%)"
       },
       "gold": {
         "week": "Recompensas semanales de nivel oro",
         "moon": "Recompensas mensuales de nivel oro",
-        "cash": "Recompensas en efectivo de oro para los niveles 50 ~ 75",
-        "mosaic": "Reembolso de código (2,8%)"
+        "cash": "Recompensas en efectivo de oro para los niveles 50 ~ 74",
+        "mosaic": "Reembolso de código (0.4%)"
       },
       "platinum": {
         "week": "Recompensas semanales de nivel Platino",
         "moon": "Recompensas mensuales de nivel Platino",
-        "cash": "Recompensas en efectivo de platino para los niveles 76 ~ 99",
-        "mosaic": "Reembolso de codificación (3,0%)",
-        "withdraw": "Descuento en la tarifa de retiro (1,5%), límite de retiro sin comisiones 5000"
+        "cash": "Recompensas en efectivo de platino para los niveles 75 ~ 99",
+        "mosaic": "Reembolso de codificación (0.5%)",
+        "withdraw": "Descuento en la tarifa de retiro (1.0%)"
       },
       "diamonds": {
         "week": "Recompensas semanales de diamantes",
         "moon": "Recompensas mensuales de nivel Diamante",
         "cash": "Premio en efectivo de diamantes de nivel 100 ~ 149",
-        "mosaic": "Reembolso de código (3,2% ~ 3,4%)",
-        "withdraw": "Descuento en la tarifa de retiro (1,5%), límite de retiro sin comisiones 10 000 ~ 25 000"
+        "mosaic": "Reembolso de código (0.6%)",
+        "withdraw": "Descuento en la tarifa de retiro (1.0%), "
       },
       "yellow_diamond": {
         "week": "Recompensas semanales del ranking Diamante Amarillo",
         "moon": "Recompensas mensuales de nivel diamante amarillo",
         "cash": "Premio en efectivo Diamante Amarillo Nivel 150~199",
-        "mosaic": "Reembolso de código (3,6% ~ 4,5%)",
-        "withdraw": "Descuento en la tarifa de retiro (1,0%), límite de retiro sin comisiones 40 000 ~ 60 000"
+        "mosaic": "Reembolso de código (0.7%)",
+        "withdraw": "Descuento en la tarifa de retiro (1.5%)"
       },
       "blue_diamond": {
         "week": "Recompensas semanales del ranking Diamante Azul",
         "moon": "Recompensas mensuales del nivel Diamante Azul",
         "cash": "Premio en efectivo de diamante azul para nivel 200 y superior",
-        "mosaic": "Reembolso de código (5,0%)",
-        "withdraw": "Descuento en la tarifa de retiro (1,0%), límite de retiro sin comisiones 80.000"
+        "mosaic": "Reembolso de código (0.8%)",
+        "withdraw": "Descuento en la tarifa de retiro (1.5%)"
       }
     }
   },
