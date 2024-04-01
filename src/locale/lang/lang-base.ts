@@ -882,6 +882,7 @@ export type langType = {
       text_23: string
       text_24: string
       text_25: string
+      text_25_1:string
       text_26: string
       text_27: string
       text_28: string
