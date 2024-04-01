@@ -24,6 +24,7 @@ import { useRoute } from "vue-router";
 import { gameStore } from "@/store/game";
 import { jwtDecode } from "jwt-decode";
 import { loginWithSocialMedia, loginType } from "@/plugins/third-party-login";
+import { ThirdPartyWayEnum } from '@/enums/userEnum'
 
 const Login = defineComponent({
   components: {
@@ -31,6 +32,11 @@ const Login = defineComponent({
     WarningIcon,
   },
   emits: ["close", "switch"],
+  props: {
+    signInForm: {
+      type: Object as any,
+    },
+  },
   setup(props, { emit }) {
     // translation
     const { t } = useI18n();
@@ -64,8 +70,14 @@ const Login = defineComponent({
         password: "",
       },
       socialIconList: [
-        new URL("@/assets/public/svg/icon_public_28.svg", import.meta.url).href,
-        new URL("@/assets/public/svg/icon_public_29.svg", import.meta.url).href,
+        {
+          url: new URL("@/assets/public/svg/icon_public_28.svg", import.meta.url).href,
+          value: ThirdPartyWayEnum.FACEBOOK_LOGIN
+        },
+        {
+          url: new URL("@/assets/public/svg/icon_public_29.svg", import.meta.url).href,
+          value: ThirdPartyWayEnum.GOOGLE_LOGIN
+        },
       ],
       isShowPassword: false,
       notificationShow: false,
@@ -192,10 +204,10 @@ const Login = defineComponent({
         password: state.formData.password,
       });
       await loginSuccess();
-      if(!localStorage.getItem("loginTag")){
-        localStorage.setItem("loginTag",'0');
+      if(!localStorage.getItem(userInfo.value.name)){
+        localStorage.setItem(userInfo.value.name,'0');
       }else{
-        localStorage.setItem("loginTag",'1');
+        localStorage.setItem(userInfo.value.name,'1');
       }
       state.loading = false;
     };
@@ -250,10 +262,10 @@ const Login = defineComponent({
     };
 
     // social login function
-    const handleSocialSigin = async (index: number) => {
-      await loginWithSocialMedia(index, 'login');
+    const handleSocialSigin = async (value: string) => {
+      await loginWithSocialMedia(value, 'login');
       await loginSuccess();
-      loginType(index);
+      loginType(value);
     };
 
     watch(
@@ -264,8 +276,13 @@ const Login = defineComponent({
       },
       { deep: true }
     );
-    
-    onMounted(() => {});
+
+    onMounted(() => {
+      if(props.signInForm.emailAddress){
+        state.formData.emailAddress=props.signInForm.emailAddress
+        state.formData.password=props.signInForm.password
+      }
+    });
 
     return {
       t,
@@ -301,6 +318,7 @@ export default Login;
       </div>
     </div>
 
+    <!-- S 登录 -->
     <template v-if="currentPage === PAGE_TYPE.LOGIN_FORM">
       <div class="relative mt-8">
         <v-text-field
@@ -313,6 +331,7 @@ export default Login;
           @input="handleEmailChange"
           :onfocus="handleEmailFocus"
         />
+        <!-- 邮箱自动补全 -->
         <div class="m-login-mail-card" :style="{ height: mailCardHeight + 'px' }">
           <v-list theme="dark" bg-color="#15161C">
             <v-list-item
@@ -414,15 +433,16 @@ export default Login;
                 icon=""
                 width="36px"
                 height="36px"
-                @click="handleSocialSigin(index)"
+                @click="handleSocialSigin(item.value)"
               >
-                <img :src="item" width="36" />
+                <img :src="item.url" width="36" />
               </v-btn>
             </v-sheet>
           </div>
         </v-col>
       </v-row>
     </template>
+    <!-- E 登录 -->
 
     <!-- Forgot password -->
 

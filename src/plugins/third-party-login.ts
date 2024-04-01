@@ -4,12 +4,14 @@ import { googleTokenLogin } from "vue3-google-login";
 import { authStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
 import AdjustClass from "@/utils/adjust";
+import { ThirdPartyWayEnum } from '@/enums/userEnum'
 
-let indexValue = 0;
+let indexValue = ''; // ThirdPartyWayEnum.GOOGLE_LOGIN FACEBOOK_LOGIN
 let typeValue = "";
 
 // 接受android傳遞的token
 (window as any).googleLogin = (token: string) => {
+    console.log(indexValue, typeValue);
     loginOrRegister(token, indexValue, typeValue);
 }
 
@@ -29,16 +31,16 @@ const userInfo = computed(() => {
  * @param index 0:facebook  1:google
  * @returns 
  */
-const loginWithSocialMedia = async (index: number, type: string): Promise<any> => {
+const loginWithSocialMedia = async (value: string, type: string): Promise<any> => {
   // 显示 loading 动画
   const loading = ElLoading.service({ lock: true });
   try {
     // 根据不同的登录类型执行相应的登录逻辑
-    switch (index) {
-      case 0:
-        return await loginWithFacebook(index, type);
-      case 1:
-        return await loginWithGoogle(index, type);
+    switch (value) {
+      case ThirdPartyWayEnum.FACEBOOK_LOGIN:
+        return await loginWithFacebook(value, type);
+      case ThirdPartyWayEnum.GOOGLE_LOGIN:
+        return await loginWithGoogle(value, type);
       default:
         throw new Error("Unsupported login type");
     }
@@ -55,21 +57,26 @@ const loginWithSocialMedia = async (index: number, type: string): Promise<any> =
  * 判断登录和注册
  * @param type 
  */
-const loginOrRegister = async (token: string, index: number, type: string) => {
+const loginOrRegister = async (token: string, value: string, type: string) => {
+  console.log(value, type, 'loginOrRegister');
+
     let val = 1;
-    if (index === 0) {
+    if (value === ThirdPartyWayEnum.FACEBOOK_LOGIN) {
         val = 2;
     }
-    if (index === 1) {
+    if (value === ThirdPartyWayEnum.GOOGLE_LOGIN) {
         val = 1;
     }
     let params = { 
         id_token: token,
         type: val,
     }
+    
     if (type === "login") {
+        // 登录
         await dispatchQuickLogin(params);
     } else {
+        // 注册
         await dispatchQuickRegister(params);
     }
 }
@@ -79,19 +86,22 @@ const startAndroid = (index: number, type: string) => {
 }
 
 // Google 登录逻辑封装
-const loginWithGoogle = (index: number, type: string): Promise<any> => {
+const loginWithGoogle = (value: string, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
         if (AdjustClass.getInstance().isMobileWebview) {
             // 啟動android原生登錄流程 
             (window as any)["AndroidWebView"].googleLogin();
-            indexValue = index;
+            indexValue = value;
             typeValue = type;
         } else {
             googleTokenLogin({
                 clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
             }).then(async (res: any) => {
-                await loginOrRegister(res.access_token, index, type);
+                console.log(res, 'googleTokenLogin-callback');
+                await loginOrRegister(res.access_token, value, type);
+                indexValue = value;
+                typeValue = type;
                 resolve(res);
             });
         }
@@ -102,7 +112,7 @@ const loginWithGoogle = (index: number, type: string): Promise<any> => {
 };
 
 // Facebook 登录逻辑封装
-const loginWithFacebook = (index: number, type: string): Promise<any> => {
+const loginWithFacebook = (value: string, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
       globalWindow.FB.init({
@@ -114,8 +124,11 @@ const loginWithFacebook = (index: number, type: string): Promise<any> => {
       globalWindow.FB.getLoginStatus((response: any) => {
         if (response.status !== "connected") {
           globalWindow.FB.login((res: any) => {
+            console.log(res, 'FB.login');
+            
             (window as any).FB.api("/me?fields=email,name", async (response: any) => {
-                await loginOrRegister(res.access_token, index, type);
+                console.log(response, 'FB.api');
+                await loginOrRegister(res.access_token, value, type);
                 resolve(res);
               });
           });
@@ -131,14 +144,14 @@ const loginWithFacebook = (index: number, type: string): Promise<any> => {
 
 /**
  * 登录方式
- * @param index 0:facebook  1:google
+ * @param value 根据枚举值来判断
  */
-const loginType = (index: number) => {
+const loginType = (value: string) => {
     let type = "";
-    if (index === 0) {
+    if (value === ThirdPartyWayEnum.FACEBOOK_LOGIN) {
         type = "FACEBOOK_LOGIN";
     }
-    if (index === 1) {
+    if (value === ThirdPartyWayEnum.GOOGLE_LOGIN) {
         type = "GOOGLE_LOGIN";
     }
     AdjustClass.getInstance().adjustTrackEvent({

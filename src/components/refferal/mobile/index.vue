@@ -363,6 +363,7 @@ onMounted(async () => {
   border-radius: 16px;
   height: 634px;
   overflow-y: auto;
+  margin-top: 16px;
   .refferal-header-tabs {
     display: flex;
     align-items: center;

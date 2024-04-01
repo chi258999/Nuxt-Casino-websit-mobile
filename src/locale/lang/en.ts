@@ -1476,7 +1476,7 @@ export const lang: langType = {
       header: {
         tabs_text1:"Invitation Link",
         tabs_text2:"Promotion Details & Bonus Withdrawal",
-        title_text: "Refer a friend and earn 20 BRL  immediately",
+        title_text: "Refer a friend and earn 20$  immediately",
         body_text: "Invite Friends, Earn Money",
         body_text_1: " users have already participated in the Invite New Users campaign and they have earned a combined total of ",
         body_text_2: "MXN in cash rewards on the",
@@ -1493,7 +1493,7 @@ export const lang: langType = {
     copy_success_text: "Copied to the clipboard.",
     description: {
       text_1: "Invite your friends",
-      text_2: "Invite friends who aren't on Blue.game yet. You will receive 20.00 BRL for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
+      text_2: "Invite friends who aren't on Blue.game yet. You will receive 20.00$ for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
       term_text: "Terms:",
       text_3: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centur ies, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
       back_btn_text: "Back"
