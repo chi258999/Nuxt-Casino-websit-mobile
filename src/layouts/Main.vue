@@ -678,7 +678,6 @@ const routeInited = () => {
         mobileVersion == 'sm' ? 'dialog-bottom-transition' : 'scale-transition'
       "
       :class="[mobileVersion == 'sm' ? 'mobile-auth-dialog-position' : '']"
-      @click:outside="authDialog = false"
       persistent
       style="z-index: 2147483646"
     >
