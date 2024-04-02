@@ -39,6 +39,9 @@ const { setRefferalDialogShow } = refferalStore();
 const vipButtonTipShow = ref(true);
 const router = useRouter();
 
+const toFormatNumFun = (val) => {
+    return toFormatNum(val)
+}
 // member information  会员信息
 const vipInfo = computed(() => {
     const { getVipInfo } = storeToRefs(vipStore());

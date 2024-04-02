@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, reactive, toRefs, computed, watch } from "vue";
+import { defineComponent, reactive, toRefs, computed, watch, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { authStore } from "@/store/auth";
 import { userStore } from "@/store/user";
@@ -197,7 +197,13 @@ const Login = defineComponent({
     };
 
     // methods
-    const handleLoginFormSubmit = async () => {
+    const handleLoginFormSubmit = async (event) => {
+      console.log(event, 'handleLoginFormSubmit');
+      // 不是回车键不触发
+      if(event.keyCode !== 13) return
+      //关闭手机软键盘
+      document.activeElement.blur();
+
       state.loading = true;
       await dispatchSignIn({
         uid: state.formData.emailAddress,
@@ -284,6 +290,7 @@ const Login = defineComponent({
       }
     });
 
+
     return {
       t,
       ...toRefs(state),
@@ -320,97 +327,101 @@ export default Login;
 
     <!-- S 登录 -->
     <template v-if="currentPage === PAGE_TYPE.LOGIN_FORM">
-      <div class="relative mt-8">
-        <v-text-field
-          :label="t('signup.formPage.emailAddress')"
-          class="form-textfield dark-textfield m-login-email mx-0"
-          variant="solo"
-          density="comfortable"
-          v-model="formData.emailAddress"
-          :onblur="handleEmailBlur"
-          @input="handleEmailChange"
-          :onfocus="handleEmailFocus"
-        />
-        <!-- 邮箱自动补全 -->
-        <div class="m-login-mail-card" :style="{ height: mailCardHeight + 'px' }">
-          <v-list theme="dark" bg-color="#15161C">
-            <v-list-item
-              class="text-600-12 white"
-              value="gmail"
-              @click="mergeEmail('@gmail.com')"
-            >
-              {{ emailPartName }}@gmail.com
-            </v-list-item>
-            <v-list-item
-              class="text-600-12 white"
-              value="hotmail"
-              @click="mergeEmail('@hotmail.com')"
-              >{{ emailPartName }}@hotmail.com</v-list-item
-            >
-            <v-list-item
-              class="text-600-12 white"
-              value="yahoo"
-              @click="mergeEmail('@yahoo.com')"
-              >{{ emailPartName }}@yahoo.com</v-list-item
-            >
-            <v-list-item
-              class="text-600-12 white"
-              value="icloud"
-              @click="mergeEmail('@icloud.com')"
-              >{{ emailPartName }}@icloud.com</v-list-item
-            >
-            <v-list-item
-              class="text-600-12 white"
-              value="outlook"
-              @click="mergeEmail('@outlook.com')"
-              >{{ emailPartName }}@outlook.com</v-list-item
-            >
-          </v-list>
-        </div>
-      </div>
-      <div class="mt-6 relative pa-0">
-        <v-text-field
-          :label="t('signup.formPage.password')"
-          class="form-textfield dark-textfield ma-0 m-login-password"
-          variant="solo"
-          density="comfortable"
-          :type="isShowPassword ? 'text' : 'password'"
-          v-model="formData.password"
-        />
-        <div v-if="isShowPassword" @click="showPassword" class="m-password-icon">
-          <img
-            src="@/assets/public/svg/icon_public_07.svg"
-            class="m-disable-password"
-            width="16"
+      <!-- 表单提交 -->
+      <form action="javascript:return true;" @submit.prevent>
+        <div class="relative mt-8">
+          <v-text-field
+            :label="t('signup.formPage.emailAddress')"
+            class="form-textfield dark-textfield m-login-email mx-0"
+            variant="solo"
+            density="comfortable"
+            v-model="formData.emailAddress"
+            :onblur="handleEmailBlur"
+            @input="handleEmailChange"
+            :onfocus="handleEmailFocus"
+            @keypress="handleLoginFormSubmit"
           />
+          <div class="m-login-mail-card" :style="{ height: mailCardHeight + 'px' }">
+            <v-list theme="dark" bg-color="#15161C">
+              <v-list-item
+                class="text-600-12 white"
+                value="gmail"
+                @click="mergeEmail('@gmail.com')"
+              >
+                {{ emailPartName }}@gmail.com
+              </v-list-item>
+              <v-list-item
+                class="text-600-12 white"
+                value="hotmail"
+                @click="mergeEmail('@hotmail.com')"
+                >{{ emailPartName }}@hotmail.com</v-list-item
+              >
+              <v-list-item
+                class="text-600-12 white"
+                value="yahoo"
+                @click="mergeEmail('@yahoo.com')"
+                >{{ emailPartName }}@yahoo.com</v-list-item
+              >
+              <v-list-item
+                class="text-600-12 white"
+                value="icloud"
+                @click="mergeEmail('@icloud.com')"
+                >{{ emailPartName }}@icloud.com</v-list-item
+              >
+              <v-list-item
+                class="text-600-12 white"
+                value="outlook"
+                @click="mergeEmail('@outlook.com')"
+                >{{ emailPartName }}@outlook.com</v-list-item
+              >
+            </v-list>
+          </div>
         </div>
-        <div v-else @click="showPassword" class="m-password-icon">
-          <img
-            src="@/assets/public/svg/icon_public_06.svg"
-            class="m-disable-password"
-            width="16"
+        <div class="mt-6 relative pa-0">
+          <v-text-field
+            :label="t('signup.formPage.password')"
+            class="form-textfield dark-textfield ma-0 m-login-password"
+            variant="solo"
+            density="comfortable"
+            :type="isShowPassword ? 'text' : 'password'"
+            v-model="formData.password"
+            @keypress="handleLoginFormSubmit"
           />
+          <div v-if="isShowPassword" @click="showPassword" class="m-password-icon">
+            <img
+              src="@/assets/public/svg/icon_public_07.svg"
+              class="m-disable-password"
+              width="16"
+            />
+          </div>
+          <div v-else @click="showPassword" class="m-password-icon">
+            <img
+              src="@/assets/public/svg/icon_public_06.svg"
+              class="m-disable-password"
+              width="16"
+            />
+          </div>
         </div>
-      </div>
-      <v-row class="mt-2">
-        <p
-          class="ml-9 login-forget-passwrod-text text-400-12"
-          @click="currentPage = PAGE_TYPE.FORGOT_PASSWORD"
-        >
-          {{ t("login.formPage.forgetPassword") }}
-        </p>
-      </v-row>
+        <v-row class="mt-2">
+          <p
+            class="ml-9 login-forget-passwrod-text text-400-12"
+            @click="currentPage = PAGE_TYPE.FORGOT_PASSWORD"
+          >
+            {{ t("login.formPage.forgetPassword") }}
+          </p>
+        </v-row>
+      </form>
       <v-row style="margin-top: 100px">
-        <v-btn
-          class="ma-3 button-bright m-signin-btn-text"
-          width="94%"
-          height="48px"
-          :loading="loading"
-          :disabled="!isFormDataReady"
-          :onclick="handleLoginFormSubmit"
-        >
-          {{ t("login.formPage.button") }}
-        </v-btn>
+          <v-btn
+            type="search"
+            class="ma-3 button-bright m-signin-btn-text"
+            width="94%"
+            height="48px"
+            :loading="loading"
+            :onclick="handleLoginFormSubmit"
+          >
+            {{ t("login.formPage.button") }}
+          </v-btn>
       </v-row>
       <v-row class="mt-4">
         <p class="m-divide-text">
