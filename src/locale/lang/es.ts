@@ -515,9 +515,9 @@ export const lang: langType = {
       "text_278": "21.11.6. Every user has the right to abandon the bonuses by making the request to Website customer support in order to zero the bonus balance.",
       "text_279": "21.12. Free Spins With free spins, you get to play free on a game on the Website with the same chance of winning as when you play with your real money. Winnings on free spins are converted to bonus money or real money. When converted to bonus money you will need to wager the bonus money 35 times before it is transferred to your cash balance after which it can be withdrawn.",
       "text_280": "22. Complaints",
-      "text_281": "22.1. If you have a complaint, you can email the Website customer support at support@Hoy777.com.",
+      "text_281": "22.1. If you have a complaint, you can email the Website customer support at support{'@'}Hoy777.com.",
       "text_283": "22.2. Pistis Trade N.V. will use best efforts to resolve a reported matter promptly.",
-      "text_284": "22.3. If you have a query with regard to any transaction you may contact Pistis Trade N.V. at support@Hoy777.com with details of the query. We will review any queried or disputed transactions. Our judgment is final.",
+      "text_284": "22.3. If you have a query with regard to any transaction you may contact Pistis Trade N.V. at support{'@'}Hoy777.com with details of the query. We will review any queried or disputed transactions. Our judgment is final.",
       "text_285": "22.4. NOTWITHSTANDING THE FOREGOING, WE TAKE NO LIABILITY WHATSOEVER TO YOU OR TO ANY THIRD PARTY WHEN RESPONDING TO ANY COMPLAINT THAT WE RECEIVED OR TOOK ACTION IN CONNECTION THEREWITH.",
       "text_286": "23. Intellectual Property",
       "text_287": "23.1. We are the sole owners of the trademark Pistis Trade N.V. and the Pistis Trade N.V. logo. Any unauthorized use of the Pistis Trade N.V. trademark and the Pistis Trade N.V. logo may result in prosecution.",
@@ -660,7 +660,7 @@ export const lang: langType = {
       "text_19": "3. Contact Us",
       "text_20": "(including contact details for the Data Protection Officer (\"DPO\")",
       "text_21": "If you have any concerns about how Betfair handles your personal data, you can contact our HOY777 International Data Protection Officers (DPO) and Data Protection Teams at:",
-      "text_22": "dataprotection@Hoy777.com If you wish to exercise your Data Protection rights, please see the 'Your Rights' section below.",
+      "text_22": "dataprotection{'@'}Hoy777.com If you wish to exercise your Data Protection rights, please see the 'Your Rights' section below.",
       "text_23": "4. Information we collect",
       "text_24": "When you use our Services, we collect the following types of information:",
       "text_25": "Information you provide us:",
@@ -726,7 +726,7 @@ export const lang: langType = {
       "text_85": "17. Other websites",
       "text_86": "Our web site may contain links to other web sites, which are outside our control and are not covered by this Privacy Policy. If you access other sites using the links provided, the operators of these sites may collect information from you, which will be used by them in accordance with their privacy policy, which may differ from ours. We are not responsible. Solely the operators of these websites shall be responsible for their functionality or possible errors on the linked sites.",
       "text_87": "18. Data Deletion",
-      "text_88": "To request for your data to be deleted please contact support@Hoy777.com. Please note under GDPR Article 17(3)(b) legal requirements take precedence over the right to be forgotten. Therefore in order to comply with AML regulations, we will retain your data for five years. After this we will be able to process your request."
+      "text_88": "To request for your data to be deleted please contact support{'@'}Hoy777.com. Please note under GDPR Article 17(3)(b) legal requirements take precedence over the right to be forgotten. Therefore in order to comply with AML regulations, we will retain your data for five years. After this we will be able to process your request."
     },
     "responsible_gambling": {
       "text_1": "Gambling with responsibility",
@@ -754,7 +754,7 @@ export const lang: langType = {
       "text_23": "",
       "text_24": "4.Information and contact",
       "text_25": "Our support will help You via email at any time without any additional costs and will not give out any information about You without your consent to anyone else:",
-      "text_26": "•\temail: support@hoy777.com",
+      "text_26": "•\temail: support{'@'}hoy777.com",
       "text_27": "",
       "text_28": "In addition You can also take test, to see if You might be addicted to gambling:",
       "text_29": "https://www.begambleaware.org/gambling-problems/do-i-have-a-gambling-problem/",
@@ -779,7 +779,7 @@ export const lang: langType = {
       "text_48": "https://famisafe.wondershare.com/internet-filter/best-internet-filters.html",
       "text_49": "7. Self-Exclusion:",
       "text_50": "In case You are diagnosed with a gambling addiction or You are trying to stay away from gambling for a different reason, we want to help. “Self-Exclusion” means, that You exclude yourself from all gambling services, You choose. This exclusion cannot be undone for a set amount of time. If You wish to self-exclude from gambling, please message our support. They will explain everything that is needed and will be able to exclude You from 6 months up to 5 years. ",
-      "text_51": "•\temail: support@hoy777.com",
+      "text_51": "•\temail: support{'@'}hoy777.com",
       "text_52": "Please keep in mind that Self Exclusion is permanent for the set period of time and will not be undone for your own protection. During Self Exclusion You are not allowed to create a new Account and every attempt to create a new Account during Self Exclusion is a violation of our Terms of Service and may result in the permanent ban of your original Account. "
     },
     "bonus_terms": {
@@ -961,7 +961,7 @@ export const lang: langType = {
       "text_99": "All data given by any user/customer will be stored securely, will not be sold or given to any third party. Only if forced by law, or in order to prevent money laundering data may be shared with the AML-authority of the affected state. The Website will follow all guidelines and rules of the data protection directive (officially Directive 95/46/EC) ",
       "text_100": "19. Contact us:",
       "text_101": "If you have any questions about our AML and KYC Policy or if you have any complaints about our AML and KYC Policy or about the procedures done with your account and your data, please contact us:",
-      "text_102": "•\tby email: support@hoy777.com",
+      "text_102": "•\tby email: support{'@'}hoy777.com",
       "text_103": "",
       "text_104": "",
       "text_105": "",
