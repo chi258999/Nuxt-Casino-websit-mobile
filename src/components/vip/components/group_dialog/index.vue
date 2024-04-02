@@ -79,7 +79,7 @@ const joinWatsapp = () => {
   margin: -24px;
   position: relative;
   background: url("@/assets/vip/image/group_select.png") no-repeat;
-  background-size: 100% 100%;
+  background-size: 100% auto;
   padding: 24px;
   box-sizing: border-box;
   .m-close-button {
