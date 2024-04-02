@@ -316,8 +316,8 @@ const MSignup = defineComponent({
 
     // handle form submit  登录提交
     const handleSignupFormSubmit = async (event) => {
-      // 不是回车键不触发
-      if(event.keyCode !== 13) return
+      // 不是回车键不触发 event.keyCode判断是不是软键盘触发
+      if(event.keyCode !== undefined && event.keyCode !== 13) return
       //关闭手机软键盘
       document.activeElement.blur();
 
