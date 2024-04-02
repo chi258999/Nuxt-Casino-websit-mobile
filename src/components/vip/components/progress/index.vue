@@ -1,9 +1,10 @@
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed ,defineAsyncComponent} from "vue";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { vipStore } from "@/store/vip";
+const GroupDialog = defineAsyncComponent(() => import("@/components/vip/components/group_dialog/index.vue"));
 import img_vipemblem_1 from "@/assets/vip/image/img_vipemblem_1.png";
 import img_vipemblem_1_24 from "@/assets/vip/image/img_vipemblem_1-24.png";
 import img_vipemblem_25_49 from "@/assets/vip/image/img_vipemblem_25-49.png";
@@ -38,6 +39,7 @@ const { setCashDialogToggle } = appBarStore();
 const { setRefferalDialogShow } = refferalStore();
 const vipButtonTipShow = ref(true);
 const router = useRouter();
+const groupVisible=ref<boolean>(false);
 
 const toFormatNumFun = (val) => {
     return toFormatNum(val)
@@ -182,7 +184,8 @@ const goPath = () => {
 
 // Telegram jump  Telegram跳转
 const goTelegram = () => {
-    window.location.href = `https://t.me/${vipInfo.value.telegram}`
+    // window.location.href = `https://t.me/${vipInfo.value.telegram}`
+    groupVisible.value=true
 }
 
 // vip prompt information status  vip提示信息状态
@@ -324,6 +327,7 @@ const refferalDialog = () => {
                 </el-collapse-item>
             </el-collapse>
         </div>
+        <GroupDialog v-if="groupVisible" v-model="groupVisible"></GroupDialog>
     </div>
 </template>
 
