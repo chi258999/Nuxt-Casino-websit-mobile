@@ -74,9 +74,9 @@ const joinWatsapp = () => {
 
 <style lang="scss">
 .group_dialog-container {
-  width: calc(100% + 48px);
-  height: 100vh;
-  margin: -24px;
+  width: calc(100%);
+  height: 650px;
+  margin: auto;
   position: relative;
   background: url("@/assets/vip/image/group_select.png") no-repeat;
   background-size: 100% auto;
