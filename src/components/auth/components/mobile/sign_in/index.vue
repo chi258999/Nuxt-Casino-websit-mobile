@@ -198,9 +198,8 @@ const Login = defineComponent({
 
     // methods
     const handleLoginFormSubmit = async (event) => {
-      console.log(event, 'handleLoginFormSubmit');
-      // 不是回车键不触发
-      if(event.keyCode !== 13) return
+      // 不是回车键不触发  event.keyCode判断是不是软键盘触发
+      if(event.keyCode !== undefined && event.keyCode !== 13) return
       //关闭手机软键盘
       document.activeElement.blur();
 
