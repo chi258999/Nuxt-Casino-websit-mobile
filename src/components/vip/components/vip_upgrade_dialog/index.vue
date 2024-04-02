@@ -124,7 +124,7 @@ onMounted(async () => {
     top: 140px;
 }
 .vip-overlay {
-    width: 90%;
+    width: 90vw;
     height: 411px;
     margin: 0 auto;
     border: 1px solid #23262F;
