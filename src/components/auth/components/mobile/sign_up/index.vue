@@ -356,6 +356,11 @@ const MSignup = defineComponent({
       });
       state.loading = false;
       await registerSuccess();
+      if(!localStorage.getItem(userInfo.value.name)){
+        localStorage.setItem(userInfo.value.name,'0');
+      }else{
+        localStorage.setItem(userInfo.value.name,'1');
+      }
       if(route.query.code){
         funcUrlDel()
       }
