@@ -1673,7 +1673,8 @@ export const lang: langType = {
         "text_13": "Wager",
         "text_14": "What is an \" Evolution Bonus\"?What is an \" Evolution Bonus\"?What is an \" Evolution Bonus\"?What is an \" Evolution Bonus\"?What is an \" Evolution Bonus\"?",
         "text_15": "What is an \" Weekly Bounes\"?",
-        "text_16": "What is an \" Weekly Bounes\"?What is an \" Weekly Bounes\"?What is an \" Weekly Bounes\"?What is an \" Weekly Bounes\"?What is an \" Weekly Bounes\"?"
+        "text_16": "What is an \" Weekly Bounes\"?What is an \" Weekly Bounes\"?What is an \" Weekly Bounes\"?What is an \" Weekly Bounes\"?What is an \" Weekly Bounes\"?",
+        "text_17":"Instant access to more events and bonuses"
       },
       "bonus": {
         "text_1": "Cashback",

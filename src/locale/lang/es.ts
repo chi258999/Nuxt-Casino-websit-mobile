@@ -1663,7 +1663,8 @@ export const lang: langType = {
         "text_13": "apuesta",
         "text_14": "¿Qué es la \"recompensa por ascenso de rango\"? ¿Qué es la \"recompensa por ascenso de rango\"? ¿Qué es la \"recompensa por ascenso de rango\"? ¿Qué es la \"recompensa por ascenso de rango\"? ¿Qué es la \"recompensa por ascenso de rango\"?",
         "text_15": "¿Qué es un \"Bono Semanal\"?",
-        "text_16": "¿Qué es un \"Bono Semanal\"? ¿Qué es un \"Bono Semanal\"? ¿Qué es un \"Bono Semanal\"? ¿Qué es un \"Bono Semanal\"? ¿Qué es un \"Bono Semanal\"?"
+        "text_16": "¿Qué es un \"Bono Semanal\"? ¿Qué es un \"Bono Semanal\"? ¿Qué es un \"Bono Semanal\"? ¿Qué es un \"Bono Semanal\"? ¿Qué es un \"Bono Semanal\"?",
+        "text_17":"W acceso instantáneo a más eventos y bonificaciones"
       },
       "bonus": {
         "text_1": "Devolución de dinero",

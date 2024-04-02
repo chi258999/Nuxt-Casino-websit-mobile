@@ -1672,6 +1672,7 @@ export type langType = {
         text_14: string,
         text_15: string,
         text_16: string,
+        text_17:string
       },
       bonus: {
         text_1: string,
