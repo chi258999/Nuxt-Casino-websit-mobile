@@ -57,8 +57,8 @@ onMounted(async () => {
 <template>
     <v-overlay
         v-model="vipOverlay"
-        contained
         class="align-center justify-center vip-position"
+        style="z-index: 99999"
     >
         <div class="vip-overlay">
             <div class="vip-overlay-header">
