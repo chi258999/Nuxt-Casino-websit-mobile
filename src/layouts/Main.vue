@@ -74,6 +74,7 @@ const MRouletteBonusDialog = defineAsyncComponent(() => import("@/components/rou
 const MAccountDialog = defineAsyncComponent(() => import("@/views/account/dialog/index.vue"));
 const VipUpgradeDialog = defineAsyncComponent(() => import("@/components/vip/components/vip_upgrade_dialog/index.vue"));
 const VipUpRankDialog = defineAsyncComponent(() => import("@/components/vip/components/vip_uprank_dialog/index.vue"));
+const GroupDialog = defineAsyncComponent(() => import("@/components/vip/components/group_dialog/index.vue"));
 const Search = defineAsyncComponent(() => import("@/components/global/search/index.vue"));
 const MSearch = defineAsyncComponent(() => import("@/components/global/search/mobile/index.vue"));
 const MDepositConfirm = defineAsyncComponent(() => import("@/components/cash/mxn/deposit/mobile/MDepositConfirm.vue"));
@@ -138,6 +139,7 @@ const nickNameDialog = ref<boolean>(false);
 const levelUpDialog = ref<boolean>(false);
 const searchDialog = ref<boolean>(false);
 const depositConfirmDialog = ref<boolean>(false);
+const groupVisible=ref<boolean>(false);
 // const bonusDashboardDialog = ref<boolean>(false);
 const overlayScrimBackground = ref<string>('rgb(var(--v-theme-on-surface))')
 
@@ -519,6 +521,11 @@ watch(route, (to) => {
   // console.log(to.path);
 }, { flush: 'pre', immediate: true, deep: true })
 
+// 打开加入group弹窗
+const openGroupDialog=()=>{
+  groupVisible.value=true
+}
+
 onMounted(() => {
   // console.log(route.query.code);
   // 带有邀请注册码的，直接打开注册弹窗
@@ -852,6 +859,9 @@ const routeInited = () => {
     <VipUpgradeDialog />
     <VipUpRankDialog />
 
+    <!-- join group dialog -->
+    <GroupDialog v-if="groupVisible" v-model="groupVisible"></GroupDialog>
+
     <!------------------------------ Main Page ------------------------------------------->
 
     <router-view v-slot="{ Component, route }">
@@ -871,7 +881,7 @@ const routeInited = () => {
       />
     </router-view>
     <!-- message btn -->
-    <div class="m-message-btn">
+    <div class="m-message-btn" @click="openGroupDialog">
       <img src="@/assets/public/svg/message.svg" class="m-back-icon-position" />
     </div>
 
