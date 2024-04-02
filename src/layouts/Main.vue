@@ -870,6 +870,11 @@ const routeInited = () => {
         :key="route.path"
       />
     </router-view>
+    <!-- message btn -->
+    <div class="m-message-btn">
+      <img src="@/assets/public/svg/message.svg" class="m-back-icon-position" />
+    </div>
+
     <!-- back top -->
 
     <el-backtop :right="16" :bottom="70">
@@ -877,6 +882,7 @@ const routeInited = () => {
         <img src="@/assets/public/svg/icon_public_101.svg" class="m-back-icon-position" />
       </div>
     </el-backtop>
+
 
     <!-- mobile menu semicircle toggle -->
 
@@ -903,6 +909,26 @@ const routeInited = () => {
 .el-backtop {
   width: 44px;
   height: 44px;
+}
+
+.m-message-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 130px;
+  width: 44px;
+  height: 44px;
+  background: rgba(22, 130, 241, 1);;
+  border-radius: 44px;
+  filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
+  z-index: 5;
+  .m-back-icon-position {
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .m-back-top {
