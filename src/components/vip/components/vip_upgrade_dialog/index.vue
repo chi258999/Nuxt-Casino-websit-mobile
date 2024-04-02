@@ -121,7 +121,7 @@ onMounted(async () => {
 }
 ::v-deep(.v-overlay__content) {
     width: 100%;
-    top: auto;
+    top: 140px;
 }
 .vip-overlay {
     width: 90%;
