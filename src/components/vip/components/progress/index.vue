@@ -41,6 +41,9 @@ const vipButtonTipShow = ref(true);
 const router = useRouter();
 const groupVisible=ref<boolean>(false);
 
+const toFormatNumFun = (val) => {
+    return toFormatNum(val)
+}
 // member information  会员信息
 const vipInfo = computed(() => {
     const { getVipInfo } = storeToRefs(vipStore());
