@@ -432,6 +432,7 @@ onMounted(async () => {
 	    easeTime: 300
 	  },
     momentum: false,
+    bounce: false,
 	  	// 监听内容变化，自动执行bs.refresh()方法
 	  observeDOM : true
   })
