@@ -1131,6 +1131,7 @@ export type langType = {
       text_4: string
       text_5: string
       text_6: string
+      text_7: string
     }
     deposit_currency: string
     choose_payment_method: string
@@ -1156,6 +1157,7 @@ export type langType = {
     }
     text_1: string
     text_2: string
+    text_3: string
   }
   transaction_history: {
     type: {
