@@ -710,6 +710,14 @@ watch(currencyMenuShow, (value) => {
   // }
 })
 
+const countDepositAmount=(item:any)=>{
+  if(item.type===0){
+    return item.depositSelect
+  }else{
+    return  Math.ceil((Number(item.bonus) * item.depositSelect)+ Number(item.depositSelect))
+  }
+}
+
 onMounted(async () => {
   AdjustClass.getInstance().adjustTrackEvent({
     key: "PAGE_VIEW",
@@ -873,7 +881,14 @@ onMounted(async () => {
           ]"
           @click="handleDepositAmount(depositAmountItem.depositSelect)"
         >
-          {{ selectedCurrencyUnit }} {{ depositAmountItem.depositSelect }}
+        <div class="m-deposit-amout-btn-text-box">
+          <span class="m-deposit-amout-btn-text-price"> {{ selectedCurrencyUnit }} {{ depositAmountItem.depositSelect }}</span>
+          <div class="m-deposit-amout-btn-text-award-price" v-if="!bonusCheck && depositAmountItem.bonus != 0">
+            <font class="text-700-6 white">{{ t("deposit_dialog.text_3")}}</font>
+            <font class="text-700-6 award-price-color">{{ selectedCurrencyUnit }}{{countDepositAmount(depositAmountItem)}}</font>
+          </div>
+        </div>
+         
           <div
             class="m-deposit-amount-area"
             v-if="!bonusCheck && depositAmountItem.bonus != 0"
@@ -1178,6 +1193,21 @@ onMounted(async () => {
     font-weight: 600;
     font-size: 12px;
     color: #ffffff;
+  }
+
+  .m-deposit-amout-btn-text-box {
+    display: flex;
+    flex-direction: column;
+    margin-top: 6px;
+  }
+  .m-deposit-amout-btn-text-award-price {
+    display: flex;
+    align-items: center;
+    scale: 0.6;
+  }
+  .award-price-color {
+    color: #F9BC01;
+    margin-left: 3px;
   }
 }
 
