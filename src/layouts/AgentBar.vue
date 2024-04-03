@@ -156,7 +156,7 @@ onMounted(() => {
     .tab-box {
       display: grid !important;
       grid-template-columns: repeat(5, 1fr) !important;
-      grid-gap: 10px !important;
+      grid-gap: 15px !important;
 
       .tab-box-item {
         display: flex;
