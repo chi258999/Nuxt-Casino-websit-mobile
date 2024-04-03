@@ -159,7 +159,7 @@ export const gameStore = defineStore({
                     lang: this.language,
                     target: document.getElementById('betby'),
                     brand_id: "2331516940205559808",
-                    betSlipOffsetTop: 0,
+                    betSlipOffsetTop: 100,
                     betslipZIndex: 999,
                     stickyTop: 0,
                     themeName: "demo-green-dark-table",
@@ -175,8 +175,10 @@ export const gameStore = defineStore({
                         this.openDialog('signup');
                     },
                     onTokenExpired: async () => {
-                        this.closeKill();
-                        await this.getGameBetbyInit();
+                        // this.closeKill();
+                        // await this.getGameBetbyInit();
+                        await this.dispatchGameEnter({ id: '9999', demo: false });
+                        return this.enterGameItem.reserve;
                     },
                     onSessionRefresh: async () => {
                         this.closeKill();
