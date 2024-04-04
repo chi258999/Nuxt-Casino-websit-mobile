@@ -4,8 +4,6 @@ import { get } from "lodash-es"
 import { createWebSocket } from '@/plugins/socket'
 import { getFingerprintInfor } from "@/utils/getPublicInformation";
 
-const fingerprintInfor = await getFingerprintInfor()
-
 /**
  * Event Object
  */
@@ -399,7 +397,8 @@ export class Network {
     timeout: number = this.netCfg.getTimeout(),
     token: string | undefined = this.netCfg.getToken(),
   ) {
-    return function <T>(config: AxiosRequestConfig): Promise<T> {
+    return async function <T>(config: AxiosRequestConfig): Promise<T> {
+      const fingerprintInfor = await getFingerprintInfor()
       const configDefault = {
         headers: {
           "Authorization": 'Bearer ' + token,
