@@ -61,7 +61,7 @@ export function clearThousandFilter(str: string): string {
  */
 export function toFormatNum(num: string | number): string {
   // 判断num是否null/undefined非数字，返回0
-  if (!(/^\d+$/.test(String(num)))) {
+  if (!(/^\d+(\.\d+)?$/.test(String(num)))) {
     return '0.00'
   }
   
