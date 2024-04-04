@@ -1132,7 +1132,7 @@ export const lang: langType = {
       "text_3": "2. Complete the deposit with your bank",
       "text_4": "3. Your ",
       "text_5": " balance and any applicabledeposit bonus will be credited",
-      "text_6": "COPY PIX CODE"
+      "text_6": "COPY PIX CODE",
     },
     "deposit_currency": "Deposit Currency",
     "choose_payment_method": "Choose a Payment Method",
@@ -1157,7 +1157,8 @@ export const lang: langType = {
       "confirm_warning_text": "Please contact customer service to make changes"
     },
     "text_1": "Successfully submitted, need to modify please contact customer service",
-    "text_2": "Once your deposit is made, it will activate the selected bonus. If you have already made a deposit Please do not change the selected bonus until the deposit is credited to the game balance."
+    "text_2": "Once your deposit is made, it will activate the selected bonus. If you have already made a deposit Please do not change the selected bonus until the deposit is credited to the game balance.",
+    "text_3": "Get Awarded"
   },
   "transaction_history": {
     "type": {

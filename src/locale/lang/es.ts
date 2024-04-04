@@ -1131,7 +1131,8 @@ export const lang: langType = {
       "text_3": "2. Completa el depósito en tu banco",
       "text_4": "3.tu",
       "text_5": "El saldo y cualquier bono de depósito aplicado se acreditarán en la cuenta.",
-      "text_6": "Copiar código PIX"
+      "text_6": "Copiar código PIX",
+      "text_7": "Recompensa"
     },
     "deposit_currency": "Moneda de depósito",
     "choose_payment_method": "Elige el método de pago",
@@ -1156,7 +1157,8 @@ export const lang: langType = {
       "confirm_warning_text": "Póngase en contacto con el servicio de atención al cliente para modificar"
     },
     "text_1": "Envío exitoso, comuníquese con el servicio de atención al cliente si necesita modificarlo.",
-    "text_2": "Una vez realizado el depósito, se activará la bonificación seleccionada. Si ya ha realizado un ingreso, no cambie la bonificación seleccionada hasta que el ingreso se acredite en el saldo de juego."
+    "text_2": "Una vez realizado el depósito, se activará la bonificación seleccionada. Si ya ha realizado un ingreso, no cambie la bonificación seleccionada hasta que el ingreso se acredite en el saldo de juego.",
+    "text_3": "Get Awarded"
   },
   "transaction_history": {
     "type": {

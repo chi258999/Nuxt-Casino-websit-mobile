@@ -314,8 +314,13 @@ const MSignup = defineComponent({
       }
     };
 
-    // handle form submit
-    const handleSignupFormSubmit = async () => {
+    // handle form submit  登录提交
+    const handleSignupFormSubmit = async (event) => {
+      // 不是回车键不触发 event.keyCode判断是不是软键盘触发
+      if(event.keyCode !== undefined && event.keyCode !== 13) return
+      //关闭手机软键盘
+      document.activeElement.blur();
+
       if (!validateEmail()) {
         state.isShowEmailValidaton = true;
         return;
@@ -505,7 +510,8 @@ export default MSignup;
         </div>
       </div>
     </div>
-    <v-form v-if="currentPage === PAGE_TYPE.SIGNUP_FORM" class="full-width">
+    <!-- S 表单 -->
+    <v-form @submit.prevent v-if="currentPage === PAGE_TYPE.SIGNUP_FORM" class="full-width">
       <div class="relative mt-10 pa-0">
         <v-text-field
           :label="t('signup.formPage.emailAddress')"
@@ -516,6 +522,7 @@ export default MSignup;
           :onblur="handleOnEmailInputBlur"
           @input="handleEmailChange"
           :onfocus="handleEmailFocus"
+          @keypress="handleSignupFormSubmit"
         />
         <ValidationBox
           v-if="isShowEmailValidaton"
@@ -564,6 +571,8 @@ export default MSignup;
           </v-list>
         </div>
       </div>
+      <!-- 邮箱 / -->
+
       <div class="mt-6 relative pa-0">
         <v-text-field
           :label="t('signup.formPage.password')"
@@ -574,6 +583,7 @@ export default MSignup;
           v-model="formData.password"
           :onfocus="handleOnPasswordInputFocus"
           :onblur="handleOnPasswordInputBlur"
+          @keypress="handleSignupFormSubmit"
         />
         <img
           v-if="isShowPassword"
@@ -595,6 +605,8 @@ export default MSignup;
           :validationList="passwordValidationList"
         />
       </div>
+      <!-- 密码 / -->
+
       <v-row class="mt-2">
         <v-text-field
           :label="t('signup.formPage.promoCode')"
@@ -603,8 +615,11 @@ export default MSignup;
           density="comfortable"
           v-model="formData.promoCode"
           :disabled="promoCodeDisabled"
+          @keypress="handleSignupFormSubmit"
         />
       </v-row>
+      <!-- 邀请码 / -->
+
       <div class="mt-2" style="display: flex; align-items: center; height: 46px">
         <v-checkbox
           v-model="formData.isAgreed"
@@ -663,8 +678,9 @@ export default MSignup;
         </v-col>
       </v-row>
     </v-form>
+    <!-- E 表单 -->
 
-    <!-- Confirm cancel. -->
+    <!-- Confirm cancel. 确认取消 -->
     <div v-if="currentPage == PAGE_TYPE.CONFIRM_CANCEL" class="full-width">
       <v-row style="margin-top: 100px" class="mx-4">
         <p class="text-700-20 white center full-width">
@@ -698,7 +714,7 @@ export default MSignup;
       </v-row>
     </div>
 
-    <!-- Already registered notification -->
+    <!-- Already registered notification 已经注册过提醒 -->
     <div v-if="currentPage == PAGE_TYPE.ALREADY_REGISTERED" class="full-width">
       <v-row>
         <p class="m-label-text-md slate-gray center full-width px-8">

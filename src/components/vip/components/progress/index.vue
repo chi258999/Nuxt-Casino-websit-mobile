@@ -13,7 +13,6 @@ import img_vipemblem_75_99 from "@/assets/vip/image/img_vipemblem_75-99.png";
 import img_vipemblem_100_149 from "@/assets/vip/image/img_vipemblem_100-149.png";
 import img_vipemblem_159_199 from "@/assets/vip/image/img_vipemblem_159-199.png";
 import img_vipemblem_200 from "@/assets/vip/image/img_vipemblem_200.png";
-import telegram_1 from "@/assets/vip/image/telegram_1.png";
 import { useRouter } from "vue-router";
 import { bonusTransactionStore } from "@/store/bonusTransaction";
 import { refferalStore } from "@/store/refferal";
@@ -41,6 +40,9 @@ const vipButtonTipShow = ref(true);
 const router = useRouter();
 const groupVisible=ref<boolean>(false);
 
+const toFormatNumFun = (val) => {
+    return toFormatNum(val)
+}
 // member information  会员信息
 const vipInfo = computed(() => {
     const { getVipInfo } = storeToRefs(vipStore());
@@ -300,7 +302,7 @@ const refferalDialog = () => {
         <div class="progress-main-group">
             <div class="progress-main-group-t">
                 <div class="progress-main-group-t-icon">
-                    <img :src="telegram_1" />
+                    <img class="progress-main-group-img" src="@/assets/public/svg/message.svg" />
                 </div>
                 <div class="progress-main-group-t-info">
                     <span>{{ t('vip.vip_level_info.progress.text_8') }}</span>
@@ -627,10 +629,19 @@ const refferalDialog = () => {
             display: flex;
             align-items: center;
             &-icon {
+                margin-right: 24px;
+                width: 44px;
+                height: 44px;
+                background: rgba(22, 130, 241, 1);;
+                border-radius: 50%;
+                filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
                 img {
-                    width: 48px;
-                    height: 48px;
-                    margin-right: 24px;
+                    width: 28px;
+                    height: 28px;
                 }
             }
             &-info {
