@@ -1939,5 +1939,15 @@ export const lang: langType = {
     "text_1": "Tiene una orden abierta",
     "text_2": "cuenta atrás ",
     "text_3": "continuar"
+  },
+  "activity_app": {
+    "text_1": "Recibir recompensas por descargar aplicaciones",
+    "text_2": "DISPONIBLE PARA",
+    "text_3": "Recompensa de inicio de sesión de la aplicación",
+    "text_4": "¡Recompensa gratuita!",
+    "text_5": "Tiempo de reclamación",
+    "text_6": "Iniciar sesión en la aplicación",
+    "text_7": "Descargar la aplicación para obtener",
+    "text_8": "Descargar la aplicación",
   }
 };

@@ -45,6 +45,7 @@ import { Network } from "@/net/Network";
 import { NETWORK } from '@/net/NetworkCfg';
 
 const GameProviders = defineAsyncComponent(() => import("@/components/global/game_provider/index.vue"));
+const ActivityApp = defineAsyncComponent(() => import("@/components/activity_app/index.vue"));
 
 const Dashboard = defineComponent({
   async beforeRouteEnter(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded, next: any) {
@@ -62,6 +63,7 @@ const Dashboard = defineComponent({
     GameProviders,
     MGameConfirm,
     MOrder,
+    ActivityApp,
     ProgressiveImage,
   },
   setup(props, context) {
@@ -1922,6 +1924,9 @@ export default Dashboard;
       <component :is="betHistoryComponent" v-if="bannerComponent"></component>
     </div>
   </div>
+
+  <!-- 下载app -->
+  <ActivityApp />
 </template>
 
 <style lang="scss">

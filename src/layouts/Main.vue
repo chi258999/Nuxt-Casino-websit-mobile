@@ -45,6 +45,9 @@ import MLoginBonusDialog from "@/components/login_bonus/mobile/index.vue";
 import { mailStore } from "@/store/mail";
 import router from '@/router';
 import { depositStore } from '@/store/deposit';
+import { activityAppStore } from '@/store/activityApp';
+import { liveChatStore } from "@/store/liveChat";
+const { setLiveChatMaximize, LiveChatWidget } = liveChatStore();
 
 const GetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonus/index.vue"));
 const MGetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonus/mobile/index.vue"));
@@ -526,7 +529,42 @@ const openGroupDialog=()=>{
   groupVisible.value=true
 }
 
+// 打开客服
+const openLiveChat=()=>{
+  if(userInfo.value?.id) {
+    LiveChatWidget?.call?.("set_customer_name", userInfo.value?.id || '');
+    // 最大化
+    setLiveChatMaximize()
+  }
+}
+
+const { setAppConfirmDialogShow } = activityAppStore();
+// 打开下载app弹框
+const openActivityApp = () => {
+  setAppConfirmDialogShow(true)
+}
+
+// 获取模式
+const mobile = computed(() => {
+  const { getMobile } = storeToRefs(activityAppStore());
+  return getMobile.value;
+});
+
+// 定义状态
+const isSwinging = ref(false);
+
+// 摇摆按钮函数
+const swingButton = () => {
+  isSwinging.value = true;
+  setTimeout(() => {
+    isSwinging.value = false;
+  }, 1600);
+};
+
 onMounted(() => {
+  // 在组件挂载时启动摇摆按钮定时器
+  setInterval(swingButton, 10000); // 每10秒执行一次
+
   // console.log(route.query.code);
   // 带有邀请注册码的，直接打开注册弹窗
   if(route.query.code){
@@ -550,6 +588,8 @@ onMounted(() => {
   setDepositDialogToggle(false);
   setWithdrawDialogToggle(false);
 })
+
+
 
 // 监听路由页面 home 初始化时间
 const routeInited = () => {
@@ -885,6 +925,16 @@ const routeInited = () => {
       <img src="@/assets/public/svg/message.svg" class="m-back-icon-position" />
     </div>
 
+    <!-- service btn -->
+    <div class="m-service-btn" @click="openLiveChat">
+      <img src="@/assets/public/svg/service-icon.svg" class="m-back-icon-position" />
+    </div>
+
+    <!-- 点击打开下载app页面 -->
+    <div class="m-activity-app-btn" :class="{ 'm-activity-app-swinging-button': isSwinging }" @click="openActivityApp" v-if="mobile">
+      <img src="@/assets/activity_app/app-floating-button.svg" class="m-back-icon-position" />
+    </div>
+
     <!-- back top -->
 
     <el-backtop :right="16" :bottom="70">
@@ -924,6 +974,26 @@ const routeInited = () => {
 .m-message-btn {
   position: fixed;
   right: 16px;
+  bottom: 190px;
+  width: 44px;
+  height: 44px;
+  background: rgba(22, 130, 241, 1);;
+  border-radius: 44px;
+  filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
+  z-index: 5;
+  .m-back-icon-position {
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.m-service-btn {
+  position: fixed;
+  right: 16px;
   bottom: 130px;
   width: 44px;
   height: 44px;
@@ -939,6 +1009,37 @@ const routeInited = () => {
     left: 50%;
     transform: translate(-50%, -50%);
   }
+}
+
+.m-activity-app-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 250px;
+  width: 44px;
+  height: 44px;
+  background: #FFD632;
+  border-radius: 44px;
+  filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
+  z-index: 5;
+  .m-back-icon-position {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes swing {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(20deg); }
+  50% { transform: rotate(-20deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.m-activity-app-swinging-button {
+  animation: swing .8s ease-in-out infinite;
 }
 
 .m-back-top {

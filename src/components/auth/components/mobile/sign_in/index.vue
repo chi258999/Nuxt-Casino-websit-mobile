@@ -25,6 +25,14 @@ import { gameStore } from "@/store/game";
 import { jwtDecode } from "jwt-decode";
 import { loginWithSocialMedia, loginType } from "@/plugins/third-party-login";
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
+import { getQueryParams } from "@/utils/getPublicInformation";
+import { activityAppStore } from "@/store/activityApp";
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const Login = defineComponent({
   components: {
@@ -57,6 +65,7 @@ const Login = defineComponent({
     const { width } = useDisplay();
     const { dispatchCurrencyList } = currencyStore();
     const {  getGameBetbyInit, closeKill } = gameStore();
+    const {  downloadApprReceive } = activityAppStore();
   
     // initiate component state
     const state = reactive({
@@ -196,9 +205,38 @@ const Login = defineComponent({
       }
     };
 
+    // 获取活动奖金
+    const activityAppBonus = computed(() => {
+      const { getActivityBonus } = storeToRefs(activityAppStore());
+      return getActivityBonus.value;
+    });
+
     // methods
     const handleLoginFormSubmit = async () => {
       state.loading = true;
+      const queryParams = getQueryParams()
+      // 如果用户是app登录，那就领取奖励
+      if (queryParams['mobile']) {
+        try {
+          await downloadApprReceive()
+          const toast = useToast();
+          toast.success(`${t('activity_app.text_1')} ${platformCurrency}${activityAppBonus}`, {
+            timeout: 3000,
+            closeOnClick: false,
+            pauseOnFocusLoss: false,
+            pauseOnHover: false,
+            draggable: false,
+            showCloseButtonOnHover: false,
+            hideProgressBar: true,
+            closeButton: "button",
+            icon: SuccessIcon,
+            rtl: false,
+          });
+        } catch (error) {
+          
+        }
+      }
+
       await dispatchSignIn({
         uid: state.formData.emailAddress,
         password: state.formData.password,
