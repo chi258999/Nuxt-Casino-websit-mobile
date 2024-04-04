@@ -7,6 +7,7 @@ import { authStore } from "@/store/auth";
 import { appBarStore } from "@/store/appBar";
 import Cookies from "js-cookie";
 import CacheKey from "@/constants/cacheKey";
+import { refferalStore } from "@/store/refferal";
 
 type dialogType = "login" | "signup";
 
@@ -152,6 +153,8 @@ export const gameStore = defineStore({
             this.gameBigWinItem = gameBigWinItem;
         },
         async getGameBetbyInit() {
+            const { setRefferalAppBarShow } = refferalStore();
+            setRefferalAppBarShow(false)
             await this.dispatchGameEnter({ id: '9999', demo: false });
             this.betby = new BTRenderer().initialize(
                 {
@@ -159,7 +162,7 @@ export const gameStore = defineStore({
                     lang: this.language,
                     target: document.getElementById('betby'),
                     brand_id: "2331516940205559808",
-                    betSlipOffsetTop: 100,
+                    betSlipOffsetTop: 60,
                     betslipZIndex: 999,
                     stickyTop: 0,
                     themeName: "demo-green-dark-table",
