@@ -2011,5 +2011,15 @@ export const lang: langType = {
     "text_1": "You have an open order",
     "text_2": "countdown ",
     "text_3": "continue"
+  },
+  "activity_app": {
+    "text_1": "Get Download App Bonus",
+    "text_2": "USABLE FOR ",
+    "text_3": "App Login Rewards",
+    "text_4": "Free Reward!",
+    "text_5": "Claimed when",
+    "text_6": "logging into the app",
+    "text_7": "Download APP to get",
+    "text_8": "Download APP",
   }
 };

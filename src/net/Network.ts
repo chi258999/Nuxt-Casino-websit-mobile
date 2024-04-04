@@ -2,6 +2,9 @@ import { EXITTYPE, NetworkData, SENDTYPE } from './NetworkData'
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import { get } from "lodash-es"
 import { createWebSocket } from '@/plugins/socket'
+import { getFingerprintInfor } from "@/utils/getPublicInformation";
+
+const fingerprintInfor = await getFingerprintInfor()
 
 /**
  * Event Object
@@ -394,12 +397,13 @@ export class Network {
   private createRequestFunction(
     service: AxiosInstance,
     timeout: number = this.netCfg.getTimeout(),
-    token: string | undefined = this.netCfg.getToken()
+    token: string | undefined = this.netCfg.getToken(),
   ) {
     return function <T>(config: AxiosRequestConfig): Promise<T> {
       const configDefault = {
         headers: {
           "Authorization": 'Bearer ' + token,
+          ...fingerprintInfor,
           // "X-Language": "en",
           "X-Language": localStorage.getItem('lang') || 'en',
           "X-Currency": sessionStorage.getItem('currency')
@@ -408,6 +412,7 @@ export class Network {
         baseURL: import.meta.env.VITE_BASE_API,
         data: {}
       }
+
       return service(Object.assign(configDefault, config))
     }
   }
