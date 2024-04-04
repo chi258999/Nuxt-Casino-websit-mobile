@@ -125,7 +125,7 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
         if (response.status !== "connected") {
           globalWindow.FB.login((res: any) => {
             console.log(res, 'FB.login');
-            loginOrRegister(res.access_token, value, type);
+            loginOrRegister(res.authResponse.access_token, value, type);
           });
         } else {
           resolve(response.authResponse);
