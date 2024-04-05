@@ -122,6 +122,8 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
         version: "v19.0",
       });
       globalWindow.FB.getLoginStatus((response: any) => {
+        console.log(response, 'getLoginStatus');
+        
         if (response.authResponse) {
           globalWindow.FB.login((res: any) => {
             console.log(res, 'FB.login === ');
