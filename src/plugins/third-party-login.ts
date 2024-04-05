@@ -129,18 +129,30 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
         version: "v19.0",
       });
       console.log('globalWindow.FB.init2');
+      // const token = "EAAGGgRp2YM8BOybcZAoOkdQie1J8Exd4qPUdF6xboYfeWCx1kvnCH17TPkZCfGC3L3uO3Mgy3fv2UqbUfGJ0RDJAacgzPQLVFns7bWqZC6MnjZCqGZAz7UK4IUTHLT7HAWxdYGa3KYxG1pOS2eisREACKTjg6nqLMH0EqPZCTLv8uiME9wZBbxjkopl4yFUKpZAitZBWsZCq8Fwk0edZCFGpc6M139A0ZBy9yUY87iM1"
+      // loginOrRegister(token, value, type);
 
       globalWindow.FB.getLoginStatus((response: any) => {
         console.log(response, 'getLoginStatus');
-        
-        if (response.authResponse) {
+        if (response.status !== "connected") {
           globalWindow.FB.login((res: any) => {
             console.log(res, 'FB.login === ');
             loginOrRegister(res.authResponse.accessToken, value, type);
+            resolve(res.authResponse);
           });
         } else {
-          reject(response.authResponse);
+          loginOrRegister(response.authResponse.accessToken, value, type);
+          resolve(response.authResponse);
         }
+
+        // if (response.authResponse) {
+        //   globalWindow.FB.login((res: any) => {
+        //     console.log(res, 'FB.login === ');
+        //     loginOrRegister(res.authResponse.accessToken, value, type);
+        //   });
+        // } else {
+        //   reject(response.authResponse);
+        // }
       });
     } catch (error) {
       reject(error);
