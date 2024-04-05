@@ -315,9 +315,9 @@ const Login = defineComponent({
 
     // social login function
     const handleSocialSigin = async (value: string) => {
-      // const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
+      const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       try {
-        // state.loading = true;
+        state.loading = true;
         await loginWithSocialMedia(value, 'login');
         console.log('awaitloginWithSocialMedia');
         
@@ -326,8 +326,8 @@ const Login = defineComponent({
       } catch (err) {
         console.error(err);
       } finally {
-        // state.loading = false;
-        // elLoading.close();
+        state.loading = false;
+        elLoading.close();
       }
     };
 

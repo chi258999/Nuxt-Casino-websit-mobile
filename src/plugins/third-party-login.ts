@@ -40,7 +40,10 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
     switch (value) {
       case ThirdPartyWayEnum.FACEBOOK_LOGIN:
         console.log(value);
-        return await loginWithFacebook(value, type);
+        let res =  await loginWithFacebook(value, type);
+        console.log(res, 'loginWithFacebook');
+        await loginOrRegister(res.accessToken, value, type);
+        return 
       case ThirdPartyWayEnum.GOOGLE_LOGIN:
         return await loginWithGoogle(value, type);
       default:
@@ -127,19 +130,20 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
         version: "v19.0",
       });
       // const token = "EAAGGgRp2YM8BO83M7b1gEnCRlpgOPbJVLjMG0KNysyKIuMFWb56oufSZB1OHZCo5FQdWZBsiCFpmxmAi1uccSkcYNuT3HZB2k8RsShFyiXIYGsBAGlaM5OBtZBUSiCUwcETs3pvC7o8fEpT7FJMcGhYZA14YZB5EJCBxKJmiPZBtf8cmZAaBsA4sK0IZATRsvSiGSxBwZDZD"
-      // await loginOrRegister(token, value, type);
-      // resolve(true);
+      // resolve({
+      //   accessToken: token
+      // });
       // return;
       globalWindow.FB.getLoginStatus(async (response: any) => {
         console.log(response, 'getLoginStatus');
         if (response.status !== "connected") {
-          globalWindow.FB.login(async (res: any) => {
+          globalWindow.FB.login((res: any) => {
             console.log(res, 'FB.login === ');
-            await loginOrRegister(res.authResponse.accessToken, value, type);
+            // loginOrRegister(res.authResponse.accessToken, value, type);
             resolve(res.authResponse);
           });
         } else {
-          loginOrRegister(response.authResponse.accessToken, value, type);
+          // await loginOrRegister(response.authResponse.accessToken, value, type);
           resolve(response.authResponse);
         }
 
