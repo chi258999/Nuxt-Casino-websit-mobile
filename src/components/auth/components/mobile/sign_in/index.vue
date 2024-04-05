@@ -84,7 +84,7 @@ const Login = defineComponent({
           value: ThirdPartyWayEnum.FACEBOOK_LOGIN
         },
         {
-          url: new URL("@/assets/public/svg/icon_public_29.svg", import.meta.url).href,
+          url: new URL("@/assets/public/svg/icon_public_google.svg", import.meta.url).href,
           value: ThirdPartyWayEnum.GOOGLE_LOGIN
         },
       ],
@@ -306,9 +306,16 @@ const Login = defineComponent({
 
     // social login function
     const handleSocialSigin = async (value: string) => {
-      await loginWithSocialMedia(value, 'login');
-      await loginSuccess();
-      loginType(value);
+      try {
+        state.loading = true;
+        await loginWithSocialMedia(value, 'login');
+        await loginSuccess();
+        loginType(value);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        state.loading = false;
+      }
     };
 
     watch(

@@ -11,7 +11,7 @@ const router = useRouter();
 const footerIcons = ref([
   new URL("@/assets/public/svg/icon_public_80.svg", import.meta.url).href,
   new URL("@/assets/public/svg/icon_public_28.svg", import.meta.url).href,
-  new URL("@/assets/public/svg/icon_public_29.svg", import.meta.url).href,
+  new URL("@/assets/public/svg/icon_public_google.svg", import.meta.url).href,
   new URL("@/assets/public/svg/icon_public_30.svg", import.meta.url).href,
   new URL("@/assets/public/svg/icon_public_31.svg", import.meta.url).href,
   new URL("@/assets/public/svg/icon_public_32.svg", import.meta.url).href,

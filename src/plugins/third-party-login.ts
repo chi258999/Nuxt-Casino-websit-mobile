@@ -124,7 +124,7 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
       globalWindow.FB.getLoginStatus((response: any) => {
         if (response.authResponse) {
           globalWindow.FB.login((res: any) => {
-            console.log(res, 'FB.login');
+            console.log(res, 'FB.login === ');
             loginOrRegister(res.authResponse.accessToken, value, type);
           });
         } else {
