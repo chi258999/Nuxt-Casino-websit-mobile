@@ -5,6 +5,7 @@ import { authStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
 import AdjustClass from "@/utils/adjust";
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
+import { log } from "console";
 
 let indexValue = ''; // ThirdPartyWayEnum.GOOGLE_LOGIN FACEBOOK_LOGIN
 let typeValue = "";
@@ -38,6 +39,8 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
     // 根据不同的登录类型执行相应的登录逻辑
     switch (value) {
       case ThirdPartyWayEnum.FACEBOOK_LOGIN:
+        console.log(value);
+        
         return await loginWithFacebook(value, type);
       case ThirdPartyWayEnum.GOOGLE_LOGIN:
         return await loginWithGoogle(value, type);
@@ -115,12 +118,16 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
 const loginWithFacebook = (value: string, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
+      console.log('globalWindow.FB.init1');
+      
       globalWindow.FB.init({
         appId: import.meta.env.VITE_FACEBOOK_APP_ID,
         cookie: true,
         xfbml: true,
         version: "v19.0",
       });
+      console.log('globalWindow.FB.init2');
+
       globalWindow.FB.getLoginStatus((response: any) => {
         console.log(response, 'getLoginStatus');
         
