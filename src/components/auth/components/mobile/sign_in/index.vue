@@ -27,6 +27,7 @@ import { loginWithSocialMedia, loginType, loginWithFacebook } from "@/plugins/th
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
 import { getQueryParams } from "@/utils/getPublicInformation";
 import { activityAppStore } from "@/store/activityApp";
+import { ElLoading } from "element-plus";
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -149,6 +150,8 @@ const Login = defineComponent({
     };
 
     const loginSuccess = async () => {
+      console.log('loginSuccess', success.value);
+      
       if (success.value) {
         await dispatchUserProfile();
         await dispatchUserBalance();
@@ -306,10 +309,12 @@ const Login = defineComponent({
 
     // social login function
     const handleSocialSigin = async (value: string) => {
+      const elLoading = ElLoading.service({ lock: true, text: '',
+    background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       try {
         // state.loading = true;
         if(value === ThirdPartyWayEnum.FACEBOOK_LOGIN) {
-          loginWithFacebook(value, 'login')
+          await loginWithFacebook(value, 'login')
         } else {
           await loginWithSocialMedia(value, 'login');
         }
@@ -319,6 +324,7 @@ const Login = defineComponent({
         console.error(err);
       } finally {
         // state.loading = false;
+        elLoading.close();
       }
     };
 
@@ -896,5 +902,11 @@ export default Login;
       opacity: 1 !important;
     }
   }
+}
+
+.top-loading {
+  z-index: 99999999999999 !important;
+  color: var(--Primary-Button-32CFEC, #009B3A) !important;
+  background: rgba(0, 0, 0, 0.7);
 }
 </style>

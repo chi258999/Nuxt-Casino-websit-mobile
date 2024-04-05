@@ -34,7 +34,7 @@ const userInfo = computed(() => {
  */
 const loginWithSocialMedia = async (value: string, type: string): Promise<any> => {
   // 显示 loading 动画
-  const loading = ElLoading.service({ lock: true });
+  // const loading = ElLoading.service({ lock: true });
   try {
     // 根据不同的登录类型执行相应的登录逻辑
     switch (value) {
@@ -52,7 +52,7 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
     throw error;
   } finally {
     // 无论如何都关闭 loading 动画
-    loading.close();
+    // loading.close();
   }
 };
 
@@ -60,7 +60,7 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
  * 判断登录和注册
  * @param type 
  */
-const loginOrRegister = (token: string, value: string, type: string) => {
+const loginOrRegister = async (token: string, value: string, type: string) => {
   console.log(value, type, 'loginOrRegister');
 
     let val = 1;
@@ -77,10 +77,12 @@ const loginOrRegister = (token: string, value: string, type: string) => {
     
     if (type === "login") {
         // 登录
-        dispatchQuickLogin(params);
+        await dispatchQuickLogin(params);
+        console.log(params, 'dispatchQuickLogin');
     } else {
         // 注册
-        dispatchQuickRegister(params);
+        await dispatchQuickRegister(params);
+        console.log(params, 'dispatchQuickRegister');
     }
 }
 
