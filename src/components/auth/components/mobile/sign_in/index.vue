@@ -163,7 +163,6 @@ const Login = defineComponent({
         // await dispatchSocketConnect();
         setOverlayScrimShow(false);
         setRefferalDialogShow(true);
-        console.log('loginSuccess1');
 
         const toast = useToast();
         toast.success(t("login.submit_result.success_text"), {
@@ -178,7 +177,6 @@ const Login = defineComponent({
           icon: SuccessIcon,
           rtl: false,
         });
-        console.log('loginSuccess2');
 
         // 埋点统计
         AdjustClass.getInstance().adjustTrackEvent({
@@ -195,7 +193,6 @@ const Login = defineComponent({
           await getGameBetbyInit();
         }
         await dispatchSocketConnect();
-        console.log('loginSuccess3');
 
       } else {
         const toast = useToast();
@@ -319,7 +316,6 @@ const Login = defineComponent({
       try {
         state.loading = true;
         await loginWithSocialMedia(value, 'login');
-        console.log('awaitloginWithSocialMedia');
         
         await loginSuccess();
         loginType(value);
