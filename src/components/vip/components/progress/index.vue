@@ -281,7 +281,8 @@ const closeVipIllustrate = () => {
                 <img class="m-vip--illustrate--icon" src="@/assets/vip/svg/illustrate.svg" @click="popupShow = !popupShow">
             </div>
         </div>
-        <div class="progress-main-reward" v-if="vipButtonTipShow">
+        <!-- 不做，先屏蔽 -->
+        <!-- <div class="progress-main-reward" v-if="vipButtonTipShow">
             <img src="@/assets/public/svg/img_public_26.svg" style="width: 100%" />
             <div class="progress-main-reward-bg">
                 <div class="progress-main-reward-bg-t">
@@ -310,7 +311,7 @@ const closeVipIllustrate = () => {
                 <span @click="refferalDialog">{{ t('vip.vip_level_info.progress.text_6') }}</span>
                 <span @click="depositDialogShow">{{ t('vip.vip_level_info.progress.text_7') }}</span>
             </div>
-        </div>
+        </div> -->
         <div class="progress-main-group">
             <div class="progress-main-group-t">
                 <div class="progress-main-group-t-icon">
