@@ -45,6 +45,7 @@ import { Network } from "@/net/Network";
 import { NETWORK } from '@/net/NetworkCfg';
 
 const GameProviders = defineAsyncComponent(() => import("@/components/global/game_provider/index.vue"));
+const ActivityApp = defineAsyncComponent(() => import("@/components/activity_app/index.vue"));
 
 const Dashboard = defineComponent({
   async beforeRouteEnter(to: RouteLocationNormalized, from: RouteLocationNormalizedLoaded, next: any) {
@@ -62,6 +63,7 @@ const Dashboard = defineComponent({
     GameProviders,
     MGameConfirm,
     MOrder,
+    ActivityApp,
     ProgressiveImage,
   },
   setup(props, context) {
@@ -446,115 +448,32 @@ const Dashboard = defineComponent({
       gameFilterBtnFlag.value = true;
       currentPage.value = 1;
       selectedGameFilterBtn.value = gamFilterBtn == "original" ? 'all_game' : gamFilterBtn;
+      
       switch (selectedGameFilterBtn.value) {
         case 'all_game':
           gameFilterIconColor1.value = "#FFFFFF";
           gameFilterIconColor2.value = "#7782AA";
           gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "lobby";
           break;
         case "favorite":
           gameFilterIconColor1.value = "#7782AA";
           gameFilterIconColor2.value = "#FFFFFF";
           gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "paging";
-          selectedCategoryName.value = "favorite";
+          selectedCategoryName.value = selectedGameFilterBtn.value;
           break;
         case "history":
           gameFilterIconColor1.value = "#7782AA";
           gameFilterIconColor2.value = "#7782AA";
           gameFilterIconColor3.value = "#FFFFFF";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "paging";
           selectedCategoryName.value = "history";
           break;
-        case "original":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#FFFFFF";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
+      
+        default:
           filterTabText.value = "paging";
-          selectedCategoryName.value = "original";
-          break;
-        case "PGSOFT":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "PGSOFT";
-          break;
-        case "SOFTSWISS":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "SOFTSWISS";
-          break;
-        case "Evoplay":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "Evoplay";
-          break;
-        case "Bgaming":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "Bgaming";
-          break;
-        case "slot":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#FFFFFF";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "slot";
-          break;
-        case "live":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#FFFFFF";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "live";
+          selectedCategoryName.value = selectedGameFilterBtn.value;
           break;
       }
 
@@ -772,10 +691,6 @@ const Dashboard = defineComponent({
           gameFilterIconColor1.value = "#7782AA";
           gameFilterIconColor2.value = "#FFFFFF";
           gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "paging";
           selectedCategoryName.value = "favorite";
           break;
@@ -783,56 +698,12 @@ const Dashboard = defineComponent({
           gameFilterIconColor1.value = "#7782AA";
           gameFilterIconColor2.value = "#7782AA";
           gameFilterIconColor3.value = "#FFFFFF";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "paging";
           selectedCategoryName.value = "history";
           break;
-        case "original":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#FFFFFF";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
+        default:
           filterTabText.value = "paging";
-          selectedCategoryName.value = "original";
-          break;
-        case "pgsoft":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "pgsoft";
-          break;
-        case "slot":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#FFFFFF";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "slot";
-          break;
-        case "live":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#FFFFFF";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "live";
+          selectedCategoryName.value = selectedGameFilterBtn.value;
           break;
       }
 
@@ -871,20 +742,12 @@ const Dashboard = defineComponent({
           gameFilterIconColor1.value = "#FFFFFF";
           gameFilterIconColor2.value = "#7782AA";
           gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "lobby";
           break;
         case "favorite":
           gameFilterIconColor1.value = "#7782AA";
           gameFilterIconColor2.value = "#FFFFFF";
           gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "paging";
           selectedCategoryName.value = "favorite";
           break;
@@ -892,78 +755,12 @@ const Dashboard = defineComponent({
           gameFilterIconColor1.value = "#7782AA";
           gameFilterIconColor2.value = "#7782AA";
           gameFilterIconColor3.value = "#FFFFFF";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "paging";
           selectedCategoryName.value = "history";
           break;
-        case "original":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#FFFFFF";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
+        default:
           filterTabText.value = "paging";
-          selectedCategoryName.value = "original";
-          break;
-        case "PGSOFT":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "PGSOFT";
-          break;
-        case "Evoplay":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "Evoplay";
-          break;
-        case "Bgaming":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "Bgaming";
-          break;
-        case "slot":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#FFFFFF";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "slot";
-          break;
-        case "live":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#FFFFFF";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "live";
+          selectedCategoryName.value = selectedGameFilterBtn.value;
           break;
       }
 
@@ -1113,20 +910,12 @@ const Dashboard = defineComponent({
           gameFilterIconColor1.value = "#FFFFFF";
           gameFilterIconColor2.value = "#7782AA";
           gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "lobby";
           break;
         case "favorite":
           gameFilterIconColor1.value = "#7782AA";
           gameFilterIconColor2.value = "#FFFFFF";
           gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "paging";
           selectedCategoryName.value = "favorite";
           break;
@@ -1134,78 +923,12 @@ const Dashboard = defineComponent({
           gameFilterIconColor1.value = "#7782AA";
           gameFilterIconColor2.value = "#7782AA";
           gameFilterIconColor3.value = "#FFFFFF";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
           filterTabText.value = "paging";
           selectedCategoryName.value = "history";
           break;
-        case "original":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#FFFFFF";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
+        default:
           filterTabText.value = "paging";
-          selectedCategoryName.value = "original";
-          break;
-        case "Evoplay":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "Evoplay";
-          break;
-        case "Bgaming":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "Bgaming";
-          break;
-        case "PGSOFT":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#FFFFFF";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "PGSOFT";
-          break;
-        case "slot":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#FFFFFF";
-          gameFilterIconColor7.value = "#7782AA";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "slot";
-          break;
-        case "live":
-          gameFilterIconColor1.value = "#7782AA";
-          gameFilterIconColor2.value = "#7782AA";
-          gameFilterIconColor3.value = "#7782AA";
-          gameFilterIconColor4.value = "#7782AA";
-          gameFilterIconColor5.value = "#7782AA";
-          gameFilterIconColor6.value = "#7782AA";
-          gameFilterIconColor7.value = "#FFFFFF";
-          filterTabText.value = "paging";
-          selectedCategoryName.value = "live";
+          selectedCategoryName.value = selectedGameFilterBtn.value;
           break;
       }
       if (route.query.game == "casino") {
@@ -1554,23 +1277,23 @@ export default Dashboard;
                   :transform-source="gameTransform3"
                   v-if="item.tranfromFunctionName == 'gameTransform3'"
                 ></inline-svg>
-                <inline-svg
+                <!-- <inline-svg
                   :src="item.image"
                   width="18"
                   height="18"
                   style="margin-right: 6px"
                   :transform-source="gameTransform4"
                   v-if="item.tranfromFunctionName == 'gameTransform4'"
-                ></inline-svg>
-                <inline-svg
+                ></inline-svg> -->
+                <!-- <inline-svg
                   :src="item.image"
                   width="18"
                   height="18"
                   style="margin-right: 6px"
                   :transform-source="gameTransform5"
                   v-if="item.tranfromFunctionName == 'gameTransform5'"
-                ></inline-svg>
-                <inline-svg
+                ></inline-svg> -->
+                <!-- <inline-svg
                   :src="item.image"
                   width="18"
                   height="18"
@@ -1585,7 +1308,7 @@ export default Dashboard;
                   style="margin-right: 6px"
                   :transform-source="gameTransform7"
                   v-if="item.tranfromFunctionName == 'gameTransform7'"
-                ></inline-svg>
+                ></inline-svg> -->
                 {{ item.name }}
               </v-btn>
             </div>
@@ -1922,6 +1645,9 @@ export default Dashboard;
       <component :is="betHistoryComponent" v-if="bannerComponent"></component>
     </div>
   </div>
+
+  <!-- 下载app -->
+  <ActivityApp />
 </template>
 
 <style lang="scss">

@@ -7,6 +7,7 @@ import { authStore } from "@/store/auth";
 import { appBarStore } from "@/store/appBar";
 import Cookies from "js-cookie";
 import CacheKey from "@/constants/cacheKey";
+import { refferalStore } from "@/store/refferal";
 
 type dialogType = "login" | "signup";
 
@@ -152,6 +153,8 @@ export const gameStore = defineStore({
             this.gameBigWinItem = gameBigWinItem;
         },
         async getGameBetbyInit() {
+            const { setRefferalAppBarShow } = refferalStore();
+            setRefferalAppBarShow(false)
             await this.dispatchGameEnter({ id: '9999', demo: false });
             this.betby = new BTRenderer().initialize(
                 {
@@ -159,9 +162,9 @@ export const gameStore = defineStore({
                     lang: this.language,
                     target: document.getElementById('betby'),
                     brand_id: "2331516940205559808",
-                    betSlipOffsetTop: 0,
+                    betSlipOffsetTop: 60,
                     betslipZIndex: 999,
-                    stickyTop: 0,
+                    stickyTop: 60,
                     themeName: "demo-green-dark-table",
                     onLogin: async () => {
                         if (Cookies.get(CacheKey.TOKEN) == "" || !Cookies.get(CacheKey.TOKEN)) {
@@ -175,8 +178,10 @@ export const gameStore = defineStore({
                         this.openDialog('signup');
                     },
                     onTokenExpired: async () => {
-                        this.closeKill();
-                        await this.getGameBetbyInit();
+                        // this.closeKill();
+                        // await this.getGameBetbyInit();
+                        await this.dispatchGameEnter({ id: '9999', demo: false });
+                        return this.enterGameItem.reserve;
                     },
                     onSessionRefresh: async () => {
                         this.closeKill();

@@ -108,7 +108,6 @@ onMounted(async () => {
 <template>
     <v-overlay
         v-model="vipRankOverlay"
-        contained
         class="align-center justify-center vip-position"
     >
         <div class="vip-overlay">

@@ -57,7 +57,7 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
  * 判断登录和注册
  * @param type 
  */
-const loginOrRegister = async (token: string, value: string, type: string) => {
+const loginOrRegister = (token: string, value: string, type: string) => {
   console.log(value, type, 'loginOrRegister');
 
     let val = 1;
@@ -74,10 +74,10 @@ const loginOrRegister = async (token: string, value: string, type: string) => {
     
     if (type === "login") {
         // 登录
-        await dispatchQuickLogin(params);
+        dispatchQuickLogin(params);
     } else {
         // 注册
-        await dispatchQuickRegister(params);
+        dispatchQuickRegister(params);
     }
 }
 
@@ -122,18 +122,13 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
         version: "v19.0",
       });
       globalWindow.FB.getLoginStatus((response: any) => {
-        if (response.status !== "connected") {
+        if (response.authResponse) {
           globalWindow.FB.login((res: any) => {
-            console.log(res, 'FB.login ===== ');
-            
-            (window as any).FB.api("/me?fields=email,name", async (response: any) => {
-                console.log(response, 'FB.api');
-                await loginOrRegister(res.access_token, value, type);
-                resolve(res);
-              });
+            console.log(res, 'FB.login === ');
+            loginOrRegister(res.authResponse.accessToken, value, type);
           });
         } else {
-          resolve(response.authResponse);
+          reject(response.status);
         }
       });
     } catch (error) {
