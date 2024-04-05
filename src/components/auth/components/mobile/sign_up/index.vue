@@ -66,7 +66,7 @@ const MSignup = defineComponent({
           value: ThirdPartyWayEnum.FACEBOOK_LOGIN
         },
         {
-          url: new URL("@/assets/public/svg/icon_public_29.svg", import.meta.url).href,
+          url: new URL("@/assets/public/svg/icon_public_google.svg", import.meta.url).href,
           value: ThirdPartyWayEnum.GOOGLE_LOGIN
         },
         // new URL("@/assets/public/svg/icon_public_28.svg", import.meta.url).href,
@@ -459,9 +459,16 @@ const MSignup = defineComponent({
 
     // 一键注册
     const onSignInSuccessGoogle = async (value: string) => {
-      await loginWithSocialMedia(value, 'register');
-      await registerSuccess();
-      loginType(value);
+      // const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
+      try {
+        await loginWithSocialMedia(value, 'register');
+        await registerSuccess();
+        loginType(value);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        // elLoading.close();
+      }
     };
 
     return {

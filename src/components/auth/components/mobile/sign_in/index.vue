@@ -23,10 +23,11 @@ import EventToken from "@/constants/EventToken";
 import { useRoute } from "vue-router";
 import { gameStore } from "@/store/game";
 import { jwtDecode } from "jwt-decode";
-import { loginWithSocialMedia, loginType } from "@/plugins/third-party-login";
+import { loginWithSocialMedia, loginType, loginWithFacebook } from "@/plugins/third-party-login";
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
 import { getQueryParams } from "@/utils/getPublicInformation";
 import { activityAppStore } from "@/store/activityApp";
+import { ElLoading } from "element-plus";
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -84,7 +85,7 @@ const Login = defineComponent({
           value: ThirdPartyWayEnum.FACEBOOK_LOGIN
         },
         {
-          url: new URL("@/assets/public/svg/icon_public_29.svg", import.meta.url).href,
+          url: new URL("@/assets/public/svg/icon_public_google.svg", import.meta.url).href,
           value: ThirdPartyWayEnum.GOOGLE_LOGIN
         },
       ],
@@ -149,6 +150,8 @@ const Login = defineComponent({
     };
 
     const loginSuccess = async () => {
+      console.log('loginSuccess', success.value);
+      
       if (success.value) {
         await dispatchUserProfile();
         await dispatchUserBalance();
@@ -160,6 +163,8 @@ const Login = defineComponent({
         // await dispatchSocketConnect();
         setOverlayScrimShow(false);
         setRefferalDialogShow(true);
+        console.log('loginSuccess1');
+
         const toast = useToast();
         toast.success(t("login.submit_result.success_text"), {
           timeout: 3000,
@@ -173,6 +178,8 @@ const Login = defineComponent({
           icon: SuccessIcon,
           rtl: false,
         });
+        console.log('loginSuccess2');
+
         // 埋点统计
         AdjustClass.getInstance().adjustTrackEvent({
           key: "LOGIN",
@@ -188,6 +195,8 @@ const Login = defineComponent({
           await getGameBetbyInit();
         }
         await dispatchSocketConnect();
+        console.log('loginSuccess3');
+
       } else {
         const toast = useToast();
         toast.success(t("login.submit_result.err_text"), {
@@ -306,9 +315,20 @@ const Login = defineComponent({
 
     // social login function
     const handleSocialSigin = async (value: string) => {
-      await loginWithSocialMedia(value, 'login');
-      await loginSuccess();
-      loginType(value);
+      const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
+      try {
+        state.loading = true;
+        await loginWithSocialMedia(value, 'login');
+        console.log('awaitloginWithSocialMedia');
+        
+        await loginSuccess();
+        loginType(value);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        state.loading = false;
+        elLoading.close();
+      }
     };
 
     watch(
@@ -885,5 +905,11 @@ export default Login;
       opacity: 1 !important;
     }
   }
+}
+
+.top-loading {
+  z-index: 99999999999999 !important;
+  color: var(--Primary-Button-32CFEC, #009B3A) !important;
+  background: rgba(0, 0, 0, 0.7);
 }
 </style>

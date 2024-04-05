@@ -5,6 +5,7 @@ import { authStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
 import AdjustClass from "@/utils/adjust";
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
+import { log } from "console";
 
 let indexValue = ''; // ThirdPartyWayEnum.GOOGLE_LOGIN FACEBOOK_LOGIN
 let typeValue = "";
@@ -33,12 +34,16 @@ const userInfo = computed(() => {
  */
 const loginWithSocialMedia = async (value: string, type: string): Promise<any> => {
   // 显示 loading 动画
-  const loading = ElLoading.service({ lock: true });
+  // const loading = ElLoading.service({ lock: true });
   try {
     // 根据不同的登录类型执行相应的登录逻辑
     switch (value) {
       case ThirdPartyWayEnum.FACEBOOK_LOGIN:
-        return await loginWithFacebook(value, type);
+        console.log(value);
+        let res =  await loginWithFacebook(value, type);
+        console.log(res, 'loginWithFacebook');
+        await loginOrRegister(res.accessToken, value, type);
+        return 
       case ThirdPartyWayEnum.GOOGLE_LOGIN:
         return await loginWithGoogle(value, type);
       default:
@@ -49,7 +54,7 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
     throw error;
   } finally {
     // 无论如何都关闭 loading 动画
-    loading.close();
+    // loading.close();
   }
 };
 
@@ -57,7 +62,7 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
  * 判断登录和注册
  * @param type 
  */
-const loginOrRegister = (token: string, value: string, type: string) => {
+const loginOrRegister = async (token: string, value: string, type: string) => {
   console.log(value, type, 'loginOrRegister');
 
     let val = 1;
@@ -74,10 +79,12 @@ const loginOrRegister = (token: string, value: string, type: string) => {
     
     if (type === "login") {
         // 登录
-        dispatchQuickLogin(params);
+        await dispatchQuickLogin(params);
+        console.log(params, 'dispatchQuickLogin');
     } else {
         // 注册
-        dispatchQuickRegister(params);
+        await dispatchQuickRegister(params);
+        console.log(params, 'dispatchQuickRegister');
     }
 }
 
@@ -115,21 +122,39 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
 const loginWithFacebook = (value: string, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
+      console.log('globalWindow.FB.init1');
       globalWindow.FB.init({
         appId: import.meta.env.VITE_FACEBOOK_APP_ID,
         cookie: true,
         xfbml: true,
         version: "v19.0",
       });
-      globalWindow.FB.getLoginStatus((response: any) => {
-        if (response.authResponse) {
+      // const token = "EAAGGgRp2YM8BO83M7b1gEnCRlpgOPbJVLjMG0KNysyKIuMFWb56oufSZB1OHZCo5FQdWZBsiCFpmxmAi1uccSkcYNuT3HZB2k8RsShFyiXIYGsBAGlaM5OBtZBUSiCUwcETs3pvC7o8fEpT7FJMcGhYZA14YZB5EJCBxKJmiPZBtf8cmZAaBsA4sK0IZATRsvSiGSxBwZDZD"
+      // resolve({
+      //   accessToken: token
+      // });
+      // return;
+      globalWindow.FB.getLoginStatus(async (response: any) => {
+        console.log(response, 'getLoginStatus');
+        if (response.status !== "connected") {
           globalWindow.FB.login((res: any) => {
-            console.log(res, 'FB.login');
-            loginOrRegister(res.authResponse.accessToken, value, type);
+            console.log(res, 'FB.login === ');
+            // loginOrRegister(res.authResponse.accessToken, value, type);
+            resolve(res.authResponse);
           });
         } else {
-          reject(response.status);
+          // await loginOrRegister(response.authResponse.accessToken, value, type);
+          resolve(response.authResponse);
         }
+
+        // if (response.authResponse) {
+        //   globalWindow.FB.login((res: any) => {
+        //     console.log(res, 'FB.login === ');
+        //     loginOrRegister(res.authResponse.accessToken, value, type);
+        //   });
+        // } else {
+        //   reject(response.authResponse);
+        // }
       });
     } catch (error) {
       reject(error);
@@ -156,4 +181,4 @@ const loginType = (value: string) => {
     });
 }
 
-export { loginWithSocialMedia, loginType };
+export { loginWithSocialMedia, loginType, loginWithFacebook };
