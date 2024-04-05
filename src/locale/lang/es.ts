@@ -1662,7 +1662,9 @@ export const lang: langType = {
         "text_13": "Apuesta",
         "text_14": "En Hoy777 apreciamos de verdad a nuestros VIPs y creemos que se merecen más. Por eso obtendrás una de las recompensas VIP más altas del mercado. Bonos semanales, personales y muchas más ventajas te esperan. Sigue conquistando la plataforma, conviértete en VIP y consigue tus increíbles recompensas. ",
         "text_15": "Niveles y rangos ",
-        "text_16": "A medida que juegues y cambies, ganarás experiencia. Cuando ganes suficiente experiencia, pasarás al siguiente nivel. Obtén recompensas cada vez que llenes la barra de progreso. Tienes que mantener una cierta cantidad de recargas y apuestas en un plazo de 7 días para que el nivel VIP no baje."
+        "text_16": "A medida que juegues y cambies, ganarás experiencia. Cuando ganes suficiente experiencia, pasarás al siguiente nivel. Obtén recompensas cada vez que llenes la barra de progreso. Tienes que mantener una cierta cantidad de recargas y apuestas en un plazo de 7 días para que el nivel VIP no baje.",
+        "text_17": "Protección de nivel",
+        "text_18": "Los privilegios VIP sólo están disponibles para los jugadores activos, si un jugador no es un jugador activo será degradado y no podrá recibir sus recompensas VIP originales. El depósito semanal mínimo y el comportamiento de apuestas basado en su nivel VIP actual protegerán eficazmente su nivel VIP",
       },
       "bonus": {
         "text_1": "Devolución de dinero",

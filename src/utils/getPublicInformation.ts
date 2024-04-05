@@ -1,5 +1,3 @@
-import FP from '@fingerprintjs/fingerprintjs-pro';
-
 // 获取当前url中的所有参数
 export function getQueryParams(): Record<string, string> {
   const queryString = window.location.search.substring(1);
@@ -32,9 +30,12 @@ export function getDeviceType(): string {
 }
 
 // 获取风控信息封装
-export async function getFingerprintInfor() {
+export function getFingerprintInfor() {
   const queryParams = getQueryParams()
   const os = getDeviceType()
+
+  const fingerprint = JSON.parse(localStorage.getItem('result')) || {}
+
 
   // 创建设备平台映射
   const platformMap: Map<string, string> = new Map([
@@ -51,20 +52,10 @@ export async function getFingerprintInfor() {
       "Source": os === 'ios' ? 'ios_app' : 'android_app'
     }
   } else {
-    // 获取fingerprint指纹
-    try {
-      const fp = await FP.load({
-        token: 'F2FGYiUPWrRUc2mVnpnR'
-      });
-      const result = await fp.get();
-      
-      return {
-        "Req-Id": result.requestId,
-        "Fp": result.visitorId,
-        "Source": platformMap.get(os)
-      }
-    } catch (error) {
-      console.error('Failed to get browser fingerprint:', error);
+    return {
+      "Req-Id": fingerprint.requestId,
+      "Fp": fingerprint.visitorId,
+      "Source": platformMap.get(os)
     }
   }
 }
