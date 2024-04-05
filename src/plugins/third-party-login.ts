@@ -117,7 +117,7 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
 
 // Facebook 登录逻辑封装
 const loginWithFacebook = (value: string, type: string): Promise<any> => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
       console.log('globalWindow.FB.init1');
       globalWindow.FB.init({
@@ -130,12 +130,12 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
       // await loginOrRegister(token, value, type);
       // resolve(true);
       // return;
-      globalWindow.FB.getLoginStatus((response: any) => {
+      globalWindow.FB.getLoginStatus(async (response: any) => {
         console.log(response, 'getLoginStatus');
         if (response.status !== "connected") {
-          globalWindow.FB.login((res: any) => {
+          globalWindow.FB.login(async (res: any) => {
             console.log(res, 'FB.login === ');
-            loginOrRegister(res.authResponse.accessToken, value, type);
+            await loginOrRegister(res.authResponse.accessToken, value, type);
             resolve(res.authResponse);
           });
         } else {
