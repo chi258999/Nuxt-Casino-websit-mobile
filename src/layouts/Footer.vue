@@ -35,7 +35,8 @@ const goToAboutPage = (index: number) => {
   <div class="py-4 footer" :class="mobileWidth > 600 ? 'mx-8 pc-max' : 'mx-2'">
     <!-------------------- footer bar -------------->
     <v-row class="mx-2" :class="mobileWidth > 600 ? 'mt-10' : 'mt-7'">
-      <v-col cols="3" sm="4" md="2" lg="2" class="px-1">
+      <!-- 游戏自研 -->
+      <v-col cols="3" sm="4" md="2" lg="2" class="px-1" v-if="false">
         <div class="footer-title" :class="mobileWidth > 600 ? 'ml-10' : 'ml-2'">
           {{ t("home.footer.game.title") }}
         </div>
@@ -52,7 +53,9 @@ const goToAboutPage = (index: number) => {
           {{ t("home.footer.game.menu_4") }}
         </div>
       </v-col>
-      <v-col cols="3" sm="4" md="2" lg="2" class="px-1 pl-2">
+
+      <!-- helpful -->
+      <v-col cols="5" sm="6" md="2" lg="2" class="px-1 pl-2">
         <div class="footer-title" :class="mobileWidth < 600 ? 'ml-2' : ''">
           {{ t("home.footer.helpful_links.title") }}
         </div>
@@ -63,7 +66,9 @@ const goToAboutPage = (index: number) => {
           {{ t("home.footer.helpful_links.menu_2") }}
         </div>
       </v-col>
-      <v-col cols="6" sm="4" md="3" lg="3" class="px-1">
+
+      <!-- 关于我们 -->
+      <v-col cols="7" sm="6" md="3" lg="3" class="px-1">
         <div class="footer-title" :class="mobileWidth < 600 ? 'ml-12' : ''">
           {{ t("home.footer.about_us.title") }}
         </div>
