@@ -65,7 +65,7 @@ export const lang: langType = {
     },
     "confirmCancelPage": {
       "title": "Estás seguro de que deseas cancelar tu registro?",
-      "description": "Beneficios por Registro\r\nGana un 75% extra en tu primer depósito.\r\nPuedes obtener bonos diarios durante 7 días seguidos iniciando sesión ",
+      "description": "Beneficios por Registro\r\r\nGana un 75% extra en tu primer depósito.\r\r\nPuedes obtener bonos diarios durante 7 días seguidos iniciando sesión ",
       "continue": "Continuar",
       "cancel": "Sí, quiero cancelar"
     },
@@ -1117,7 +1117,7 @@ export const lang: langType = {
     "menu": "Menú",
     "casino": "Casino",
     "share": "Bono",
-    "sport": "Educación Física",
+    "sport": "Deportes",
     "mail": "Correo",
     "reward": "Remuneración",
     "search": "Buscar",
@@ -1305,7 +1305,7 @@ export const lang: langType = {
       "tab": {
         "text_1": "Beneficios de hoy",
         "text_2": "Ganancia esta semana",
-        "text_3": "Ganancia este mes",
+        "text_3": "Ganancias de este mes",
         "today": {
           "profit_today_text": "Beneficios de hoy"
         },
@@ -1946,6 +1946,6 @@ export const lang: langType = {
     "text_5": "Tiempo de reclamación",
     "text_6": "Iniciar sesión en la aplicación",
     "text_7": "Descargar la aplicación para obtener",
-    "text_8": "Descargar la aplicación",
+    "text_8": "Descargar la aplicación"
   }
 };
