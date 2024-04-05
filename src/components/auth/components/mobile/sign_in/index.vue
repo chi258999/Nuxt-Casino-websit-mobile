@@ -307,7 +307,7 @@ const Login = defineComponent({
     // social login function
     const handleSocialSigin = async (value: string) => {
       try {
-        state.loading = true;
+        // state.loading = true;
         if(value === ThirdPartyWayEnum.FACEBOOK_LOGIN) {
           loginWithFacebook(value, 'login')
         } else {
@@ -318,7 +318,7 @@ const Login = defineComponent({
       } catch (err) {
         console.error(err);
       } finally {
-        state.loading = false;
+        // state.loading = false;
       }
     };
 
