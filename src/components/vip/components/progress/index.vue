@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { vipStore } from "@/store/vip";
 const GroupDialog = defineAsyncComponent(() => import("@/components/vip/components/group_dialog/index.vue"));
+const InfoPopUp = defineAsyncComponent(() => import("./InfoPopUp.vue"));
 import img_vipemblem_1 from "@/assets/vip/image/img_vipemblem_1.png";
 import img_vipemblem_1_24 from "@/assets/vip/image/img_vipemblem_1-24.png";
 import img_vipemblem_25_49 from "@/assets/vip/image/img_vipemblem_25-49.png";
@@ -209,6 +210,13 @@ const refferalDialog = () => {
     setRefferalDialogShow(true);
 }
 
+// 关闭vip说明弹框
+const popupShow = ref(false)
+
+const closeVipIllustrate = () => {
+    popupShow.value = !popupShow.value
+    console.log(popupShow.value);
+}
 
 </script>
 <template>
@@ -267,6 +275,10 @@ const refferalDialog = () => {
                         </v-progress-linear>
                     </div>
                 </div>
+            </div>
+            <div class="m-vip--illustrate">
+                <InfoPopUp v-if="popupShow" :show="popupShow" @close="closeVipIllustrate" :validationTitleText="t('vip.vip_level_info.progress.text_17')" :validationText="t('vip.vip_level_info.progress.text_18')" />
+                <img class="m-vip--illustrate--icon" src="@/assets/vip/svg/illustrate.svg" @click="popupShow = !popupShow">
             </div>
         </div>
         <div class="progress-main-reward" v-if="vipButtonTipShow">
@@ -336,7 +348,7 @@ const refferalDialog = () => {
     &-card {
         display: flex;
         flex-direction: column;
-        padding: 16px 16px 32px 16px;
+        padding: 16px 16px 16px 16px;
         border: 1px solid #23262F;
         background: linear-gradient(0deg, #23262F, #23262F),
         conic-gradient(from 45.08deg at 50.17% 49.69%, #1D2027 0deg, #23262F 360deg);
@@ -703,6 +715,20 @@ const refferalDialog = () => {
         &-collapse {
             margin-top: 10px;
         }
+    }
+}
+
+.m-vip--illustrate {
+    width: 100%;
+    height: 16px;
+    margin-top: 15px;
+    text-align: right;
+    position: relative;
+    padding-right: 7px;
+    
+    img {
+        width: 16px;
+        height: 16px;
     }
 }
 </style>

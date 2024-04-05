@@ -398,7 +398,7 @@ export class Network {
     token: string | undefined = this.netCfg.getToken(),
   ) {
     return async function <T>(config: AxiosRequestConfig): Promise<T> {
-      const fingerprintInfor = await getFingerprintInfor()
+      const fingerprintInfor = getFingerprintInfor()
       const configDefault = {
         headers: {
           "Authorization": 'Bearer ' + token,
