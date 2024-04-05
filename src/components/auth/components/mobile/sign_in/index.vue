@@ -602,7 +602,7 @@ export default Login;
                 width="36px"
                 height="36px"
               >
-                <img :src="item" width="36" />
+                <img :src="item.url" width="36" />
               </v-btn>
             </v-sheet>
           </div>
