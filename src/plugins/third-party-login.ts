@@ -165,4 +165,4 @@ const loginType = (value: string) => {
     });
 }
 
-export { loginWithSocialMedia, loginType };
+export { loginWithSocialMedia, loginType, loginWithFacebook };
