@@ -122,13 +122,15 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
         version: "v19.0",
       });
       globalWindow.FB.getLoginStatus((response: any) => {
-        if (response.authResponse) {
+        console.log(response, 'getLoginStatus');
+        
+        if (response.status !== 'connected') {
           globalWindow.FB.login((res: any) => {
             console.log(res, 'FB.login === ');
             loginOrRegister(res.authResponse.accessToken, value, type);
           });
         } else {
-          reject(response.status);
+          resolve(response.authResponse);
         }
       });
     } catch (error) {
