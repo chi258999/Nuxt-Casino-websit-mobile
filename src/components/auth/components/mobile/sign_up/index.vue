@@ -459,15 +459,15 @@ const MSignup = defineComponent({
 
     // 一键注册
     const onSignInSuccessGoogle = async (value: string) => {
+      const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       try {
-        state.loading = true;
         await loginWithSocialMedia(value, 'register');
         await registerSuccess();
         loginType(value);
       } catch (err) {
         console.error(err);
       } finally {
-        state.loading = false;
+        elLoading.close();
       }
     };
 
