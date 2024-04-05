@@ -314,7 +314,12 @@ const showWithdrawInfoDialog = (type: string) => {
   withdrawInfoDialog.value = true
 }
 
-const handleWithdrawSubmit = async () => {
+const handleWithdrawSubmit = async (event) => {
+  // 不是回车键不触发  event.keyCode判断是不是软键盘触发
+  if(event.keyCode !== undefined && event.keyCode !== 13) return
+  //关闭手机软键盘
+  document.activeElement.blur();
+
   if (Number(withdrawAmount.value) == 0 || Number(userBalance.value.availabe_balance) == 0) {
     const toast = useToast();
     toast.success('Your current cash withdrawal amount is insufficient', {
@@ -586,19 +591,22 @@ onMounted(async () => {
         />
       </div>
     </v-row>
-    <v-row class="mt-2 mx-3 relative">
-      <v-text-field
-        :label="`${t('withdraw_dialog.amount')}(${selectedCurrencyUnit})`"
-        class="form-textfield dark-textfield m-withdraw-amount-text mb-0"
-        variant="solo"
-        density="comfortable"
-        color="#7782AA"
-        v-model="withdrawAmount"
-        :onfocus="handleAmountInputFocus"
-        :onblur="handleAmountInputBlur"
-        @input="handleAmountInputChange"
-      />
-    </v-row>
+    <form action="javascript:return true;" @submit.prevent>
+      <v-row class="mt-2 mx-3 relative">
+          <v-text-field
+            :label="`${t('withdraw_dialog.amount')}(${selectedCurrencyUnit})`"
+            class="form-textfield dark-textfield m-withdraw-amount-text mb-0"
+            variant="solo"
+            density="comfortable"
+            color="#7782AA"
+            v-model="withdrawAmount"
+            :onfocus="handleAmountInputFocus"
+            :onblur="handleAmountInputBlur"
+            @input="handleAmountInputChange"
+            @keypress="handleWithdrawSubmit"
+          />
+      </v-row>
+    </form>
     <div class="mt-3 mx-10 text-400-12 gray d-flex align-center">
       {{ t("withdraw_dialog.text_5") }}
       <span class="text-700-12" style="margin-left: auto">
