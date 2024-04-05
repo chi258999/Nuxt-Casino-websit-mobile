@@ -163,6 +163,8 @@ const Login = defineComponent({
         // await dispatchSocketConnect();
         setOverlayScrimShow(false);
         setRefferalDialogShow(true);
+        console.log('loginSuccess1');
+
         const toast = useToast();
         toast.success(t("login.submit_result.success_text"), {
           timeout: 3000,
@@ -176,6 +178,8 @@ const Login = defineComponent({
           icon: SuccessIcon,
           rtl: false,
         });
+        console.log('loginSuccess2');
+
         // 埋点统计
         AdjustClass.getInstance().adjustTrackEvent({
           key: "LOGIN",
@@ -191,6 +195,8 @@ const Login = defineComponent({
           await getGameBetbyInit();
         }
         await dispatchSocketConnect();
+        console.log('loginSuccess3');
+
       } else {
         const toast = useToast();
         toast.success(t("login.submit_result.err_text"), {
@@ -309,15 +315,12 @@ const Login = defineComponent({
 
     // social login function
     const handleSocialSigin = async (value: string) => {
-      const elLoading = ElLoading.service({ lock: true, text: '',
-    background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
+      const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       try {
         // state.loading = true;
-        if(value === ThirdPartyWayEnum.FACEBOOK_LOGIN) {
-          await loginWithFacebook(value, 'login')
-        } else {
-          await loginWithSocialMedia(value, 'login');
-        }
+        await loginWithSocialMedia(value, 'login');
+        console.log('awaitloginWithSocialMedia');
+        
         await loginSuccess();
         loginType(value);
       } catch (err) {

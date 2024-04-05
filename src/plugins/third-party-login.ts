@@ -40,7 +40,6 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
     switch (value) {
       case ThirdPartyWayEnum.FACEBOOK_LOGIN:
         console.log(value);
-        
         return await loginWithFacebook(value, type);
       case ThirdPartyWayEnum.GOOGLE_LOGIN:
         return await loginWithGoogle(value, type);
@@ -118,29 +117,40 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
 
 // Facebook 登录逻辑封装
 const loginWithFacebook = (value: string, type: string): Promise<any> => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       console.log('globalWindow.FB.init1');
-      
       globalWindow.FB.init({
         appId: import.meta.env.VITE_FACEBOOK_APP_ID,
         cookie: true,
         xfbml: true,
         version: "v19.0",
       });
-      console.log('globalWindow.FB.init2');
-
+      // const token = "EAAGGgRp2YM8BO83M7b1gEnCRlpgOPbJVLjMG0KNysyKIuMFWb56oufSZB1OHZCo5FQdWZBsiCFpmxmAi1uccSkcYNuT3HZB2k8RsShFyiXIYGsBAGlaM5OBtZBUSiCUwcETs3pvC7o8fEpT7FJMcGhYZA14YZB5EJCBxKJmiPZBtf8cmZAaBsA4sK0IZATRsvSiGSxBwZDZD"
+      // await loginOrRegister(token, value, type);
+      // resolve(true);
+      // return;
       globalWindow.FB.getLoginStatus((response: any) => {
         console.log(response, 'getLoginStatus');
-        
-        if (response.authResponse) {
+        if (response.status !== "connected") {
           globalWindow.FB.login((res: any) => {
             console.log(res, 'FB.login === ');
             loginOrRegister(res.authResponse.accessToken, value, type);
+            resolve(res.authResponse);
           });
         } else {
-          reject(response.authResponse);
+          loginOrRegister(response.authResponse.accessToken, value, type);
+          resolve(response.authResponse);
         }
+
+        // if (response.authResponse) {
+        //   globalWindow.FB.login((res: any) => {
+        //     console.log(res, 'FB.login === ');
+        //     loginOrRegister(res.authResponse.accessToken, value, type);
+        //   });
+        // } else {
+        //   reject(response.authResponse);
+        // }
       });
     } catch (error) {
       reject(error);
