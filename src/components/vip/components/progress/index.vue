@@ -281,8 +281,8 @@ const closeVipIllustrate = () => {
                 <img class="m-vip--illustrate--icon" src="@/assets/vip/svg/illustrate.svg" @click="popupShow = !popupShow">
             </div>
         </div>
-        <!-- 不做，先屏蔽 -->
-        <!-- <div class="progress-main-reward" v-if="vipButtonTipShow">
+        <div class="progress-main-reward">
+        <!-- <div class="progress-main-reward" v-if="vipButtonTipShow"> -->
             <img src="@/assets/public/svg/img_public_26.svg" style="width: 100%" />
             <div class="progress-main-reward-bg">
                 <div class="progress-main-reward-bg-t">
@@ -302,7 +302,7 @@ const closeVipIllustrate = () => {
                 <span @click="goPath">{{ t('vip.vip_level_info.progress.text_4') }}</span>
             </div>
         </div>
-        <div class="progress-main-tip" v-else>
+        <!-- <div class="progress-main-tip" v-else>
             <div class="progress-main-tip-title">No Claims</div>
             <div class="progress-main-tip-content">
                 {{ t('vip.vip_level_info.progress.text_5') }}
