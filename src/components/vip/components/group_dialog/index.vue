@@ -29,13 +29,14 @@ const vipInfo = computed(() => {
 const closeGroupDialog = () => {
   emit("update:modelValue", false);
 };
-// 加入telegram
+// 加入telegram 
 const joinTelegram = () => {
-  window.location.href = `https://t.me/${vipInfo.value.telegram}`
+  // window.location.href = `https://t.me/${vipInfo.value.telegram}`
+  window.location.href = `https://t.me/HOY777Oficial`
 };
 //加入watsapp
 const joinWatsapp = () => {
-  window.location.href = `https://www.whatsapp.com/`
+  window.location.href = `https://whatsapp.com/channel/0029VaVcgRGAu3aVUq386c1H`
 };
 </script>
 
