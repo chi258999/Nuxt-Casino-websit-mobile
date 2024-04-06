@@ -27,6 +27,7 @@ import CashHeader from "@/components/cash/mxn/header/index.vue";
 // import MLogin from "@/components/Login/mobile/index.vue";
 import MNickName from "@/components/auth/components/mobile/sign_up/NickName.vue";
 import Signout from "@/components/Signout/index.vue";
+import StaticActivityPage from "@/components/static_activity_page/index.vue";
 import MSignout from "@/components/Signout/mobile/index.vue";
 import MAuth from "@/components/auth/mobile/index.vue";
 import LoginBonusDialog from "@/components/login_bonus/index.vue";
@@ -41,7 +42,7 @@ import MLoginBonusDialog from "@/components/login_bonus/mobile/index.vue";
 // import MenuSemiCircle from "@/components/global/menu_semi_circle/index.vue";
 // import LevelUpDialog from "@/components/level_up/index.vue";
 // import MLevelUpDialog from "@/components/level_up/mobile/index.vue";
-
+import { CookieService } from "@/utils/cookieService";
 import { mailStore } from "@/store/mail";
 import router from '@/router';
 import { depositStore } from '@/store/deposit';
@@ -225,6 +226,17 @@ const closeDialog = (type: dialogType) => {
   mobileDialog.value = false;
   setAuthModalType("");
 };
+
+const staticActivityDialog = ref<boolean>(true); // 静态活动页面显示
+// 关闭静态页面弹框
+const closeStaticActivityDialog = () => {
+  staticActivityDialog.value = false
+}
+
+// 判断是否已经勾选当天不显示静态活动弹框
+if (CookieService.getCookie('Static_Activity')) {
+  staticActivityDialog.value = false
+}
 
 const closeNickNameDialog = () => {
   setMainBlurEffectShow(false);
@@ -732,6 +744,16 @@ const routeInited = () => {
       <template v-else>
         <MAuth />
       </template>
+    </v-dialog>
+
+    <!-------------------------------      静态活动页面     ------------------------------------>
+    <v-dialog
+      v-model="staticActivityDialog"
+      :width="mobileWidth < 600 ? 328 : 471"
+      :scrim="true"
+      persistent
+    >
+      <StaticActivityPage v-if="mobileVersion == 'sm'" @close="closeStaticActivityDialog" />
     </v-dialog>
 
     <!-------------------------------      SIGNUP     ------------------------------------>
