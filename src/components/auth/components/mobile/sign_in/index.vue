@@ -586,8 +586,8 @@ export default Login;
         </p>
         <v-divider class="mx-10" style="border: 1px solid #414968 !important" />
       </v-row>
-      <v-row class="mt-6">
-        <v-col cols="8" offset="2">
+      <v-row class="mt-6  m-justify-content">
+        <v-col cols="4">
           <div class="d-flex justify-space-around bg-surface-variant social-icon-wrapper">
             <v-sheet
               v-for="(item, index) in socialIconList"

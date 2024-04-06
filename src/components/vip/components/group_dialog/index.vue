@@ -57,16 +57,19 @@ const joinWatsapp = () => {
         </font>
       </div>
       <div class="footer-btn">
-        <img
-          class="telegram-btn"
-          src="@/assets/vip/svg/telegram_btn.svg"
-          @click="joinTelegram"
-        />
-        <img
-          class="watsapp_btn-btn"
-          src="@/assets/vip/svg/watsapp_btn.svg"
-          @click="joinWatsapp"
-        />
+        <div class="telegram-btn">
+          <img
+            src="@/assets/vip/svg/telegram_btn.svg"
+            @click="joinTelegram"
+          />
+        </div>
+        <div class="watsapp_btn-btn">
+          <img
+            src="@/assets/vip/svg/watsapp_btn.svg"
+            @click="joinWatsapp"
+          />
+        </div>
+
       </div>
     </div>
   </v-dialog>
@@ -75,7 +78,8 @@ const joinWatsapp = () => {
 <style lang="scss">
 .group_dialog-container {
   width: calc(100%);
-  height: 650px;
+  // height: 650px;
+  height: 90vh;
   margin: auto;
   position: relative;
   background: url("@/assets/vip/image/group_select.png") no-repeat;
@@ -111,8 +115,15 @@ const joinWatsapp = () => {
   }
   .telegram-btn,
   .watsapp_btn-btn {
-    width: 158px;
-    height: 68px;
+    flex-basis: 50%;
+    flex-shrink: 0;
+    max-width: 50%;
+    // max-width: 158px;
+    // height: 68px;
+    img {
+      // object-fit: contain
+      width: 100%;
+    }
   }
 }
 </style>
