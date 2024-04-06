@@ -103,28 +103,29 @@ const joinWatsapp = () => {
     text-align: center;
     position: absolute;
     left: 50%;
-    bottom: 143px;
+    // bottom: 143px;
+    bottom: 20%;
     transform: translate(-50%,0);
   }
   .footer-btn {
     width: calc(100% - 48px);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     position: absolute;
-    bottom: 48px;
+    // bottom: 48px;
+    bottom: 7%;
   }
   .telegram-btn,
   .watsapp_btn-btn {
-    flex-basis: 50%;
-    flex-shrink: 0;
-    max-width: 50%;
-    // max-width: 158px;
-    // height: 68px;
     img {
-      // object-fit: contain
       width: 100%;
     }
+  }
+  .telegram-btn {
+    margin-right: 15px;
+  }
+  .watsapp_btn-btn {
+    margin-left: 15px;
   }
 }
 </style>
