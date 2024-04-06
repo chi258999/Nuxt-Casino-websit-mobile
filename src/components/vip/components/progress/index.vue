@@ -633,7 +633,7 @@ const closeVipIllustrate = () => {
     &-group {
         display: flex;
         flex-direction: column;
-        height: 168px;
+        // height: 168px;
         background: #1D2027;
         border-radius: 8px;
         margin-top: 12px;
@@ -715,6 +715,13 @@ const closeVipIllustrate = () => {
         }
         &-collapse {
             margin-top: 10px;
+            ::v-deep(.el-collapse-item__header) {
+                // line-height: 24px;
+                height: fit-content;
+            }
+            ::v-deep(.el-collapse-item__arrow) {
+                margin-right: 0;
+            }
         }
     }
 }
