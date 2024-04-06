@@ -428,7 +428,7 @@ onMounted(async () => {
               class="py-1 d-flex align-center"
               style="flex-basis: 0; flex-grow: 1"
             >
-              <img :src="imgList[Math.floor(Math.random() * 4)]" width="22" />
+              <img :src="item.game_icon" width="22" />
               <p class="text-500-16 gray text-center ml-2 game-text-overflow">
                 {{ item.game_name }}
               </p>
@@ -531,7 +531,8 @@ onMounted(async () => {
         <swiper-slide v-for="(item, index) in selectedBetHistoryList" :key="index">
           <v-row class="mx-4 mt-1 align-center">
             <v-col cols="4" class="py-1 d-flex align-center">
-              <img :src="imgList[Math.floor(Math.random() * 4)]" width="16" />
+              <img :src="item.game_icon" width="22" style="aspect-ratio: 1/1;object-fit: cover;object-position: top;" />
+              <!-- <img :src="item.game_icon" width="16"/> -->
               <p class="text-400-12 gray text-left ml-2 game-text-overflow">
                 {{ item.game_name }}
               </p>
