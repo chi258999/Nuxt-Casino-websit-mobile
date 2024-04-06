@@ -39,9 +39,7 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
     // 根据不同的登录类型执行相应的登录逻辑
     switch (value) {
       case ThirdPartyWayEnum.FACEBOOK_LOGIN:
-        console.log(value);
         let res =  await loginWithFacebook(value, type);
-        console.log(res, 'loginWithFacebook');
         await loginOrRegister(res.accessToken, value, type);
         return 
       case ThirdPartyWayEnum.GOOGLE_LOGIN:
@@ -63,7 +61,6 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
  * @param type 
  */
 const loginOrRegister = async (token: string, value: string, type: string) => {
-  console.log(value, type, 'loginOrRegister');
 
     let val = 1;
     if (value === ThirdPartyWayEnum.FACEBOOK_LOGIN) {
@@ -122,28 +119,19 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
 const loginWithFacebook = (value: string, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
-      console.log('globalWindow.FB.init1');
       globalWindow.FB.init({
         appId: import.meta.env.VITE_FACEBOOK_APP_ID,
         cookie: true,
         xfbml: true,
         version: "v19.0",
       });
-      // const token = "EAAGGgRp2YM8BO83M7b1gEnCRlpgOPbJVLjMG0KNysyKIuMFWb56oufSZB1OHZCo5FQdWZBsiCFpmxmAi1uccSkcYNuT3HZB2k8RsShFyiXIYGsBAGlaM5OBtZBUSiCUwcETs3pvC7o8fEpT7FJMcGhYZA14YZB5EJCBxKJmiPZBtf8cmZAaBsA4sK0IZATRsvSiGSxBwZDZD"
-      // resolve({
-      //   accessToken: token
-      // });
-      // return;
+
       globalWindow.FB.getLoginStatus(async (response: any) => {
-        console.log(response, 'getLoginStatus');
         if (response.status !== "connected") {
           globalWindow.FB.login((res: any) => {
-            console.log(res, 'FB.login === ');
-            // loginOrRegister(res.authResponse.accessToken, value, type);
             resolve(res.authResponse);
           });
         } else {
-          // await loginOrRegister(response.authResponse.accessToken, value, type);
           resolve(response.authResponse);
         }
 
