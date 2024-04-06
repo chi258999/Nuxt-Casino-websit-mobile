@@ -65,7 +65,7 @@ export const lang: langType = {
     },
     "confirmCancelPage": {
       "title": "Estás seguro de que deseas cancelar tu registro?",
-      "description": "Beneficios por Registro\r\r\nGana un 75% extra en tu primer depósito.\r\r\nPuedes obtener bonos diarios durante 7 días seguidos iniciando sesión ",
+      "description": "Beneficios por Registro\r\r\r\nGana un 75% extra en tu primer depósito.\r\r\r\nPuedes obtener bonos diarios durante 7 días seguidos iniciando sesión ",
       "continue": "Continuar",
       "cancel": "Sí, quiero cancelar"
     },
@@ -1144,7 +1144,7 @@ export const lang: langType = {
     "check_text": "No participar en promociones.",
     "other_text": "tarifa del 0,00%,",
     "other_text_1": "Bono depositado en su cuenta",
-    "deposit_btn_text": "Depósito",
+    "deposit_btn_text": "Depositar",
     "personal_information": {
       "header_text": "Introduce los datos de tu foto",
       "id_text": "Número de identificación (CPF)",
@@ -1289,10 +1289,10 @@ export const lang: langType = {
       "grade_text_3": "Nivel 3",
       "text_4": "Usuarios",
       "text_5": "registrados",
-      "text_6": "Usuarios",
-      "text_7": "depositados",
-      "text_8": "comisión",
-      "text_9": "apuesta",
+      "text_6": "depositada",
+      "text_7": "de comisión",
+      "text_8": "Cantidad",
+      "text_9": "de apuesta",
       "text_10": "Logros y",
       "text_11": "remuneraciones.",
       "summary_text": "Resumir",
@@ -1664,7 +1664,7 @@ export const lang: langType = {
         "text_15": "Niveles y rangos ",
         "text_16": "A medida que juegues y cambies, ganarás experiencia. Cuando ganes suficiente experiencia, pasarás al siguiente nivel. Obtén recompensas cada vez que llenes la barra de progreso. Tienes que mantener una cierta cantidad de recargas y apuestas en un plazo de 7 días para que el nivel VIP no baje.",
         "text_17": "Protección de nivel",
-        "text_18": "Los privilegios VIP sólo están disponibles para los jugadores activos, si un jugador no es un jugador activo será degradado y no podrá recibir sus recompensas VIP originales. El depósito semanal mínimo y el comportamiento de apuestas basado en su nivel VIP actual protegerán eficazmente su nivel VIP",
+        "text_18": "Los privilegios VIP sólo están disponibles para los jugadores activos, si un jugador no es un jugador activo será degradado y no podrá recibir sus recompensas VIP originales. El depósito semanal mínimo y el comportamiento de apuestas basado en su nivel VIP actual protegerán eficazmente su nivel VIP"
       },
       "bonus": {
         "text_1": "Devolución de dinero",
