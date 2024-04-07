@@ -1155,7 +1155,8 @@ export const lang: langType = {
       "confirm_warning_text": "Póngase en contacto con el servicio de atención al cliente para modificar"
     },
     "text_1": "Envío exitoso, comuníquese con el servicio de atención al cliente si necesita modificarlo.",
-    "text_2": "Una vez realizado el depósito, se activará la bonificación seleccionada. Si ya ha realizado un ingreso, no cambie la bonificación seleccionada hasta que el ingreso se acredite en el saldo de juego."
+    "text_2": "Una vez realizado el depósito, se activará la bonificación seleccionada. Si ya ha realizado un ingreso, no cambie la bonificación seleccionada hasta que el ingreso se acredite en el saldo de juego.",
+    "text_3":'Recompensas'
   },
   "transaction_history": {
     "type": {
