@@ -2026,5 +2026,17 @@ export const lang: langType = {
     "text_6": "logging into the app",
     "text_7": "Download APP to get",
     "text_8": "Download APP",
+  },
+  "static_activity": {
+    "text_1": "ANNOUNCE",
+    "text_2": "Welcome to HOY777.COM!",
+    "text_3": "New User First Deposit Bonus up to $10,000",
+    "text_4": "Daily First Deposit Bonus up to $3000",
+    "text_5": "HOY777 Deposit Rebate, after making a deposit you can get a free bonus every day for 7 days in a row!",
+    "text_6": "VIP Bronze: $10 total bonus!",
+    "text_7": "VIP Silver: $27 bonus in total",
+    "text_8": "VIP Gold: $44 in bonuses.",
+    "text_9": "The higher the VIP level, the higher the bonus!",
+    "text_10": "Retire quickly 24 hours a day, 7 days a week.",
   }
 };

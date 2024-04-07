@@ -223,7 +223,6 @@ export default BannerComponent;
       :navigation="false"
       :virtual="true"
       class="mx-2"
-      style="border-radius: 8px"
       @swiper="getSwiperRef"
       @slideChange="handleSlideChange"
     >

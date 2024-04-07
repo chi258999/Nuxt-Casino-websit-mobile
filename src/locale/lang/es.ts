@@ -215,7 +215,7 @@ export const lang: langType = {
     "logo_text_2": "777",
     "id": "ID",
     "account": "Cuenta",
-    "deposit": "Depósito",
+    "deposit": "Depositar",
     "wager": "Apuesta",
     "bonuses": "Bonificaciones",
     "game_history": "Historia del juego",
@@ -1956,5 +1956,17 @@ export const lang: langType = {
     "text_6": "Iniciar sesión en la aplicación",
     "text_7": "Descargar la aplicación para obtener",
     "text_8": "Descargar la aplicación"
+  },
+  "static_activity": {
+    "text_1": "ANUNCIO",
+    "text_2": "Bienvenido a HOY777.COM",
+    "text_3": "¡Bonificación de hasta $ 10,000 para nuevos usuarios en su primer depósito!",
+    "text_4": "Bonificación diaria de hasta $ 3,000 en el primer depósito cada día.",
+    "text_5": "¡Recompensa por depósito en HOY777! ¡Después de depositar, puede recibir un bono gratuito todos los días durante 7 días seguidos!",
+    "text_6": "VIP Bronce: ¡Total de bonificaciones recibidas $ 10!",
+    "text_7": "VIP Plata: ¡Total de bonificaciones recibidas $ 27!",
+    "text_8": "VIP Oro: ¡Total de bonificaciones recibidas $ 44!",
+    "text_9": "¡Cuanto más alto sea el nivel VIP, mayores serán las bonificaciones!",
+    "text_10": "Retiros rápidos las 24 horas, los 7 días de la semana a SPEI.",
   }
 };
