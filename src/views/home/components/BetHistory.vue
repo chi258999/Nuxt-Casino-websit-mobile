@@ -516,10 +516,10 @@ onMounted(async () => {
           <v-col cols="4" class="text-700-12 gray py-0">
             {{ t("home.bet_history.text_6") }}
           </v-col>
-          <v-col cols="3" class="text-700-12 gray py-0 text-right">
+          <v-col cols="4" class="text-700-12 gray py-0 text-center">
             <p class="ml-2">{{ t("home.bet_history.text_7") }}</p>
           </v-col>
-          <v-col cols="5" class="text-700-12 gray text-right py-0">
+          <v-col cols="4" class="text-700-12 gray text-right py-0">
             {{ t("home.bet_history.text_8") }}
           </v-col>
         </v-row>
@@ -544,7 +544,7 @@ onMounted(async () => {
                 {{ item.game_name }}
               </p>
             </v-col>
-            <v-col cols="3" class="py-1 text-center">
+            <v-col cols="4" class="py-1 text-center">
               <p
                 class="text-400-12"
                 :class="Number(item.multiplier) > 1 ? 'color-01983A' : 'gray'"
@@ -553,7 +553,7 @@ onMounted(async () => {
               </p>
             </v-col>
             <v-col
-              cols="5"
+              cols="4"
               class="py-1 text-700-12 text-right"
               :class="Number(item.win_amount) > 10 ? 'color-01983A' : 'gray'"
             >
