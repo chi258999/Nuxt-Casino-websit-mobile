@@ -991,7 +991,7 @@ const routeInited = () => {
 .el-backtop {
   width: 44px;
   height: 44px;
-  z-index: 999999;
+  z-index: 1000;
 }
 
 .m-message-btn {
@@ -1003,7 +1003,7 @@ const routeInited = () => {
   background: rgba(22, 130, 241, 1);;
   border-radius: 44px;
   filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
-  z-index: 999999;
+  z-index: 1000;
   .m-back-icon-position {
     width: 28px;
     height: 28px;
@@ -1023,7 +1023,7 @@ const routeInited = () => {
   background: rgba(22, 130, 241, 1);;
   border-radius: 44px;
   filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
-  z-index: 999999;
+  z-index: 1000;
   .m-back-icon-position {
     width: 28px;
     height: 28px;
@@ -1043,7 +1043,7 @@ const routeInited = () => {
   background: #FFD632;
   border-radius: 44px;
   filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
-  z-index: 999999;
+  z-index: 1000;
   .m-back-icon-position {
     width: 100%;
     height: 100%;
