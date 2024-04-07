@@ -141,6 +141,8 @@ const handleLoginBonus = async (day: number, moeny: any) => {
       icon: GiftIcon,
       rtl: false,
     });
+    // 给已经领取的账号打上标识
+    localStorage.setItem(userInfo.value.name,'1');
   } else if(vipSignIn.value.signin_day !== day||vipSignIn.value.is_signin === 2) {
     //点击的不是当天可领取的弹窗警告
     isShowReceiveValidation.value = true;
@@ -852,13 +854,13 @@ onMounted(async () => {
   top: 84px;
   left: 54px;
   z-index: 9999;
-  animation: moveRight 2s linear infinite;
+  animation: moveRight 1s linear infinite;
   // animation-iteration-count: 1;
 }
 
 @keyframes moveRight {
   0% {
-    transform: translateX(-84px);
+    transform: translateX(-54px);
   }
 
   100% {
