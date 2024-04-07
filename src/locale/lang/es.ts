@@ -65,7 +65,7 @@ export const lang: langType = {
     },
     "confirmCancelPage": {
       "title": "Estás seguro de que deseas cancelar tu registro?",
-      "description": "Beneficios por Registro\r\r\r\nGana un 75% extra en tu primer depósito.\r\r\r\nPuedes obtener bonos diarios durante 7 días seguidos iniciando sesión ",
+      "description": "Beneficios por Registro\r\r\r\r\nGana un 75% extra en tu primer depósito.\r\r\r\r\nPuedes obtener bonos diarios durante 7 días seguidos iniciando sesión ",
       "continue": "Continuar",
       "cancel": "Sí, quiero cancelar"
     },
@@ -129,7 +129,7 @@ export const lang: langType = {
     "unlock_text": "Desbloqueado",
     "spin_text": "GIRAR",
     "live_support": "Soporte en sitio",
-    "earn_free_text": "Gana $ gratis",
+    "earn_free_text": "Gana {0} gratis",
     "login_bonus_text": "Bono de inicio de sesión VIP",
     "lucky_wheel_text": "Rueda de la suerte",
     "refer_earn_text": "Refiere y gana",
@@ -794,9 +794,9 @@ export const lang: langType = {
       "text_9": "4. All bonuses are subject to 35 times wagering on bonus amount.",
       "text_10": "5. A bet must be settled to count towards wagering requirements, unsettled bets will not count.",
       "text_11": "6. All deposit and free cash bonuses will expire after 30 days.",
-      "text_12": "7. The maximum bet with bonus money is R$25 or the equivalent in your local currency. Any attempt to circumvent the R$25 maximum bet is strictly      prohibited.",
+      "text_12": "7. The maximum bet with bonus money is {0}25 or the equivalent in your local currency. Any attempt to circumvent the {0}25 maximum bet is strictly      prohibited.",
       "text_13": "8. Before any withdrawals are processed, your play will be reviewed for any irregular playing patterns. For fair gaming purposes, equal, zero or low margin bets, hedge betting, or high variance betting strategies shall all be considered irregular gaming for Bonus playthrough requirement purposes. Should HOY777 deem that irregular game play has occurred, it reserves the right to withhold any withdrawals and/or confiscate all winnings, and if applicable, after canceling bonuses, to reinstate the deposit on the player’s account, without necessarily informing the player.",
-      "text_14": "9. R$25 is the maximum bet allowed when playing with bonus money. If, after gameplay is reviewed, HOY777 finds that a player is in breach of this condition, their bonus and winnings will be forfeit.",
+      "text_14": "9. {0}25 is the maximum bet allowed when playing with bonus money. If, after gameplay is reviewed, HOY777 finds that a player is in breach of this condition, their bonus and winnings will be forfeit.",
       "text_15": "10. HOY777.COM management reserves the right to void any bonuses and/or winnings obtained by fraudulent behavior as described above.",
       "text_16": "11. HOY777.COM management has the right to update these rules at any time.",
       "text_17": "12. Your Real Money will be used before your Bonus Money when placing wagers on our games. Your wager may include both Real and Bonus Money if your wager exceeds your Real Money balance.",
@@ -1156,7 +1156,7 @@ export const lang: langType = {
     },
     "text_1": "Envío exitoso, comuníquese con el servicio de atención al cliente si necesita modificarlo.",
     "text_2": "Una vez realizado el depósito, se activará la bonificación seleccionada. Si ya ha realizado un ingreso, no cambie la bonificación seleccionada hasta que el ingreso se acredite en el saldo de juego.",
-    "text_3":'Recompensas'
+    "text_3": "Recompensas"
   },
   "transaction_history": {
     "type": {
@@ -1296,13 +1296,13 @@ export const lang: langType = {
       "text_9": "de apuesta",
       "text_10": "Logros y",
       "text_11": "remuneraciones.",
-      "text_12": "Registered Users",
-      "text_13": "Deposit Users",
-      "text_14": "Commission Amount",
-      "text_15": "Deposit Amount",
-      "text_16": "Bet Amount",
-      "text_17": "Commission Amount",
-      "text_18": "Achievement Reward",
+      "text_12": "Usuarios registrados",
+      "text_13": "Usuarios depositados",
+      "text_14": "Cantidad de comisión",
+      "text_15": "Cantidad depositada",
+      "text_16": "Cantidad de apuesta",
+      "text_17": "Cantidad de comisión",
+      "text_18": "Logros y remuneraciones",
       "summary_text": "Resumir",
       "receive_btn_text": "Recibir",
       "total_profit_text": "El beneficio total",
@@ -1469,7 +1469,7 @@ export const lang: langType = {
     }
   },
   "refferal": {
-    "app_bar_title": "Cada usuario de recarga podrá obtener al menos $12 por cada invitación.",
+    "app_bar_title": "Cada usuario de recarga podrá obtener al menos {0}12 por cada invitación.",
     "earn_btn_text": "Ganar",
     "dialog": {
       "header": {
@@ -1492,7 +1492,7 @@ export const lang: langType = {
     "copy_success_text": "Copiar al portapapeles.",
     "description": {
       "text_1": "Invita a tus amigos",
-      "text_2": "Invita a amigos que aún no estén en Blue.game. Recibirás 20,00 BRL por cada amigo que se registre y haga un depósito. No hay límite en el número de amigos que puedes invitar. Eso significa que tampoco hay límite para lo que puedes ganar.",
+      "text_2": "Invita a amigos que aún no estén en Blue.game. Recibirás 20,00 {0} por cada amigo que se registre y haga un depósito. No hay límite en el número de amigos que puedes invitar. Eso significa que tampoco hay límite para lo que puedes ganar.",
       "term_text": "Términos:",
       "text_3": "Lorem Ipsum es simplemente el texto ficticio de la industria tipográfica. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y la desordenó para hacer un libro de muestras tipográficas. Ha sobrevivido no sólo a cinco siglos, sino también al salto a la composición electrónica, permaneciendo esencialmente inalterado. Se popularizó en los años 60 con la aparición de las hojas Letraset, que contenían pasajes de Lorem Ipsum, y más recientemente con programas de autoedición como Aldus PageMaker, que incluían versiones de Lorem Ipsum. Lorem Ipsum es simplemente el texto ficticio de la industria de la impresión y la composición tipográfica. Lorem Ipsum no es más que el texto ficticio de la industria de la impresión y la composición tipográfica. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y la mezcló para hacer un libro de muestras tipográficas. Ha sobrevivido no sólo a cinco siglos, sino también al salto a la composición electrónica, permaneciendo esencialmente inalterado. Se popularizó en los años 60 con la aparición de las hojas Letraset, que contenían pasajes de Lorem Ipsum, y más recientemente con programas de autoedición como Aldus PageMaker, que incluían versiones de Lorem Ipsum. Lorem Ipsum no es más que el texto ficticio de la industria tipográfica.",
       "back_btn_text": "ATRÁS"
@@ -1560,13 +1560,13 @@ export const lang: langType = {
       "text_1": "Mi misión VIP",
       "text_2": "Completamente",
       "text_3": "Hoy",
-      "text_4": "Gana 10 victorias en juegos intensivos para obtener $10 x 2,5 veces las ganancias",
+      "text_4": "Gana 10 victorias en juegos intensivos para obtener {0}10 x 2,5 veces las ganancias",
       "text_5": "Premio: Giro gratis*1",
       "text_6": "Comenzar",
       "text_7": "En curso...",
       "text_8": "Premio: Giro gratis*2",
       "text_9": "Premio: Giro gratis*3",
-      "text_10": "Bono VIP: R$ 3",
+      "text_10": "Bono VIP: {0} 3",
       "text_11": "Ir al juego",
       "text_12": "Recibir premio",
       "text_13": "Puedes empezar de nuevo mañana",
@@ -1857,7 +1857,7 @@ export const lang: langType = {
     "text_1": "Todas las actividades",
     "text_2": "Eventos VIP",
     "text_3": "Promociones",
-    "text_4": "Bono de depósito$",
+    "text_4": "Bono de depósito{0}",
     "text_5": "- Cada día -",
     "text_6": "Comprobar los detalles",
     "text_7": "Primer deposito",
@@ -1866,7 +1866,7 @@ export const lang: langType = {
     "text_10": "Completar",
     "text_11": "Ahora",
     "text_12": "Obtenga inicio de sesión diario",
-    "text_13": "Bono$",
+    "text_13": "Bono{0}",
     "text_14": "Atrás",
     "text_15": "Bono de depósito diario del 10% hasta",
     "text_16": "HOY777 se compromete a brindarles a nuestros clientes una experiencia fluida y sin complicaciones, con todas las transacciones de los jugadores completadas en 3 minutos. Brindamos servicios de depósito y retiro seguros, confiables y rápidos las 24 horas, los 7 días de la semana.",
@@ -1881,7 +1881,7 @@ export const lang: langType = {
     "text_25": "Una vez realizado el depósito (siempre que haya seleccionado el \"Bono de depósito diario del 10%\" durante el período de depósito), recibirá inmediata y automáticamente el 10% del monto del depósito, hasta",
     "text_26": "Como beneficio adicional.",
     "text_27": "En este evento se puede participar 3 veces al día.",
-    "text_28": "Esto significa que por cada R$100 que deposites, recibirás R$10 adicionales en efectivo de bonificación, hasta",
+    "text_28": "Esto significa que por cada {0}100 que deposites, recibirás {0}10 adicionales en efectivo de bonificación, hasta",
     "text_29": "Estándar",
     "text_30": "Términos de bonificación",
     "text_31": "Aplica a el bono de bienvenida.",
@@ -1961,13 +1961,13 @@ export const lang: langType = {
   "static_activity": {
     "text_1": "ANUNCIO",
     "text_2": "Bienvenido a HOY777.COM",
-    "text_3": "¡Bonificación de hasta $ 10,000 para nuevos usuarios en su primer depósito!",
-    "text_4": "Bonificación diaria de hasta $ 3,000 en el primer depósito cada día.",
+    "text_3": "¡Bonificación de hasta {0} 10,000 para nuevos usuarios en su primer depósito!",
+    "text_4": "Bonificación diaria de hasta {0} 3,000 en el primer depósito cada día.",
     "text_5": "¡Recompensa por depósito en HOY777! ¡Después de depositar, puede recibir un bono gratuito todos los días durante 7 días seguidos!",
-    "text_6": "VIP Bronce: ¡Total de bonificaciones recibidas $ 10!",
-    "text_7": "VIP Plata: ¡Total de bonificaciones recibidas $ 27!",
-    "text_8": "VIP Oro: ¡Total de bonificaciones recibidas $ 44!",
+    "text_6": "VIP Bronce: ¡Total de bonificaciones recibidas {0} 10!",
+    "text_7": "VIP Plata: ¡Total de bonificaciones recibidas {0} 27!",
+    "text_8": "VIP Oro: ¡Total de bonificaciones recibidas {0} 44!",
     "text_9": "¡Cuanto más alto sea el nivel VIP, mayores serán las bonificaciones!",
-    "text_10": "Retiros rápidos las 24 horas, los 7 días de la semana a SPEI.",
+    "text_10": "Retiros rápidos las 24 horas, los 7 días de la semana a SPEI."
   }
 };

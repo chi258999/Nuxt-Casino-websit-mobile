@@ -1,7 +1,14 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, computed } from "vue";
+import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { CookieService } from "@/utils/cookieService";
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const emit = defineEmits<{
   (e: "close"): void;
@@ -29,12 +36,12 @@ const checkboxChanged = () => {
 
       <div class="m-static-activity-content">
         <p class="content-title">{{ t('static_activity.text_2') }}</p>
-        <p>🎁 {{ t('static_activity.text_3') }}</p>
-        <p>🎁 {{ t('static_activity.text_4') }}</p>
+        <p>🎁 {{ t('static_activity.text_3', [platformCurrency]) }}</p>
+        <p>🎁 {{ t('static_activity.text_4', [platformCurrency]) }}</p>
         <p>🎁 {{ t('static_activity.text_5') }}</p>
-        <p style="margin: 0;">👉 {{ t('static_activity.text_6') }}</p>
-        <p style="margin: 0;">👉 {{ t('static_activity.text_7') }}</p>
-        <p>👉 {{ t('static_activity.text_8') }}</p>
+        <p style="margin: 0;">👉 {{ t('static_activity.text_6', [platformCurrency]) }}</p>
+        <p style="margin: 0;">👉 {{ t('static_activity.text_7', [platformCurrency]) }}</p>
+        <p>👉 {{ t('static_activity.text_8', [platformCurrency]) }}</p>
         <p>{{ t('static_activity.text_9') }}</p>
         <p style="margin: 0;">✅ {{ t('static_activity.text_10') }}</p>
       </div>

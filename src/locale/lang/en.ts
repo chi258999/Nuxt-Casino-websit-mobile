@@ -129,7 +129,7 @@ export const lang: langType = {
     "unlock_text": "unlocked",
     "spin_text": "SPIN",
     "live_support": "Live support",
-    "earn_free_text": "Earn Free $",
+    "earn_free_text": "Earn Free {0}",
     "login_bonus_text": "VIP Login Bonus",
     "lucky_wheel_text": "Lucky wheel",
     "refer_earn_text": "Refer and Earn",
@@ -1478,13 +1478,13 @@ export const lang: langType = {
     "text_3": "Email updated successfully!"
   },
   "refferal": {
-    "app_bar_title": "Earn up to $20 per guest deposit user.",
+    "app_bar_title": "Earn up to {0}20 per guest deposit user.",
     "earn_btn_text": "Earn",
     "dialog": {
       "header": {
         "tabs_text1": "Invitation Link",
         "tabs_text2": "Promotion Details & Bonus Withdrawal",
-        "title_text": "Refer a friend and earn 20 BRL  immediately",
+        "title_text": "Refer a friend and earn 20 {0}  immediately",
         "body_text": "Invite Friends, Earn Money",
         "body_text_1": " users have already participated in the Invite New Users campaign and they have earned a combined total of ",
         "body_text_2": "MXN in cash rewards on the",
@@ -1501,7 +1501,7 @@ export const lang: langType = {
     "copy_success_text": "Copied to the clipboard.",
     "description": {
       "text_1": "Invite your friends",
-      "text_2": "Invite friends who aren't on Blue.game yet. You will receive 20.00 BRL for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
+      "text_2": "Invite friends who aren't on Blue.game yet. You will receive 20.00 {0} for each friend that signs up and makes a deposit. There's no limit to how many friends you can invite. That means there's also no limit to how much you can earn!",
       "term_text": "Terms:",
       "text_3": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centur ies, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
       "back_btn_text": "Back"
@@ -1569,7 +1569,7 @@ export const lang: langType = {
       "text_1": "My VIP Mission",
       "text_2": "Completed ",
       "text_3": " today",
-      "text_4": "Get 10 Crash on $10 x 2.5x win",
+      "text_4": "Get 10 Crash on {0}10 x 2.5x win",
       "text_5": "Prize: Free spinning wheel*1",
       "text_6": "Start",
       "text_7": "Ongoing...",
@@ -1921,7 +1921,7 @@ export const lang: langType = {
     "text_1": "All Events",
     "text_2": "VlP Events",
     "text_3": "Promotions",
-    "text_4": "Deposit Bonu$",
+    "text_4": "Deposit Bonu{0}",
     "text_5": "-EverydaY-",
     "text_6": "View details",
     "text_7": "First Deposit",
@@ -1930,7 +1930,7 @@ export const lang: langType = {
     "text_10": "Recharge ",
     "text_11": "now",
     "text_12": "Get Daily Login",
-    "text_13": "Bonu$",
+    "text_13": "Bonu{0}",
     "text_14": "back",
     "text_15": "10% Deposit Bonus Everyday up to ",
     "text_16": "HOY777 is committed to providing a seamless and worry-free experience for our customers, with all player transactions completed within 3 minutes. We offer secure, reliable, and fast deposit and withdrawal services around the clock.",
@@ -2031,12 +2031,12 @@ export const lang: langType = {
   "static_activity": {
     "text_1": "ANNOUNCE",
     "text_2": "Welcome to HOY777.COM!",
-    "text_3": "New User First Deposit Bonus up to $10,000",
-    "text_4": "Daily First Deposit Bonus up to $3000",
+    "text_3": "New User First Deposit Bonus up to {0}10,000",
+    "text_4": "Daily First Deposit Bonus up to {0}3000",
     "text_5": "HOY777 Deposit Rebate, after making a deposit you can get a free bonus every day for 7 days in a row!",
-    "text_6": "VIP Bronze: $10 total bonus!",
-    "text_7": "VIP Silver: $27 bonus in total",
-    "text_8": "VIP Gold: $44 in bonuses.",
+    "text_6": "VIP Bronze: {0}10 total bonus!",
+    "text_7": "VIP Silver: {0}27 bonus in total",
+    "text_8": "VIP Gold: {0}44 in bonuses.",
     "text_9": "The higher the VIP level, the higher the bonus!",
     "text_10": "Retire quickly 24 hours a day, 7 days a week.",
   }
