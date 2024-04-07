@@ -12,6 +12,7 @@ import * as clipboard from "clipboard-polyfill";
 import { useToast } from "vue-toastification";
 import SuccessIcon from '@/components/global/notification/SuccessIcon.vue';
 import WarningIcon from '@/components/global/notification/WarningIcon.vue';
+import { toFormatNum } from '@/utils/numFormat'
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -299,7 +300,7 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
                 min-width: 130px;
               "
             >
-              {{ formatCurrency(Number(item.amount), item.currency) }}
+             {{ platformCurrency }}{{ toFormatNum(Number(item.amount)) }}
             </td>
             <td
               class="text-400-12 text-center"
