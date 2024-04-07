@@ -27,6 +27,13 @@ import img_public_28 from "@/assets/public/image/img_public_28.png";
 import { type GameBigWinItem } from "@/interface/game";
 import vipLevelGroups from "@/utils/VipLevelGroup";
 
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed<string>(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
+
 const { t } = useI18n();
 const { width } = useDisplay();
 const selectedBtnText = ref<string>("home.bet_history.text_2");
@@ -550,7 +557,7 @@ onMounted(async () => {
               class="py-1 text-700-12 text-right"
               :class="Number(item.win_amount) > 10 ? 'color-01983A' : 'gray'"
             >
-              $ {{ item.win_amount }}
+              {{ platformCurrency }}{{ item.win_amount }}
             </v-col>
           </v-row>
         </swiper-slide>
