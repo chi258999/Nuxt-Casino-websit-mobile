@@ -389,9 +389,10 @@ const handleResize = () => {
 
 // 点击关闭按钮回调
 const closeGame = () => {
-  router.go(-1);
+  // router.go(-1);
+  router.push({path: "/"})
   // 关闭按钮显示
-  displayedCloseBtn.value = false
+  // displayedCloseBtn.value = false
 }
 
 onMounted(async () => {
