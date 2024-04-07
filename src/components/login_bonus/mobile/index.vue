@@ -258,8 +258,8 @@ onMounted(async () => {
         @click="handleLoginBonus(0, vipSignIn.award[0])"
       />
       <div class="mt-2 text-center">
-        <Font class="color-F9BC01 text-900-18">{{ vipLevelText(vipSignIn.vip_level) }}</Font>
-        <Font class="text-900-18 white">{{ t("vip.login_bonus.title_text") }}</Font>
+        <Font class="color-F9BC01 text-900-16">{{ vipLevelText(vipSignIn.vip_level)+" " }}</Font>
+        <Font class="text-900-16 white">{{ t("vip.login_bonus.title_text") }}</Font>
       </div>
       <v-row class="mt-2 mx-2">
         <v-col cols="4" class="pa-0 d-flex justify-center">
