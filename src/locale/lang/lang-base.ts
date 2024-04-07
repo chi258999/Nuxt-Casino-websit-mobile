@@ -1299,6 +1299,13 @@ export type langType = {
       text_9: string
       text_10: string
       text_11: string
+      text_12: string
+      text_13: string
+      text_14: string
+      text_15: string
+      text_16: string
+      text_17: string
+      text_18: string
       summary_text: string
       receive_btn_text: string
       total_profit_text: string
