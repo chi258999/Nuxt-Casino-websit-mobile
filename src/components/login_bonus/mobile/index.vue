@@ -19,7 +19,7 @@ import ReceiveValidationBox from "@/components/cash/mxn/deposit/ReceiveValidatio
 import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import { useToast } from "vue-toastification";
-import { toFormatNum } from '@/utils/numFormat';
+import { toFormatNum } from "@/utils/numFormat";
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -48,7 +48,7 @@ const isShowReceiveValidation = ref(false);
 const loginBonusItem = ref({
   award: [8, 10, 12, 14, 16, 18, 20, 22], // reward list
   signin_day: 0, // The number of days that have been signed in
-  is_signin: true, // You can sign in today
+  is_signin: true // You can sign in today
 });
 const swiper = ref<any>(null);
 const confirmDialog = ref<boolean>(false);
@@ -109,7 +109,17 @@ const getSwiperRef = (swiperInstance: any) => {
   swiper.value = swiperInstance;
 };
 
+// Match VIP level name  匹配vip等级名称
+const vipLevelText = (value: number) => {
+    for (let i in vipLevels.value) {
+        if (vipLevels.value[i].level === value) {
+            return vipLevels.value[i].rank_name;
+        }
+    }
+}
+
 const handleLoginBonus = async (day: number, moeny: any) => {
+  console.log(vipSignIn.value,'vipSignIn.value')
   if (token.value == undefined) {
     setAuthModalType("login");
     setAuthDialogVisible(true);
@@ -139,9 +149,14 @@ const handleLoginBonus = async (day: number, moeny: any) => {
       hideProgressBar: true,
       closeButton: "button",
       icon: GiftIcon,
-      rtl: false,
+      rtl: false
     });
-  } else if(vipSignIn.value.signin_day !== day||vipSignIn.value.is_signin === 2) {
+    // 给已经领取的账号打上标识
+    showGuide.value = "1";
+  } else if (
+    vipSignIn.value.signin_day !== day ||
+    vipSignIn.value.is_signin === 2
+  ) {
     //点击的不是当天可领取的弹窗警告
     isShowReceiveValidation.value = true;
     // 摧毁定时器，防止多次创建
@@ -165,12 +180,15 @@ const handleLoginBonus = async (day: number, moeny: any) => {
   // }
 };
 
-const showGuide = computed(() => {
-  if (userInfo.value) {
-    return localStorage.getItem(userInfo.value.name);
-  } else {
-    return "1";
-  }
+const showGuide = computed({
+  get: () => {
+    if (userInfo.value) {
+      return localStorage.getItem(userInfo.value.name);
+    } else {
+      return "1";
+    }
+  },
+  set: val => val
 });
 
 const submitConfirm = async () => {
@@ -184,7 +202,7 @@ onMounted(async () => {
   AdjustClass.getInstance().adjustTrackEvent({
     key: "PAGE_VIEW",
     value: "login_bonus",
-    params: "",
+    params: ""
   });
   if (localStorage.getItem("signin_day") == undefined) {
     localStorage.setItem("signin_day", "0");
@@ -199,14 +217,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div
-    class="m-login-bonus-dialog-container"
-    :class="confirmDialog ? 'blur-effect' : ''"
-  >
-    <img
-      src="@/assets/public/image/bg_public_03_01.png"
-      class="m-header-bar-img-position"
-    />
+  <div class="m-login-bonus-dialog-container" :class="confirmDialog ? 'blur-effect' : ''">
+    <img src="@/assets/public/image/bg_public_03_01.png" class="m-header-bar-img-position" />
     <v-btn
       class="m-close-login-bonus-button"
       icon="true"
@@ -216,10 +228,7 @@ onMounted(async () => {
     >
       <img src="@/assets/public/svg/icon_public_52.svg" width="20" />
     </v-btn>
-    <img
-      src="@/assets/vip/image/img_agent_02.png"
-      class="m-login-bonus-agent-img"
-    />
+    <img src="@/assets/vip/image/img_agent_02.png" class="m-login-bonus-agent-img" />
     <div class="m-login-bonus-body">
       <ReceiveValidationBox v-if="isShowReceiveValidation" />
       <!-- <Swiper :modules="modules" :slidesPerView="1" :loop="true" @swiper="getSwiperRef">
@@ -227,7 +236,7 @@ onMounted(async () => {
           v-for="(item, index) in vipLevels"
           :key="index"
           :virtualIndex="index"
-        > -->
+      >-->
       <img
         class="absolute m-login-bonus-card-select"
         src="@/assets/vip/svg/img_vip_select.svg"
@@ -249,22 +258,15 @@ onMounted(async () => {
         @click="handleLoginBonus(0, vipSignIn.award[0])"
       />
       <div class="mt-2 text-center">
-        <Font class="color-F9BC01 text-900-18"
-          >VIP{{ vipSignIn.vip_level }}</Font
-        >
-        <Font class="text-900-18 white">
-          {{ t("vip.login_bonus.title_text") }}
-        </Font>
+        <Font class="color-F9BC01 text-900-18">VIP{{  vipLevelText(vipSignIn.vip_level) }}</Font>
+        <Font class="text-900-18 white">{{ t("vip.login_bonus.title_text") }}</Font>
       </div>
       <v-row class="mt-2 mx-2">
         <v-col cols="4" class="pa-0 d-flex justify-center">
-          <div
-            class="m-login-bonus-card-checkout-bg relative"
-            v-if="vipSignIn.signin_day > 0"
-          >
-            <p class="text-900-14 gray m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_1_text") }}
-            </p>
+          <div class="m-login-bonus-card-checkout-bg relative" v-if="vipSignIn.signin_day > 0">
+            <p
+              class="text-900-14 gray m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_1_text") }}</p>
             <img
               src="@/assets/public/svg/icon_public_18.svg"
               class="m-login-bonus-card-cash-position"
@@ -286,9 +288,9 @@ onMounted(async () => {
               class="m-login-bonus-sunshine-img"
               v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 0"
             />
-            <p class="text-900-12 white m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_1_text") }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_1_text") }}</p>
             <img
               src="@/assets/vip/image/img_vip_21.png"
               class="m-login-bonus-card-cash-position"
@@ -300,13 +302,10 @@ onMounted(async () => {
           </div>
         </v-col>
         <v-col cols="4" class="pa-0 d-flex justify-center">
-          <div
-            class="m-login-bonus-card-checkout-bg relative"
-            v-if="vipSignIn.signin_day > 1"
-          >
-            <p class="text-900-14 gray m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_2_text") }}
-            </p>
+          <div class="m-login-bonus-card-checkout-bg relative" v-if="vipSignIn.signin_day > 1">
+            <p
+              class="text-900-14 gray m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_2_text") }}</p>
             <img
               src="@/assets/public/svg/icon_public_18.svg"
               class="m-login-bonus-card-cash-position"
@@ -328,9 +327,9 @@ onMounted(async () => {
               class="m-login-bonus-sunshine-img"
               v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 1"
             />
-            <p class="text-900-12 white m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_2_text") }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_2_text") }}</p>
             <img
               src="@/assets/vip/image/img_vip_22.png"
               class="m-login-bonus-card-cash-position"
@@ -342,13 +341,10 @@ onMounted(async () => {
           </div>
         </v-col>
         <v-col cols="4" class="pa-0 d-flex justify-center">
-          <div
-            class="m-login-bonus-card-checkout-bg relative"
-            v-if="vipSignIn.signin_day > 2"
-          >
-            <p class="text-900-14 gray m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_3_text") }}
-            </p>
+          <div class="m-login-bonus-card-checkout-bg relative" v-if="vipSignIn.signin_day > 2">
+            <p
+              class="text-900-14 gray m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_3_text") }}</p>
             <img
               src="@/assets/public/svg/icon_public_18.svg"
               class="m-login-bonus-card-cash-position"
@@ -370,9 +366,9 @@ onMounted(async () => {
               class="m-login-bonus-sunshine-img"
               v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 2"
             />
-            <p class="text-900-12 white m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_3_text") }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_3_text") }}</p>
             <img
               src="@/assets/vip/image/img_vip_23.png"
               class="m-login-bonus-card-cash-position"
@@ -386,13 +382,10 @@ onMounted(async () => {
       </v-row>
       <v-row class="mt-5 mx-2">
         <v-col cols="4" class="pa-0 d-flex justify-center">
-          <div
-            class="m-login-bonus-card-checkout-bg relative"
-            v-if="vipSignIn.signin_day > 3"
-          >
-            <p class="text-900-14 gray m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_4_text") }}
-            </p>
+          <div class="m-login-bonus-card-checkout-bg relative" v-if="vipSignIn.signin_day > 3">
+            <p
+              class="text-900-14 gray m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_4_text") }}</p>
             <img
               src="@/assets/public/svg/icon_public_18.svg"
               class="m-login-bonus-card-cash-position"
@@ -414,9 +407,9 @@ onMounted(async () => {
               class="m-login-bonus-sunshine-img"
               v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 3"
             />
-            <p class="text-900-12 white m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_4_text") }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_4_text") }}</p>
             <img
               src="@/assets/vip/image/img_vip_24.png"
               class="m-login-bonus-card-cash-position"
@@ -428,13 +421,10 @@ onMounted(async () => {
           </div>
         </v-col>
         <v-col cols="4" class="pa-0 d-flex justify-center">
-          <div
-            class="m-login-bonus-card-checkout-bg relative"
-            v-if="vipSignIn.signin_day > 4"
-          >
-            <p class="text-900-14 gray m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_5_text") }}
-            </p>
+          <div class="m-login-bonus-card-checkout-bg relative" v-if="vipSignIn.signin_day > 4">
+            <p
+              class="text-900-14 gray m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_5_text") }}</p>
             <img
               src="@/assets/public/svg/icon_public_18.svg"
               class="login-bonus-card-cash-position"
@@ -456,9 +446,9 @@ onMounted(async () => {
               class="m-login-bonus-sunshine-img"
               v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 4"
             />
-            <p class="text-900-12 white m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_5_text") }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_5_text") }}</p>
             <img
               src="@/assets/vip/image/img_vip_25.png"
               class="m-login-bonus-card-cash-position"
@@ -470,13 +460,10 @@ onMounted(async () => {
           </div>
         </v-col>
         <v-col cols="4" class="pa-0 d-flex justify-center">
-          <div
-            class="m-login-bonus-card-checkout-bg relative"
-            v-if="vipSignIn.signin_day > 5"
-          >
-            <p class="text-900-14 gray m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_6_text") }}
-            </p>
+          <div class="m-login-bonus-card-checkout-bg relative" v-if="vipSignIn.signin_day > 5">
+            <p
+              class="text-900-14 gray m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_6_text") }}</p>
             <img
               src="@/assets/public/svg/icon_public_18.svg"
               class="m-login-bonus-card-cash-position"
@@ -498,9 +485,9 @@ onMounted(async () => {
               class="m-login-bonus-sunshine-img"
               v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 5"
             />
-            <p class="text-900-12 white m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_6_text") }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_6_text") }}</p>
             <img
               src="@/assets/vip/image/img_vip_26.png"
               class="m-login-bonus-card-cash-position"
@@ -514,13 +501,10 @@ onMounted(async () => {
       </v-row>
       <v-row class="mt-5 mx-2 mb-1">
         <v-col cols="4" class="pa-0 d-flex justify-center">
-          <div
-            class="m-login-bonus-card-checkout-bg relative"
-            v-if="vipSignIn.signin_day > 6"
-          >
-            <p class="text-900-14 gray m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_7_text") }}
-            </p>
+          <div class="m-login-bonus-card-checkout-bg relative" v-if="vipSignIn.signin_day > 6">
+            <p
+              class="text-900-14 gray m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_7_text") }}</p>
             <img
               src="@/assets/public/svg/icon_public_18.svg"
               class="m-login-bonus-card-cash-position"
@@ -542,9 +526,9 @@ onMounted(async () => {
               class="m-login-bonus-sunshine-img"
               v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day === 6"
             />
-            <p class="text-900-12 white m-login-bonus-text-position">
-              {{ t("vip.login_bonus.day_7_text") }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-text-position"
+            >{{ t("vip.login_bonus.day_7_text") }}</p>
             <img
               src="@/assets/vip/image/img_vip_26.png"
               class="m-login-bonus-card-cash-position"
@@ -560,9 +544,9 @@ onMounted(async () => {
             class="m-login-bonus-card-checkout-bg-1 relative"
             v-if="vipSignIn.signin_day > 7 && vipSignIn.is_signin === 2"
           >
-            <p class="text-900-14 gray m-login-bonus-text-position-1">
-              {{ t("vip.login_bonus.day_8_text") }}
-            </p>
+            <p
+              class="text-900-14 gray m-login-bonus-text-position-1"
+            >{{ t("vip.login_bonus.day_8_text") }}</p>
             <p
               class="text-900-14 gray mt-2 m-login-bonus-card-money-position-1"
             >
@@ -591,9 +575,9 @@ onMounted(async () => {
               class="m-login-bonus-sunshine-img"
               v-if="vipSignIn.is_signin === 1 && vipSignIn.signin_day >= 7"
             />
-            <p class="text-900-12 white m-login-bonus-text-position-1">
-              {{ t("vip.login_bonus.day_8_text") }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-text-position-1"
+            >{{ t("vip.login_bonus.day_8_text") }}</p>
             <p
               class="text-900-12 white mt-2 m-login-bonus-card-money-position-1"
             >
@@ -609,7 +593,7 @@ onMounted(async () => {
         </v-col>
       </v-row>
       <!-- </SwiperSlide>
-      </Swiper> -->
+      </Swiper>-->
     </div>
     <font
       v-if="
@@ -617,8 +601,7 @@ onMounted(async () => {
         Number(vipSignIn.limited_deposit) == 0
       "
       class="text-900-10 m-login-bonus-bottom-text"
-      >{{ t("vip.login_bonus.footer_text_8") }}</font
-    >
+    >{{ t("vip.login_bonus.footer_text_8") }}</font>
     <v-row class="m-login-bonus-footer mx-0 align-center">
       <v-col cols="2" class="pa-0 ma-0">
         <!-- <v-btn
@@ -629,7 +612,7 @@ onMounted(async () => {
           @click="goToPrev"
         >
           <v-icon color="#FFFFFF">mdi-chevron-left</v-icon>
-        </v-btn> -->
+        </v-btn>-->
       </v-col>
       <v-col cols="8" class="pa-0 ma-0">
         <template
@@ -641,9 +624,9 @@ onMounted(async () => {
           <p class="text-center" style="line-height: normal">
             <font class="text-900-10 white">
               If you recharge
-              <font class="text-900-10 purple">
-                {{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_deposit) }}
-              </font>
+              <font
+                class="text-900-10 purple"
+              >{{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_deposit) }}</font>
               today,
             </font>
           </p>
@@ -657,9 +640,9 @@ onMounted(async () => {
           <p class="text-center" style="line-height: normal">
             <font class="text-900-10 white">
               If you bet
-              <font class="text-900-10 purple">
-                {{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_bet) }}
-              </font>
+              <font
+                class="text-900-10 purple"
+              >{{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_bet) }}</font>
               today,
             </font>
           </p>
@@ -673,16 +656,16 @@ onMounted(async () => {
           <p class="text-center" style="line-height: normal">
             <font class="text-900-10 white">
               If you recharge
-              <font class="text-900-10 purple">
-                {{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_deposit) }}
-              </font>
+              <font
+                class="text-900-10 purple"
+              >{{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_deposit) }}</font>
               &nbsp;and&nbsp;
             </font>
             <font class="text-900-10 white">
               bet
-              <font class="text-900-10 purple">
-                {{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_bet) }}
-              </font>
+              <font
+                class="text-900-10 purple"
+              >{{ platformCurrency }} {{ toFormatNum(vipSignIn.limited_bet) }}</font>
               today,
             </font>
           </p>
@@ -692,7 +675,7 @@ onMounted(async () => {
           <font class="text-900-10 purple">{{ platformCurrency }}20 </font>
           <font class="text-900-10 white">{{ t("vip.login_bonus.footer_text_2") }}</font>
           <font class="text-900-10 purple">{{ t("vip.login_bonus.footer_text_3") }}</font>
-        </p> -->
+        </p>-->
         <p
           class="text-center"
           style="line-height: normal"
@@ -701,9 +684,11 @@ onMounted(async () => {
             Number(vipSignIn.limited_deposit) != 0
           "
         >
-          <font class="text-900-10 white">{{
+          <font class="text-900-10 white">
+            {{
             t("vip.login_bonus.footer_text_4")
-          }}</font>
+            }}
+          </font>
         </p>
       </v-col>
       <v-col cols="2" class="pa-0 ma-0 text-right">
@@ -715,7 +700,7 @@ onMounted(async () => {
           @click="goToNext"
         >
           <v-icon color="#FFFFFF">mdi-chevron-right</v-icon>
-        </v-btn> -->
+        </v-btn>-->
       </v-col>
     </v-row>
     <v-dialog v-model="confirmDialog" width="280">
@@ -852,13 +837,13 @@ onMounted(async () => {
   top: 84px;
   left: 54px;
   z-index: 9999;
-  animation: moveRight 2s linear infinite;
+  animation: moveRight 1s linear infinite;
   // animation-iteration-count: 1;
 }
 
 @keyframes moveRight {
   0% {
-    transform: translateX(-84px);
+    transform: translateX(-54px);
   }
 
   100% {

@@ -55,8 +55,10 @@ onMounted(async () => {
 </script>
 
 <template>
-    <v-overlay
+    <v-dialog
         v-model="vipOverlay"
+        persistent
+        :scrim="true"
         class="align-center justify-center vip-position"
         style="z-index: 99999"
     >
@@ -99,7 +101,7 @@ onMounted(async () => {
                 ></v-checkbox>
             </div> -->
         </div>
-    </v-overlay>
+    </v-dialog>
 </template>
 
 <style lang="scss" scoped>

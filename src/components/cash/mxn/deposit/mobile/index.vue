@@ -884,8 +884,8 @@ onMounted(async () => {
         <div class="m-deposit-amout-btn-text-box">
           <span class="m-deposit-amout-btn-text-price"> {{ platformCurrency }}{{ depositAmountItem.depositSelect }}</span>
           <div class="m-deposit-amout-btn-text-award-price" v-if="!bonusCheck && depositAmountItem.bonus != 0">
-            <!-- <font class="text-700-6 white">{{ t("deposit_dialog.text_3")}}</font> -->
-            <font class="text-700-6 award-price-color">{{ platformCurrency }}{{countDepositAmount(depositAmountItem)}}</font>
+            <font class="text-700-6 white">{{ t("deposit_dialog.text_3")}}</font>
+            <font class="text-700-6 award-price-color">{{ selectedCurrencyUnit }}{{countDepositAmount(depositAmountItem)}}</font>
           </div>
         </div>
          
