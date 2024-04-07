@@ -39,7 +39,7 @@ const depositDialogShow = () => {
 
 // 点击图片调整活动详情页
 const jumpActivityDetails=()=>{
-  router.push({name: "Promo_Detail",query:{id:'2'}})
+  router.push({name: "Promo_Detail",query:{id:'15'}})
   emit("closeGetBonusDialog");
 }
 
@@ -135,7 +135,7 @@ onUnmounted(() => {
       </p>
     </div> -->
     <img
-      src="@/assets/vip/image/img_vip_register-bg.png"
+      src="https://pix.kim/res/upload/banner_image/20240407_53f3c6d6f6ab05e6f93c04e340a4bc04_1712455742181.png"
       width="320"
       height="123"
       class="m-get-bonus-dialog-img-register mx-3 mt-2"
