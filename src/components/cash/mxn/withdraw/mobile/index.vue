@@ -220,7 +220,7 @@ watch(withdrawConfig, (newValue) => {
       icon: userBalance.value.currency == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
       name: item.channel_name,
       channel_type: item.channel_type,
-      description: item.min + "~" + item.max + " " + item.currecy_type,
+      description: item.min + "~" + item.max + " " + platformCurrency.value,
       min: item.min,
       max: item.max
     })
@@ -532,7 +532,7 @@ onMounted(async () => {
       icon: userBalance.value.currency == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
       name: item.channel_name,
       channel_type: item.channel_type,
-      description: item.min + "~" + item.max + " " + item.currecy_type,
+      description: item.min + "~" + item.max + " " + platformCurrency.value,
       min: item.min,
       max: item.max
     })

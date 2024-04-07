@@ -227,7 +227,7 @@ watch(depositConfig, (newValue) => {
       icon: userBalance.value.currency == "MXN" ? mxnPaymentChannel.value[item.channel_type.toLowerCase()] : new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
       name: item.channel_name,
       channel_type: item.channel_type,
-      description: item.min + "~" + item.max + " " + item.currecy_type,
+      description: item.min + "~" + item.max + " " + platformCurrency.value,
       min: item.min,
       max: item.max
     })
@@ -882,10 +882,10 @@ onMounted(async () => {
           @click="handleDepositAmount(depositAmountItem.depositSelect)"
         >
         <div class="m-deposit-amout-btn-text-box">
-          <span class="m-deposit-amout-btn-text-price"> {{ selectedCurrencyUnit }} {{ depositAmountItem.depositSelect }}</span>
+          <span class="m-deposit-amout-btn-text-price"> {{ platformCurrency }}{{ depositAmountItem.depositSelect }}</span>
           <div class="m-deposit-amout-btn-text-award-price" v-if="!bonusCheck && depositAmountItem.bonus != 0">
             <!-- <font class="text-700-6 white">{{ t("deposit_dialog.text_3")}}</font> -->
-            <font class="text-700-6 award-price-color">{{ selectedCurrencyUnit }}{{countDepositAmount(depositAmountItem)}}</font>
+            <font class="text-700-6 award-price-color">{{ platformCurrency }}{{countDepositAmount(depositAmountItem)}}</font>
           </div>
         </div>
          
@@ -906,7 +906,7 @@ onMounted(async () => {
     </v-row>
     <v-row class="mt-3 mx-3 relative">
       <v-text-field
-        :label="`${t('deposit_dialog.amount')}(${selectedCurrencyItem.name})`"
+        :label="`${t('deposit_dialog.amount')}(${platformCurrency})`"
         class="form-textfield dark-textfield m-deposit-amount-text"
         variant="solo"
         density="comfortable"

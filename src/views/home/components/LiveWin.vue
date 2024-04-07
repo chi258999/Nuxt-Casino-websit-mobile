@@ -27,6 +27,13 @@ import vipLevelGroups from "@/utils/VipLevelGroup";
 import { storeToRefs } from "pinia";
 import {GameBigWinItem} from "@/interface/game"
 
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed<string>(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
+
 const { t } = useI18n();
 const { width } = useDisplay();
 const modules = [Pagination, Autoplay, Navigation];
@@ -137,7 +144,7 @@ const liveWinList = ()=>{
     </div> -->
     <div class="live-win-body">
       <Swiper
-      :modules="modules"
+        :modules="modules"
         :slidesPerView="5"
         :spaceBetween="8"
         :loop="true"
@@ -165,7 +172,7 @@ const liveWinList = ()=>{
               <img :src="vipLevelGroups[item.user_vip_group]" width="12" />
               <p class="text-500-8 white ml-1">{{ item.user_name }}</p>
             </div>
-            <div class="text-900-10 color-12FF76">${{ item.win_amount }}</div>
+            <div class="text-900-10 color-12FF76">{{ platformCurrency }}{{ item.win_amount }}</div>
           </div>
         </SwiperSlide>
       </Swiper>
@@ -206,7 +213,7 @@ const liveWinList = ()=>{
               <img :src="vipLevelGroups[item.user_vip_group]" width="21" />
               <p class="text-400-14 white ml-2">{{ item.user_name }}</p>
             </div>
-            <div class="text-900-18 color-12FF76">${{ item.win_amount }}</div>
+            <div class="text-900-18 color-12FF76">{{ platformCurrency }}{{ item.win_amount }}</div>
           </div>
         </SwiperSlide>
       </Swiper>
