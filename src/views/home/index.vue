@@ -1336,7 +1336,8 @@ export default Dashboard;
             v-if="item.games != undefined && item.games.length > 0"
             style="margin-bottom: 6px !important"
           >
-            <p @click="handleGameFilterBtn(item.slug)">{{ item.name }}</p>
+            <!-- <p @click="handleGameFilterBtn(item.slug)">{{ item.name }}</p> -->
+            <p>{{ item.name }}</p>
           </v-row>
 
           <!-- PC 游戏列表 -->
