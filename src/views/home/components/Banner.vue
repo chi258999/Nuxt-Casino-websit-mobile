@@ -25,6 +25,8 @@ import { Pagination, Virtual, Autoplay, Navigation } from "swiper/modules";
 import { useRouter } from "vue-router";
 import { promoStore } from "@/store/promo";
 import { STATEMENT_TYPES } from "@babel/types";
+import { agentStore } from "@/store/agent";
+import { vipStore } from "@/store/vip";
 
 const BannerComponent = defineComponent({
   components: {
@@ -43,6 +45,8 @@ const BannerComponent = defineComponent({
     const { width } = useDisplay();
     const router = useRouter();
     const { dispatchUserActivityList } = promoStore();
+    const { setAgentNavBarToggle } = agentStore();
+    const { setVipNavBarToggle } = vipStore();
     /**
      * 初始化swiper
      * Initialize swiper
@@ -103,6 +107,8 @@ const BannerComponent = defineComponent({
       await dispatchBannerList();
 
       const { getBannerList } = storeToRefs(bannerStore());
+      console.log(getBannerList, "getBannerList");
+
       state.slides.length = 0;
       getBannerList.value.forEach((element) => {
         if (element.image_path) {
@@ -110,28 +116,73 @@ const BannerComponent = defineComponent({
         }
       });
     });
+
+    // click_feedback枚举类型如下:
+    // - 0 无响应
+    // - 1 打开弹窗
+    // - 2 打开客服
+    // - 3 下载APP
+    // - 4 打开客服列表
+    // - 5 站内页面 此情况下需要关注content内容 具体定义见下文
+    // - 6 站外链接
+    // - 7 游戏分类 此情况下需要关注content内容, 为游戏分类字符串 比如bgaming
+    // - 8 具体游戏 此情况下需要关注content内容, 为具体游戏id 比如 1234
+    // - 9 打开活动广告页面 此情况下需要关注content内容, 为活动广告页面id 比如 1
     const slideImageClick = async (index: number) => {
+      console.log("slideImageClick", index);
       const { getBannerList } = storeToRefs(bannerStore());
-      let type: number = getBannerList.value[index % getBannerList.value.length].click_feedback;
+      const currentIndex = index % getBannerList.value.length
+      const currentItem = getBannerList.value[currentIndex]
+      let type: number =
+        getBannerList.value[currentIndex].click_feedback;
+      console.log(type, 'type');
+
+      // 5 站内页面 此情况下需要关注content内容
       if (type == 5) {
-        window.location.href = getBannerList.value[index].content;
+        const contentValue = currentItem.content;
+        console.log(contentValue, 'contentValue');
+        
+        switch (contentValue) {
+          case "invite_popup":
+            setAgentNavBarToggle(true)
+            break;
+          case "vip":
+            setVipNavBarToggle('1');
+            break;
+          default:
+            window.location.href = contentValue;
+            break;
+        }
       }
+
+      // 站外链接 打开新页签
       if (type == 6) {
-        window.location.href = getBannerList.value[index].content;
+        if(!currentItem.content) return;
+        window.open(currentItem.content, '_blank')
       }
+
+      //
       if (type == 7) {
-        emit("handleBannerCategory", getBannerList.value[index].content);
+        emit("handleBannerCategory", currentItem.content);
       }
       if (type == 8) {
-        window.location.href = "game/" + getBannerList.value[index].content;
+        window.location.href = "game/" + currentItem.content;
       }
-      if(type == 9) {
-        console.log(index);
-        router.push({ name: "Promo_Detail", query: { id: parseInt(getBannerList.value[index % getBannerList.value.length].content) } });
+      if (type == 9) {
+        console.log(currentIndex);
+        router.push({
+          name: "Promo_Detail",
+          query: {
+            id: parseInt(
+              currentItem.content
+            ),
+          },
+        });
       }
     };
     const calcSlide = () => {
       let res = [...state.slides, ...state.slides];
+
       //let res = [...state.slides];
       return res;
     };
@@ -189,7 +240,11 @@ export default BannerComponent;
       style="border-radius: 8px"
       @swiper="getSwiperRef"
     >
-      <swiper-slide v-for="(slide, index) in slides" :key="index" :virtualIndex="index">
+      <swiper-slide
+        v-for="(slide, index) in slides"
+        :key="index"
+        :virtualIndex="index"
+      >
         <img
           :src="slide"
           class="slider-img-width"
@@ -205,7 +260,11 @@ export default BannerComponent;
 
   <!-- 屏幕宽度小于600展示区域 -->
   <!-- Screen width is less than 600 display area -->
-  <div class="relative m-home-swiper" :class="!refferalAppBarShow ? 'mt-2' : ''" v-else>
+  <div
+    class="relative m-home-swiper"
+    :class="!refferalAppBarShow ? 'mt-2' : ''"
+    v-else
+  >
     <swiper
       :modules="modules"
       :slidesPerView="1"

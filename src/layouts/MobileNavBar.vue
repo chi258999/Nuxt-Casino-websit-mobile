@@ -1541,6 +1541,8 @@ onMounted(async () => {
         </v-list-group>
       </v-list>
       <v-divider class="divider"></v-divider>
+
+      <!--  -->
       <v-list>
         <v-list-item
           class="m-avatar-img m-user-item1 m-nav-menu"
@@ -1589,6 +1591,8 @@ onMounted(async () => {
             {{ t("navBar.menu_item_1.vip_club") }}
           </v-list-item-title>
         </v-list-item>
+        
+        <!-- Affiliate -->
         <v-list-item
           class="m-avatar-img m-user-item1 m-nav-menu"
           style="
