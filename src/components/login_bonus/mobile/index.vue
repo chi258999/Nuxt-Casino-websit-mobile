@@ -258,7 +258,7 @@ onMounted(async () => {
         @click="handleLoginBonus(0, vipSignIn.award[0])"
       />
       <div class="mt-2 text-center">
-        <Font class="color-F9BC01 text-900-18">VIP{{  vipLevelText(vipSignIn.vip_level) }}</Font>
+        <Font class="color-F9BC01 text-900-18">{{ vipLevelText(vipSignIn.vip_level) }}</Font>
         <Font class="text-900-18 white">{{ t("vip.login_bonus.title_text") }}</Font>
       </div>
       <v-row class="mt-2 mx-2">
@@ -825,11 +825,11 @@ onMounted(async () => {
 
 @keyframes moveRight {
   0% {
-    transform: translateX(-54px);
+    transform: translateY(45px);
   }
 
   100% {
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
