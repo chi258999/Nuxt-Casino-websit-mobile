@@ -87,7 +87,7 @@ const mobile = computed(() => {
   // height: 188px;
   position: fixed;
   bottom: 0;
-  z-index: 10000;
+  z-index: 1000000;
   background-color: #10AB3B;
   background-image: url(@/assets/activity_app/activity-bg.svg);
   background-size: cover;
