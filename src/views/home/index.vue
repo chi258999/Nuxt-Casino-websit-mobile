@@ -442,6 +442,8 @@ const Dashboard = defineComponent({
       //   top: 450,
       //   behavior: "smooth",
       // });
+      console.log(gamFilterBtn, 'handleGameFilterBtn');
+      
       if (gameFilterBtnFlag.value) {
         return;
       }
@@ -500,6 +502,7 @@ const Dashboard = defineComponent({
           }
         });
       }
+      // PC 
       if (mobileWidth.value > 600) {
         pagingGames.value.map((item: { games: string | any[]; page_no: number; }) => {
           if (item.games.length > 7) {
@@ -514,6 +517,7 @@ const Dashboard = defineComponent({
           }
         });
       } else {
+        // H5
         pagingGames.value.map((item: { games: string | any[]; page_no: number; }) => {
           if (item.games.length > 6) {
             item.games = item.games.slice(0, 6);
@@ -777,6 +781,8 @@ const Dashboard = defineComponent({
 
       // await dispatchGameCategories(`?type=sports`);
       // await dispatchGameCategories(`?type=${filterTabText.value}`);
+      console.log(filterTabText.value, 'filterTabText.value');
+      
       const categorieList = await getCategoriesFunc(`?type=${filterTabText.value}`)
       // await dispatchUserActivityList({})
       await bannerLoad();
@@ -853,6 +859,8 @@ const Dashboard = defineComponent({
       pagingGames.value = gameCategories.value;
 
       console.log("favoritegameList: ", favoriteGameList.value);
+      console.log("gameGroupBtnList: ", gameGroupBtnList.value);
+      console.log("allGames: ", allGames.value);
 
       await Promise.all(
         pagingGames.value.map(async (item: { slug: string; page_no: number; games: any; game_count: any; }) => {
@@ -1116,7 +1124,8 @@ export default Dashboard;
       <v-row
         :class="[mobileVersion == 'sm' ? 'mx-2 mb-0' : 'mx-4 mb-0']"
         style="margin-top: 0px"
-      >
+      > 
+        <!-- PC 分类按钮 -->
         <template v-if="mobileVersion != 'sm'">
           <v-slide-group
             class="mt-2"
@@ -1220,6 +1229,7 @@ export default Dashboard;
             </v-slide-group-item>
           </v-slide-group>
         </template>
+        <!-- H5 分类按钮 -->
         <template v-else>
           <div
             style="overflow: auto; color: white"
@@ -1317,6 +1327,7 @@ export default Dashboard;
       </v-row>
 
       <!-- game list -->
+      <!-- 全部游戏 -->
       <template v-if="selectedGameFilterBtn == 'all_game'">
         <template v-for="(item, index) in allGames" :key="index">
           <v-row
@@ -1325,27 +1336,10 @@ export default Dashboard;
             v-if="item.games != undefined && item.games.length > 0"
             style="margin-bottom: 6px !important"
           >
-            <!-- <inline-svg
-              :src="item.image"
-              width="18"
-              height="18"
-              style="margin-right: 6px"
-              :transform-source="iconTransform"
-              v-if="item.slug != 'pgsoft'"
-            >
-            </inline-svg>
-            <inline-svg
-              :src="item.image"
-              width="18"
-              height="18"
-              style="margin-right: 6px"
-              :transform-source="pgIconTransform"
-              v-else
-            >
-            </inline-svg> -->
             <p @click="handleGameFilterBtn(item.slug)">{{ item.name }}</p>
           </v-row>
 
+          <!-- PC 游戏列表 -->
           <v-row class="ml-4 mr-2 mt-2 mb-0 pc-game-row" v-if="mobileWidth > 600">
             <template v-if="item.games != undefined && item.games.length > 0">
               <template v-for="(gameItem, gameIndex) in item.games" :key="gameIndex">
@@ -1364,6 +1358,7 @@ export default Dashboard;
               </template>
             </template>
           </v-row>
+          <!-- H5 游戏列表  -->
           <v-row class="mx-1 mt-0 mb-0" v-else>
             <template v-if="item.games != undefined && item.games.length > 0">
               <template v-for="(gameItem, gameIndex) in item.games" :key="gameIndex">
@@ -1449,6 +1444,7 @@ export default Dashboard;
         </template>
       </template>
 
+      <!-- 某个类型游戏 -->
       <template
         v-for="(otherGameItem, otherIndex) in pagingGames"
         :key="otherIndex"
