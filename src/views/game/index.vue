@@ -25,6 +25,7 @@ const { t } = useI18n();
 const { width } = useDisplay();
 const { setMailMenuShow } = mailStore();
 const { dispatchGameEnter } = gameStore();
+const { setIsScroll } = gameStore();
 const { setMobileMenuShow } = gameStore();
 const route = useRoute();
 const router = useRouter();
@@ -366,6 +367,9 @@ const handleIframeLoad = () => {
   // 打开游戏，显示关闭按钮
   displayedCloseBtn.value = true
 
+  // 打开游戏，关闭横屏遮罩层的监听
+  setIsScroll(false)
+
   if (enterGameItem.value.weburl != "") {
     frameShow.value = true;
   }
@@ -377,6 +381,8 @@ const handleIframeLoad = () => {
 const handleMessageFromIframe = (event: any) => {
   console.log(event);
   if (event.data.url == "bluesite:exit") {
+    // 关闭游戏，打开横屏遮罩层的监听
+    setIsScroll(true)
     router.go(-1);
   }
 };
@@ -389,6 +395,8 @@ const handleResize = () => {
 
 // 点击关闭按钮回调
 const closeGame = () => {
+  // 关闭游戏，打开横屏遮罩层的监听
+  setIsScroll(true)
   // router.go(-1);
   router.push({path: "/"})
   // 关闭按钮显示

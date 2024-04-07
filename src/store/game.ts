@@ -46,7 +46,8 @@ export const gameStore = defineStore({
             high_rollers: [],
             lucky_bets: []
         } as Game.GameBigWinData,
-        favoriteGameList: [] as Array<number | string>
+        favoriteGameList: [] as Array<number | string>,
+        isScroll: true as boolean, // 是否需要打开横屏遮罩监听
     }),
     getters: {
         getSuccess: (state) => state.success,
@@ -66,11 +67,16 @@ export const gameStore = defineStore({
         getLanguage: (state) => state.language,
         getGameBigWinItem: (state) => state.gameBigWinItem,
         getFavoriteGameList: (state) => state.favoriteGameList,
+        getIsScroll: (state) => state.isScroll,
     },
     actions: {
         // set functions
         setSuccess(success: boolean) {
             this.success = success
+        },
+        // 设置是否显示横屏遮罩层
+        setIsScroll(param: boolean) {
+            this.isScroll = param
         },
         setErrorMessage(message: string) {
             this.errMessage = message
