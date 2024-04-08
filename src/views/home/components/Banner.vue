@@ -8,6 +8,8 @@ import {
   watch,
   onMounted,
   defineEmits,
+  onActivated, 
+  onDeactivated
 } from "vue";
 import { storeToRefs } from "pinia";
 import { refferalStore } from "@/store/refferal";
@@ -119,6 +121,14 @@ const BannerComponent = defineComponent({
       });
     });
 
+    // 提前手动关闭swiper，缓存组件时，就可以避免不动的问题
+    onActivated(() => {
+      swiper.value.autoplay.start()
+    })
+    onDeactivated(() => {
+      swiper.value.autoplay.stop()
+    })
+
     // click_feedback枚举类型如下:
     // - 0 无响应
     // - 1 打开弹窗
@@ -200,6 +210,7 @@ const BannerComponent = defineComponent({
       //   }
       // }
     };
+    
     return {
       ...toRefs(state),
       mobileWidth,

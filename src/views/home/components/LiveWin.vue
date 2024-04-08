@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, onUnmounted } from "vue";
+import { ref, onMounted, computed, onUnmounted, onActivated, onDeactivated } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { useRouter } from "vue-router";
@@ -106,9 +106,23 @@ const goGame = (item: any) => {
   router.push(`/game/${item.game_id}`);
 }
 
+const swiper = ref<any>(null);
+const getSwiperRef = (swiperInstance: any) => {
+  swiper.value = swiperInstance;
+  console.log(swiperInstance, 'swiperInstance');
+};
+
 onMounted(async () => {
   await dispatchGameBigWin();
 });
+
+// 提前手动关闭swiper，缓存组件时，就可以避免不动的问题
+onActivated(() => {
+  swiper.value.autoplay.start()
+})
+onDeactivated(() => {
+  swiper.value.autoplay.stop()
+})
 
 const liveWinList = ()=>{
   let res =[...gameBigWinItem.value.lucky_bets, ...gameBigWinItem.value.lucky_bets];
@@ -142,7 +156,7 @@ const liveWinList = ()=>{
       ></inline-svg>
       <p class="text-900-10 gray ml-1">{{ t("home.live_win.text_1") }}</p>
     </div> -->
-    <div class="live-win-body">
+    <div class="live-win-body" v-show="Swiper">
       <Swiper
         :modules="modules"
         :slidesPerView="5"
@@ -154,7 +168,10 @@ const liveWinList = ()=>{
         }"
         class="mx-2"
         style="height: auto"
+        @swiper="getSwiperRef"
       >
+        <!-- :observer="true"    
+        :observeParents="true" -->
         <SwiperSlide
           v-for="(item, index) in liveWinList()"
           :key="index"
