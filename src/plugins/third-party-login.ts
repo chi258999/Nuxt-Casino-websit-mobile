@@ -96,6 +96,7 @@ const loginOrRegister = async (token: string, value: string, type: string) => {
         await dispatchQuickRegister(params);
         console.log(params, 'dispatchQuickRegister');
     }
+    return true
 }
 
 const startAndroid = (index: number, type: string) => {
@@ -117,11 +118,11 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
             googleTokenLogin({
                 clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
             }).then(async (res: any) => {
-                await loginOrRegister(res.access_token, value, type);
                 indexValue = value;
                 typeValue = type;
+                await loginOrRegister(res.access_token, value, type);
+              resolve(true);
             });
-            resolve(true);
         }
     } catch (error) {
       reject();
@@ -153,10 +154,10 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
           typeValue = type;
           if (response.status !== "connected") {
             globalWindow.FB.login((res: any) => {
-              loginOrRegister(res.authResponse, value, type);
+              loginOrRegister(res.authResponse.accessToken, value, type);
             });
           } else {
-              await loginOrRegister(response.authResponse, value, type);
+              await loginOrRegister(response.authResponse.accessToken, value, type);
           }
         });
         resolve(true);
