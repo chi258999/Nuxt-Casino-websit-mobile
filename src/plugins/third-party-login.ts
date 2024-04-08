@@ -120,6 +120,8 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
             (window as any)["AndroidWebView"].googleLogin();
             indexValue = value;
             typeValue = type;
+
+            resolve(true);
         } else {
             googleTokenLogin({
                 clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
@@ -141,33 +143,24 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
 const loginWithFacebook = (value: string, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
-
-      if (AdjustClass.getInstance().isMobileWebview) {
-        // 啟動android原生登錄流程 
-        (window as any)["AndroidWebView"].facebookLogin();
+      globalWindow.FB.init({
+        appId: import.meta.env.VITE_FACEBOOK_APP_ID,
+        cookie: true,
+        xfbml: true,
+        version: "v19.0",
+      });
+  
+      globalWindow.FB.getLoginStatus(async (response: any) => {
         indexValue = value;
         typeValue = type;
-      } else {
-        globalWindow.FB.init({
-          appId: import.meta.env.VITE_FACEBOOK_APP_ID,
-          cookie: true,
-          xfbml: true,
-          version: "v19.0",
-        });
-  
-        globalWindow.FB.getLoginStatus(async (response: any) => {
-          indexValue = value;
-          typeValue = type;
-          if (response.status !== "connected") {
-            globalWindow.FB.login((res: any) => {
-              resolve(res.authResponse);
-            });
-          } else {
-            resolve(response.authResponse);
-          }
-        });
-      }
-
+        if (response.status !== "connected") {
+          globalWindow.FB.login((res: any) => {
+            resolve(res.authResponse);
+          });
+        } else {
+          resolve(response.authResponse);
+        }
+      });
     } catch (error) {
       reject(error);
     }
