@@ -1475,10 +1475,10 @@ export const lang: langType = {
       "header": {
         "tabs_text1": "Recomendar a un amigo",
         "tabs_text2": "Promotion details and bonus withdrawal",
-        "title_text": "Recomienda a un amigo y gana 25 MXN inmediatamente",
+        "title_text": "Recomienda a un amigo y gana 25 {0} inmediatamente",
         "body_text": "Invita amigos y gana dinero.",
         "body_text_1": "usuarios ya han participado en la campaña Invita a Nuevos Usuarios y han ganado un total combinado de",
-        "body_text_2": "MXN en recompensas en efectivo en la plataforma",
+        "body_text_2": "{0} en recompensas en efectivo en la plataforma",
         "body_text_3": "Plataforma.",
         "body_text_4": "Así funcionan las invitaciones"
       },

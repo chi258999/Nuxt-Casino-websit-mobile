@@ -1487,7 +1487,7 @@ export const lang: langType = {
         "title_text": "Refer a friend and earn 20 {0}  immediately",
         "body_text": "Invite Friends, Earn Money",
         "body_text_1": " users have already participated in the Invite New Users campaign and they have earned a combined total of ",
-        "body_text_2": "MXN in cash rewards on the",
+        "body_text_2": "{0} in cash rewards on the",
         "body_text_3": " platform.",
         "body_text_4": "How invitations work"
       },
