@@ -107,7 +107,7 @@ const vipLevelText = (value: number) => {
       } else {
         let levelText = "Hierro negro";
         switch (vipLevels.value[i].rank_name) {
-          case "Black Iron":
+          case "Iron":
             levelText = "Hierro negro";
             break;
           case "Bronze":
@@ -122,15 +122,16 @@ const vipLevelText = (value: number) => {
           case "Platinum":
             levelText = "Platino";
             break;
-          case "Diamonds":
+          case "Diamond":
             levelText = "Diamante";
             break;
           case "Yellow Diamond":
             levelText = "Diamante amarillo";
             break;
-
-          default:
+          case "Blue Diamond":
             levelText = "Diamante azul";
+            break;
+          default:
             break;
         }
         return levelText;
@@ -216,7 +217,7 @@ const submitVipLevelAward = async () => {
 // Route jump  路由跳转
 const goPath = () => {
   setVipNavBarToggle("0");
-  router.push({ name: "Bonuses And Transactions", query: { tab: "VIP" } });
+  router.push({ name: "Bonuses And Transactions", query: { tab: "vip" } });
   setBonusTabIndex(1);
 };
 

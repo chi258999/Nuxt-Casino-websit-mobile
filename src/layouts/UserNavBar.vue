@@ -540,43 +540,43 @@ onMounted(async () => {
                     {{ vipLevelImgs[0].content }}
                   </div>
                   <div
-                    class="text-800-10 color-F9BC01 text-center"
+                    class="text-800-10 color-F9BC01 text-center level-text"
                     v-if="vipInfo.level >= 1 && vipInfo.level < 25"
                   >
                     {{ vipLevelImgs[1].content }}
                   </div>
                   <div
-                    class="text-800-10 color-F9BC01 text-center"
+                    class="text-800-10 color-F9BC01 text-center level-text"
                     v-if="vipInfo.level >= 25 && vipInfo.level < 50"
                   >
                     {{ vipLevelImgs[2].content }}
                   </div>
                   <div
-                    class="text-800-10 color-F9BC01 text-center"
+                    class="text-800-10 color-F9BC01 text-center level-text"
                     v-if="vipInfo.level >= 50 && vipInfo.level < 75"
                   >
                     {{ vipLevelImgs[3].content }}
                   </div>
                   <div
-                    class="text-800-10 color-F9BC01 text-center"
+                    class="text-800-10 color-F9BC01 text-center level-text"
                     v-if="vipInfo.level >= 75 && vipInfo.level < 100"
                   >
                     {{ vipLevelImgs[4].content }}
                   </div>
                   <div
-                    class="text-800-10 color-F9BC01 text-center"
+                    class="text-800-10 color-F9BC01 text-center level-text"
                     v-if="vipInfo.level >= 100 && vipInfo.level < 150"
                   >
                     {{ vipLevelImgs[5].content }}
                   </div>
                   <div
-                    class="text-800-10 color-F9BC01 text-center"
+                    class="text-800-10 color-F9BC01 text-center level-text"
                     v-if="vipInfo.level >= 150 && vipInfo.level < 200"
                   >
                     {{ vipLevelImgs[6].content }}
                   </div>
                   <div
-                    class="text-800-10 color-F9BC01 text-center"
+                    class="text-800-10 color-F9BC01 text-center level-text"
                     v-if="vipInfo.level >= 200"
                   >
                     {{ vipLevelImgs[7].content }}
@@ -814,6 +814,11 @@ onMounted(async () => {
   /* Button Shadow */
   // box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   margin: 43.5px auto 0;
+}
+
+.level-text {
+  width: 53px;
+  word-wrap: break-word;
 }
 
 .m-refer-friend-img-position {
