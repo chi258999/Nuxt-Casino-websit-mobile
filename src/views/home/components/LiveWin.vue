@@ -107,9 +107,9 @@ const goGame = (item: any) => {
 }
 
 const swiper = ref<any>(null);
+const swiperShow = ref<boolean>(true);
 const getSwiperRef = (swiperInstance: any) => {
   swiper.value = swiperInstance;
-  console.log(swiperInstance, 'swiperInstance');
 };
 
 onMounted(async () => {
@@ -118,10 +118,10 @@ onMounted(async () => {
 
 // 提前手动关闭swiper，缓存组件时，就可以避免不动的问题
 onActivated(() => {
-  swiper.value.autoplay.start()
+  swiperShow.value = true;
 })
 onDeactivated(() => {
-  swiper.value.autoplay.stop()
+  swiperShow.value = false;
 })
 
 const liveWinList = ()=>{
@@ -156,8 +156,9 @@ const liveWinList = ()=>{
       ></inline-svg>
       <p class="text-900-10 gray ml-1">{{ t("home.live_win.text_1") }}</p>
     </div> -->
-    <div class="live-win-body" v-show="Swiper">
+    <div class="live-win-body">
       <Swiper
+        v-if="swiperShow"
         :modules="modules"
         :slidesPerView="5"
         :spaceBetween="8"
@@ -170,8 +171,6 @@ const liveWinList = ()=>{
         style="height: auto"
         @swiper="getSwiperRef"
       >
-        <!-- :observer="true"    
-        :observeParents="true" -->
         <SwiperSlide
           v-for="(item, index) in liveWinList()"
           :key="index"

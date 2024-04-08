@@ -54,6 +54,7 @@ const BannerComponent = defineComponent({
      * Initialize swiper
      */
     const swiper = ref<any>(null);
+    const swiperShow = ref<boolean>(true);
     const { dispatchBannerList } = bannerStore();
     const state = reactive({
       /**
@@ -123,10 +124,10 @@ const BannerComponent = defineComponent({
 
     // 提前手动关闭swiper，缓存组件时，就可以避免不动的问题
     onActivated(() => {
-      swiper.value.autoplay.start()
+      swiperShow.value = true;
     })
     onDeactivated(() => {
-      swiper.value.autoplay.stop()
+      swiperShow.value = false;
     })
 
     // click_feedback枚举类型如下:
