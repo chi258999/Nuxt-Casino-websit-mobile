@@ -55,15 +55,15 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
       case ThirdPartyWayEnum.FACEBOOK_LOGIN:
 
         if (AdjustClass.getInstance().isMobileWebview) {
-          // 啟動android原生登錄流程 
-          (window as any)["AndroidWebView"].facebookLogin();
           indexValue = value;
           typeValue = type;
+          // 啟動android原生登錄流程 
+          await (window as any)["AndroidWebView"].facebookLogin();
         } else {
           let res =  await loginWithFacebook(value, type);
           await loginOrRegister(res.accessToken, value, type);
         }
-        return 
+        return
       case ThirdPartyWayEnum.GOOGLE_LOGIN:
         return await loginWithGoogle(value, type);
       default:
