@@ -44,11 +44,12 @@ const openRefferalDialogShow = () => {
   setRefferalDialogShow(true);
 };
 
+// 获取下载app活动信息
+downloadAppAcquisition()
+
 onMounted(() => {
   // 获取当前运行的是否浏览器
   runningSystem()
-  // 获取下载app活动信息
-  downloadAppAcquisition()
 })
 
 </script>

@@ -67,6 +67,7 @@ const Login = defineComponent({
     const { dispatchCurrencyList } = currencyStore();
     const {  getGameBetbyInit, closeKill } = gameStore();
     const {  downloadApprReceive } = activityAppStore();
+    const {  userDownloadAppAcquisition } = activityAppStore();
   
     // initiate component state
     const state = reactive({
@@ -217,6 +218,12 @@ const Login = defineComponent({
       return getActivityBonus.value;
     });
 
+    // 获取app下载活动id
+    let downloadID = computed(() => {
+      const { getDownloadID } = storeToRefs(activityAppStore());
+      return getDownloadID.value;
+    });
+
     // methods
     const handleLoginFormSubmit = async (event) => {
       // 不是回车键不触发  event.keyCode判断是不是软键盘触发
@@ -225,39 +232,46 @@ const Login = defineComponent({
       document.activeElement.blur();
 
       state.loading = true;
-      const queryParams = getQueryParams()
-      // 如果用户是app登录，那就领取奖励
-      if (queryParams['mobile']) {
-        try {
-          await downloadApprReceive()
-          const toast = useToast();
-          toast.success(`${t('activity_app.text_1')} ${platformCurrency}${activityAppBonus}`, {
-            timeout: 3000,
-            closeOnClick: false,
-            pauseOnFocusLoss: false,
-            pauseOnHover: false,
-            draggable: false,
-            showCloseButtonOnHover: false,
-            hideProgressBar: true,
-            closeButton: "button",
-            icon: SuccessIcon,
-            rtl: false,
-          });
-        } catch (error) {
-          
-        }
-      }
 
       await dispatchSignIn({
         uid: state.formData.emailAddress,
         password: state.formData.password,
       });
+
       await loginSuccess();
       if(!localStorage.getItem(userInfo.value.name)){
         localStorage.setItem(userInfo.value.name,'0');
       }else{
         localStorage.setItem(userInfo.value.name,'1');
       }
+
+      setTimeout(async () => {
+        const queryParams = getQueryParams()
+        // 如果用户是app登录，那就领取奖励
+        if (queryParams['mobile']) {
+          try {
+            await downloadApprReceive({id: downloadID.value})
+            const toast = useToast();
+            toast.success(`${t('activity_app.text_1')} ${platformCurrency}${activityAppBonus}`, {
+              timeout: 3000,
+              closeOnClick: false,
+              pauseOnFocusLoss: false,
+              pauseOnHover: false,
+              draggable: false,
+              showCloseButtonOnHover: false,
+              hideProgressBar: true,
+              closeButton: "button",
+              icon: SuccessIcon,
+              rtl: false,
+            });
+
+            await userDownloadAppAcquisition()
+          } catch (error) {
+            
+          }
+        }
+      }, 500);
+
       state.loading = false;
     };
 

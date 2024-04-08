@@ -23,18 +23,36 @@ export const activityAppStore = defineStore({
     setAppConfirmDialogShow(param: boolean) {
       this.appConfirmDialogShow = param;
     },
-    // 获取下载app活动的数据
+    // 获取未登录时下载app活动的数据
     async downloadAppAcquisition() {
       const route: string = NETWORK.DOWNLOADAPP.DOWAPP_INFO_ACQUISTION;
       const network: Network = Network.getInstance();
       // response call back function
-      const next = (response: any) => {
+      const next = (response: any, rej: any) => {
         if (response.code == 200) {
-          const data = response.data
-          this.downloadID = data.id
+          const data = response.data          
+          this.downloadID = String(data.id)
           this.downloadLink = data.link
           this.activityBonus = data.bonus
         } else {
+          
+        }
+      }
+      await network.sendMsg(route, {}, next, 1, 4);
+    },
+    // 获取登录之后下载app活动的数据
+    async userDownloadAppAcquisition() {
+      const route: string = NETWORK.DOWNLOADAPP.USER_DOWAPP_INFO_ACQUISTION;
+      const network: Network = Network.getInstance();
+      // response call back function
+      const next = (response: any, rej: any) => {
+        if (response.code == 200) {
+          const data = response.data          
+          this.downloadID = String(data.id)
+          this.downloadLink = data.link
+          this.activityBonus = data.bonus
+        } else {
+          
         }
       }
       await network.sendMsg(route, {}, next, 1, 4);
@@ -51,17 +69,17 @@ export const activityAppStore = defineStore({
       }
     },
     // 用户通过app登录，领取奖励
-    async downloadApprReceive() {
+    async downloadApprReceive(data: any) {
+      console.log(data, 'downloadApprReceivedownloadApprReceivedownloadApprReceivedownloadApprReceivedownloadApprReceivedownloadApprReceive');
       const route: string = NETWORK.DOWNLOADAPP.DOWAPP_RECEIVE;
       const network: Network = Network.getInstance();
       // response call back function
-      const next = (response: any) => {
+      const next = async (response: any) => {
         if (response.code == 200) {
-          
         } else {
         }
       }
-      await network.sendMsg(route, {id: this.downloadID}, next, 1, 4);
+      await network.sendMsg(route, data, next, 1);
     },
   }
 })
