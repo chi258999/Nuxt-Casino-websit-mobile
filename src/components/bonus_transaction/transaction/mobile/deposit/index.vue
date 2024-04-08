@@ -145,6 +145,8 @@ const handlePrev = async (page_no: number) => {
 }
 
 watch(depositHistoryItem, (value) => {
+  console.log(value, 'depositHistoryItem-watch');
+  
   paginationLength.value = moreDepositHistoryFlag.value ? paginationLength.value + 1 : paginationLength.value
 }, { deep: true, immediate: true })
 
@@ -182,6 +184,11 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
   })
 
   return fomarttedAmount
+}
+
+// 有值则转化，没值显示空
+const getFormatAmount = (amount) => {
+  return amount ? `${platformCurrency.value}${toFormatNum(Number(amount))}` : ''
 }
 </script>
 <template>
@@ -300,7 +307,7 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
                 min-width: 130px;
               "
             >
-             {{ platformCurrency }}{{ toFormatNum(Number(item.amount)) }}
+             {{ getFormatAmount(item.amount) }}
             </td>
             <td
               class="text-400-12 text-center"
