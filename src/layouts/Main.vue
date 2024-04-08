@@ -532,8 +532,14 @@ const handleResize = () => {
   mainHeight.value = window.innerHeight;
 }
 
+const fixBtnContainer = ref(false)
 watch(route, (to) => {
   // console.log(to.path);
+  if(to.path === '/sports') {
+    fixBtnContainer.value = false;
+  } else {
+    fixBtnContainer.value = true;
+  }
 }, { flush: 'pre', immediate: true, deep: true })
 
 // 打开加入group弹窗
@@ -572,6 +578,7 @@ const swingButton = () => {
     isSwinging.value = false;
   }, 1600);
 };
+
 
 onMounted(() => {
   // 在组件挂载时启动摇摆按钮定时器
@@ -943,20 +950,25 @@ const routeInited = () => {
         :key="route.path"
       />
     </router-view>
-    <!-- message btn -->
-    <div class="m-message-btn" @click="openGroupDialog">
-      <img src="@/assets/public/svg/message.svg" class="m-back-icon-position" />
+
+    <!-- fix钉 按钮集合 -->
+    <div v-show="fixBtnContainer">
+      <!-- message btn -->
+      <div class="m-message-btn" @click="openGroupDialog">
+        <img src="@/assets/public/svg/message.svg" class="m-back-icon-position" />
+      </div>
+
+      <!-- service btn -->
+      <div class="m-service-btn" @click="openLiveChat">
+        <img src="@/assets/public/svg/service-icon.svg" class="m-back-icon-position" />
+      </div>
+
+      <!-- 点击打开下载app页面 -->
+      <div class="m-activity-app-btn" :class="{ 'm-activity-app-swinging-button': isSwinging }" @click="openActivityApp" v-if="mobile">
+        <img src="@/assets/activity_app/app-floating-button.svg" class="m-back-icon-position" />
+      </div>
     </div>
 
-    <!-- service btn -->
-    <div class="m-service-btn" @click="openLiveChat">
-      <img src="@/assets/public/svg/service-icon.svg" class="m-back-icon-position" />
-    </div>
-
-    <!-- 点击打开下载app页面 -->
-    <div class="m-activity-app-btn" :class="{ 'm-activity-app-swinging-button': isSwinging }" @click="openActivityApp" v-if="mobile">
-      <img src="@/assets/activity_app/app-floating-button.svg" class="m-back-icon-position" />
-    </div>
 
     <!-- back top -->
 
