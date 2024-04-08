@@ -112,13 +112,13 @@ const getSwiperRef = (swiperInstance: any) => {
 const vipLevelText = (value: number) => {
   for (let i in vipLevels.value) {
     if (vipLevels.value[i].level === value) {
-      // 英文西班牙判断
+      // 英文西班牙
       if (localStorage.getItem("lang") === "en") {
         return vipLevels.value[i].rank_name;
       } else {
         let levelText = "Hierro negro";
         switch (vipLevels.value[i].rank_name) {
-          case "Black Iron":
+          case "Iron":
             levelText = "Hierro negro";
             break;
           case "Bronze":
@@ -133,15 +133,16 @@ const vipLevelText = (value: number) => {
           case "Platinum":
             levelText = "Platino";
             break;
-          case "Diamonds":
+          case "Diamond":
             levelText = "Diamante";
             break;
           case "Yellow Diamond":
             levelText = "Diamante amarillo";
             break;
-
-          default:
+          case "Blue Diamond":
             levelText = "Diamante azul";
+            break;
+          default:
             break;
         }
         return levelText;
@@ -755,7 +756,7 @@ onMounted(async () => {
 
 .m-login-bonus-dialog-container {
   width: 340px;
-  height: 400px;
+  height: 435px;
   border-radius: 16px;
   background: #1d2027;
   position: relative;
@@ -789,7 +790,8 @@ onMounted(async () => {
   left: 50%;
   transform: translateX(-50%);
   width: 320px;
-  height: 338px;
+  // height: 370px;
+  padding: 10px 0;
   border-radius: 14px;
   background: #15161c;
   box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset;
