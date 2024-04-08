@@ -18,6 +18,7 @@ import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import CloseIframe from "@/components/close_iframe/index.vue";
 import { getDeviceType } from "@/utils/getPublicInformation";
+import { getQueryParams } from "@/utils/getPublicInformation";
 
 // 是否显示关闭按钮
 const displayedCloseBtn = ref<boolean>(false)
@@ -394,12 +395,14 @@ const handleResize = () => {
   mobileHeight.value = window.innerHeight;
 };
 
+const queryParams = getQueryParams()
+
 // 点击关闭按钮回调
 const closeGame = () => {
   // 关闭游戏，打开横屏遮罩层的监听
   setIsScroll(true)
   // router.go(-1);
-  router.push({path: "/"})
+  router.push({path: "/", query: queryParams})
   // 关闭按钮显示
   // displayedCloseBtn.value = false
 }
