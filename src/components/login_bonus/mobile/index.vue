@@ -62,7 +62,6 @@ const modules = [Pagination];
 
 const vipLevels = computed(() => {
   const { getVipLevels } = storeToRefs(vipStore());
-  console.log(getVipLevels.value[1]);
   return getVipLevels.value;
 });
 
@@ -111,15 +110,48 @@ const getSwiperRef = (swiperInstance: any) => {
 
 // Match VIP level name  匹配vip等级名称
 const vipLevelText = (value: number) => {
-    for (let i in vipLevels.value) {
-        if (vipLevels.value[i].level === value) {
-            return vipLevels.value[i].rank_name;
+  for (let i in vipLevels.value) {
+    if (vipLevels.value[i].level === value) {
+      // 英文西班牙判断
+      if (localStorage.getItem("lang") === "en") {
+        return vipLevels.value[i].rank_name;
+      } else {
+        let levelText = "Hierro negro";
+        switch (vipLevels.value[i].rank_name) {
+          case "Black Iron":
+            levelText = "Hierro negro";
+            break;
+          case "Bronze":
+            levelText = "Bronce";
+            break;
+          case "Silver":
+            levelText = "Plata";
+            break;
+          case "Gold":
+            levelText = "Oro";
+            break;
+          case "Platinum":
+            levelText = "Platino";
+            break;
+          case "Diamonds":
+            levelText = "Diamante";
+            break;
+          case "Yellow Diamond":
+            levelText = "Diamante amarillo";
+            break;
+
+          default:
+            levelText = "Diamante azul";
+            break;
         }
+        return levelText;
+      }
     }
-}
+  }
+};
 
 const handleLoginBonus = async (day: number, moeny: any) => {
-  console.log(vipSignIn.value,'vipSignIn.value')
+  console.log(vipSignIn.value, "vipSignIn.value");
   if (token.value == undefined) {
     setAuthModalType("login");
     setAuthDialogVisible(true);
@@ -139,18 +171,21 @@ const handleLoginBonus = async (day: number, moeny: any) => {
   if (vipSignIn.value.signin_day === day && vipSignIn.value.is_signin === 1) {
     await dispatchVipSigninawardReceive();
     const toast = useToast();
-    toast.success(`Congratulations on your prize:${platformCurrency.value}${Number(moeny)}`, {
-      timeout: 3000,
-      closeOnClick: false,
-      pauseOnFocusLoss: false,
-      pauseOnHover: false,
-      draggable: false,
-      showCloseButtonOnHover: false,
-      hideProgressBar: true,
-      closeButton: "button",
-      icon: GiftIcon,
-      rtl: false
-    });
+    toast.success(
+      `Congratulations on your prize:${platformCurrency.value}${Number(moeny)}`,
+      {
+        timeout: 3000,
+        closeOnClick: false,
+        pauseOnFocusLoss: false,
+        pauseOnHover: false,
+        draggable: false,
+        showCloseButtonOnHover: false,
+        hideProgressBar: true,
+        closeButton: "button",
+        icon: GiftIcon,
+        rtl: false
+      }
+    );
     // 给已经领取的账号打上标识
     showGuide.value = "1";
   } else if (
@@ -272,9 +307,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="32"
             />
-            <p class="text-900-14 gray m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[0] }}
-            </p>
+            <p
+              class="text-900-14 gray m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[0] }}</p>
           </div>
           <div
             class="m-login-bonus-card-bg-2 relative"
@@ -296,9 +331,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="29"
             />
-            <p class="text-900-12 white m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[0] }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[0] }}</p>
           </div>
         </v-col>
         <v-col cols="4" class="pa-0 d-flex justify-center">
@@ -311,9 +346,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="32"
             />
-            <p class="text-900-14 gray m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[1] }}
-            </p>
+            <p
+              class="text-900-14 gray m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[1] }}</p>
           </div>
           <div
             class="m-login-bonus-card-bg-2 relative"
@@ -335,9 +370,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="40"
             />
-            <p class="text-900-12 white m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[1] }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[1] }}</p>
           </div>
         </v-col>
         <v-col cols="4" class="pa-0 d-flex justify-center">
@@ -350,9 +385,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="32"
             />
-            <p class="text-900-14 gray m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[2] }}
-            </p>
+            <p
+              class="text-900-14 gray m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[2] }}</p>
           </div>
           <div
             class="m-login-bonus-card-bg-3 relative"
@@ -374,9 +409,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="50"
             />
-            <p class="text-900-12 white m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[2] }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[2] }}</p>
           </div>
         </v-col>
       </v-row>
@@ -391,9 +426,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="32"
             />
-            <p class="text-900-14 gray login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[3] }}
-            </p>
+            <p
+              class="text-900-14 gray login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[3] }}</p>
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
@@ -415,9 +450,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="48"
             />
-            <p class="text-900-12 white m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[3] }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[3] }}</p>
           </div>
         </v-col>
         <v-col cols="4" class="pa-0 d-flex justify-center">
@@ -430,9 +465,9 @@ onMounted(async () => {
               class="login-bonus-card-cash-position"
               width="32"
             />
-            <p class="text-900-14 gray m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[4] }}
-            </p>
+            <p
+              class="text-900-14 gray m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[4] }}</p>
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
@@ -454,9 +489,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="45"
             />
-            <p class="text-900-12 white m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[4] }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[4] }}</p>
           </div>
         </v-col>
         <v-col cols="4" class="pa-0 d-flex justify-center">
@@ -469,9 +504,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="32"
             />
-            <p class="text-900-14 gray m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[5] }}
-            </p>
+            <p
+              class="text-900-14 gray m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[5] }}</p>
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
@@ -493,9 +528,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="50"
             />
-            <p class="text-900-12 white m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[5] }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[5] }}</p>
           </div>
         </v-col>
       </v-row>
@@ -510,9 +545,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="32"
             />
-            <p class="text-900-14 gray m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[6] }}
-            </p>
+            <p
+              class="text-900-14 gray m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[6] }}</p>
           </div>
           <div
             class="m-login-bonus-card-bg-4 relative"
@@ -534,9 +569,9 @@ onMounted(async () => {
               class="m-login-bonus-card-cash-position"
               width="50"
             />
-            <p class="text-900-12 white m-login-bonus-card-money-position">
-              {{ platformCurrency }}{{ vipSignIn.award[6] }}
-            </p>
+            <p
+              class="text-900-12 white m-login-bonus-card-money-position"
+            >{{ platformCurrency }}{{ vipSignIn.award[6] }}</p>
           </div>
         </v-col>
         <v-col cols="8" class="pa-0 d-flex justify-center">
@@ -549,9 +584,7 @@ onMounted(async () => {
             >{{ t("vip.login_bonus.day_8_text") }}</p>
             <p
               class="text-900-14 gray mt-2 m-login-bonus-card-money-position-1"
-            >
-              {{ platformCurrency }}{{ vipSignIn.award[7] }}
-            </p>
+            >{{ platformCurrency }}{{ vipSignIn.award[7] }}</p>
             <img
               src="@/assets/public/svg/icon_public_18.svg"
               class="m-login-bonus-card-cash-position"
@@ -580,9 +613,7 @@ onMounted(async () => {
             >{{ t("vip.login_bonus.day_8_text") }}</p>
             <p
               class="text-900-12 white mt-2 m-login-bonus-card-money-position-1"
-            >
-              {{ platformCurrency }}{{ vipSignIn.award[7] }}
-            </p>
+            >{{ platformCurrency }}{{ vipSignIn.award[7] }}</p>
             <img
               src="@/assets/vip/image/img_vip_27.png"
               width="113"

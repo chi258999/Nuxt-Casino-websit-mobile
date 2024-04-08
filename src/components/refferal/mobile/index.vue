@@ -196,7 +196,7 @@ onMounted(async () => {
           {{ t("refferal.description.text_2", [platformCurrency]) }}
         </div>
         <div
-          class="mt-2 mx-6 text-gray text-500-10"
+          class="mt-2 mx-6 mb-1 text-gray text-500-10"
           style="word-break: break-all"
         >
           {{ t("refferal.description.text_3", [platformCurrency]) }}
@@ -212,9 +212,15 @@ onMounted(async () => {
             <div class="mx-4 mt-2 text-600-14 text-gray">
               {{ t("refferal.description.term_text_1") }}
             </div>
-             <div class="mx-4 mt-2 text-600-14 text-gray">
+             <!-- <div class="mx-4 mt-2 text-600-14 text-gray">
               {{ t("refferal.description.term_text_2") }}
-            </div>
+            </div> -->
+               <p
+              class="ml-4 mr-2 mt-2 text-400-10 text-gray"
+              style="word-break: break-all"
+            >
+              {{ t("refferal.description.term_text_2", [platformCurrency]) }}
+            </p>
              <div class="mx-4 mt-2 text-600-14 text-gray">
               {{ t("refferal.description.term_text_3") }}
             </div>
@@ -234,7 +240,7 @@ onMounted(async () => {
               {{ t("refferal.description.text_5", [platformCurrency]) }}
             </p>
              <p
-              class="ml-4 mr-2 mt-2 text-400-10 text-gray"
+              class="ml-4 mr-2 mt-2 mb-1 text-400-10 text-gray"
               style="word-break: break-all"
             >
               {{ t("refferal.description.text_6", [platformCurrency]) }}

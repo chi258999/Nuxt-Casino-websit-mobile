@@ -17,6 +17,7 @@ import { useRoute, useRouter } from "vue-router";
 import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import CloseIframe from "@/components/close_iframe/index.vue";
+import { getDeviceType } from "@/utils/getPublicInformation";
 
 // 是否显示关闭按钮
 const displayedCloseBtn = ref<boolean>(false)
@@ -411,6 +412,27 @@ onMounted(async () => {
   });
   window.addEventListener("resize", handleResize);
   handleResize()
+
+  // 判断是否切换横竖屏
+  window.addEventListener(
+    "onorientationchange" in window ? "orientationchange" : "resize",
+    function () {
+      frameShow.value = true;
+      setTimeout(() => {
+        // 页面重载
+        window.location.reload();
+        frameShow.value = false;
+      }, 200);
+    },
+    false
+  );
+
+  // 判断初始化是否在游戏页面并且是移动端，则关闭遮罩层
+  if(['ios', 'android'].includes(getDeviceType())) {
+    // 打开游戏，关闭横屏遮罩层的监听
+    setIsScroll(false)
+  }
+
   mobileHeight.value = window.innerHeight;
   setMobileMenuShow(false);
   window.scrollTo({
@@ -455,7 +477,7 @@ onUnmounted(() => {
 
   <CloseIframe v-if="displayedCloseBtn" @close="closeGame"></CloseIframe>
 
-  <div class="game-body" v-if="mobileWidth < 600">
+  <div class="game-body" v-if="mobileWidth < 600 || ['ios', 'android'].includes(getDeviceType())">
     <div class="m-game-frame-body">
       <div class="m-loading-container relative" v-if="!frameShow">
         <div class="loading-body">
@@ -466,21 +488,20 @@ onUnmounted(() => {
       </div>
       <div id="game_wrapper safari_only">
         <iframe
-          v-if="enterGameItem.method == 'HTML'"
           ref="gameFrameRef"
           :srcdoc="enterGameItem.weburl"
           :style="{ height: frameShow ? '100%' : '0px', position: 'fixed' }"
           class="home-game-frame-area"
           @load="handleIframeLoad"
         ></iframe>
-        <iframe
+        <!-- <iframe
           v-else
           ref="gameFrameRef"
           :src="enterGameItem.weburl"
           :style="{ height: frameShow ? '100%' : '0px', position: 'fixed' }"
           class="home-game-frame-area"
           @load="handleIframeLoad"
-        ></iframe>
+        ></iframe> -->
       </div>
     </div>
   </div>
