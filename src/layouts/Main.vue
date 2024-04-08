@@ -55,6 +55,7 @@ const MGetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonu
 const MenuSemiCircle = defineAsyncComponent(() => import("@/components/global/menu_semi_circle/index.vue"));
 const LevelUpDialog = defineAsyncComponent(() => import("@/components/level_up/index.vue"));
 const MLevelUpDialog = defineAsyncComponent(() => import("@/components/level_up/mobile/index.vue"));
+const ActivityApp = defineAsyncComponent(() => import("@/components/activity_app/index.vue"));
 // const Deposit = defineAsyncComponent(() => import("@/components/cash/deposit/index.vue"));
 // const MDeposit = defineAsyncComponent(() => import("@/components/cash/deposit/mobile/index.vue"));
 // const Withdraw = defineAsyncComponent(() => import("@/components/cash/withdraw/index.vue"));
@@ -985,6 +986,10 @@ const routeInited = () => {
 
     <!-------------------------------- Footer Tab ----------------------------------------->
     <Footer v-if="route.path != '/promo'" />
+
+    <!-- 下载app -->
+    <ActivityApp />
+
   </v-main>
 </template>
 <style lang="scss">
