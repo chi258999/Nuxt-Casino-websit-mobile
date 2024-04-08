@@ -8,6 +8,8 @@ import {
   watch,
   onMounted,
   defineEmits,
+  onActivated, 
+  onDeactivated
 } from "vue";
 import { storeToRefs } from "pinia";
 import { refferalStore } from "@/store/refferal";
@@ -52,6 +54,7 @@ const BannerComponent = defineComponent({
      * Initialize swiper
      */
     const swiper = ref<any>(null);
+    const swiperShow = ref<boolean>(true);
     const { dispatchBannerList } = bannerStore();
     const state = reactive({
       /**
@@ -118,6 +121,14 @@ const BannerComponent = defineComponent({
         }
       });
     });
+
+    // 提前手动关闭swiper，缓存组件时，就可以避免不动的问题
+    onActivated(() => {
+      swiperShow.value = true;
+    })
+    onDeactivated(() => {
+      swiperShow.value = false;
+    })
 
     // click_feedback枚举类型如下:
     // - 0 无响应
@@ -200,6 +211,7 @@ const BannerComponent = defineComponent({
       //   }
       // }
     };
+    
     return {
       ...toRefs(state),
       mobileWidth,
