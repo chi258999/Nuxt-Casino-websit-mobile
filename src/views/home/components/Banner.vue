@@ -188,17 +188,17 @@ const BannerComponent = defineComponent({
       return res;
     };
     const handleSlideChange = (event: any) => {
-      let bullets = document.getElementsByClassName("swiper-pagination-bullet");
+      // let bullets = document.getElementsByClassName("swiper-pagination-bullet");
 
-      for (let i = 0; i < bullets.length; i++) {
-        if (i == event.activeIndex % state.slides.length)
-          bullets[event.activeIndex % state.slides.length].classList.add(
-            "swiper-pagination-bullet-active"
-          );
-        else {
-          bullets[i].classList.remove("swiper-pagination-bullet-active");
-        }
-      }
+      // for (let i = 0; i < bullets.length; i++) {
+      //   if (i == event.activeIndex % state.slides.length)
+      //     bullets[event.activeIndex % state.slides.length].classList.add(
+      //       "swiper-pagination-bullet-active"
+      //     );
+      //   else {
+      //     bullets[i].classList.remove("swiper-pagination-bullet-active");
+      //   }
+      // }
     };
     return {
       ...toRefs(state),
@@ -377,9 +377,9 @@ export default BannerComponent;
     opacity: 1;
     margin: 0 var(--swiper-pagination-bullet-horizontal-gap, 2px) !important;
   }
-  .swiper-pagination-bullet:not(:nth-child(-n + 3)) {
-    display: none !important;
-  }
+  // .swiper-pagination-bullet:not(:nth-child(-n + 3)) {
+    // display: none !important;
+  // }
   .swiper-pagination {
     bottom: -12px !important;
   }
