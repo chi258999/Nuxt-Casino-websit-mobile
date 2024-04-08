@@ -1491,10 +1491,16 @@ export const lang: langType = {
     },
     "copy_success_text": "Copiar al portapapeles.",
     "description": {
-      "text_1": "Invita a tus amigos",
-      "text_2": "Invita a amigos que aún no estén en Blue.game. Recibirás 20,00 {0} por cada amigo que se registre y haga un depósito. No hay límite en el número de amigos que puedes invitar. Eso significa que tampoco hay límite para lo que puedes ganar.",
-      "term_text": "Términos:",
-      "text_3": "Lorem Ipsum es simplemente el texto ficticio de la industria tipográfica. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y la desordenó para hacer un libro de muestras tipográficas. Ha sobrevivido no sólo a cinco siglos, sino también al salto a la composición electrónica, permaneciendo esencialmente inalterado. Se popularizó en los años 60 con la aparición de las hojas Letraset, que contenían pasajes de Lorem Ipsum, y más recientemente con programas de autoedición como Aldus PageMaker, que incluían versiones de Lorem Ipsum. Lorem Ipsum es simplemente el texto ficticio de la industria de la impresión y la composición tipográfica. Lorem Ipsum no es más que el texto ficticio de la industria de la impresión y la composición tipográfica. Lorem Ipsum ha sido el texto ficticio estándar de la industria desde el siglo XVI, cuando un impresor desconocido tomó una galera de tipos y la mezcló para hacer un libro de muestras tipográficas. Ha sobrevivido no sólo a cinco siglos, sino también al salto a la composición electrónica, permaneciendo esencialmente inalterado. Se popularizó en los años 60 con la aparición de las hojas Letraset, que contenían pasajes de Lorem Ipsum, y más recientemente con programas de autoedición como Aldus PageMaker, que incluían versiones de Lorem Ipsum. Lorem Ipsum no es más que el texto ficticio de la industria tipográfica.",
+      "text_1": "Invitar a nuevos usuarios y formar tu propio equipo de agentes.",
+      "text_2": "HOY777 ha lanzado un exclusivo programa de afiliados. Ahora no solo puedes disfrutar de la diversión de los juegos aquí, sino que también puedes ganar dinero fácilmente, sin riesgos ni inversión, ¡con un retorno de hasta el 1000%! Según las estadísticas, el ingreso mensual promedio de todos los agentes de HOY777 está entre $30,000 y $100,000MXN.",
+      "text_3":"¡Únete a nosotros ahora y gana tu primer ingreso en la vida!",
+      "term_text_1": "Modelo de ingresos.",
+      "term_text_2": "Tus ganancias = bonificación por invitación + comisión de apuestas de 3 niveles.",
+      "term_text_3": "Bonificación por invitación.",
+      "text_4": "Cada persona que se registre y deposite a través de tu enlace de invitación te generará una ganancia de $25. Si logras invitar exitosamente a 30 personas diariamente, al cabo de un mes, habrías acumulado ganancias por un total de =$25*30*30=$22500.",
+      "term_text_4": "Comisión de apuestas de nivel 3.",
+      "text_5": "En el modelo de ganancias multinivel, los usuarios invitados por sus miembros de nivel inferior también se convertirán en miembros de su equipo, y cada miembro del equipo generará ingresos constantes para usted. Según nuestras estadísticas, una vez que haya construido su equipo de agentes, los ingresos generados por las comisiones de apuestas de nivel 3 superarán con creces el bono de invitación, ¡y le proporcionarán ingresos permanentes!",
+      "text_6": "Haz clic aquí para obtener más información detallada sobre las comisiones de apuestas de tercer nivel. ",
       "back_btn_text": "ATRÁS"
     }
   },
