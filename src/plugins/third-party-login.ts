@@ -53,9 +53,16 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
     // 根据不同的登录类型执行相应的登录逻辑
     switch (value) {
       case ThirdPartyWayEnum.FACEBOOK_LOGIN:
-        let res =  await loginWithFacebook(value, type);
 
-        await loginOrRegister(res.accessToken, value, type);
+        if (AdjustClass.getInstance().isMobileWebview) {
+          // 啟動android原生登錄流程 
+          (window as any)["AndroidWebView"].facebookLogin();
+          indexValue = value;
+          typeValue = type;
+        } else {
+          let res =  await loginWithFacebook(value, type);
+          await loginOrRegister(res.accessToken, value, type);
+        }
         return 
       case ThirdPartyWayEnum.GOOGLE_LOGIN:
         return await loginWithGoogle(value, type);
@@ -117,7 +124,7 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
             googleTokenLogin({
                 clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
             }).then(async (res: any) => {
-                console.log(res, 'googleTokenLogin-callback');
+
                 await loginOrRegister(res.access_token, value, type);
                 indexValue = value;
                 typeValue = type;
