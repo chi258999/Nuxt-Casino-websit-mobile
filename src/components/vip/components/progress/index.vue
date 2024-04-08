@@ -217,7 +217,7 @@ const submitVipLevelAward = async () => {
 // Route jump  路由跳转
 const goPath = () => {
   setVipNavBarToggle("0");
-  router.push({ name: "Bonuses And Transactions", query: { tab: "VIP" } });
+  router.push({ name: "Bonuses And Transactions", query: { tab: "vip" } });
   setBonusTabIndex(1);
 };
 
