@@ -102,15 +102,17 @@ const BannerComponent = defineComponent({
       const { getToken } = storeToRefs(authStore());
       return getToken.value;
     });
+    
+    const bannerList = computed(() => {
+      const { getBannerList } = storeToRefs(bannerStore());
+      return getBannerList.value
+    })
 
     onMounted(async () => {
       await dispatchBannerList();
 
-      const { getBannerList } = storeToRefs(bannerStore());
-      console.log(getBannerList, "getBannerList");
-
       state.slides.length = 0;
-      getBannerList.value.forEach((element) => {
+      bannerList.value.forEach((element) => {
         if (element.image_path) {
           state.slides.push(element.image_path);
         }
@@ -130,11 +132,10 @@ const BannerComponent = defineComponent({
     // - 9 打开活动广告页面 此情况下需要关注content内容, 为活动广告页面id 比如 1
     const slideImageClick = async (index: number) => {
       console.log("slideImageClick", index);
-      const { getBannerList } = storeToRefs(bannerStore());
-      const currentIndex = index % getBannerList.value.length
-      const currentItem = getBannerList.value[currentIndex]
+      const currentIndex = index % bannerList.value.length
+      const currentItem = bannerList.value[currentIndex]
       let type: number =
-        getBannerList.value[currentIndex].click_feedback;
+        bannerList.value[currentIndex].click_feedback;
       console.log(type, 'type');
 
       // 5 站内页面 此情况下需要关注content内容
@@ -181,9 +182,9 @@ const BannerComponent = defineComponent({
       }
     };
     const calcSlide = () => {
-      let res = [...state.slides, ...state.slides];
+      // let res = [...state.slides, ...state.slides];
 
-      //let res = [...state.slides];
+      let res = [...state.slides];
       return res;
     };
     const handleSlideChange = (event: any) => {

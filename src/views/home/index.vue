@@ -789,8 +789,12 @@ const Dashboard = defineComponent({
       await liveWinLoad();
       await betHistoryLoad();
       loading.value = false;
+
+      // 全部游戏
       allGames.value = categorieList;
       allGames.value.map(async (item: { slug: string; page_no: number; games: any; }) => {
+
+        // 查询每个分类里游戏的数据 gameSearchList是查询回来的结果
         await dispatchGameSearch(
           "?game_categories_slug=" +
           item.slug +
@@ -816,12 +820,14 @@ const Dashboard = defineComponent({
             index++;
           });
         }
+        // 初始化页码为1
         item.page_no = 1;
         item.games = gameSearchList.value.list;
         if (item.slug == "original") {
           setOriginalGames(gameSearchList.value.list.slice(0, 9));
         }
       });
+
       if (token.value != undefined) {
         await dispatchSocketConnect();
       }
@@ -858,9 +864,9 @@ const Dashboard = defineComponent({
 
       pagingGames.value = gameCategories.value;
 
-      console.log("favoritegameList: ", favoriteGameList.value);
-      console.log("gameGroupBtnList: ", gameGroupBtnList.value);
-      console.log("allGames: ", allGames.value);
+      // console.log("favoritegameList: ", favoriteGameList.value);
+      // console.log("gameGroupBtnList: ", gameGroupBtnList.value);
+      // console.log("allGames: ", allGames.value);
 
       await Promise.all(
         pagingGames.value.map(async (item: { slug: string; page_no: number; games: any; game_count: any; }) => {
@@ -1255,6 +1261,8 @@ export default Dashboard;
               </inline-svg>
               {{ t("home.button.all_game") }} 
             </v-btn>
+            <!-- / 所有游戏 -->
+            
             <div
               v-for="(item, index) in gameGroupBtnList"
               :key="index"

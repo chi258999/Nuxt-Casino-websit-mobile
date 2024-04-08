@@ -144,7 +144,7 @@ export class Network {
   }
 
   private handleOpen() {
-    console.log('WebSocket connection established');
+    // console.log('WebSocket connection established');
   }
 
   private handleMessage(event: MessageEvent) {

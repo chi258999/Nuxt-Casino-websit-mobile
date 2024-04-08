@@ -127,7 +127,7 @@ const mDialogHide = () => {
 }
 
 const goBeforePage = () => {
-  router.go(-1);
+  router.push({path:'/'});
   /*setTimeout(() => {
     activeMenuIndex.value = route.query.index ? route.query.index : 0
     setActiveAccountIndex(activeMenuIndex.value)

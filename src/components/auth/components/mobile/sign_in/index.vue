@@ -23,7 +23,7 @@ import EventToken from "@/constants/EventToken";
 import { useRoute } from "vue-router";
 import { gameStore } from "@/store/game";
 import { jwtDecode } from "jwt-decode";
-import { loginWithSocialMedia, loginType, loginWithFacebook } from "@/plugins/third-party-login";
+import { loginWithSocialMedia, loginType } from "@/plugins/third-party-login";
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
 import { getQueryParams } from "@/utils/getPublicInformation";
 import { activityAppStore } from "@/store/activityApp";
