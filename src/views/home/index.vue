@@ -1255,6 +1255,8 @@ export default Dashboard;
               </inline-svg>
               {{ t("home.button.all_game") }} 
             </v-btn>
+            <!-- / 所有游戏 -->
+            
             <div
               v-for="(item, index) in gameGroupBtnList"
               :key="index"

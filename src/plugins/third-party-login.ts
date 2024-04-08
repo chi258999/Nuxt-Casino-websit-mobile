@@ -10,10 +10,24 @@ import { log } from "console";
 let indexValue = ''; // ThirdPartyWayEnum.GOOGLE_LOGIN FACEBOOK_LOGIN
 let typeValue = "";
 
-// 接受android傳遞的token
+// 接受android傳遞的token - google 登录模拟
 (window as any).googleLogin = (token: string) => {
-    console.log(indexValue, typeValue);
+  console.log(indexValue, typeValue);
+  if(token) {
     loginOrRegister(token, indexValue, typeValue);
+  } else {
+    console.error('登录/注册失败，检查接口')
+  }
+
+}
+// 接受android傳遞的token  - facebook 登录模拟
+(window as any).facebookLogin = (token: string) => {
+  console.log(indexValue, typeValue);
+  if(token) {
+    loginOrRegister(token, indexValue, typeValue);
+  } else {
+    console.error('登录/注册失败，检查接口')
+  }
 }
 
 // 全局 window 对象
@@ -40,6 +54,7 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
     switch (value) {
       case ThirdPartyWayEnum.FACEBOOK_LOGIN:
         let res =  await loginWithFacebook(value, type);
+
         await loginOrRegister(res.accessToken, value, type);
         return 
       case ThirdPartyWayEnum.GOOGLE_LOGIN:
@@ -119,31 +134,33 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
 const loginWithFacebook = (value: string, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
-      globalWindow.FB.init({
-        appId: import.meta.env.VITE_FACEBOOK_APP_ID,
-        cookie: true,
-        xfbml: true,
-        version: "v19.0",
-      });
 
-      globalWindow.FB.getLoginStatus(async (response: any) => {
-        if (response.status !== "connected") {
-          globalWindow.FB.login((res: any) => {
-            resolve(res.authResponse);
-          });
-        } else {
-          resolve(response.authResponse);
-        }
+      if (AdjustClass.getInstance().isMobileWebview) {
+        // 啟動android原生登錄流程 
+        (window as any)["AndroidWebView"].facebookLogin();
+        indexValue = value;
+        typeValue = type;
+      } else {
+        globalWindow.FB.init({
+          appId: import.meta.env.VITE_FACEBOOK_APP_ID,
+          cookie: true,
+          xfbml: true,
+          version: "v19.0",
+        });
+  
+        globalWindow.FB.getLoginStatus(async (response: any) => {
+          indexValue = value;
+          typeValue = type;
+          if (response.status !== "connected") {
+            globalWindow.FB.login((res: any) => {
+              resolve(res.authResponse);
+            });
+          } else {
+            resolve(response.authResponse);
+          }
+        });
+      }
 
-        // if (response.authResponse) {
-        //   globalWindow.FB.login((res: any) => {
-        //     console.log(res, 'FB.login === ');
-        //     loginOrRegister(res.authResponse.accessToken, value, type);
-        //   });
-        // } else {
-        //   reject(response.authResponse);
-        // }
-      });
     } catch (error) {
       reject(error);
     }
@@ -169,4 +186,4 @@ const loginType = (value: string) => {
     });
 }
 
-export { loginWithSocialMedia, loginType, loginWithFacebook };
+export { loginWithSocialMedia, loginType };
