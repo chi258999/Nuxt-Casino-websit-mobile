@@ -579,7 +579,7 @@ onMounted(async () => {
   >
     <v-row class="mt-6 mx-10 text-500-10 white align-center">
       {{ t("withdraw_dialog.withdraw_amount") }}
-      {{ selectedCurrencyUnit }}
+      {{ platformCurrency }}
       {{ toFormatNum(availableAmount) }}
       <div style="margin-left: auto" class="relative pr-4">
         <img
@@ -594,7 +594,7 @@ onMounted(async () => {
     <form action="javascript:return true;" @submit.prevent>
       <v-row class="mt-2 mx-3 relative">
           <v-text-field
-            :label="`${t('withdraw_dialog.amount')}(${selectedCurrencyUnit})`"
+            :label="`${t('withdraw_dialog.amount')}(${platformCurrency})`"
             class="form-textfield dark-textfield m-withdraw-amount-text mb-0"
             variant="solo"
             density="comfortable"
@@ -610,13 +610,13 @@ onMounted(async () => {
     <div class="mt-3 mx-10 text-400-12 gray d-flex align-center">
       {{ t("withdraw_dialog.text_5") }}
       <span class="text-700-12" style="margin-left: auto">
-        {{ toFormatNum(feeAmount) }}&nbsp;{{ selectedCurrencyUnit }}
+        {{ toFormatNum(feeAmount) }}&nbsp;{{ platformCurrency }}
       </span>
     </div>
     <div class="mt-2 mx-10 text-400-12 gray d-flex align-center">
       {{ t("withdraw_dialog.text_6") }}
       <span class="text-700-12" style="margin-left: auto">
-        {{ toFormatNum(cashableAmount) }}&nbsp;{{ selectedCurrencyUnit }}
+        {{ toFormatNum(cashableAmount) }}&nbsp;{{ platformCurrency }}
       </span>
     </div>
     <div class="mt-2 mx-10 text-400-12 gray d-flex align-center">
@@ -626,7 +626,7 @@ onMounted(async () => {
         style="margin-left: auto"
         :class="withdrawAmount != '' && Number(withdrawAmount) != 0 ? 'green' : ''"
       >
-        {{ toFormatNum(residualAmount) }}&nbsp;{{ selectedCurrencyUnit }}
+        {{ toFormatNum(residualAmount) }}&nbsp;{{ platformCurrency }}
       </span>
     </div>
     <div
@@ -640,7 +640,7 @@ onMounted(async () => {
         :class="withdrawAmount != '' && Number(withdrawAmount) != 0 ? 'orange' : ''"
       >
         {{ toFormatNum(userBalance.amount - userBalance.availabe_balance) }}
-        &nbsp;{{ selectedCurrencyUnit }}
+        &nbsp;{{ platformCurrency }}
         <v-menu
           offset="10"
           v-model="helpMenuShow"
