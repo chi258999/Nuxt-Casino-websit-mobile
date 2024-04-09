@@ -34,12 +34,14 @@ import { activityAppStore } from '@/store/activityApp';
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 import BScroll from '@better-scroll/core'
+import { useOpenUrl } from '@/plugins/openPage'
 
 const platformCurrency = computed(() => {
   const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
   return getPlatformCurrency.value;
 });
 
+const { setAppConfirmDialogShow } = activityAppStore();
 const { setAuthModalType } = authStore();
 const { setUserNavBarToggle } = appBarStore();
 const { setDepositDialogToggle } = appBarStore();
@@ -66,6 +68,7 @@ const { setAgentNavBarToggle } = agentStore();
 const { name, width } = useDisplay()
 const { t } = useI18n();
 const router = useRouter();
+const { openUrl } = useOpenUrl()
 
 const drawer = ref<boolean>(false);
 
@@ -311,7 +314,8 @@ const downloadLink = computed(() => {
   return getDownloadLink.value;
 });
 const downloadAppEvent = () => {
-  window.location.href = downloadLink.value
+  setUserNavBarToggle(false);
+  setAppConfirmDialogShow(true)
 }
 
 const goAccountPage = () => {
