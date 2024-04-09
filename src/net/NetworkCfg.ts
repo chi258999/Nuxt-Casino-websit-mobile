@@ -156,4 +156,9 @@ export namespace NETWORK {
     static DOWAPP_INFO_ACQUISTION = '/downloadapp/list';
     static DOWAPP_RECEIVE = '/user/downloadapp/receive';
   }
+
+  // 通用 api
+  export class COMMON {
+    static SERVER_TIMESTAMP = '/timeunix';
+  }
 }
