@@ -85,36 +85,37 @@ onMounted(() => {
         :class="[currentLang === 'es' ? 'tab-box' : '']"
       >
         <div class="tab-box-item">
-          <span
+          <div
             @click="handleTab(0)"
             :class="activeIndex == 0 ? 'text-700-12 text-white' : 'text-400-12 text-gray'"
           >
             {{ t("agent.text_1") }}
-          </span>
+          </div>
         </div>
+        
         <div class="tab-box-item">
-          <span
+          <div
             @click="handleTab(1)"
             :class="activeIndex == 1 ? 'text-700-12 text-white' : 'text-400-12 text-gray'"
           >
             {{ t("agent.text_2") }}
-          </span>
+          </div>
         </div>
         <div class="tab-box-item">
-          <span
+          <div
             @click="handleTab(2)"
             :class="activeIndex == 2 ? 'text-700-12 text-white' : 'text-400-12 text-gray'"
           >
             {{ t("agent.text_3") }}
-          </span>
+          </div>
         </div>
         <div class="tab-box-item">
-          <span
+          <div
             @click="handleTab(3)"
             :class="activeIndex == 3 ? 'text-700-12 text-white' : 'text-400-12 text-gray'"
           >
             {{ t("agent.text_4") }}
-          </span>
+          </div>
         </div>
         <!-- <div class="tab-box-item">
           <span
@@ -153,10 +154,11 @@ onMounted(() => {
     border-style: none !important;
     height: 70px !important;
 
+
     .tab-box {
-      display: grid !important;
-      grid-template-columns: repeat(5, 1fr) !important;
-      grid-gap: 15px !important;
+      // display: grid !important;
+      // grid-template-columns: repeat(5, 1fr) !important;
+      // grid-gap: 15px !important;
 
       .tab-box-item {
         display: flex;
@@ -164,7 +166,7 @@ onMounted(() => {
         justify-content: center;
         padding: 0 4px;
 
-        span {
+        div {
           white-space: pre-wrap;
           line-height: 14px;
         }
