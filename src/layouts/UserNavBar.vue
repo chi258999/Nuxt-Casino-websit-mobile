@@ -30,6 +30,7 @@ import img_vipemblem_200 from "@/assets/vip/image/img_vipemblem_200.png";
 import { menuStore } from "@/store/menu";
 import { BtTabEnum } from '@/enums/bonusTransactionEnum';
 import { toFormatNum } from '@/utils/numFormat';
+import { activityAppStore } from '@/store/activityApp';
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 import BScroll from '@better-scroll/core'
@@ -302,6 +303,15 @@ const handleAgentNavBarShow = () => {
   setMenuBlurEffectShow(false);
   setOverlayScrimShow(false);
   setUserNavBarToggle(false);
+}
+
+// 下载app
+const downloadLink = computed(() => {
+  const { getDownloadLink } = storeToRefs(activityAppStore());
+  return getDownloadLink.value;
+});
+const downloadAppEvent = () => {
+  window.location.href = downloadLink.value
 }
 
 const goAccountPage = () => {
@@ -707,7 +717,7 @@ onMounted(async () => {
               </template>
               <v-list-item-title class="ml-2">{{ t('navBar.menu_item_1.affiliate') }}</v-list-item-title>
             </v-list-item>
-            <v-list-item class="m-user-item app-background" value="app" height="36">
+            <v-list-item class="m-user-item app-background" value="app" height="36" @click="downloadAppEvent">
               <template v-slot:prepend>
                 <img src="@/assets/public/svg/icon_public_66.svg" width="18" />
               </template>

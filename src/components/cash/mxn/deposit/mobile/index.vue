@@ -714,7 +714,22 @@ const countDepositAmount=(item:any)=>{
   if(item.type===0){
     return item.depositSelect
   }else{
-    return  Math.ceil((Number(item.bonus) * item.depositSelect)+ Number(item.depositSelect))
+    console.log(userInfo.value,userInfo.value.is_first_deposit,'userInfo')
+    if(!userInfo.value.is_first_deposit){
+      console.log()
+      if(Math.ceil(Number(item.bonus) * item.depositSelect)>10000){
+        return 10000+ Number(item.depositSelect)
+      }else{
+         return  Math.ceil((Number(item.bonus) * item.depositSelect)+ Number(item.depositSelect))
+      }
+    }else{
+       if(Math.ceil(Number(item.bonus) * item.depositSelect)>3000){
+         return 3000+ Number(item.depositSelect)
+       }else{
+         return  Math.ceil((Number(item.bonus) * item.depositSelect)+ Number(item.depositSelect))
+       }
+    }
+   
   }
 }
 
