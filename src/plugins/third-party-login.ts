@@ -5,6 +5,7 @@ import { authStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
 import AdjustClass from "@/utils/adjust";
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
+import { useToast } from "vue-toastification";
 import { log } from "console";
 
 let indexValue = ''; // ThirdPartyWayEnum.GOOGLE_LOGIN FACEBOOK_LOGIN
@@ -13,6 +14,7 @@ let typeValue = "";
 
 // 全局 window 对象
 const globalWindow: any = window;
+const toast = useToast();
 
 // 接受android傳遞的token - google 登录模拟
 globalWindow.googleLogin = (token: string) => {
@@ -22,7 +24,6 @@ globalWindow.googleLogin = (token: string) => {
   } else {
     console.error('登录/注册失败，检查接口')
   }
-
 }
 // 接受android傳遞的token  - facebook 登录模拟
 globalWindow.facebookLogin = (token: string) => {
@@ -45,7 +46,7 @@ const userInfo = computed(() => {
 /**
  * 封装登录函数
  * @param index 0:facebook  1:google
- * @returns 
+ * @returns
  */
 const loginWithSocialMedia = async (value: string, type: string): Promise<any> => {
   // 显示 loading 动画
@@ -71,7 +72,7 @@ const loginWithSocialMedia = async (value: string, type: string): Promise<any> =
 
 /**
  * 判断登录和注册
- * @param type 
+ * @param type
  */
 const loginOrRegister = async (token: string, value: string, type: string) => {
 
@@ -82,11 +83,11 @@ const loginOrRegister = async (token: string, value: string, type: string) => {
     if (value === ThirdPartyWayEnum.GOOGLE_LOGIN) {
         val = 1;
     }
-    let params = { 
+    let params = {
         id_token: token,
         type: val,
     }
-    
+
     if (type === "login") {
         // 登录
         await dispatchQuickLogin(params);
@@ -107,23 +108,24 @@ const startAndroid = (index: number, type: string) => {
 const loginWithGoogle = (value: string, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
-        if (AdjustClass.getInstance().isMobileWebview) {
+        // if (AdjustClass.getInstance().isMobileWebview) {
+        //     indexValue = value;
+        //     typeValue = type;
+        //     // 啟動android原生登錄流程
+        //     globalWindow["AndroidWebView"].googleLogin((result: any) => {
+        //       console.log('原生返回', result)
+        //       resolve(true);
+        //     })
+        // } else {
+        googleTokenLogin({
+            clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        }).then(async (res: any) => {
             indexValue = value;
             typeValue = type;
-            // 啟動android原生登錄流程 
-            globalWindow["AndroidWebView"].googleLogin();
-
-            resolve(true);
-        } else {
-            googleTokenLogin({
-                clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-            }).then(async (res: any) => {
-                indexValue = value;
-                typeValue = type;
-                await loginOrRegister(res.access_token, value, type);
-              resolve(true);
-            });
-        }
+            await loginOrRegister(res.access_token, value, type);
+          resolve(true);
+        });
+        // }
     } catch (error) {
       reject();
     }
@@ -137,10 +139,11 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
       if (AdjustClass.getInstance().isMobileWebview) {
         indexValue = value;
         typeValue = type;
-        // 啟動android原生登錄流程 
-        globalWindow["AndroidWebView"].facebookLogin();
-
-        resolve(true);
+        // 啟動android原生登錄流程
+        globalWindow["AndroidWebView"].facebookLogin((result: any) => {
+          console.log('result', result)
+          resolve(true);
+        })
       } else {
         globalWindow.FB.init({
           appId: import.meta.env.VITE_FACEBOOK_APP_ID,
@@ -148,7 +151,7 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
           xfbml: true,
           version: "v19.0",
         });
-    
+
         globalWindow.FB.getLoginStatus(async (response: any) => {
           indexValue = value;
           typeValue = type;
@@ -187,4 +190,4 @@ const loginType = (value: string) => {
     });
 }
 
-export { loginWithSocialMedia, loginType };
+export { loginWithSocialMedia, loginType, loginOrRegister };
