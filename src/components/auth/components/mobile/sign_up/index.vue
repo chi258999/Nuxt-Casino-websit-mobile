@@ -485,7 +485,7 @@ const MSignup = defineComponent({
       }
     }
     // 接受android傳遞的token  - facebook 登录模拟
-    globalWindow.facebookLogin = async (token: string) => {
+    globalWindow.fbrLogin = async (token: string) => {
       if(token) {
         loginOrRegister(token, state.indexValue, state.typeValue);
         await registerSuccess();
