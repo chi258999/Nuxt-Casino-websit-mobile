@@ -23,7 +23,7 @@ import EventToken from "@/constants/EventToken";
 import { useRoute } from "vue-router";
 import { gameStore } from "@/store/game";
 import { jwtDecode } from "jwt-decode";
-import { loginWithSocialMedia, loginType } from "@/plugins/third-party-login";
+import { loginWithSocialMedia, loginType, loginOrRegister } from "@/plugins/third-party-login";
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
 import { getQueryParams } from "@/utils/getPublicInformation";
 import { activityAppStore } from "@/store/activityApp";
@@ -68,7 +68,7 @@ const Login = defineComponent({
     const {  getGameBetbyInit, closeKill } = gameStore();
     const {  downloadApprReceive } = activityAppStore();
     const {  userDownloadAppAcquisition } = activityAppStore();
-  
+
     // initiate component state
     const state = reactive({
       currentPage: 0, // default login form
@@ -102,6 +102,8 @@ const Login = defineComponent({
       bodyHeight: 0,
       clientId:
         "315002729492-ij8mt521q04m5hmqmdl1gdgc70oedbsi.apps.googleusercontent.com",
+      indexValue: "",
+      typeValue: ""
     });
     const mobileWidth = computed(() => {
       return width.value;
@@ -152,7 +154,7 @@ const Login = defineComponent({
 
     const loginSuccess = async () => {
       console.log('loginSuccess', success.value);
-      
+
       if (success.value) {
         await dispatchUserProfile();
         await dispatchUserBalance();
@@ -250,7 +252,7 @@ const Login = defineComponent({
         // 如果用户是app登录，那就领取奖励
         if (queryParams['mobile']) {
           try {
-            await downloadApprReceive({id: downloadID.value})
+            await downloadApprReceive({id: Number(downloadID.value)})
             const toast = useToast();
             toast.success(`${t('activity_app.text_1')} ${platformCurrency}${activityAppBonus}`, {
               timeout: 3000,
@@ -267,7 +269,7 @@ const Login = defineComponent({
 
             await userDownloadAppAcquisition()
           } catch (error) {
-            
+
           }
         }
       }, 500);
@@ -324,15 +326,74 @@ const Login = defineComponent({
       }
     };
 
+    // 全局 window 对象
+    const globalWindow: any = window;
+
+    // 接受android傳遞的token - google 登录模拟
+    globalWindow.googleLogin = async (token: string) => {
+      if(token) {
+        await loginOrRegister(token, state.indexValue, state.typeValue);
+        await loginSuccess();
+        loginType(state.indexValue);
+      } else {
+        const toast = useToast();
+        toast.error(t("login.submit_result.err_text"), {
+          timeout: 3000,
+          closeOnClick: false,
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+          draggable: false,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: WarningIcon,
+          rtl: false,
+        });
+      }
+    }
+    // 接受android傳遞的token  - facebook 登录模拟
+    globalWindow.facebookLogin = async (token: string) => {
+      if(token) {
+        loginOrRegister(token, state.indexValue, state.typeValue);
+        await loginSuccess();
+        loginType(state.indexValue);
+      } else {
+        const toast = useToast();
+        toast.error(t("login.submit_result.err_text"), {
+          timeout: 3000,
+          closeOnClick: false,
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+          draggable: false,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: WarningIcon,
+          rtl: false,
+        });
+      }
+    }
+
     // social login function
     const handleSocialSigin = async (value: string) => {
       const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       try {
         state.loading = true;
-        await loginWithSocialMedia(value, 'login');
-        
-        await loginSuccess();
-        loginType(value);
+        if (AdjustClass.getInstance().isMobileWebview) {
+            state.indexValue = value;
+            state.typeValue = 'login';
+            // 啟動android原生登錄流程
+            if (value === "google") {
+              globalWindow["AndroidWebView"].googleLogin();
+            }
+            if (value === "facebook") {
+              globalWindow["AndroidWebView"].facebookLogin();
+            }
+        } else {
+          await loginWithSocialMedia(value, 'login');
+          await loginSuccess();
+          loginType(value);
+        }
       } catch (err) {
         console.error(err);
       } finally {

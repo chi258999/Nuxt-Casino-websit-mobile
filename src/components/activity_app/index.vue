@@ -51,7 +51,11 @@ const mobile = computed(() => {
 </script>
 
 <template>
-  <div class="m-app" v-if="appConfirmDialogShow && mobileWidth < 600 && mobile">
+<transition
+  enter-active-class="animated hinge fadeInUp"
+  leave-active-class="animated hinge fadeOutDown"
+>
+  <div class="m-app slideInDown" v-if="appConfirmDialogShow && mobileWidth < 600 && mobile">
     <v-btn
       class="m-app-confirm-drawer-close-button"
       icon="true"
@@ -79,6 +83,7 @@ const mobile = computed(() => {
       </v-btn>
     </div>
   </div>
+</transition>
 </template>
 
 <style scoped lang="scss">
