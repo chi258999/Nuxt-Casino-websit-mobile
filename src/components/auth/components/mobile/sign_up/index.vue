@@ -24,7 +24,7 @@ import { currencyStore } from "@/store/currency";
 import AdjustClass from "@/utils/adjust";
 import { googleTokenLogin } from "vue3-google-login";
 import EventToken from "@/constants/EventToken";
-import { loginWithSocialMedia, loginType } from "@/plugins/third-party-login";
+import { loginWithSocialMedia, loginType, loginOrRegister } from "@/plugins/third-party-login";
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
 
 const MSignup = defineComponent({
@@ -118,7 +118,9 @@ const MSignup = defineComponent({
       loading: false,
       mailCardHeight: 0,
       emailPartName: "",
-      promoCodeDisabled:false
+      promoCodeDisabled:false,
+      indexValue: "",
+      typeValue: ""
     });
 
     watch(
@@ -457,13 +459,79 @@ const MSignup = defineComponent({
       }
     };
 
+    // 全局 window 对象
+    const globalWindow: any = window;
+
+    // 接受android傳遞的token - google 登录模拟
+    globalWindow.googleLogin = async (token: string) => {
+      if(token) {
+        await loginOrRegister(token, state.indexValue, state.typeValue);
+        await registerSuccess();
+        loginType(state.indexValue);
+      } else {
+        const toast = useToast();
+        toast.error(t("login.submit_result.err_text"), {
+          timeout: 3000,
+          closeOnClick: false,
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+          draggable: false,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: WarningIcon,
+          rtl: false,
+        });
+      }
+    }
+    // 接受android傳遞的token  - facebook 登录模拟
+    globalWindow.facebookLogin = async (token: string) => {
+      if(token) {
+        loginOrRegister(token, state.indexValue, state.typeValue);
+        await registerSuccess();
+        loginType(state.indexValue);
+      } else {
+        const toast = useToast();
+        toast.error(t("login.submit_result.err_text"), {
+          timeout: 3000,
+          closeOnClick: false,
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+          draggable: false,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: WarningIcon,
+          rtl: false,
+        });
+      }
+    }
+
     // 一键注册
     const onSignInSuccessGoogle = async (value: string) => {
       // const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       try {
-        await loginWithSocialMedia(value, 'register');
-        await registerSuccess();
-        loginType(value);
+        if (AdjustClass.getInstance().isMobileWebview) {
+            state.indexValue = value;
+            state.typeValue = 'login';
+            // 啟動android原生登錄流程
+            await new Promise((resolve, reject) => {
+              if (value === "google") {
+                globalWindow["AndroidWebView"].googleLogin((token: string) => {
+                  resolve(token);
+                });
+              }
+              if (value === "facebook") {
+                globalWindow["AndroidWebView"].facebookLogin((token: string) => {
+                  resolve(token);
+                });
+              }
+            });
+        } else {
+          await loginWithSocialMedia(value, 'login');
+          await registerSuccess();
+          loginType(value);
+        }
       } catch (err) {
         console.error(err);
       } finally {
