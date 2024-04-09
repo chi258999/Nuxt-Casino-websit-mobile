@@ -136,15 +136,15 @@ const loginWithGoogle = (value: string, type: string): Promise<any> => {
 const loginWithFacebook = (value: string, type: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     try {
-      if (AdjustClass.getInstance().isMobileWebview) {
-        indexValue = value;
-        typeValue = type;
-        // 啟動android原生登錄流程
-        globalWindow["AndroidWebView"].facebookLogin((result: any) => {
-          console.log('result', result)
-          resolve(true);
-        })
-      } else {
+      // if (AdjustClass.getInstance().isMobileWebview) {
+      //   indexValue = value;
+      //   typeValue = type;
+      //   // 啟動android原生登錄流程
+      //   globalWindow["AndroidWebView"].facebookLogin((result: any) => {
+      //     console.log('result', result)
+      //     resolve(true);
+      //   })
+      // } else {
         globalWindow.FB.init({
           appId: import.meta.env.VITE_FACEBOOK_APP_ID,
           cookie: true,
@@ -164,7 +164,7 @@ const loginWithFacebook = (value: string, type: string): Promise<any> => {
           }
         });
         resolve(true);
-      }
+      // }
     } catch (error) {
       reject();
     }
