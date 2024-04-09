@@ -491,20 +491,21 @@ onUnmounted(() => {
       </div>
       <div id="game_wrapper safari_only">
         <iframe
+          v-if="enterGameItem.method == 'HTML'"
           ref="gameFrameRef"
           :srcdoc="enterGameItem.weburl"
           :style="{ height: frameShow ? '100%' : '0px', position: 'fixed' }"
           class="home-game-frame-area"
           @load="handleIframeLoad"
         ></iframe>
-        <!-- <iframe
+        <iframe
           v-else
           ref="gameFrameRef"
           :src="enterGameItem.weburl"
           :style="{ height: frameShow ? '100%' : '0px', position: 'fixed' }"
           class="home-game-frame-area"
           @load="handleIframeLoad"
-        ></iframe> -->
+        ></iframe>
       </div>
     </div>
   </div>
