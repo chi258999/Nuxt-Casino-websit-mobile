@@ -250,7 +250,7 @@ const Login = defineComponent({
         // 如果用户是app登录，那就领取奖励
         if (queryParams['mobile']) {
           try {
-            await downloadApprReceive({id: downloadID.value})
+            await downloadApprReceive({id: Number(downloadID.value)})
             const toast = useToast();
             toast.success(`${t('activity_app.text_1')} ${platformCurrency}${activityAppBonus}`, {
               timeout: 3000,
