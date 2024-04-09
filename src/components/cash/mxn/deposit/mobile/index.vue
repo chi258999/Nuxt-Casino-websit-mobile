@@ -4,6 +4,7 @@ import { appBarStore } from '@/store/appBar';
 import { authStore } from "@/store/auth";
 import { userStore } from '@/store/user';
 import { depositStore } from '@/store/deposit';
+import { promoStore } from "@/store/promo";
 import { type GetCurrencyItem } from '@/interface/deposit';
 import { type GetPaymentItem } from '@/interface/deposit';
 import { type GetPixInfo } from '@/interface/deposit';
@@ -55,6 +56,7 @@ const { setDepositOrderDialog } = depositStore();
 const { setTimerValue } = depositStore();
 const { setDepositOrderTimeRefresh } = depositStore();
 const { setDepositCurrency } = depositStore();
+const { dispatchUserActivityList } = promoStore();
 
 const selectedCurrencyUnit = ref<string>(platformCurrency.value);
 
@@ -175,6 +177,11 @@ const notificationText = ref<string>("");
 const isShowAmountValidation = ref<boolean>(false);
 
 const isDepositBtnReady = ref<boolean>(false);
+
+const promoList = computed(() => {
+  const { getUserActivityList } = storeToRefs(promoStore());
+  return getUserActivityList.value;
+});
 
 const userInfo = computed((): GetUserInfo => {
   const { getUserInfo } = storeToRefs(authStore());
@@ -629,6 +636,17 @@ const promoBlurEffectShow = computed(() => {
   return getMainBlurEffectShow.value
 })
 
+// 跳转活动页
+const jumpPromocione=()=>{
+  if(!userInfo.value.is_first_deposit){
+     router.push({name: "Promo_Detail",query:{id:promoList.value.group_data[0].list_data[0].id}})
+  }else{
+     router.push({name: "Promo_Detail",query:{id:promoList.value.group_data[0].list_data[1].id}})
+  }
+  setDepositDialogToggle(false);
+  setCashDialogToggle(false);
+}
+
 watch(bonusCheck, (newValue) => {
   if (newValue) {
     setOverlayScrimShow(true);
@@ -714,7 +732,20 @@ const countDepositAmount=(item:any)=>{
   if(item.type===0){
     return item.depositSelect
   }else{
-    return  Math.ceil((Number(item.bonus) * item.depositSelect)+ Number(item.depositSelect))
+    if(!userInfo.value.is_first_deposit){
+      if(Math.ceil(Number(item.bonus) * item.depositSelect)>10000){
+        return 10000+ Number(item.depositSelect)
+      }else{
+         return  Math.ceil((Number(item.bonus) * item.depositSelect)+ Number(item.depositSelect))
+      }
+    }else{
+       if(Math.ceil(Number(item.bonus) * item.depositSelect)>3000){
+         return 3000+ Number(item.depositSelect)
+       }else{
+         return  Math.ceil((Number(item.bonus) * item.depositSelect)+ Number(item.depositSelect))
+       }
+    }
+   
   }
 }
 
@@ -726,6 +757,7 @@ onMounted(async () => {
   });
   setDepositWithdrawToggle(false);
   await dispatchUserDepositCfg();
+  await dispatchUserActivityList();
   selectedCurrencyUnit.value = userBalance.value.currency;
   currencyList.value.map(item => {
     if (item.name == userBalance.value.currency) {
@@ -957,6 +989,10 @@ onMounted(async () => {
       class="m-deposit-bonus-card mx-6 px-2 py-2"
       :class="bonusCheck ? '' : 'm-deposit-bonus-card-border'"
     >
+      <div class="m-deposit-btn-check" @click="jumpPromocione">
+        <span>{{ t("deposit_dialog.text_4") }}</span>
+        <span class="ml-1">{{'>'}}</span>
+      </div>
       <div class="d-flex align-center">
         <img src="@/assets/vip/image/img_vip_10.png" width="21" />
         <div class="text-700-12 white">{{ depositConfig.name }}</div>
@@ -1018,6 +1054,13 @@ onMounted(async () => {
     // height: 83px;
     border-radius: 8px;
     background: #23262f;
+  }
+  .m-deposit-btn-check {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #009b3a;
+    font-size: 10px;
   }
 
   .m-deposit-bonus-card-border {
