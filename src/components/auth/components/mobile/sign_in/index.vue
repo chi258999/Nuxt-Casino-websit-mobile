@@ -27,6 +27,7 @@ import { loginWithSocialMedia, loginType, loginOrRegister } from "@/plugins/thir
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
 import { getQueryParams } from "@/utils/getPublicInformation";
 import { activityAppStore } from "@/store/activityApp";
+import { mainStore } from "@/store/main";
 import { ElLoading } from "element-plus";
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
@@ -68,6 +69,7 @@ const Login = defineComponent({
     const {  getGameBetbyInit, closeKill } = gameStore();
     const {  downloadApprReceive } = activityAppStore();
     const {  userDownloadAppAcquisition } = activityAppStore();
+    const { dispatchTimeunix } = mainStore()
 
     // initiate component state
     const state = reactive({
@@ -163,6 +165,9 @@ const Login = defineComponent({
         await dispatchVipInfo();
         await dispatchVipLevels();
         await dispatchVipLevelAward();
+
+        // 获取服务器时间戳
+        dispatchTimeunix()
         // await dispatchSocketConnect();
         setOverlayScrimShow(false);
         setRefferalDialogShow(true);
