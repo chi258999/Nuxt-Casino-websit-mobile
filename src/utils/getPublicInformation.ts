@@ -6,9 +6,11 @@ export function getQueryParams(): Record<string, string> {
 
   pairs.forEach(pair => {
     const [key, value] = pair.split('=');
-    queryParams[key] = decodeURIComponent(value);
+    if (key) {
+      queryParams[key] = decodeURIComponent(value);
+    }
   });
-
+  
   return queryParams;
 }
 

@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { vipStore } from "@/store/vip";
+import AdjustClass from '@/utils/adjust';
 const props = defineProps({
   modelValue: {
     type: Boolean,
@@ -29,14 +30,35 @@ const vipInfo = computed(() => {
 const closeGroupDialog = () => {
   emit("update:modelValue", false);
 };
+
+// 获取app端对象
+let appInstance = AdjustClass.getInstance()
+
 // 加入telegram 
 const joinTelegram = () => {
   // window.location.href = `https://t.me/${vipInfo.value.telegram}`
-  window.location.href = `https://t.me/HOY777Oficial`
+  setTimeout(() => {
+    if(!appInstance) { 
+      // 浏览器端打开页面
+      window.location.href = `https://t.me/HOY777Oficial`
+    } else {
+      // app端打开页面
+      window["AndroidWebView"].openUrl(`https://t.me/HOY777Oficial`)
+    }
+  }, 0)
 };
+
 //加入watsapp
 const joinWatsapp = () => {
-  window.location.href = `https://whatsapp.com/channel/0029VaVcgRGAu3aVUq386c1H`
+  setTimeout(() => {
+    if(!appInstance) { 
+      // 浏览器端打开页面
+      window.location.href = `https://whatsapp.com/channel/0029VaVcgRGAu3aVUq386c1H`
+    } else {
+      // app端打开页面
+      window["AndroidWebView"].openUrl(`https://whatsapp.com/channel/0029VaVcgRGAu3aVUq386c1H`)
+    }
+  }, 0)
 };
 </script>
 

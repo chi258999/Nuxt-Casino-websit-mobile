@@ -33,7 +33,16 @@ const downloadLink = computed(() => {
 
 // 安装 APP
 const installAPP = () => {
-  window.location.href = downloadLink.value
+  const tempLink = document.createElement('a')
+  tempLink.style.display = 'none'
+  tempLink.href = downloadLink.value
+  tempLink.setAttribute('download', '')
+  if (typeof tempLink.download === 'undefined') {
+    tempLink.setAttribute('target', '_blank')
+  }
+  document.body.appendChild(tempLink)
+  tempLink.click()
+  document.body.removeChild(tempLink)
 }
 
 // 获取活动奖金
