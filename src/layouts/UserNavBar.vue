@@ -40,6 +40,7 @@ const platformCurrency = computed(() => {
   return getPlatformCurrency.value;
 });
 
+const { setAppConfirmDialogShow } = activityAppStore();
 const { setAuthModalType } = authStore();
 const { setUserNavBarToggle } = appBarStore();
 const { setDepositDialogToggle } = appBarStore();
@@ -311,7 +312,8 @@ const downloadLink = computed(() => {
   return getDownloadLink.value;
 });
 const downloadAppEvent = () => {
-  window.location.href = downloadLink.value
+  setUserNavBarToggle(false);
+  setAppConfirmDialogShow(true)
 }
 
 const goAccountPage = () => {

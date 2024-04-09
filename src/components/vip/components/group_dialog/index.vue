@@ -38,7 +38,9 @@ let appInstance = AdjustClass.getInstance()
 const joinTelegram = () => {
   // window.location.href = `https://t.me/${vipInfo.value.telegram}`
   setTimeout(() => {
-    if(!appInstance) { 
+    console.log(appInstance);
+    
+    if(!appInstance.isMobileWebview) { 
       // 浏览器端打开页面
       window.location.href = `https://t.me/HOY777Oficial`
     } else {
@@ -51,7 +53,7 @@ const joinTelegram = () => {
 //加入watsapp
 const joinWatsapp = () => {
   setTimeout(() => {
-    if(!appInstance) { 
+    if(!appInstance.isMobileWebview) { 
       // 浏览器端打开页面
       window.location.href = `https://whatsapp.com/channel/0029VaVcgRGAu3aVUq386c1H`
     } else {
