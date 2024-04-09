@@ -408,7 +408,7 @@ const handleDepositSubmit = async () => {
   formData.is_bonus = bonusCheck.value ? false : true;
 
   // 获取app端对象
-  let appInstance = AdjustClass.getInstance()
+  let appInstance = AdjustClass.getInstance().isMobileWebview
 
   // 先打开一个新页面，成功请求有url再赋值，不成功则关闭
   let winRef:any = null
@@ -460,8 +460,6 @@ const handleDepositSubmit = async () => {
          // 浏览器端打开新页面
          if(winRef) winRef.location = depositSubmit.value.url
         } else {
-          console.log('window["AndroidWebView"].openUrl(depositSubmit.value.url)');
-          
           // app端打开新页面
           window["AndroidWebView"].openUrl(depositSubmit.value.url)
         }
