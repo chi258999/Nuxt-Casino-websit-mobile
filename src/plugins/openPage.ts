@@ -2,11 +2,13 @@
 import AdjustClass from '@/utils/adjust';
 
 export const useOpenUrl = () => {
-    let appInstance = AdjustClass.getInstance()
-
+    const appInstance = AdjustClass.getInstance()
+    const isApp = appInstance.isMobileWebview
     const openUrl = (url: string, blank: boolean = false) => {
+        console.log(url, isApp, 'useOpenUrl');
+        
         if (!url) return;
-        if (!appInstance) {
+        if (!isApp) {
             // 浏览器端打开页面
             if( blank ) {
                 window.open(url, '_blank');
@@ -26,6 +28,7 @@ export const useOpenUrl = () => {
 
     return {
         appInstance,
+        isApp,
         openUrl,
         androidOpenUrl,
     }
