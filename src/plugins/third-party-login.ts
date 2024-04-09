@@ -5,35 +5,33 @@ import { authStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
 import AdjustClass from "@/utils/adjust";
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
-import { useToast } from "vue-toastification";
 import { log } from "console";
 
 let indexValue = ''; // ThirdPartyWayEnum.GOOGLE_LOGIN FACEBOOK_LOGIN
 let typeValue = "";
 
 
-// 全局 window 对象
+// // 全局 window 对象
 const globalWindow: any = window;
-const toast = useToast();
 
-// 接受android傳遞的token - google 登录模拟
-globalWindow.googleLogin = (token: string) => {
-  console.log(indexValue, typeValue);
-  if(token) {
-    loginOrRegister(token, indexValue, typeValue);
-  } else {
-    console.error('登录/注册失败，检查接口')
-  }
-}
-// 接受android傳遞的token  - facebook 登录模拟
-globalWindow.facebookLogin = (token: string) => {
-  console.log(indexValue, typeValue);
-  if(token) {
-    loginOrRegister(token, indexValue, typeValue);
-  } else {
-    console.error('登录/注册失败，检查接口')
-  }
-}
+// // 接受android傳遞的token - google 登录模拟
+// globalWindow.googleLogin = (token: string) => {
+//   console.log(indexValue, typeValue);
+//   if(token) {
+//     loginOrRegister(token, indexValue, typeValue);
+//   } else {
+//     console.error('登录/注册失败，检查接口')
+//   }
+// }
+// // 接受android傳遞的token  - facebook 登录模拟
+// globalWindow.facebookLogin = (token: string) => {
+//   console.log(indexValue, typeValue);
+//   if(token) {
+//     loginOrRegister(token, indexValue, typeValue);
+//   } else {
+//     console.error('登录/注册失败，检查接口')
+//   }
+// }
 
 const { dispatchQuickLogin, dispatchQuickRegister } = authStore();
 
