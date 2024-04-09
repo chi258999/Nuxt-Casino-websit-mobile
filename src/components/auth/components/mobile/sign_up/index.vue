@@ -515,18 +515,12 @@ const MSignup = defineComponent({
             state.indexValue = value;
             state.typeValue = 'login';
             // 啟動android原生登錄流程
-            await new Promise((resolve, reject) => {
-              if (value === "google") {
-                globalWindow["AndroidWebView"].googleLogin((token: string) => {
-                  resolve(token);
-                });
-              }
-              if (value === "facebook") {
-                globalWindow["AndroidWebView"].facebookLogin((token: string) => {
-                  resolve(token);
-                });
-              }
-            });
+            if (value === "google") {
+              globalWindow["AndroidWebView"].googleLogin();
+            }
+            if (value === "facebook") {
+              globalWindow["AndroidWebView"].facebookLogin();
+            }
         } else {
           await loginWithSocialMedia(value, 'login');
           await registerSuccess();

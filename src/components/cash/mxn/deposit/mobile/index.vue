@@ -144,6 +144,8 @@ const depositRate = ref<number>(0);
 const depositAmount = ref<string | number>(0)
 
 const stopCheckDepositAmount = ref<boolean>(false)
+// 是否展示充值活动说明框
+const showDepositBonusCard=ref<boolean>(true)
 
 const depositAmountWithCurrency = ref<string>("");
 
@@ -270,6 +272,9 @@ watch(depositConfig, (newValue) => {
       bonus: bonusAmount,
       type: bonusType
     })
+    console.log(depositAmountList.value,'depositAmountList.valuedepositAmountList.value')
+    // 当没有充值活动时，不展示活动说明框
+   showDepositBonusCard.value=depositAmountList.value.some((item:any)=>item.bonus!==0)
   })
   // depositAmountList.value = newValue["list"];
   // bonusAmount.value = newValue["bonus"][0]["type"] == 0 ? Number(newValue["bonus"][0].award) : Number(newValue["bonus"][0].rate) * 100
@@ -688,6 +693,7 @@ watch(bonusCheck, (newValue) => {
       }
     })
   }
+  console.log(depositAmountList.value,'1111111111111111111depositAmountList.valuedepositAmountList.value')
 })
 
 watch(depositAmount, (newValue) => {
@@ -1001,23 +1007,26 @@ onMounted(async () => {
       }}
       {{ t("deposit_dialog.other_text_1") }}
     </v-row> -->
-    <div
-      class="m-deposit-bonus-card mx-6 px-2 py-2"
-      :class="bonusCheck ? '' : 'm-deposit-bonus-card-border'"
-    >
-      <div class="m-deposit-btn-check" @click="jumpPromocione">
-        <span>{{ t("deposit_dialog.text_4") }}</span>
-        <span class="ml-1">{{'>'}}</span>
+    <template v-if="showDepositBonusCard">
+      <div
+        v-if="!bonusCheck"
+        class="m-deposit-bonus-card mx-6 px-2 py-2"
+        :class="bonusCheck ? '' : 'm-deposit-bonus-card-border'"
+      >
+        <div class="m-deposit-btn-check" @click="jumpPromocione">
+          <span>{{ t("deposit_dialog.text_4") }}</span>
+          <span class="ml-1">{{'>'}}</span>
+        </div>
+        <div class="d-flex align-center">
+          <img src="@/assets/vip/image/img_vip_10.png" width="21" />
+          <div class="text-700-12 white">{{ depositConfig.name }}</div>
+        </div>
+        <div class="d-flex align-start ml-6">
+          <img src="@/assets/public/svg/icon_public_03.svg" />
+          <div class="text-400-8 gray">{{ t("deposit_dialog.text_2") }}</div>
+        </div>
       </div>
-      <div class="d-flex align-center">
-        <img src="@/assets/vip/image/img_vip_10.png" width="21" />
-        <div class="text-700-12 white">{{ depositConfig.name }}</div>
-      </div>
-      <div class="d-flex align-start ml-6">
-        <img src="@/assets/public/svg/icon_public_03.svg" />
-        <div class="text-400-8 gray">{{ t("deposit_dialog.text_2") }}</div>
-      </div>
-    </div>
+    </template>
     <div class="m-deposit-btn-position">
       <v-btn
         class="my-4 mx-6 m-deposit-btn"
