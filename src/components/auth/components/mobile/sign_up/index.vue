@@ -1015,6 +1015,17 @@ export default MSignup;
 }
 
 .m-agreement-checkbox {
+  width: fit-content;
+  flex-shrink: 0;
+
+  .v-input__control {
+    margin-right: 5px;
+  }
+  .v-selection-control__wrapper {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
   i.v-icon {
     color: #15161c;
     background-color: #01983a;
