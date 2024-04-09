@@ -1157,7 +1157,8 @@ export const lang: langType = {
     },
     "text_1": "Successfully submitted, need to modify please contact customer service",
     "text_2": "Once your deposit is made, it will activate the selected bonus. If you have already made a deposit Please do not change the selected bonus until the deposit is credited to the game balance.",
-    "text_3":'Get Awarded'
+    "text_3":'Get Awarded',
+    "text_4":'CHECK',
   },
   "transaction_history": {
     "type": {
