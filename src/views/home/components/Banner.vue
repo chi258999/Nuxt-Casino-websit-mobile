@@ -29,6 +29,7 @@ import { promoStore } from "@/store/promo";
 import { STATEMENT_TYPES } from "@babel/types";
 import { agentStore } from "@/store/agent";
 import { vipStore } from "@/store/vip";
+import { useOpenUrl } from '@/plugins/openPage'
 
 const BannerComponent = defineComponent({
   components: {
@@ -49,6 +50,7 @@ const BannerComponent = defineComponent({
     const { dispatchUserActivityList } = promoStore();
     const { setAgentNavBarToggle } = agentStore();
     const { setVipNavBarToggle } = vipStore();
+    const { openUrl } = useOpenUrl()
     /**
      * 初始化swiper
      * Initialize swiper
@@ -164,7 +166,8 @@ const BannerComponent = defineComponent({
             setVipNavBarToggle('1');
             break;
           default:
-            window.location.href = contentValue;
+            // window.location.href = contentValue;
+            openUrl(contentValue)
             break;
         }
       }
@@ -172,7 +175,8 @@ const BannerComponent = defineComponent({
       // 站外链接 打开新页签
       if (type == 6) {
         if(!currentItem.content) return;
-        window.open(currentItem.content, '_blank')
+        // window.open(currentItem.content, '_blank')
+        openUrl(currentItem.content, true)
       }
 
       //
