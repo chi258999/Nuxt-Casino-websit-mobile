@@ -54,7 +54,7 @@ const BannerComponent = defineComponent({
      * Initialize swiper
      */
     const swiper = ref<any>(null);
-    const swiperShow = ref<boolean>(true);
+    const swiperShow = ref<boolean>(false);
     const { dispatchBannerList } = bannerStore();
     const state = reactive({
       /**
@@ -124,9 +124,11 @@ const BannerComponent = defineComponent({
 
     // 提前手动关闭swiper，缓存组件时，就可以避免不动的问题
     onActivated(() => {
+      console.log('onActivated=============');
       swiperShow.value = true;
     })
     onDeactivated(() => {
+      console.log('onDeactivated=============');
       swiperShow.value = false;
     })
 
