@@ -359,7 +359,7 @@ const Login = defineComponent({
     // 接受android傳遞的token  - facebook 登录模拟
     globalWindow.fbrLogin = async (token: string) => {
       if(token) {
-        loginOrRegister(token, state.indexValue, state.typeValue);
+        await loginOrRegister(token, state.indexValue, state.typeValue);
         await loginSuccess();
         loginType(state.indexValue);
       } else {

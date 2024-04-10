@@ -61,8 +61,8 @@ const { dispatchUserActivityList } = promoStore();
 const selectedCurrencyUnit = ref<string>(platformCurrency.value);
 
 const selectedCurrencyItem = ref<GetCurrencyItem>({
-  icon: new URL("@/assets/public/svg/icon_public_84.svg", import.meta.url).href,
-  name: platformCurrency.value,
+  icon: '',
+  name: '',
   value: 5.25
 })
 

@@ -220,7 +220,7 @@ const i18nButtonText = (eng: string) => {
               width="-webkit-fill-available"
               height="55px"
               @click="handleContent"
-              :disabled="userInfo.is_first_deposit"
+              :disabled="userInfo.is_first_deposit&&selectedItem.name=='首充活动'"
             >
               {{ i18nButtonText(selectedItem.button_text) }}
             </v-btn>
