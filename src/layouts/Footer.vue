@@ -3,10 +3,15 @@ import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
+import { agentStore } from "@/store/agent";
+import { vipStore } from "@/store/vip";
+
 const { t } = useI18n();
 const { name, width } = useDisplay();
 const route = useRoute();
 const router = useRouter();
+const { setAgentNavBarToggle } = agentStore();
+const { setVipNavBarToggle } = vipStore();
 
 const footerIcons = ref([
   new URL("@/assets/public/svg/icon_public_80.svg", import.meta.url).href,
@@ -28,6 +33,14 @@ const mobileWidth = computed(() => {
 
 const goToAboutPage = (index: number) => {
   router.push({ name: "About_US", query: { index: index } });
+};
+const oepnDialog = (val: string) => {
+  if(val === 'vip') {
+    setVipNavBarToggle('1');
+  }
+  if(val ==='affiliate') {
+    setAgentNavBarToggle(true);
+  }
 };
 </script>
 
@@ -59,11 +72,14 @@ const goToAboutPage = (index: number) => {
         <div class="footer-title" :class="mobileWidth < 600 ? 'ml-2' : ''">
           {{ t("home.footer.helpful_links.title") }}
         </div>
-        <div class="footer-text-1" :class="mobileWidth < 600 ? 'ml-2' : ''">
+        <!-- <div class="footer-text-1" :class="mobileWidth < 600 ? 'ml-2' : ''">
           {{ t("home.footer.helpful_links.menu_1") }}
-        </div>
-        <div class="footer-text-1" :class="mobileWidth < 600 ? 'ml-2' : ''">
+        </div> -->
+        <div @click="oepnDialog('vip')" class="footer-text-1" :class="mobileWidth < 600 ? 'ml-2' : ''">
           {{ t("home.footer.helpful_links.menu_2") }}
+        </div>
+        <div @click="oepnDialog('affiliate')" class="footer-text-1" :class="mobileWidth < 600 ? 'ml-2' : ''">
+          {{ t("home.footer.helpful_links.menu_3") }}
         </div>
       </v-col>
 
