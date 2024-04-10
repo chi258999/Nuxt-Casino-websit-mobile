@@ -383,6 +383,11 @@ const closeVipIllustrate = () => {
       <div class="progress-main-faq-title">FAQ</div>
       <el-collapse class="progress-main-faq-collapse">
         <el-collapse-item :title="t('vip.vip_level_info.progress.text_11')" name="1">
+          <template #title>
+            <div class="faq-collapse-head">
+              <p>{{ t('vip.vip_level_info.progress.text_11') }}</p>
+            </div>
+          </template>
           <div>{{ t('vip.vip_level_info.progress.text_14') }}</div>
         </el-collapse-item>
       </el-collapse>
@@ -794,6 +799,15 @@ const closeVipIllustrate = () => {
   img {
     width: 16px;
     height: 16px;
+  }
+}
+
+.faq-collapse-head {
+  height: 49px;
+  display: flex;
+  align-items: center;
+  p {
+    line-height: 24px;
   }
 }
 </style>
