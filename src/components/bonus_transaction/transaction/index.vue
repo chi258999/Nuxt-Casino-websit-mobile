@@ -227,6 +227,7 @@ onMounted(async () => {
   <v-slide-group
     class="mt-2 slide-tab-btns slide-tabs"
     v-model="selectedTab"
+    center-active
     show-arrows
     style="touch-action: none"
     :style="{
@@ -237,7 +238,7 @@ onMounted(async () => {
     <v-slide-group-item
       v-for="(item, index) in transactionTabs"
       :key="index"
-      :value="item"
+      :value="item.value"
     >
       <v-btn
         class="ma-2 text-none transaction-tab-btn"
