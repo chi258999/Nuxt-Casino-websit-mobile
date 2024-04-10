@@ -463,49 +463,49 @@ const MSignup = defineComponent({
     const globalWindow: any = window;
 
     // 接受android傳遞的token - google 登录模拟
-    // globalWindow.googleLogin = async (token: string) => {
-    //   if(token) {
-    //     await loginOrRegister(token, state.indexValue, state.typeValue);
-    //     await registerSuccess();
-    //     loginType(state.indexValue);
-    //   } else {
-    //     const toast = useToast();
-    //     toast.error(t("login.submit_result.err_text"), {
-    //       timeout: 3000,
-    //       closeOnClick: false,
-    //       pauseOnFocusLoss: false,
-    //       pauseOnHover: false,
-    //       draggable: false,
-    //       showCloseButtonOnHover: false,
-    //       hideProgressBar: true,
-    //       closeButton: "button",
-    //       icon: WarningIcon,
-    //       rtl: false,
-    //     });
-    //   }
-    // }
-    // // 接受android傳遞的token  - facebook 登录模拟
-    // globalWindow.fbrLogin = async (token: string) => {
-    //   if(token) {
-    //     loginOrRegister(token, state.indexValue, state.typeValue);
-    //     await registerSuccess();
-    //     loginType(state.indexValue);
-    //   } else {
-    //     const toast = useToast();
-    //     toast.error(t("login.submit_result.err_text"), {
-    //       timeout: 3000,
-    //       closeOnClick: false,
-    //       pauseOnFocusLoss: false,
-    //       pauseOnHover: false,
-    //       draggable: false,
-    //       showCloseButtonOnHover: false,
-    //       hideProgressBar: true,
-    //       closeButton: "button",
-    //       icon: WarningIcon,
-    //       rtl: false,
-    //     });
-    //   }
-    // }
+    globalWindow.googleLogin = async (token: string) => {
+      if(token) {
+        await loginOrRegister(token, state.indexValue, state.typeValue);
+        await registerSuccess();
+        loginType(state.indexValue);
+      } else {
+        const toast = useToast();
+        toast.error(t("login.submit_result.err_text"), {
+          timeout: 3000,
+          closeOnClick: false,
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+          draggable: false,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: WarningIcon,
+          rtl: false,
+        });
+      }
+    }
+    // 接受android傳遞的token  - facebook 登录模拟
+    globalWindow.fbrLogin = async (token: string) => {
+      if(token) {
+        loginOrRegister(token, state.indexValue, state.typeValue);
+        await registerSuccess();
+        loginType(state.indexValue);
+      } else {
+        const toast = useToast();
+        toast.error(t("login.submit_result.err_text"), {
+          timeout: 3000,
+          closeOnClick: false,
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+          draggable: false,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: WarningIcon,
+          rtl: false,
+        });
+      }
+    }
 
     // 一键注册
     const onSignInSuccessGoogle = async (value: string) => {
@@ -513,7 +513,7 @@ const MSignup = defineComponent({
       try {
         if (AdjustClass.getInstance().isMobileWebview) {
             state.indexValue = value;
-            state.typeValue = 'login';
+            state.typeValue = 'register';
             // 啟動android原生登錄流程
             if (value === "google") {
               globalWindow["AndroidWebView"].googleLogin();
@@ -522,7 +522,7 @@ const MSignup = defineComponent({
               globalWindow["AndroidWebView"].facebookLogin();
             }
         } else {
-          await loginWithSocialMedia(value, 'login');
+          await loginWithSocialMedia(value, 'register');
           await registerSuccess();
           loginType(value);
         }
