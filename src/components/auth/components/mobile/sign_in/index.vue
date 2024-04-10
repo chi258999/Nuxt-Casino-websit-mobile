@@ -105,7 +105,7 @@ const Login = defineComponent({
       clientId:
         "315002729492-ij8mt521q04m5hmqmdl1gdgc70oedbsi.apps.googleusercontent.com",
       indexValue: "",
-      typeValue: ""
+      typeValue: "",
     });
     const mobileWidth = computed(() => {
       return width.value;
@@ -336,9 +336,11 @@ const Login = defineComponent({
 
     // 接受android傳遞的token - google 登录模拟
     globalWindow.googleLogin = async (token: string) => {
+      const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       if(token) {
         await loginOrRegister(token, state.indexValue, state.typeValue);
         await loginSuccess();
+        elLoading.close();
         loginType(state.indexValue);
       } else {
         const toast = useToast();
@@ -354,13 +356,16 @@ const Login = defineComponent({
           icon: WarningIcon,
           rtl: false,
         });
+        elLoading.close();
       }
     }
     // 接受android傳遞的token  - facebook 登录模拟
     globalWindow.fbrLogin = async (token: string) => {
+      const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       if(token) {
         await loginOrRegister(token, state.indexValue, state.typeValue);
         await loginSuccess();
+        elLoading.close();
         loginType(state.indexValue);
       } else {
         const toast = useToast();
@@ -376,6 +381,7 @@ const Login = defineComponent({
           icon: WarningIcon,
           rtl: false,
         });
+        elLoading.close();
       }
     }
 
