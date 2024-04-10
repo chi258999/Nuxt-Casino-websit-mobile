@@ -1087,7 +1087,8 @@ export const lang: langType = {
       "helpful_links": {
         "title": "Enlaces relacionados",
         "menu_1": "Justo",
-        "menu_2": "Club vip"
+        "menu_2": "Club vip",
+        "menu_3": "Afiliado",
       },
       "about_us": {
         "title": "Sobre nosotros",

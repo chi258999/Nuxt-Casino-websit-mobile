@@ -1088,6 +1088,7 @@ export type langType = {
         title: string
         menu_1: string
         menu_2: string
+        menu_3: string
       }
       about_us: {
         title: string
