@@ -164,7 +164,8 @@ onMounted(() => {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0 4px;
+        padding: 0 8px;
+        width: 230px;
 
         div {
           white-space: pre-wrap;
