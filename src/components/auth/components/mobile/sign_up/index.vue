@@ -26,6 +26,7 @@ import { googleTokenLogin } from "vue3-google-login";
 import EventToken from "@/constants/EventToken";
 import { loginWithSocialMedia, loginType, loginOrRegister } from "@/plugins/third-party-login";
 import { ThirdPartyWayEnum } from '@/enums/userEnum'
+import { ElLoading } from "element-plus";
 
 const MSignup = defineComponent({
   components: {
@@ -464,9 +465,11 @@ const MSignup = defineComponent({
 
     // 接受android傳遞的token - google 登录模拟
     globalWindow.googleLogin = async (token: string) => {
+      const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       if(token) {
         await loginOrRegister(token, state.indexValue, state.typeValue);
         await registerSuccess();
+        elLoading.close();
         loginType(state.indexValue);
       } else {
         const toast = useToast();
@@ -482,13 +485,16 @@ const MSignup = defineComponent({
           icon: WarningIcon,
           rtl: false,
         });
+        elLoading.close();
       }
     }
     // 接受android傳遞的token  - facebook 登录模拟
     globalWindow.fbrLogin = async (token: string) => {
+      const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       if(token) {
-        loginOrRegister(token, state.indexValue, state.typeValue);
+        await loginOrRegister(token, state.indexValue, state.typeValue);
         await registerSuccess();
+        elLoading.close();
         loginType(state.indexValue);
       } else {
         const toast = useToast();
@@ -504,6 +510,7 @@ const MSignup = defineComponent({
           icon: WarningIcon,
           rtl: false,
         });
+        elLoading.close();
       }
     }
 

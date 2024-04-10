@@ -1,5 +1,4 @@
 import { computed } from "vue";
-import { ElLoading } from "element-plus";
 import { googleTokenLogin } from "vue3-google-login";
 import { authStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
@@ -96,10 +95,6 @@ const loginOrRegister = async (token: string, value: string, type: string) => {
         console.log(params, 'dispatchQuickRegister');
     }
     return true
-}
-
-const startAndroid = (index: number, type: string) => {
-
 }
 
 // Google 登录逻辑封装
