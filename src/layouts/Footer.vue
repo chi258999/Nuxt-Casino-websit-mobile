@@ -36,7 +36,7 @@ const goToAboutPage = (index: number) => {
 };
 const oepnDialog = (val: string) => {
   if(val === 'vip') {
-    setVipNavBarToggle('1');
+    setVipNavBarToggle('2');
   }
   if(val ==='affiliate') {
     setAgentNavBarToggle(true);
