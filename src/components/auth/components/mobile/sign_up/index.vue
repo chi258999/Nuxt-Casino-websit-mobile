@@ -248,8 +248,9 @@ const MSignup = defineComponent({
       state.isShowUsernameValidation = false;
     };
 
-    const handleOnEmailInputBlur = (): void => {
+    const handleOnEmailInputBlur = (e:any): void => {
       // handleValidateEmail();
+      state.formData.emailAddress =e.target.value.replace(/([^@])[\s~`!#$%^&*()_+=[\]{};:"<>?/,.]/g, '$1')
       state.isShowEmailValidaton = false;
       setTimeout(() => {
         state.mailCardHeight = 0;
@@ -386,7 +387,8 @@ const MSignup = defineComponent({
       state.currentPage = state.PAGE_TYPE.SIGNUP_FORM;
     };
 
-    const handleEmailChange = () => {
+    const handleEmailChange = (e:any) => {
+       state.formData.emailAddress =e.target.value.replace(/([^@])[\s~`!#$%^&*()_+=[\]{};:"<>?/,.]/g, '$1')
       handleValidateEmail();
       if (state.formData.emailAddress.includes("@")) {
         state.emailPartName = state.formData.emailAddress.split("@")[0];
