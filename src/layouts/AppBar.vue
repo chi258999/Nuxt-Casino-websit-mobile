@@ -512,7 +512,7 @@ watch(userBalance, (value) => {
 
 watch(socketBalance, (value) => {
   console.log("socketBalance================", value);
-  if (value.op_type == 201) {
+  if (value.op_type == 201||value.op_type ==2010) {
     setTimerValue(0);
     localStorage.removeItem("spei");
     localStorage.removeItem("timer");
