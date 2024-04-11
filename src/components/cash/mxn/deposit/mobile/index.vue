@@ -691,7 +691,6 @@ watch(bonusCheck, (newValue) => {
       }
     })
   }
-  console.log(depositAmountList.value,'1111111111111111111depositAmountList.valuedepositAmountList.value')
 })
 
 watch(depositAmount, (newValue) => {
