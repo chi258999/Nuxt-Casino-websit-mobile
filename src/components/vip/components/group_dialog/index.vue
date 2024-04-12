@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { vipStore } from "@/store/vip";
+import { gameStore } from "@/store/game";
 import AdjustClass from '@/utils/adjust';
 const props = defineProps({
   modelValue: {
@@ -26,6 +27,11 @@ const vipInfo = computed(() => {
     const { getVipInfo } = storeToRefs(vipStore());
     return getVipInfo.value
 })
+// 获取国际化语言
+const getLang = computed(() => {
+  const { getLanguage } = storeToRefs(gameStore());
+  return getLanguage.value;
+});
 
 const closeGroupDialog = () => {
   emit("update:modelValue", false);
@@ -76,6 +82,8 @@ const joinWatsapp = () => {
       >
         <img src="@/assets/public/svg/icon_public_10.svg" />
       </v-btn>
+      <img v-if="getLang=='en'" class="group-select-text-img" src="@/assets/vip/svg/group_select_en.svg">
+      <img v-else class="group-select-text-img" src="@/assets/vip/svg/group_select_es.svg">
       <div class="join-text">
         <font class="text-400-14 white">
           {{ t("vip.vip_level_info.progress.text_17") }}
@@ -102,13 +110,14 @@ const joinWatsapp = () => {
 
 <style lang="scss">
 .group_dialog-container {
-  width: calc(100%);
-  // height: 650px;
-  height: 90vh;
+  width: 330px;
+  height: 650px;
+  // height: 90vh;
+  flex-shrink: 1;
   margin: auto;
   position: relative;
   background: url("@/assets/vip/image/group_select.png") no-repeat;
-  background-size: 100% auto;
+  background-size: 100% 100%;
   padding: 24px;
   box-sizing: border-box;
   .m-close-button {
@@ -121,9 +130,15 @@ const joinWatsapp = () => {
       font-size: 24px;
     }
   }
+  .group-select-text-img {
+     position: absolute;
+     bottom: 28%;
+     left: 50%;
+     transform: translate(-50%,0);
+  }
   .join-text {
     line-height:17px;
-    width: 240px;
+    width: 275px;
     text-align: center;
     position: absolute;
     left: 50%;
