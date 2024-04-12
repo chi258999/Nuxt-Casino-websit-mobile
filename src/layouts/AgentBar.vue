@@ -21,15 +21,15 @@ const MGrade = defineAsyncComponent(
 const { setMailMenuShow } = mailStore();
 const { setAgentNavBarToggle } = agentStore();
 
-const { t } = useI18n();
-
+const { t, locale } = useI18n();
 const drawer = ref<boolean>(false);
 const activeIndex = ref<number>(0);
 
 const scrollTop = ref<number>(0);
 
-const currentLang = ref<string | null>(localStorage.getItem("lang"));
-
+const currentLang = computed(() => {
+  return locale.value
+});
 const agentNavBarToggle = computed(() => {
   const { getAgentNavBarToggle } = storeToRefs(agentStore());
   return getAgentNavBarToggle.value;
@@ -156,16 +156,17 @@ onMounted(() => {
 
 
     .tab-box {
-      // display: grid !important;
-      // grid-template-columns: repeat(5, 1fr) !important;
-      // grid-gap: 15px !important;
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      grid-gap: 15px !important;
+      margin: 0 14px !important;
 
       .tab-box-item {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0 8px;
-        width: 230px;
+        // padding: 0 8px;
+        // width: 230px;
 
         div {
           white-space: pre-wrap;
