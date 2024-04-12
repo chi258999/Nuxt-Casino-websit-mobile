@@ -289,7 +289,7 @@ const Login = defineComponent({
     const handleEmailBlur = (e:any) => {
       // console.log("onblur")
       // 去除空格和特殊符号
-      state.formData.emailAddress =e.target.value.replace(/([^@])[\s~`!#$%^&*()_+=[\]{};:"<>?/,.]/g, '$1')
+      state.formData.emailAddress =e.target.value.replace(/([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g, '$1')
       setTimeout(() => {
         state.mailCardHeight = 0;
       }, 100);
@@ -297,7 +297,7 @@ const Login = defineComponent({
 
     const handleEmailChange = (e:any) => {
       // 去除空格和特殊符号
-      state.formData.emailAddress =e.target.value.replace(/([^@])[\s~`!#$%^&*()_+=[\]{};:"<>?/,.]/g, '$1')
+      state.formData.emailAddress =e.target.value.replace(/([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g, '$1')
       if (state.formData.emailAddress.includes("@")) {
         state.emailPartName = state.formData.emailAddress.split("@")[0];
         state.mailCardHeight = 220;
