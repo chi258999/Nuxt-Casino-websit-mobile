@@ -250,7 +250,7 @@ const MSignup = defineComponent({
 
     const handleOnEmailInputBlur = (e:any): void => {
       // handleValidateEmail();
-      state.formData.emailAddress =e.target.value.replace(/([^@])[\s~`!#$%^&*()_+=[\]{};:"<>?/,.]/g, '$1')
+      state.formData.emailAddress =e.target.value.replace(/([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g, '$1')
       state.isShowEmailValidaton = false;
       setTimeout(() => {
         state.mailCardHeight = 0;
@@ -388,7 +388,7 @@ const MSignup = defineComponent({
     };
 
     const handleEmailChange = (e:any) => {
-       state.formData.emailAddress =e.target.value.replace(/([^@])[\s~`!#$%^&*()_+=[\]{};:"<>?/,.]/g, '$1')
+      state.formData.emailAddress =e.target.value.replace(/([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g, '$1')
       handleValidateEmail();
       if (state.formData.emailAddress.includes("@")) {
         state.emailPartName = state.formData.emailAddress.split("@")[0];
