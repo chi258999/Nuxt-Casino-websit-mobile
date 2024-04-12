@@ -115,7 +115,7 @@ const BannerComponent = defineComponent({
 
     onMounted(async () => {
       await dispatchBannerList();
-
+      swiperShow.value = true;
       state.slides.length = 0;
       bannerList.value.forEach((element) => {
         if (element.image_path) {
@@ -230,6 +230,7 @@ const BannerComponent = defineComponent({
       refferalAppBarShow,
       calcSlide,
       handleSlideChange,
+      swiperShow
     };
   },
 });
@@ -284,40 +285,42 @@ export default BannerComponent;
     :class="!refferalAppBarShow ? 'mt-2' : ''"
     v-else
   >
-    <swiper
-      :modules="modules"
-      :slidesPerView="1"
-      :spaceBetween="6"
-      :centeredSlides="true"
-      :loop="true"
-      :autoplay="{
-        delay: 2000,
-        disableOnInteraction: false,
-      }"
-      :pagination="{
-        el: '.swiper-pagination',
-        clickable: true,
-      }"
-      :navigation="false"
-      :virtual="true"
-      class="mx-2"
-      @swiper="getSwiperRef"
-      @slideChange="handleSlideChange"
-    >
-      <swiper-slide
-        v-for="(slide, index) in calcSlide()"
-        :key="index"
-        :virtualIndex="index"
+    <template v-if="swiperShow">
+      <swiper
+        :modules="modules"
+        :slidesPerView="1"
+        :spaceBetween="6"
+        :centeredSlides="true"
+        :loop="true"
+        :autoplay="{
+          delay: 2000,
+          disableOnInteraction: false,
+        }"
+        :pagination="{
+          el: '.swiper-pagination',
+          clickable: true,
+        }"
+        :navigation="false"
+        :virtual="true"
+        class="mx-2"
+        @swiper="getSwiperRef"
+        @slideChange="handleSlideChange"
       >
-        <img
-          :src="slide"
-          class="m-slider-img-width"
-          :class="mobileWidth < 600 ? 'm-carousel-img-border' : ''"
-          @click="slideImageClick(index)"
-        />
-      </swiper-slide>
-    </swiper>
-    <div class="swiper-pagination" slot="pagination"></div>
+        <swiper-slide
+          v-for="(slide, index) in calcSlide()"
+          :key="index"
+          :virtualIndex="index"
+        >
+          <img
+            :src="slide"
+            class="m-slider-img-width"
+            :class="mobileWidth < 600 ? 'm-carousel-img-border' : ''"
+            @click="slideImageClick(index)"
+          />
+        </swiper-slide>
+      </swiper>
+      <div class="swiper-pagination" slot="pagination"></div>
+    </template>
   </div>
 </template>
 
