@@ -298,12 +298,12 @@ onMounted(async () => {
 <template>
   <v-dialog
     v-model="modelValueNew"
-    @click:outside="closeGroupDialog"
     class="cash-header-dialog"
     :width="''"
     :fullscreen="true"
     :scrim="false"
     :transition="'dialog-top-transition'"
+    persistent
   >
     <div
       class="mobile-cash-header"
