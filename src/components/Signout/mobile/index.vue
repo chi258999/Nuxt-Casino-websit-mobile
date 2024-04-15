@@ -164,6 +164,7 @@ onMounted(() => {
       font-size: 24px;
       font-weight: 700;
       text-align: center;
+      line-height: 24px;
     }
 
     .m-signout-notice {
