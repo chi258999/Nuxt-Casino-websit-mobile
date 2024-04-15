@@ -720,8 +720,8 @@ const routeInited = () => {
     </v-dialog>
 
     <!---------------------------------- Deposit Confirm ----------------------------------------->
-
-    <v-dialog
+  <!-- 充值确认 -->
+    <!-- <v-dialog
       class="m-deposit-cofirm-dialog"
       v-model="depositConfirmDialog"
       :width="''"
@@ -730,9 +730,9 @@ const routeInited = () => {
       persistent
       v-if="mobileVersion == 'sm'"
       :transition="'dialog-top-transition'"
-    >
-      <MDepositConfirm />
-    </v-dialog>
+    > -->
+      <MDepositConfirm  v-if="depositConfirmDialog&&mobileVersion == 'sm'" v-model="depositConfirmDialog" />
+    <!-- </v-dialog> -->
 
     <!-----------------------Authentication Dialog --------------------------------------->
 
