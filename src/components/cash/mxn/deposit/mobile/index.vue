@@ -141,7 +141,7 @@ const depositToggleSwitch = ref<boolean>(false);
 
 const depositRate = ref<number>(0);
 
-const depositAmount = ref<string | number>(0)
+const depositAmount = ref<string | number>('')
 
 const stopCheckDepositAmount = ref<boolean>(false)
 // 是否展示充值活动说明框
@@ -964,8 +964,8 @@ onMounted(async () => {
         color="#7782AA"
         style="border-radius: 8px"
         v-model="depositAmount"
-        :onfocus="handleAmountInputFocus"
-        :onblur="handleAmountInputBlur"
+        :onfocus="handleAmountInputBlur"
+        :onblur="handleAmountInputFocus"
         @input="handleAmountInputChange"
       />
       <ValidationBox
