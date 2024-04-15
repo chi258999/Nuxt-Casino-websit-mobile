@@ -189,10 +189,10 @@ onMounted(() => {
       }
     }
     .m-signout-box {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      // position: absolute;
+      // bottom: 20px;
+      // left: 50%;
+      // transform: translateX(-50%);
     }
 
     // close modal button
