@@ -650,8 +650,8 @@ const routeInited = () => {
     </v-navigation-drawer>
 
     <!---------------------- Deposit Dialog ----------------------------------------------->
-
-    <v-dialog
+  <!-- 存款菜单弹窗 -->
+    <!-- <v-dialog
       v-model="cashDialog"
       class="cash-header-dialog"
       :width="''"
@@ -660,11 +660,11 @@ const routeInited = () => {
       :transition="'dialog-top-transition'"
       @click:outside="setCashDialogToggle(false)"
       v-if="mobileVersion == 'sm'"
-    >
-      <MCashHeader />
-    </v-dialog>
-
-    <v-dialog
+    > -->
+      <MCashHeader v-if="cashDialog&&mobileVersion == 'sm'" v-model="cashDialog"  />
+    <!-- </v-dialog> -->
+    <!-- 存款充值 -->
+    <!-- <v-dialog
       v-model="withdrawDialog"
       :class="depositBlurEffectShow ? 'm-deposit-dialog' : ''"
       :width="''"
@@ -675,13 +675,13 @@ const routeInited = () => {
       persistent
       v-if="mobileVersion == 'sm'"
     >
-      <template v-if="withdrawDialog">
-        <Withdraw v-if="mobileWidth > 600" />
-        <MWithdraw v-else />
-      </template>
-    </v-dialog>
-
-    <v-dialog
+      <template v-if="withdrawDialog"> -->
+        <!-- <Withdraw v-if="mobileWidth > 600" /> -->
+        <MWithdraw v-if="withdrawDialog&&mobileVersion == 'sm'" v-model="withdrawDialog" />
+      <!-- </template>
+    </v-dialog> -->
+    <!-- 存款选择 -->
+    <!-- <v-dialog
       v-model="depositDialog"
       :class="depositBlurEffectShow ? 'm-deposit-dialog' : ''"
       :width="''"
@@ -693,10 +693,10 @@ const routeInited = () => {
       v-if="mobileVersion == 'sm'"
     >
       <template v-if="depositDialog">
-        <Deposit v-if="mobileWidth > 600" />
-        <MDeposit class="m-deposit-sub-dialog" v-else />
-      </template>
-    </v-dialog>
+        <Deposit v-if="mobileWidth > 600" /> -->
+        <MDeposit class="m-deposit-sub-dialog"  v-if="depositDialog&&mobileVersion == 'sm'" v-model="depositDialog" />
+      <!-- </template>
+    </v-dialog> -->
 
     <v-dialog
       v-model="cashDialog"
@@ -720,8 +720,8 @@ const routeInited = () => {
     </v-dialog>
 
     <!---------------------------------- Deposit Confirm ----------------------------------------->
-
-    <v-dialog
+  <!-- 充值确认 -->
+    <!-- <v-dialog
       class="m-deposit-cofirm-dialog"
       v-model="depositConfirmDialog"
       :width="''"
@@ -730,9 +730,9 @@ const routeInited = () => {
       persistent
       v-if="mobileVersion == 'sm'"
       :transition="'dialog-top-transition'"
-    >
-      <MDepositConfirm />
-    </v-dialog>
+    > -->
+      <MDepositConfirm  v-if="depositConfirmDialog&&mobileVersion == 'sm'" v-model="depositConfirmDialog" />
+    <!-- </v-dialog> -->
 
     <!-----------------------Authentication Dialog --------------------------------------->
 
