@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted,watch } from "vue";
 import { defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
 
@@ -21,6 +21,7 @@ import { refferalStore } from "@/store/refferal";
 import { gameStore } from "@/store/game";
 import { storeToRefs } from "pinia";
 import { appBarStore } from "@/store/appBar";
+import { menuStore } from "@/store/menu";
 
 // const AppBarLayout = defineAsyncComponent(() => import("./AppBar.vue"));
 // const MainLayout = defineAsyncComponent(() => import("./Main.vue"));
@@ -41,6 +42,17 @@ const LiveChat = defineAsyncComponent(() => import("./live_chat/index.vue"));
 
 const route = useRoute();
 const { width } = useDisplay();
+
+const rewardNavigationShow = computed(() => {
+  const { getRewardNavShow } = storeToRefs(menuStore());
+  return getRewardNavShow.value;
+});
+
+const rewardNavShow = ref<boolean>(false);
+watch(rewardNavigationShow, (value) => {
+  rewardNavShow.value = value;
+});
+
 
 const refferalAppBarShow = computed(() => {
   const { getRefferalAppBarShow } = storeToRefs(refferalStore());
@@ -111,7 +123,7 @@ onMounted(() => {
     </template>
     <template v-else>
       <MNavBarLayout />
-      <RewardBarLayout v-if="route.name !== 'Sports'" />
+      <RewardBarLayout v-if="route.name !== 'Sports'&&rewardNavShow" v-model="rewardNavShow" />
       <AgentBarLayout />
       <VipBar />
     </template>
