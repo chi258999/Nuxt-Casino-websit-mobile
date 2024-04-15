@@ -1687,7 +1687,7 @@ export const lang: langType = {
         "text_14": "We here at Hoy777 truly cherish our VIPs and believe you deserve more! That's why you'll get one of the highest VIP rewards on the market. Weekly,Personal bonuses,and much more perks await you. Keep conquering the platform,become a VIP,and get your stunning rewards.",
         "text_15": "Levels and Ranks",
         "text_16": "As you play and rechange,you will gain experience,When you gain enough experience,you will move on to the next level. Get rewarded every time you fill the progress bar. Leveling up entitles you to bigger and better rewards!You need to maintain a certain amount of top-ups and bets within 7 days for the VIP level not to be lowered",
-        "text_17": "Level Protection",
+        "text_17": " Instant access to more events and bonuses",
         "text_18": "VIP privileges only apply to active players, if a player is not an active player they will be downgraded and will not be able to receive their original VIP rewards. Weekly minimum deposit and wagering behavior based on current VIP level will effectively protect your VIP level.",
       },
       "bonus": {
