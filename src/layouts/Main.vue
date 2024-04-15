@@ -580,6 +580,10 @@ const swingButton = () => {
   }, 1600);
 };
 
+const token = computed(() => {
+  const { getToken } = storeToRefs(authStore());
+  return getToken.value;
+});
 
 onMounted(() => {
   // 在组件挂载时启动摇摆按钮定时器
@@ -587,9 +591,12 @@ onMounted(() => {
 
   // console.log(route.query.code);
   // 带有邀请注册码的，直接打开注册弹窗
-  if(route.query.code){
-    setAuthDialogVisible(true)
+  if (!token.value) {
+    if(route.query.code){
+      setAuthDialogVisible(true)
+    }
   }
+  
   window.addEventListener("resize", handleResize);
   // window.addEventListener('scroll', (e) => {
   //         // 获取滚动的值并打印出来
