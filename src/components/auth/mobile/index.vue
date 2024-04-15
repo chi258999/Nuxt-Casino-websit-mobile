@@ -49,14 +49,20 @@ watch(dialogCheckBox, (value) => {
   setAuthModalType(type);
 });
 
+const token = computed(() => {
+  const { getToken } = storeToRefs(authStore());
+  return getToken.value;
+});
+
 onMounted(() => {
-  console.log(route.query.code,'2222222222222')
-  if(route.query.code){
-    // 带有邀请注册码的，直接打开注册弹窗
-    setAuthModalType('signup');
-    dialogCheckBox.value=true
+  if (!token.value) {
+    if(route.query.code){
+      // 带有邀请注册码的，直接打开注册弹窗
+      setAuthModalType('signup');
+      dialogCheckBox.value=true
+    }
+    dialogCheckBox.value = authModalType.value == "signup" ? true : false;
   }
-  dialogCheckBox.value = authModalType.value == "signup" ? true : false;
 });
 </script>
 
