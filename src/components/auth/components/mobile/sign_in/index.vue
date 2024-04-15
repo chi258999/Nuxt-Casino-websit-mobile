@@ -259,7 +259,7 @@ const Login = defineComponent({
           try {
             await downloadApprReceive({id: Number(downloadID.value)})
             const toast = useToast();
-            toast.success(`${t('activity_app.text_1')} ${platformCurrency}${activityAppBonus}`, {
+            toast.success(`${t('activity_app.text_1')} ${platformCurrency.value}${activityAppBonus.value}`, {
               timeout: 3000,
               closeOnClick: false,
               pauseOnFocusLoss: false,
