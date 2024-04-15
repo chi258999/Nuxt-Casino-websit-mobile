@@ -451,11 +451,15 @@ const closeVipIllustrate = () => {
     &-m {
       display: flex;
       flex-direction: column;
+      width: 100%;
       &-title {
-        display: flex;
-        justify-content: flex-end;
+        // display: flex;
+        // justify-content: flex-end;
         font-size: 12px;
         font-weight: 700;
+        width: 100%;
+        text-align: right;
+
         &-price {
           color: #f9bc01;
         }
@@ -490,10 +494,12 @@ const closeVipIllustrate = () => {
       display: flex;
       flex-direction: column;
       &-title {
-        display: flex;
-        justify-content: flex-end;
+        // display: flex;
+        // justify-content: flex-end;
         font-size: 12px;
         font-weight: 700;
+        width: 100%;
+        text-align: right;
         &-price {
           span:nth-child(1) {
             color: #7782aa;
