@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, nextTick } from "vue";
 import { toRefs } from "vue";
 import { reactive } from "vue";
 import { watch } from "vue";
@@ -969,11 +969,15 @@ const Dashboard = defineComponent({
     });
     //组件激活
     onActivated(() => {
-      if (placeScroll.value != null && placeScroll.value > 0) {
-        //组件激活后进行浏览位置的赋值
-        document.documentElement.scrollTop = placeScroll.value;
-        document.body.scrollTop = placeScroll.value;
-      }
+      // 等待nexttick再赋值
+      nextTick(() => {
+        if (placeScroll.value != null && placeScroll.value > 0) {
+          //组件激活后进行浏览位置的赋值
+          document.documentElement.scrollTop = placeScroll.value;
+          document.body.scrollTop = placeScroll.value;
+        }
+      })
+
     });
     return {
       t,
