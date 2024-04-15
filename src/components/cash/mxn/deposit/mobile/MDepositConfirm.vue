@@ -117,6 +117,7 @@ onUnmounted(() => {
 
 <template>
   <div class="m-deposit-confirm-dialog">
+    <!-- 关闭 -->
     <div class="m-deposit-confirm-dailog-header">
       <v-btn
         class="m-close-button"
@@ -128,6 +129,7 @@ onUnmounted(() => {
         <img src="@/assets/public/svg/icon_public_52.svg" width="18" />
       </v-btn>
     </div>
+    <!-- 内容 -->
     <div class="m-deposit-confirm-dailog-body px-8 py-2">
       <img :src="mxnPaymentChannel[channnelName]" width="63" />
       <div class="m-order-amount text-center mt-2 pa-2">
@@ -203,6 +205,7 @@ onUnmounted(() => {
         {{ t("deposit_confirm.text_12") }}
       </v-btn>
     </div>
+    <!-- 底部 icon显示栏 -->
     <div class="m-deposit-confirm-dailog-footer d-flex align-center px-10">
       <div class="text-400-12 gray">{{ t("deposit_confirm.text_13") }}</div>
       <div class="d-flex align-center" style="margin-left: auto">
@@ -215,15 +218,15 @@ onUnmounted(() => {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .m-deposit-confirm-dialog {
   background: #1d2027;
   height: 100vh;
 
   .m-deposit-confirm-dailog-header {
+    // position: fixed;
+    // top: 0px;
     height: 36px;
-    position: fixed;
-    top: 0px;
     width: 100%;
 
     .m-close-button {
@@ -236,9 +239,10 @@ onUnmounted(() => {
   }
 
   .m-deposit-confirm-dailog-body {
-    position: absolute;
-    height: calc(100vh - 36px);
-    top: 36px;
+    // position: absolute;
+    // top: 36px;
+    box-sizing: border-box;
+    height: calc(100vh - 36px - 32px);
     overflow-y: scroll;
     width: 100%;
     padding-bottom: 52px !important;
@@ -269,7 +273,7 @@ onUnmounted(() => {
       box-shadow: 0px 3px 4px 1px #00000036;
       border-radius: 8px;
 
-      .v-btn__content {
+      ::v-deep(.v-btn__content) {
         font-family: Inter;
         font-size: 14px;
         font-weight: 700;
@@ -279,10 +283,10 @@ onUnmounted(() => {
   }
 
   .m-deposit-confirm-dailog-footer {
-    position: fixed;
+    // position: fixed;
+    // bottom: 0px;
     height: 32px;
     background: #23262f;
-    bottom: 0px;
     width: 100%;
   }
 }
