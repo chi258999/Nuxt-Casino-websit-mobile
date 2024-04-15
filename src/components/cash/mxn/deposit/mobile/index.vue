@@ -400,6 +400,7 @@ const handleDepositSubmit = async () => {
   if (Number(depositAmount.value) == 0) return;
   if (depositConfig.value.deposit_user_switch) {
     setPixInfoToggle(true);
+    emit("update:modelValue", false);
     return;
   }
   loading.value = true
