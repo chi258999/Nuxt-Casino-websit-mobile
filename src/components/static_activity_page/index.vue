@@ -51,7 +51,7 @@ const checkboxChanged = () => {
   :width="328"
   :scrim="true"
   persistent
-  style="z-index: 1000001"
+  style="z-index: 1000002"
 >
   <div class="m-static-activity-container">
     <div class="m-static-activity-animation-container">
