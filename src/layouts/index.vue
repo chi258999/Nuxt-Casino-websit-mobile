@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted,watch } from "vue";
+import { ref, computed, onMounted,watch, toRefs } from "vue";
 import { defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
 
@@ -22,6 +22,7 @@ import { gameStore } from "@/store/game";
 import { storeToRefs } from "pinia";
 import { appBarStore } from "@/store/appBar";
 import { menuStore } from "@/store/menu";
+import { useDialog } from "@/hooks/dialog";
 
 // const AppBarLayout = defineAsyncComponent(() => import("./AppBar.vue"));
 // const MainLayout = defineAsyncComponent(() => import("./Main.vue"));
@@ -39,6 +40,7 @@ const MBonusDashboardDialog = defineAsyncComponent(
   () => import("@/components/vip/mobile/MBonusDashboard.vue")
 );
 const LiveChat = defineAsyncComponent(() => import("./live_chat/index.vue"));
+const { agentNavBarDrawer, vipDrawer } = useDialog();
 
 const route = useRoute();
 const { width } = useDisplay();
@@ -66,8 +68,6 @@ const isGameScroll = computed(() => {
 });
 
 const isScroll = ref(false)
-
-const agentNavBarToggle = computed(() => {});
 
 const mobileWidth = computed(() => {
   return width.value||300;
@@ -124,8 +124,8 @@ onMounted(() => {
     <template v-else>
       <MNavBarLayout />
       <RewardBarLayout v-if="route.name !== 'Sports'&&rewardNavShow" v-model="rewardNavShow" />
-      <AgentBarLayout />
-      <VipBar />
+      <AgentBarLayout v-if="agentNavBarDrawer" />
+      <VipBar v-if="vipDrawer" />
     </template>
     <UserNavBarLayout />
     <MBonusDashboardDialog />

@@ -549,7 +549,7 @@ onMounted(async () => {
                 class="text-400-12"
                 :class="Number(item.multiplier) > 1 ? 'color-01983A' : 'gray'"
               >
-                {{ item.multiplier }}X
+                {{ Number(item.multiplier) === 0 ? item.multiplier : item.multiplier + 'X' }}
               </p>
             </v-col>
             <v-col
