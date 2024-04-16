@@ -48,27 +48,28 @@ const initVip = async () => {
 watch(vipNavBarToggle, (value: string) => {
   if (value === "1") {
     initVip();
-    vipDrawer.value = true;
+    // vipDrawer.value = true;
     document.body.style.height =
       vipNavigation.value.getBoundingClientRect().height + "px";
   } else if(value === "2") { 
     initVip();
-    vipDrawer.value = true;
+    // vipDrawer.value = true;
   } else {
-    vipDrawer.value = false;
+    // vipDrawer.value = false;
     document.body.style.height = "auto";
   }
 });
 
 onMounted(async () => {
+  console.log('vipDrawer ========= mount')
   if (localStorage.getItem("vipBar") === "1") {
-    vipDrawer.value = true;
+    // vipDrawer.value = true;
     document.body.style.height =
       vipNavigation.value.getBoundingClientRect().height + "px";
   } else if(localStorage.getItem("vipBar") === "2") {
-    vipDrawer.value = true;
+    // vipDrawer.value = true;
   }else {
-    vipDrawer.value = false;
+    // vipDrawer.value = false;
   }
   await dispatchVipCycleawardList();
   await dispatchVipBetawardList();

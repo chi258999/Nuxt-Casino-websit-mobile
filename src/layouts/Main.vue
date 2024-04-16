@@ -48,7 +48,9 @@ import router from '@/router';
 import { depositStore } from '@/store/deposit';
 import { activityAppStore } from '@/store/activityApp';
 import { liveChatStore } from "@/store/liveChat";
+import { useDialog } from "@/hooks/dialog";
 const { setLiveChatMaximize, LiveChatWidget } = liveChatStore();
+const { authDialog } = useDialog();
 
 const GetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonus/index.vue"));
 const MGetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonus/mobile/index.vue"));
@@ -108,6 +110,8 @@ const { setNavBarToggle } = appBarStore();
 const { setLevelUpDialogVisible } = vipStore();
 const { setSearchDialogShow } = mainStore();
 const { scrollTo } = useScroll()
+
+
 type dialogType = "login" | "signup" | "signout";
 
 const route = useRoute();
@@ -133,7 +137,7 @@ const signUpForm = computed(() => {
 })
 
 // authentication dialog
-const authDialog = ref<boolean>(false);
+// const authDialog = ref<boolean>(false);
 const signupDialog = ref<boolean>(false);
 const signoutDialog = ref<boolean>(false);
 const loginDialog = ref<boolean>(false);
@@ -160,14 +164,14 @@ watch(searchDialogShow, (value) => {
   setMailMenuShow(value);
 })
 
-const authDialogVisible = computed(() => {
-  const { getAuthDialogVisible } = storeToRefs(authStore());
-  return getAuthDialogVisible.value;
-});
+// const authDialogVisible = computed(() => {
+//   const { getAuthDialogVisible } = storeToRefs(authStore());
+//   return getAuthDialogVisible.value;
+// });
 
-watch(authDialogVisible, (value) => {
-  authDialog.value = value;
-})
+// watch(authDialogVisible, (value) => {
+//   authDialog.value = value;
+// })
 
 const nickNameDialogVisible = computed(() => {
   const { getNickNameDialogVisible } = storeToRefs(authStore());
@@ -743,7 +747,7 @@ const routeInited = () => {
 
     <!-----------------------Authentication Dialog --------------------------------------->
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="authDialog"
       :width="mobileVersion == 'sm' ? '' : 471"
       :fullscreen="mobileVersion == 'sm'"
@@ -754,23 +758,23 @@ const routeInited = () => {
       :class="[mobileVersion == 'sm' ? 'mobile-auth-dialog-position' : '']"
       persistent
       style="z-index: 2147483646"
-    >
+    > -->
       <template v-if="mobileVersion != 'sm'"> </template>
       <template v-else>
-        <MAuth />
+        <MAuth v-if="authDialog" v-model="authDialog" />
       </template>
-    </v-dialog>
+    <!-- </v-dialog> -->
 
     <!-------------------------------      静态活动页面     ------------------------------------>
-    <v-dialog
+    <!-- <v-dialog
       v-model="staticActivityDialog"
       :width="mobileWidth < 600 ? 328 : 471"
       :scrim="true"
       persistent
       style="z-index: 1000001"
-    >
-      <StaticActivityPage v-if="mobileVersion == 'sm'" @close="closeStaticActivityDialog" />
-    </v-dialog>
+    > -->
+      <StaticActivityPage v-model="staticActivityDialog" v-if="staticActivityDialog && mobileVersion == 'sm'" @close="closeStaticActivityDialog" />
+    <!-- </v-dialog> -->
 
     <!-------------------------------      SIGNUP     ------------------------------------>
 

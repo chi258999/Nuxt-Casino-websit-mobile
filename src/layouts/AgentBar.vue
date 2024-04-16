@@ -22,7 +22,7 @@ const { setMailMenuShow } = mailStore();
 const { setAgentNavBarToggle } = agentStore();
 
 const { t, locale } = useI18n();
-const drawer = ref<boolean>(false);
+const drawer = ref<boolean>(true);
 const activeIndex = ref<number>(0);
 
 const scrollTop = ref<number>(0);
@@ -30,14 +30,14 @@ const scrollTop = ref<number>(0);
 const currentLang = computed(() => {
   return locale.value
 });
-const agentNavBarToggle = computed(() => {
-  const { getAgentNavBarToggle } = storeToRefs(agentStore());
-  return getAgentNavBarToggle.value;
-});
+// const agentNavBarToggle = computed(() => {
+//   const { getAgentNavBarToggle } = storeToRefs(agentStore());
+//   return getAgentNavBarToggle.value;
+// });
 
-watch(agentNavBarToggle, (value) => {
-  drawer.value = value;
-});
+// watch(agentNavBarToggle, (value) => {
+//   drawer.value = value;
+// });
 
 const handleTab = (index: number) => {
   activeIndex.value = index;
@@ -58,11 +58,11 @@ const closeAgentNavBarToggle = () => {
 
 onMounted(() => {
   // setAgentNavBarToggle(false);
+  console.log('mount ============== agentNavBarDrawer');
 });
 </script>
 
 <template>
-<div v-if="drawer">
   <v-navigation-drawer
     temporary
     location="right"
@@ -135,7 +135,6 @@ onMounted(() => {
       <MGrade v-if="activeIndex == 4" />
     </div>
   </v-navigation-drawer>
-</div>
 </template>
 
 <style lang="scss">
