@@ -2,12 +2,30 @@
 import { ref, computed, toRefs } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDisplay } from 'vuetify';
+import { appBarStore } from '@/store/appBar';
+
+
 
 const { t } = useI18n();
 const { width } = useDisplay();
-const emit = defineEmits<{ (e: 'mDialogHide'): void, (e: 'selectActiveIndex', value: number): void }>()
-const props = defineProps<{ avatar: any, nickName: string }>();
-const { avatar, nickName } = toRefs(props);
+const props = defineProps<{ avatar: any, nickName: string,modelValue:boolean }>();
+const { avatar, nickName,modelValue } = toRefs(props);
+const emit = defineEmits(["update:modelValue","mDialogHide","selectActiveIndex"]);
+
+const modelValueNew = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(val) {
+    emit("update:modelValue", val);
+  },
+});
+
+const { setMainBlurEffectShow } = appBarStore();
+const { setHeaderBlurEffectShow } = appBarStore();
+const { setMenuBlurEffectShow } = appBarStore();
+const { setOverlayScrimShow } = appBarStore();
+const { setAccountDialogShow } = appBarStore();
 
 const menuList = ref<Array<any>>([
     {
@@ -36,9 +54,19 @@ const handleMenu = (index: number) => {
     emit('selectActiveIndex', index)
 }
 
+const accountDialogClose = () => {
+  emit("update:modelValue", false);
+  setMainBlurEffectShow(false);
+  setHeaderBlurEffectShow(false);
+  setMenuBlurEffectShow(false);
+  setOverlayScrimShow(false);
+  setAccountDialogShow(false);
+}
+
 </script>
 
 <template>
+    <v-dialog v-model="modelValueNew" width="312" @click:outside="accountDialogClose"> 
     <div class="m-account-dialog-container">
         <img :src="avatar" class="m-account-avatar-position" />
         <v-btn class="m-account-close-button" icon="true" @click="emit('mDialogHide')" width="30" height="30">
@@ -72,6 +100,7 @@ const handleMenu = (index: number) => {
             </v-col>
         </v-row>
     </div>
+    </v-dialog> 
 </template>
 
 <style lang="scss">
