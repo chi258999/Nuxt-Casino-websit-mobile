@@ -194,6 +194,7 @@ onMounted(() => {
     width="320"
     :scrim="true"
     transition="scale-transition"
+    @click:outside="closeDialog"
   >
     <div class="m-nickname-container">
       <img src="@/assets/public/image/bg_public_05.png" class="m-header-img" />

@@ -64,6 +64,7 @@ onMounted(() => {
     v-model="signoutDialog"
     :width="mobileWidth < 600 ? 328 : 471"
     :scrim="true"
+    @click:outside="$emit('close')"
   >
     <div class="m-signout-container">
       <div
