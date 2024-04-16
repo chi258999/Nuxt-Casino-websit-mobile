@@ -18,10 +18,27 @@ import "swiper/css/pagination";
 // import Swiper core and required modules
 import { Pagination } from "swiper/modules";
 
+const props = defineProps({
+  nickNameDialog: {
+    type: Boolean,
+  },
+});
+
+const emit = defineEmits(["update:nickNameDialog", 'close']);
+
+const nickNameDialog = computed({
+  get() {
+    return props.nickNameDialog;
+  },
+  set(val) {
+    emit("update:nickNameDialog", val);
+  },
+});
+
 const modules = [Pagination];
 
 const { t } = useI18n();
-const emit = defineEmits<{ (e: "close"): void }>();
+// const emit = defineEmits<{ (e: "close"): void }>();
 const { dispatchUpdateUserInfo } = authStore();
 const { dispatchUserProfile } = authStore();
 const { dispatchVipInfo } = vipStore();
@@ -172,79 +189,86 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="m-nickname-container">
-    <img src="@/assets/public/image/bg_public_05.png" class="m-header-img" />
-    <img src="@/assets/public/image/bg_public_01.png" class="m-body-img" />
-    <div class="m-nickname-circle"></div>
-    <div class="m-nickname-swiper-container mt-10">
-      <Swiper
-        v-model="selectedAvatarItem"
-        :modules="modules"
-        class="mx-80"
-        style="height: 130px"
-        :loop="true"
-        @swiper="getSwiperRef"
-      >
-        <SwiperSlide v-for="(slide, index) in slides" :key="index" :virtualIndex="index">
-          <ProgressiveImage
-            :src="slide"
-            blur="30"
-            custom-class="m-signup-displayname-img"
+  <v-dialog
+    v-model="nickNameDialog"
+    width="320"
+    :scrim="true"
+    transition="scale-transition"
+  >
+    <div class="m-nickname-container">
+      <img src="@/assets/public/image/bg_public_05.png" class="m-header-img" />
+      <img src="@/assets/public/image/bg_public_01.png" class="m-body-img" />
+      <div class="m-nickname-circle"></div>
+      <div class="m-nickname-swiper-container mt-10">
+        <Swiper
+          v-model="selectedAvatarItem"
+          :modules="modules"
+          class="mx-80"
+          style="height: 130px"
+          :loop="true"
+          @swiper="getSwiperRef"
+        >
+          <SwiperSlide v-for="(slide, index) in slides" :key="index" :virtualIndex="index">
+            <ProgressiveImage
+              :src="slide"
+              blur="30"
+              custom-class="m-signup-displayname-img"
+            />
+          </SwiperSlide>
+        </Swiper>
+      </div>
+      <div class="m-nickname-avatar-btn">
+        <div class="swiper-button-next" slot="button-next" @click="goToNext"></div>
+        <div class="swiper-button-prev" slot="button-prev" @click="goToPrev"></div>
+      </div>
+      <div class="m-nickname-displayname">
+        <p class="text-700-16 white full-width center">
+          {{ t("signup.displayNamePage.title") }}
+        </p>
+      </div>
+      <!-- 修改用户昵称 -->
+      <div class="mx-5 mt-16 relative m-display-name-input">
+        <form action="javascript:return true;" @submit.prevent>
+          <v-text-field
+            :label="t('signup.displayNamePage.username')"
+            class="form-textfield dark-textfield ma-0 m-signup-displayname"
+            variant="solo"
+            density="comfortable"
+            v-model="userName"
+            :onfocus="handleOnUserNameInputFocus"
+            :onblur="handleOnUserNameInputBlur"
+            @keypress="submitNickName"
           />
-        </SwiperSlide>
-      </Swiper>
-    </div>
-    <div class="m-nickname-avatar-btn">
-      <div class="swiper-button-next" slot="button-next" @click="goToNext"></div>
-      <div class="swiper-button-prev" slot="button-prev" @click="goToPrev"></div>
-    </div>
-    <div class="m-nickname-displayname">
-      <p class="text-700-16 white full-width center">
-        {{ t("signup.displayNamePage.title") }}
-      </p>
-    </div>
-    <!-- 修改用户昵称 -->
-    <div class="mx-5 mt-16 relative m-display-name-input">
-      <form action="javascript:return true;" @submit.prevent>
-        <v-text-field
-          :label="t('signup.displayNamePage.username')"
-          class="form-textfield dark-textfield ma-0 m-signup-displayname"
-          variant="solo"
-          density="comfortable"
-          v-model="userName"
-          :onfocus="handleOnUserNameInputFocus"
-          :onblur="handleOnUserNameInputBlur"
-          @keypress="submitNickName"
-        />
-        <ValidationBox
-          v-if="isShowUsernameValidation"
-          :title="t('signup.displayNamePage.validation.username.title')"
-          :descriptionList="userNameValidationStrList"
-          :validationList="userNameValidationList"
-        />
-      </form>
-    </div>
-    <v-row class="mx-5 mt-5">
+          <ValidationBox
+            v-if="isShowUsernameValidation"
+            :title="t('signup.displayNamePage.validation.username.title')"
+            :descriptionList="userNameValidationStrList"
+            :validationList="userNameValidationList"
+          />
+        </form>
+      </div>
+      <v-row class="mx-5 mt-5">
+        <v-btn
+          :class="isFormDataReady ? 'm-signup-btn' : 'm-signup-disabled-btn'"
+          width="-webkit-fill-available"
+          height="48px"
+          :loading="loading"
+          @click="submitNickName"
+        >
+          {{ t("signup.displayNamePage.submit") }}
+        </v-btn>
+      </v-row>
       <v-btn
-        :class="isFormDataReady ? 'm-signup-btn' : 'm-signup-disabled-btn'"
-        width="-webkit-fill-available"
-        height="48px"
-        :loading="loading"
-        @click="submitNickName"
+        class="m-nickname-close-button"
+        icon="true"
+        @click="closeDialog"
+        width="24"
+        height="24"
       >
-        {{ t("signup.displayNamePage.submit") }}
+        <img src="@/assets/public/svg/icon_public_52.svg" width="18" />
       </v-btn>
-    </v-row>
-    <v-btn
-      class="m-nickname-close-button"
-      icon="true"
-      @click="closeDialog"
-      width="24"
-      height="24"
-    >
-      <img src="@/assets/public/svg/icon_public_52.svg" width="18" />
-    </v-btn>
-  </div>
+    </div>
+  </v-dialog>
 </template>
 
 <style lang="scss">

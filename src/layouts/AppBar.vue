@@ -37,6 +37,7 @@ import { bannerStore } from "@/store/banner";
 import { depositStore } from "@/store/deposit";
 import icon_public_81 from "@/assets/public/svg/icon_public_81.svg";
 import { BtTabEnum } from '@/enums/bonusTransactionEnum';
+import { activityAppStore } from '@/store/activityApp';
 
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
@@ -47,6 +48,10 @@ const platformCurrency = computed(() => {
   return getPlatformCurrency.value;
 });
 
+const appConfirmDialogShow = computed(() => {
+  const { getAppConfirmDialogShow } = storeToRefs(activityAppStore());
+  return getAppConfirmDialogShow.value
+})
 
 const { setAuthModalType } = authStore();
 const { setAuthDialogVisible } = authStore();
@@ -676,6 +681,7 @@ onMounted(async () => {
       headerBlurEffectShow ? 'header-bg-blur' : mobileWidth > 1200 ? 'pc-header-l' : '',
     ]"
     class="app-bar-height"
+    :style="{ top: !appConfirmDialogShow ? '0 !important' : '' }"
   >
     <v-app-bar-nav-icon
       @click.stop="setNavBarToggle(true)"

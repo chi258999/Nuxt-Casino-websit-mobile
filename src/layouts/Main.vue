@@ -767,7 +767,7 @@ const routeInited = () => {
       :width="mobileWidth < 600 ? 328 : 471"
       :scrim="true"
       persistent
-      style="z-index: 1000001"
+      style="z-index: 1000002"
     >
       <StaticActivityPage v-if="mobileVersion == 'sm'" @close="closeStaticActivityDialog" />
     </v-dialog>
@@ -831,27 +831,27 @@ const routeInited = () => {
 
     <!-------------------------------      NICKNAME     ------------------------------------>
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="nickNameDialog"
       width="320"
       :scrim="true"
       transition="scale-transition"
       @click:outside="closeNickNameDialog"
-    >
-      <MNickName @close="closeNickNameDialog" />
-    </v-dialog>
+    > -->
+      <MNickName v-if="nickNameDialog" @close="closeNickNameDialog" v-model="nickNameDialog" />
+    <!-- </v-dialog> -->
 
     <!-------------------------------      SIGNOUT     ------------------------------------>
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="signoutDialog"
       :width="mobileWidth < 600 ? 328 : 471"
       :scrim="true"
       @click:outside="closeDialog('signout')"
-    >
-      <Signout v-if="mobileVersion != 'sm'" @close="closeDialog('signout')" />
-      <MSignout v-else @close="closeDialog('signout')" />
-    </v-dialog>
+    > -->
+      <Signout v-if="signoutDialog && mobileVersion != 'sm'" @close="closeDialog('signout')" v-model="signoutDialog" />
+      <MSignout v-else-if="signoutDialog && mobileVersion == 'sm'" @close="closeDialog('signout')" v-model="signoutDialog" />
+    <!-- </v-dialog> -->
 
     <!----------------------------------- level up dialog --------------------------------->
 
