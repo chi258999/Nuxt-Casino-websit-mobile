@@ -17,9 +17,24 @@ import { useToast } from "vue-toastification";
 import * as clipboard from "clipboard-polyfill";
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
+
+const props = defineProps({
+  modelValue: {
+    type: Boolean
+  }
+});
+const emit = defineEmits(["update:modelValue"]);
 const platformCurrency = computed(() => {
   const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
   return getPlatformCurrency.value;
+});
+const modelValueNew = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(val) {
+    emit("update:modelValue", val);
+  }
 });
 
 const router = useRouter();
@@ -53,6 +68,10 @@ const checkIcon = ref<any>(
 );
 
 const notificationText = ref<string>(t("refferal.copy_success_text"));
+
+const mobileWidth = computed(() => {
+  return width.value;
+});
 
 const copyToClipboard = (copy_text: string) => {
   clipboard.writeText(copy_text).then(
@@ -145,6 +164,13 @@ onMounted(async () => {
 </script>
 
 <template>
+  <v-dialog
+      v-model="modelValueNew"
+      persistent
+      :width="mobileWidth < 600 ? '360' : '471'"
+      :scrim="true"
+      style="z-index: 2147483646"
+    >
   <div class="m-refferal-container">
     <v-btn
       class="m-close-button"
@@ -361,6 +387,7 @@ onMounted(async () => {
       :checkIcon="checkIcon"
     /> -->
   </div>
+  </v-dialog> 
 </template>
 
 <style lang="scss">
