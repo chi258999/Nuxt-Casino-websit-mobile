@@ -5,14 +5,32 @@ import { useI18n } from "vue-i18n";
 import { CookieService } from "@/utils/cookieService";
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
+
+const props = defineProps({
+  modelValue: {
+    type: Boolean
+  }
+});
+
+const emit = defineEmits(["update:modelValue", 'close']);
+
+const modelValueNew = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(val) {
+    emit("update:modelValue", val);
+  }
+});
+
 const platformCurrency = computed(() => {
   const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
   return getPlatformCurrency.value;
 });
 
-const emit = defineEmits<{
-  (e: "close"): void;
-}>();
+// const emit = defineEmits<{
+//   (e: "close"): void;
+// }>();
 const { t } = useI18n();
 
 const activityCheck = ref(false)
@@ -28,6 +46,13 @@ const checkboxChanged = () => {
 </script>
 
 <template>
+<v-dialog
+  v-model="modelValueNew"
+  :width="328"
+  :scrim="true"
+  persistent
+  style="z-index: 1000002"
+>
   <div class="m-static-activity-container">
     <div class="m-static-activity-animation-container">
       <div class="m-static-activity-title">
@@ -72,6 +97,7 @@ const checkboxChanged = () => {
       </v-btn>
     </div>
   </div>
+</v-dialog>
 </template>
 
 <style lang="scss">

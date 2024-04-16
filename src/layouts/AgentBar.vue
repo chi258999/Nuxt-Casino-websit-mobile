@@ -74,11 +74,11 @@ const closeAgentNavBarToggle = () => {
 
 onMounted(() => {
   // setAgentNavBarToggle(false);
+  console.log('mount ============== agentNavBarDrawer');
 });
 </script>
 
 <template>
-<!-- <div v-if="drawer"> -->
   <v-navigation-drawer
     temporary
     location="right"
@@ -151,7 +151,6 @@ onMounted(() => {
       <MGrade v-if="activeIndex == 4" />
     </div>
   </v-navigation-drawer>
-<!-- </div> -->
 </template>
 
 <style lang="scss">

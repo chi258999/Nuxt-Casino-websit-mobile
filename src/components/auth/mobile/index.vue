@@ -9,6 +9,24 @@ import MSignUp from "@/components/auth/components/mobile/sign_up/index.vue";
 
 type dialogType = "login" | "signup" | "signout";
 
+const props = defineProps({
+  modelValue: {
+    type: Boolean
+  }
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const modelValueNew = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(val) {
+    emit("update:modelValue", val);
+  }
+});
+
+
 const { t } = useI18n();
 const route = useRoute();
 
@@ -67,6 +85,16 @@ onMounted(() => {
 </script>
 
 <template>
+<v-dialog
+  v-model="modelValueNew"
+  :width="''"
+  :fullscreen="true"
+  :scrim="true"
+  :transition="'dialog-bottom-transition'"
+  class="mobile-auth-dialog-position"
+  persistent
+  style="z-index: 2147483646"
+>
   <div class="m-auth-dialog-container">
     <div class="m-auth-dialog-header mb-2">
       <div class="m-auth-dialog-toggle" :class="[!dialogCheckBox ? 'bgActive' : '']">
@@ -94,6 +122,8 @@ onMounted(() => {
       <img src="@/assets/public/svg/icon_public_10.svg" />
     </v-btn>
   </div>
+</v-dialog>
+
 </template>
 <style lang="scss">
 .m-auth-dialog-container {
