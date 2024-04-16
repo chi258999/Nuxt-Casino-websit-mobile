@@ -835,27 +835,27 @@ const routeInited = () => {
 
     <!-------------------------------      NICKNAME     ------------------------------------>
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="nickNameDialog"
       width="320"
       :scrim="true"
       transition="scale-transition"
       @click:outside="closeNickNameDialog"
-    >
-      <MNickName @close="closeNickNameDialog" />
-    </v-dialog>
+    > -->
+      <MNickName v-if="nickNameDialog" @close="closeNickNameDialog" v-model="nickNameDialog" />
+    <!-- </v-dialog> -->
 
     <!-------------------------------      SIGNOUT     ------------------------------------>
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="signoutDialog"
       :width="mobileWidth < 600 ? 328 : 471"
       :scrim="true"
       @click:outside="closeDialog('signout')"
-    >
-      <Signout v-if="mobileVersion != 'sm'" @close="closeDialog('signout')" />
-      <MSignout v-else @close="closeDialog('signout')" />
-    </v-dialog>
+    > -->
+      <Signout v-if="signoutDialog && mobileVersion != 'sm'" @close="closeDialog('signout')" v-model="signoutDialog" />
+      <MSignout v-else-if="signoutDialog && mobileVersion == 'sm'" @close="closeDialog('signout')" v-model="signoutDialog" />
+    <!-- </v-dialog> -->
 
     <!----------------------------------- level up dialog --------------------------------->
 
@@ -871,32 +871,34 @@ const routeInited = () => {
 
     <!----------------------------------- refferal dialog @click:outside="closeReferDialog"--------------------------------->
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="refferalDialog"
       persistent
       :width="mobileWidth < 600 ? '360' : '471'"
       :scrim="true"
       style="z-index: 2147483646"
-    >
-      <RefferalDialog v-if="mobileWidth > 600" />
-      <MRefferalDialog v-else />
-    </v-dialog>
+    > -->
+      <RefferalDialog v-if="mobileWidth > 600&&refferalDialog" v-model="refferalDialog" />
+      <MRefferalDialog v-if="mobileWidth <= 600&&refferalDialog" v-model="refferalDialog" />
+    <!-- </v-dialog> -->
 
     <!----------------------------------- login bonus dialog --------------------------------->
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="loginBonusDialog"
       :width="mobileWidth < 600 ? '340' : '471'"
       @click:outside="closeLoginBonusDialog"
       :class="mobileWidth < 600 ? 'm-login-bonus-dialog' : ''"
       style="z-index: 2147483646"
-    >
+    > -->
       <LoginBonusDialog
-        v-if="mobileWidth > 600"
+        v-if="mobileWidth > 600&&loginBonusDialog"
+        v-model="loginBonusDialog"
         @closeLoginBonusDialog="closeLoginBonusDialog"
+        
       />
-      <MLoginBonusDialog v-else @closeLoginBonusDialog="closeLoginBonusDialog" />
-    </v-dialog>
+      <MLoginBonusDialog v-if="mobileWidth <= 600&&loginBonusDialog" v-model="loginBonusDialog" @closeLoginBonusDialog="closeLoginBonusDialog" />
+    <!-- </v-dialog> -->
 
     <!----------------------------------- deposit and get bonus dialog --------------------------------->
 
@@ -929,14 +931,16 @@ const routeInited = () => {
 
     <!----------------------------------- account dialog --------------------------------->
 
-    <v-dialog v-model="accountDialog" width="312" @click:outside="accountDialogClose">
+    <!-- <v-dialog v-model="accountDialog" width="312" @click:outside="accountDialogClose"> -->
       <MAccountDialog
+        v-if="accountDialog" 
+        v-model="accountDialog"
         @mDialogHide="accountDialogClose"
         :avatar="userInfo.avatar"
         :nickName="userInfo.name"
         @selectActiveIndex="selectActiveIndex"
       />
-    </v-dialog>
+    <!-- </v-dialog> -->
 
     <VipUpgradeDialog />
     <VipUpRankDialog />
