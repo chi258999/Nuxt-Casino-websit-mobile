@@ -24,9 +24,9 @@ const signOut = (): void => {
   dispatchSignout();
   resetAllStores();
   router.push({ path: '/', query: queryParams })
-  setTimeout(() => {
-    window.location.reload();
-  }, 300);
+  // setTimeout(() => {
+  //   window.location.reload();
+  // }, 300);
 };
 
 onMounted(() => {

@@ -72,6 +72,10 @@ export const authStore = defineStore({
     },
     removeToken() {
       this.token = undefined;
+      const networkData: NetworkData = NetworkData.getInstance();
+      networkData.resetData();
+      const network: Network = Network.getInstance();
+      network.refresh()
       this.userInfo = {
         uid: "User6696608024",
         name: "Little Planes",
@@ -98,10 +102,6 @@ export const authStore = defineStore({
         locked_personal_info_fields: [],
         create_at: 0
       }
-      const networkData: NetworkData = NetworkData.getInstance();
-      networkData.resetData();
-      const network: Network = Network.getInstance();
-      network.refresh()
     },
     setUserInfo(userInfo: User.GetUserInfo) {
       this.userInfo = userInfo;
