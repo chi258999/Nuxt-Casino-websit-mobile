@@ -867,16 +867,16 @@ const routeInited = () => {
 
     <!----------------------------------- refferal dialog @click:outside="closeReferDialog"--------------------------------->
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="refferalDialog"
       persistent
       :width="mobileWidth < 600 ? '360' : '471'"
       :scrim="true"
       style="z-index: 2147483646"
-    >
-      <RefferalDialog v-if="mobileWidth > 600" />
-      <MRefferalDialog v-else />
-    </v-dialog>
+    > -->
+      <RefferalDialog v-if="mobileWidth > 600&&refferalDialog" v-model="refferalDialog" />
+      <MRefferalDialog v-if="mobileWidth <= 600&&refferalDialog" v-model="refferalDialog" />
+    <!-- </v-dialog> -->
 
     <!----------------------------------- login bonus dialog --------------------------------->
 
