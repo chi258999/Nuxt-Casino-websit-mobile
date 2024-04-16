@@ -15,6 +15,9 @@ import { liveChatStore } from "@/store/liveChat";
 import { authStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import { Network } from "@/net/Network";
+import { NETWORK } from '@/net/NetworkCfg';
+
 import icon_public_34 from "@/assets/public/svg/icon_public_34.svg";
 import icon_public_35 from "@/assets/public/svg/icon_public_35.svg";
 import icon_public_36 from "@/assets/public/svg/icon_public_36.svg";
@@ -874,16 +877,35 @@ const goGameBetBy = () => {
 
 const casinoMenuList = ref<Array<any>>([]);
 
-const gameCategories = computed(() => {
-  const { getGameCategories } = storeToRefs(gameStore());
-  return getGameCategories.value;
-});
+// const gameCategories = computed(() => {
+//   const { getGameCategories } = storeToRefs(gameStore());
+//   return getGameCategories.value;
+// });
+
+const getCasinoCategoriesFunc = async () => {
+  let result;
+  const route: string = NETWORK.GAME_INFO.GAME_CATEGORY + '?type=casino'
+  const network: Network = Network.getInstance();
+  try {
+    const res = await network.request({
+      url: route,
+      method: 'GET',
+    })
+    result = res.data || []
+  } catch (err) {
+    result = []
+  }
+  return result
+}
 
 onMounted(async () => {
   drawer.value = mobileWidth.value < 1280 ? false : true;
   languageText();
-  await dispatchGameCategories('?type=casino');
-  casinoMenuList.value = gameCategories.value
+  // await dispatchGameCategories('?type=casino');
+  // casinoMenuList.value = gameCategories.value
+  const categorieList = await getCasinoCategoriesFunc()
+  // console.log(categorieList, 'categorieList');
+  casinoMenuList.value = categorieList
 })
 </script>
 
@@ -917,15 +939,6 @@ onMounted(async () => {
       </v-list-item>
     </template>
     <div class="m-nav-drawer-content" @scroll="navDrawerScroll">
-      <!-- <div class="m-space-between">
-        <div>
-          <img src="@/assets/public/svg/icon_public_1001.svg" width="18" />
-          <span class="card-title">{{ t("navBar.rewards_center") }}</span>
-        </div>
-        <div>
-          <img src="@/assets/public/svg/icon_public_501.svg" width="18" />
-        </div>
-      </div> -->
       <div class="m-vip-login-bonus mt-6" @click="openLoginBonusDialog">
         <img src="@/assets/public/image/img_public_1.png" class="m-vip-login-bonus-img" />
         <div class="m-vip-login-bonus-text">
@@ -936,15 +949,6 @@ onMounted(async () => {
         </div>
         <img src="@/assets/public/image/img_ci_7.png" class="m-vip-login-bonus-img-1" />
       </div>
-      <!--<div class="m-lucky-wheel mt-4" @click="openRouletteBonusDialog">
-        <img src="@/assets/public/image/img_public_2.png" class="m-lucky-wheel-img" />
-        <div class="m-vip-login-bonus-text">
-          <p class="text-700-10 white">{{ t("navBar.lucky_wheel_text") }}</p>
-          <p class="text-400-8 white" style="line-height: 6px">
-            {{ t("navBar.unlock_text") }}
-          </p>
-        </div>
-      </div>-->
       <div class="m-refer-earn mt-4" @click="openRefferalDialogShow">
         <img src="@/assets/public/svg/img_public_20.svg" width="184" />
         <img src="@/assets/public/image/img_public_6.png" width="48" class="m-earn-img" />
@@ -955,71 +959,7 @@ onMounted(async () => {
         </div>
 
       </div>
-      <!-- <v-list density="compact" nav class="mt-1 px-0">
-        <v-card color="#15161C" theme="dark" style="border-radius: 0px">
-          <v-row class="ma-2 align-center">
-            <span class="m-card-title">{{ t("navBar.my_vip_perks") }}</span>
-            <span class="ml-15 m-more-font">{{ t("navBar.more") }}</span>
-            <v-btn class="m-right-btn" icon="true" height="24" width="24">
-              <img src="@/assets/public/svg/icon_public_11.svg" width="16" />
-            </v-btn>
-          </v-row>
-          <v-row class="ma-1">
-            <v-col cols="6" class="pa-1 relative">
-              <v-list-item class="ma-0 pa-0" height="48px" @click="openLoginBonusDialog">
-                <img src="@/assets/public/svg/bg_public_16.svg" class="m-img-width" />
-                <img
-                  src="@/assets/public/image/img_public_01.png"
-                  class="m-navbar-task-img-position"
-                  width="34"
-                />
-                <p class="text-700-10 white m-navbar-task-text-position">
-                  {{ t("navBar.task_text") }}
-                </p>
-                <p class="text-400-8 white m-navbar-unlock-text-left-position">
-                  {{ t("navBar.unlock_text") }}
-                </p>
-              </v-list-item>
-            </v-col>
-            <v-col cols="6" class="pa-1">
-              <v-list-item
-                class="ma-0 pa-0"
-                height="48px"
-                @click="openRouletteBonusDialog"
-              >
-                <img
-                  src="@/assets/public/svg/bg_public_17.svg"
-                  class="m-spin-img-width"
-                />
-                <img
-                  src="@/assets/public/image/img_public_02.png"
-                  class="m-navbar-spin-img-position"
-                  width="28"
-                />
-                <p class="text-700-10 white m-navbar-spin-text-position">
-                  {{ t("navBar.spin_text") }}
-                </p>
-                <p class="text-400-8 white m-navbar-unlock-text-right-position">
-                  {{ t("navBar.unlock_text") }}
-                </p>
-              </v-list-item>
-            </v-col>
-          </v-row>
-        </v-card>
-      </v-list>
-      <v-list density="compact" nav class="px-0">
-        <v-list-item class="ma-0 pa-0" @click="openRefferalDialogShow">
-          <img src="@/assets/public/image/img_public_18.png" class="m-earn-free-img" />
-          <img
-            src="@/assets/public/image/img_public_17.png"
-            class="m-navbar-free-money-img-position"
-            width="23"
-          />
-          <p class="text-700-12 color-29263C m-navbar-free-money-text-position">
-            {{ t("navBar.earn_free_text") }}
-          </p>
-        </v-list-item>
-      </v-list> -->
+
       <v-list v-model:opened="casinoOpen">
         <v-list-group value="Casino">
           <template v-slot:activator="{ props }">

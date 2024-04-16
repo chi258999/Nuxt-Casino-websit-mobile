@@ -164,7 +164,7 @@ const depositToggleSwitch = ref<boolean>(false);
 
 const depositRate = ref<number>(0);
 
-const depositAmount = ref<string | number>(0)
+const depositAmount = ref<string | number>('')
 
 const stopCheckDepositAmount = ref<boolean>(false)
 // 是否展示充值活动说明框
@@ -985,8 +985,8 @@ onMounted(async () => {
           color="#7782AA"
           style="border-radius: 8px"
           v-model="depositAmount"
-          :onfocus="handleAmountInputFocus"
-          :onblur="handleAmountInputBlur"
+          :onfocus="handleAmountInputBlur"
+          :onblur="handleAmountInputFocus"
           @input="handleAmountInputChange"
         />
         <ValidationBox
@@ -1037,7 +1037,7 @@ onMounted(async () => {
           </div>
           <div class="d-flex align-center">
             <img src="@/assets/vip/image/img_vip_10.png" width="21" />
-            <div class="text-700-12 white">{{ depositConfig.name }}</div>
+            <div class="text-700-12 white" style="flex: 1;">{{ depositConfig.name }}</div>
           </div>
           <div class="d-flex align-start ml-6">
             <img src="@/assets/public/svg/icon_public_03.svg" />
