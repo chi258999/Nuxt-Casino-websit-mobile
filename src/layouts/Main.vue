@@ -880,19 +880,21 @@ const routeInited = () => {
 
     <!----------------------------------- login bonus dialog --------------------------------->
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="loginBonusDialog"
       :width="mobileWidth < 600 ? '340' : '471'"
       @click:outside="closeLoginBonusDialog"
       :class="mobileWidth < 600 ? 'm-login-bonus-dialog' : ''"
       style="z-index: 2147483646"
-    >
+    > -->
       <LoginBonusDialog
-        v-if="mobileWidth > 600"
+        v-if="mobileWidth > 600&&loginBonusDialog"
+        v-model="loginBonusDialog"
         @closeLoginBonusDialog="closeLoginBonusDialog"
+        
       />
-      <MLoginBonusDialog v-else @closeLoginBonusDialog="closeLoginBonusDialog" />
-    </v-dialog>
+      <MLoginBonusDialog v-if="mobileWidth <= 600&&loginBonusDialog" v-model="loginBonusDialog" @closeLoginBonusDialog="closeLoginBonusDialog" />
+    <!-- </v-dialog> -->
 
     <!----------------------------------- deposit and get bonus dialog --------------------------------->
 
