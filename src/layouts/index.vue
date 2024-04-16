@@ -21,6 +21,7 @@ import { refferalStore } from "@/store/refferal";
 import { gameStore } from "@/store/game";
 import { storeToRefs } from "pinia";
 import { appBarStore } from "@/store/appBar";
+import { agentStore } from "@/store/agent";
 import { menuStore } from "@/store/menu";
 import { useDialog } from "@/hooks/dialog";
 
@@ -55,7 +56,6 @@ watch(rewardNavigationShow, (value) => {
   rewardNavShow.value = value;
 });
 
-
 const refferalAppBarShow = computed(() => {
   const { getRefferalAppBarShow } = storeToRefs(refferalStore());
   return getRefferalAppBarShow.value;
@@ -68,6 +68,8 @@ const isGameScroll = computed(() => {
 });
 
 const isScroll = ref(false)
+
+
 
 const mobileWidth = computed(() => {
   return width.value||300;
@@ -124,7 +126,7 @@ onMounted(() => {
     <template v-else>
       <MNavBarLayout />
       <RewardBarLayout v-if="route.name !== 'Sports'&&rewardNavShow" v-model="rewardNavShow" />
-      <AgentBarLayout v-if="agentNavBarDrawer" />
+      <AgentBarLayout v-if="agentNavBarDrawer" v-model="agentNavBarDrawer" />
       <VipBar v-if="vipDrawer" />
     </template>
     <UserNavBarLayout />
