@@ -767,7 +767,7 @@ const routeInited = () => {
       :width="mobileWidth < 600 ? 328 : 471"
       :scrim="true"
       persistent
-      style="z-index: 1000001"
+      style="z-index: 1000002"
     >
       <StaticActivityPage v-if="mobileVersion == 'sm'" @close="closeStaticActivityDialog" />
     </v-dialog>
