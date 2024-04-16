@@ -925,14 +925,16 @@ const routeInited = () => {
 
     <!----------------------------------- account dialog --------------------------------->
 
-    <v-dialog v-model="accountDialog" width="312" @click:outside="accountDialogClose">
+    <!-- <v-dialog v-model="accountDialog" width="312" @click:outside="accountDialogClose"> -->
       <MAccountDialog
+        v-if="accountDialog" 
+        v-model="accountDialog"
         @mDialogHide="accountDialogClose"
         :avatar="userInfo.avatar"
         :nickName="userInfo.name"
         @selectActiveIndex="selectActiveIndex"
       />
-    </v-dialog>
+    <!-- </v-dialog> -->
 
     <VipUpgradeDialog />
     <VipUpRankDialog />
