@@ -48,10 +48,11 @@ const platformCurrency = computed(() => {
   return getPlatformCurrency.value;
 });
 
-const appConfirmDialogShow = computed(() => {
-  const { getAppConfirmDialogShow } = storeToRefs(activityAppStore());
-  return getAppConfirmDialogShow.value
-})
+// 获取模式
+const mobile = computed(() => {
+  const { getMobile } = storeToRefs(activityAppStore());
+  return getMobile.value;
+});
 
 const { setAuthModalType } = authStore();
 const { setAuthDialogVisible } = authStore();
@@ -665,7 +666,7 @@ onMounted(async () => {
   if (token.value != undefined) {
     await dispatchUserProfile();
     await dispatchUserBalance();
-    await dispatchCurrencyList();
+    await dispatchCurrencyList(); 
     // await dispatchSocketConnect();
   }
 });
@@ -681,7 +682,7 @@ onMounted(async () => {
       headerBlurEffectShow ? 'header-bg-blur' : mobileWidth > 1200 ? 'pc-header-l' : '',
     ]"
     class="app-bar-height"
-    :style="{ top: !appConfirmDialogShow ? '0 !important' : '' }"
+    :style="{ top: !mobile ? '0 !important' : '' }"
   >
     <v-app-bar-nav-icon
       @click.stop="setNavBarToggle(true)"

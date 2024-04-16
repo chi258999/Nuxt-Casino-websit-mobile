@@ -47,10 +47,11 @@ const openRefferalDialogShow = () => {
 // 获取下载app活动信息
 downloadAppAcquisition()
 
-const appConfirmDialogShow = computed(() => {
-  const { getAppConfirmDialogShow } = storeToRefs(activityAppStore());
-  return getAppConfirmDialogShow.value
-})
+// 获取模式
+const mobile = computed(() => {
+  const { getMobile } = storeToRefs(activityAppStore());
+  return getMobile.value;
+});
 
 onMounted(() => {
   // 获取当前运行的是否浏览器
@@ -67,7 +68,7 @@ onMounted(() => {
     density="compact"
     :inverted-scroll="invertedScroll"
     :elevate-on-scroll="elevateOnScroll"
-    v-if="appConfirmDialogShow"
+    v-if="mobile"
   >
     <v-toolbar-title class="d-flex align-center justify-center">
       <p class="white" :class="mobileWidth < 600 ? 'text-500-10 wrap' : 'text-700-16'">
