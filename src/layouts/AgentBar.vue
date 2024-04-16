@@ -18,11 +18,27 @@ const MGrade = defineAsyncComponent(
   () => import("@/components/agent/grade/mobile/index.vue")
 );
 
+const props = defineProps({
+  modelValue: {
+    type: Boolean
+  }
+});
+const emit = defineEmits(["update:modelValue"]);
+
+const modelValueNew = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(val) {
+    emit("update:modelValue", val);
+  }
+});
+
 const { setMailMenuShow } = mailStore();
 const { setAgentNavBarToggle } = agentStore();
 
 const { t, locale } = useI18n();
-const drawer = ref<boolean>(false);
+// const drawer = ref<boolean>(false);
 const activeIndex = ref<number>(0);
 
 const scrollTop = ref<number>(0);
@@ -30,14 +46,14 @@ const scrollTop = ref<number>(0);
 const currentLang = computed(() => {
   return locale.value
 });
-const agentNavBarToggle = computed(() => {
-  const { getAgentNavBarToggle } = storeToRefs(agentStore());
-  return getAgentNavBarToggle.value;
-});
+// const agentNavBarToggle = computed(() => {
+//   const { getAgentNavBarToggle } = storeToRefs(agentStore());
+//   return getAgentNavBarToggle.value;
+// });
 
-watch(agentNavBarToggle, (value) => {
-  drawer.value = value;
-});
+// watch(agentNavBarToggle, (value) => {
+//   drawer.value = value;
+// });
 
 const handleTab = (index: number) => {
   activeIndex.value = index;
@@ -62,11 +78,11 @@ onMounted(() => {
 </script>
 
 <template>
-<div v-if="drawer">
+<!-- <div v-if="drawer"> -->
   <v-navigation-drawer
     temporary
     location="right"
-    v-model="drawer"
+    v-model="modelValueNew"
     :touchless="true"
     class="m-agent-drawer"
   >
@@ -135,7 +151,7 @@ onMounted(() => {
       <MGrade v-if="activeIndex == 4" />
     </div>
   </v-navigation-drawer>
-</div>
+<!-- </div> -->
 </template>
 
 <style lang="scss">

@@ -21,6 +21,7 @@ import { refferalStore } from "@/store/refferal";
 import { gameStore } from "@/store/game";
 import { storeToRefs } from "pinia";
 import { appBarStore } from "@/store/appBar";
+import { agentStore } from "@/store/agent";
 import { menuStore } from "@/store/menu";
 
 // const AppBarLayout = defineAsyncComponent(() => import("./AppBar.vue"));
@@ -53,6 +54,14 @@ watch(rewardNavigationShow, (value) => {
   rewardNavShow.value = value;
 });
 
+const agentBarShow = ref<boolean>(false);
+const agentNavBarToggle = computed(() => {
+  const { getAgentNavBarToggle } = storeToRefs(agentStore());
+  return getAgentNavBarToggle.value;
+});
+watch(agentNavBarToggle, (value) => {
+  agentBarShow.value = value;
+});
 
 const refferalAppBarShow = computed(() => {
   const { getRefferalAppBarShow } = storeToRefs(refferalStore());
@@ -67,7 +76,7 @@ const isGameScroll = computed(() => {
 
 const isScroll = ref(false)
 
-const agentNavBarToggle = computed(() => {});
+
 
 const mobileWidth = computed(() => {
   return width.value||300;
@@ -124,7 +133,7 @@ onMounted(() => {
     <template v-else>
       <MNavBarLayout />
       <RewardBarLayout v-if="route.name !== 'Sports'&&rewardNavShow" v-model="rewardNavShow" />
-      <AgentBarLayout />
+      <AgentBarLayout v-if="agentBarShow" v-model="agentBarShow" />
       <VipBar />
     </template>
     <UserNavBarLayout />
