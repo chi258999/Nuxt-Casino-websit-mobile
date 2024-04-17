@@ -181,6 +181,7 @@ onMounted(async () => {
     >
       <img src="@/assets/public/svg/icon_public_10.svg" />
     </v-btn>
+    
     <div class="refferal-header-tabs">
       <div class="tab-item text-700-10"> 
         {{ t("refferal.dialog.header.tabs_text1") }}
@@ -195,6 +196,7 @@ onMounted(async () => {
         />
       </div>
     </div>
+    
     <div
       class="m-refferal-animation-container"
       :style="{
@@ -421,8 +423,9 @@ onMounted(async () => {
 
 .m-refferal-container {
   border-radius: 16px;
-  height: 634px;
-  overflow-y: auto;
+  // height: 634px;
+  height: 85vh;
+  overflow: hidden;
   margin-top: 16px;
   .refferal-header-tabs {
     display: flex;
@@ -469,13 +472,16 @@ onMounted(async () => {
     width: 328px;
     background: #15161c;
     border-radius: 16px;
-    height: 333px;
+    min-height: 333px;
+    max-height: calc(85vh - 16px - 44px);
+    padding-bottom: 20px;
     animation-name: heighting;
     animation-duration: 0.4s;
     animation-delay: 0.4s;
     animation-timing-function: linear;
     animation-iteration-count: 1;
     overflow: hidden;
+    overflow-y: auto;
     .v-card {
       border-radius: 8px;
       &.description-card {
