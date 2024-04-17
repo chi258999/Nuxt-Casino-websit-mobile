@@ -10,7 +10,6 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import icon_public_36 from "@/assets/public/svg/icon_public_36.svg";
 import icon_public_103 from "@/assets/public/svg/icon_public_103.svg";
-import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
 import { useToast } from "vue-toastification";
 import SuccessIcon from "@/components/global/notification/SuccessIcon.vue";
 import WarningIcon from "@/components/global/notification/WarningIcon.vue";
@@ -75,7 +74,6 @@ const openDialog = (type: dialogType) => {
 // 添加收藏
 const addFavoriteGame = async (id: string | number) => {
   if (!token.value) {
-    // emit("closeGameConfirmDialog");
     close()
     openDialog("login");
     return;

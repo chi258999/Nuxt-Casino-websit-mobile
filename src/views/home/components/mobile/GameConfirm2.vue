@@ -138,10 +138,7 @@ watch(gameConfirmDialogShow, (value) => {
   console.log("favorite:::::::::::::::::", is_favorite.value)
   favoriteSvgIconColor.value = is_favorite.value ? "#F9BC01" : "#7782AA";
 })
-onMounted(() => {
-  console.log('MGameConfirm ======================================== MGameConfirm');
-  
-})
+
 </script>
 
 <template>
