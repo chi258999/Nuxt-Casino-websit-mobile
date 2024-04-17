@@ -13,8 +13,19 @@ const betbyHeight = ref<number | undefined>(0);
 const betby = ref(null);
 type dialogType = "login" | "signup";
 
-const handleResize = () => {
-  betbyHeight.value = window.innerHeight;
+
+let resizeTimer: any = null;
+// 监听嵌套体育页面高度，当有内容就会有高度，去掉页面loading
+const handleResize = (entries:any) => {
+  clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        for (const entry of entries) {
+            const { height } = entry.contentRect;
+            if(height>20){
+              betbyShow.value = false;
+            }
+        }
+    }, 200);
 };
 
 const getLang = computed(() => {
@@ -36,13 +47,14 @@ watch(
   { deep: true }
 );
 
+ let observer:  null = null;
 onMounted(async () => {
   AdjustClass.getInstance().adjustTrackEvent({
     key: "PAGE_VIEW",
     value: "sports",
     params: "",
   });
-  window.addEventListener("resize", handleResize);
+  // window.addEventListener("resize", handleResize);
   betbyHeight.value = window.innerHeight;
   betbyShow.value = true;
   window.scrollTo({
@@ -51,7 +63,11 @@ onMounted(async () => {
   });
   // await dispatchGameEnter({ id: "9999", demo: false });
   await getGameBetbyInit();
-  betbyShow.value = false;
+  // 监听嵌套体育页面高度，当有内容就会有高度，去掉页面loading
+   observer = new ResizeObserver(handleResize);
+   observer.observe(betby.value);
+
+ 
 });
 </script>
 <template>
@@ -63,7 +79,7 @@ onMounted(async () => {
         <div class="dot-0"></div>
       </div>
     </div>
-    <div id="betby"></div>
+    <div id="betby" ref="betby"></div>
   </div>
 </template>
 <style lang="scss">
