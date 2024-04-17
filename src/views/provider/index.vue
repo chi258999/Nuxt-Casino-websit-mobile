@@ -184,13 +184,15 @@ onMounted(async () => {
       >
         <inline-svg :src="icon_public_10" width="20" height="20"></inline-svg>
       </v-btn>
-      <MGameConfirm
-        :selectedGameItem="selectedGameItem"
-        :is_favorite="is_favorite"
-        :gameConfirmDialogShow="gameConfirmDialogShow"
-        @closeGameConfirmDialog="gameConfirmDialogShow = false"
-        @refreshGameFavoriteList="refreshGameFavoriteList"
-      />
+      <template v-if="gameConfirmDialogShow">
+        <MGameConfirm
+          :selectedGameItem="selectedGameItem"
+          :is_favorite="is_favorite"
+          :gameConfirmDialogShow="gameConfirmDialogShow"
+          @closeGameConfirmDialog="gameConfirmDialogShow = false"
+          @refreshGameFavoriteList="refreshGameFavoriteList"
+        />
+      </template>
     </v-navigation-drawer>
     <div
       class="mx-3 m-provider-loading-container"
