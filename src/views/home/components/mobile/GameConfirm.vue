@@ -110,7 +110,7 @@ const handleEnterGame = async (id: number, name: string, is_demo: string) => {
     loading.value = false;
     if (!success.value) {
       const toast = useToast();
-      toast.success("Game id is wrong!", {
+      toast.success("You have been banned from playing the game! Please contact customer service.", {
         timeout: 3000,
         closeOnClick: false,
         pauseOnFocusLoss: false,
