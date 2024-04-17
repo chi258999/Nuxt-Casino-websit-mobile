@@ -1083,17 +1083,17 @@ export default Dashboard;
       }"
       v-if="mobileWidth < 600"
     >
-      <v-btn
-        class="m-game-confirm-drawer-close-button"
-        icon="true"
-        width="24"
-        height="24"
-        @click="gameConfirmDialogShow = false"
-      >
-        <inline-svg :src="icon_public_10" width="20" height="20"></inline-svg>
-      </v-btn>
-      <!-- 打开游戏 确认弹窗 - 二级页面 -->
       <template v-if="gameConfirmDialogShow">
+        <v-btn
+          class="m-game-confirm-drawer-close-button"
+          icon="true"
+          width="24"
+          height="24"
+          @click="gameConfirmDialogShow = false"
+        >
+          <inline-svg :src="icon_public_10" width="20" height="20"></inline-svg>
+        </v-btn>
+        <!-- 打开游戏 确认弹窗 - 二级页面 -->
         <MGameConfirm
           :selectedGameItem="selectedGameItem"
           :is_favorite="is_favorite"
