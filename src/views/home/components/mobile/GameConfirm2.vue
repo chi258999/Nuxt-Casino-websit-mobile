@@ -74,7 +74,7 @@ const openDialog = (type: dialogType) => {
 // 添加收藏
 const addFavoriteGame = async (id: string | number) => {
   if (!token.value) {
-    close()
+    emit("closeGameConfirmDialog");
     openDialog("login");
     return;
   }
@@ -110,7 +110,7 @@ const handleEnterGame = async (id: number, name: string, is_demo: string) => {
     loading.value = false;
     if (!success.value) {
       const toast = useToast();
-      toast.success("You have been banned from playing the game! Please contact customer service.", {
+      toast.success("Game id is wrong!", {
         timeout: 3000,
         closeOnClick: false,
         pauseOnFocusLoss: false,
@@ -129,84 +129,79 @@ const handleEnterGame = async (id: number, name: string, is_demo: string) => {
     // router.push(`/game/${id}/${replaceName}/${is_demo}`);
     router.push({ name: "Game", params: { id: id, name: replaceName, demo: is_demo } });
   } else {
-    close()
+    emit("closeGameConfirmDialog");
     openDialog('login');
   }
 };
-const close = () => {
-  emit("closeGameConfirmDialog")
-}
 
 watch(gameConfirmDialogShow, (value) => {
   console.log("favorite:::::::::::::::::", is_favorite.value)
   favoriteSvgIconColor.value = is_favorite.value ? "#F9BC01" : "#7782AA";
 })
-onMounted(() => {
-  console.log('MGameConfirm ======================================== MGameConfirm');
-})
+
 </script>
 
 <template>
-<div class="m-game-confirm-body">
-      <v-row class="mx-2 my-0">
-        <v-col style="flex: 0 0 27.333333% !important" cols="4" class="px-1">
-          <div style="position: relative">
-            <img
-              :src="selectedGameItem.image"
-              style="width: 100%"
-              class="m-game-confirm-img"
-            />
-            <div class="text-overlay" style="margin-bottom: 7px">
-              <h2>{{ selectedGameItem.name }}</h2>
-              <p>{{ selectedGameItem.provider_name }}</p>
-            </div>
+  <div class="m-game-confirm-body">
+    <v-row class="mx-2 my-0">
+      <v-col style="flex: 0 0 27.333333% !important" cols="4" class="px-1">
+        <div style="position: relative">
+          <img
+            :src="selectedGameItem.image"
+            style="width: 100%"
+            class="m-game-confirm-img"
+          />
+          <div class="text-overlay" style="margin-bottom: 7px">
+            <h2>{{ selectedGameItem.name }}</h2>
+            <p>{{ selectedGameItem.provider_name }}</p>
           </div>
-        </v-col>
-        <v-col cols="5">
-          <div class="text-700-14 white mt-2">{{ selectedGameItem.name }}</div>
-          <div class="text-400-12 gray mt-1" v-if="selectedGameItem.provider_name">by {{ selectedGameItem.provider_name }}</div>
-        </v-col>
-        <v-col cols="3" class="px-2 mt-2 d-flex justify-end">
-          <inline-svg
-            :src="icon_public_36"
-            :transform-source="svgIconTransform"
-            @click="addFavoriteGame(selectedGameItem.id)"
-          ></inline-svg>
-          <!-- <inline-svg :src="icon_public_103" style="margin-left: auto"></inline-svg> -->
-        </v-col>
-      </v-row>
-      <v-row class="mx-8 pb-4 align-center" v-if="selectedGameItem.is_demo">
-        <v-col
-          cols="6"
-          class="text-700-12 gray text-center"
-          @click="handleEnterGame(selectedGameItem.id, selectedGameItem.name, 'true')"
-        >
-          {{ t("game_confirm.text_1") }}
-        </v-col>
-        <v-col cols="6">
-          <v-btn
-            :loading="loading"
-            class="text-none m-game-confirm-real-more-btn"
-            width="144"
-            height="40"
-            @click="handleEnterGame(selectedGameItem.id, selectedGameItem.name, 'false')"
-          >
-            {{ t("game_confirm.text_2") }}
-          </v-btn>
-        </v-col>
-      </v-row>
-      <div class="text-center" v-else>
+        </div>
+      </v-col>
+      <v-col cols="5">
+        <div class="text-700-14 white mt-2">{{ selectedGameItem.name }}</div>
+        <div class="text-400-12 gray mt-1">by {{ selectedGameItem.provider_name }}</div>
+      </v-col>
+      <v-col cols="3" class="px-2 mt-2 d-flex justify-end">
+        <inline-svg
+          :src="icon_public_36"
+          :transform-source="svgIconTransform"
+          @click="addFavoriteGame(selectedGameItem.id)"
+        ></inline-svg>
+        <!-- <inline-svg :src="icon_public_103" style="margin-left: auto"></inline-svg> -->
+      </v-col>
+    </v-row>
+    <v-row class="mx-8 pb-4 align-center" v-if="selectedGameItem.is_demo">
+      <v-col
+        cols="6"
+        class="text-700-12 gray text-center"
+        @click="handleEnterGame(selectedGameItem.id, selectedGameItem.name, 'true')"
+      >
+        {{ t("game_confirm.text_1") }}
+      </v-col>
+      <v-col cols="6">
         <v-btn
           :loading="loading"
-          class="my-4 mb-11 text-none m-game-confirm-real-more-btn"
-          width="280"
+          class="text-none m-game-confirm-real-more-btn"
+          width="144"
           height="40"
           @click="handleEnterGame(selectedGameItem.id, selectedGameItem.name, 'false')"
         >
           {{ t("game_confirm.text_2") }}
         </v-btn>
-      </div>
-</div>
+      </v-col>
+    </v-row>
+    <div class="text-center" v-else>
+      <v-btn
+        :loading="loading"
+        class="my-4 mb-11 text-none m-game-confirm-real-more-btn"
+        width="280"
+        height="40"
+        @click="handleEnterGame(selectedGameItem.id, selectedGameItem.name, 'false')"
+      >
+        {{ t("game_confirm.text_2") }}
+      </v-btn>
+    </div>
+  </div>
 </template>
 
 <style lang="scss">
