@@ -1047,7 +1047,7 @@ onMounted(async () => {
       </template>
       <div class="m-deposit-btn-position">
         <v-btn
-          class="my-4 mx-6 m-deposit-btn"
+          class="my-3 mx-6 m-deposit-btn"
           :class="isDepositBtnReady ? 'm-deposit-btn-ready' : ''"
           height="48px"
           :loading="loading"
@@ -1082,6 +1082,7 @@ onMounted(async () => {
   </v-dialog>
 </template>
 
+
 <style lang="scss">
 .m-deposit-payment-menu {
   left: 24px !important;
@@ -1090,7 +1091,7 @@ onMounted(async () => {
 // container
 .mobile-deposit-container {
   overflow-y: auto;
-  padding-bottom: 10px;
+  padding-bottom: 90px;
 
   .m-deposit-bonus-card {
     // height: 83px;
@@ -1297,11 +1298,14 @@ onMounted(async () => {
 }
 
 .m-deposit-btn-position {
-  // position: absolute;
-  // bottom: 48px;
-  // left: 50%;
-  // transform: translateX(-50%);
-  // width: 98%;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  background: #1d2027;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0px -4px 6px 1px #0000004D;
 }
 
 .m-deposit-footer-text-position {
