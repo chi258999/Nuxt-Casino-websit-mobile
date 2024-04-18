@@ -125,7 +125,7 @@ onMounted(async () => {
     max-width: 1300px;
     min-height: 500px;
     margin: 0 auto;
-    top:0
+    // top:0
 }
 
 
