@@ -630,6 +630,7 @@ const routeInited = () => {
 
 <template>
   <v-main
+    id="mainContainer"
     class="main-background"
     :class="mainBlurEffectShow ? 'main-bg-blur' : ''"
     :style="{
