@@ -39,7 +39,7 @@ const { t } = useI18n();
 const { setDepositConfirmDialogToggle } = depositStore();
 const { setTimerValue } = depositStore();
 
-const timer_value = ref<number>(3600);
+const timer_value = ref<number>(3599);
 
 const mxnPaymentChannel = ref<any>({
   spei: icon_public_106,
