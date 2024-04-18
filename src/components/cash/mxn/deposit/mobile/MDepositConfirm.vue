@@ -178,7 +178,7 @@ onUnmounted(() => {
             height="24"
             @click="depositInfoCopy(depositConfirmItem.bank_name)"
           >
-            <img src="@/assets/public/svg/icon_public_71.svg" width="18" />
+            <img src="@/assets/public/svg/icon_public_71.svg" width="28" />
           </v-btn>
         </div>
         <div class="text-400-12 gray my-2 ml-4 d-flex align-center">
@@ -194,7 +194,7 @@ onUnmounted(() => {
             height="24"
             @click="depositInfoCopy(depositConfirmItem.account_number)"
           >
-            <img src="@/assets/public/svg/icon_public_71.svg" width="18" />
+            <img src="@/assets/public/svg/icon_public_71.svg" width="28" />
           </v-btn>
         </div>
         <div class="text-400-12 gray my-2 mx-4">{{ t("deposit_confirm.text_6") }}</div>
@@ -207,22 +207,22 @@ onUnmounted(() => {
             height="24"
             @click="depositInfoCopy(depositConfirmItem.account_name)"
           >
-            <img src="@/assets/public/svg/icon_public_71.svg" width="18" />
+            <img src="@/assets/public/svg/icon_public_71.svg" width="28" />
           </v-btn>
         </div>
         <div class="text-400-12 blue my-2 d-flex align-center">
           <img :src="icon_public_104" />&nbsp;
           <div style="text-decoration: underline">{{ t("deposit_confirm.text_7") }}</div>
         </div>
-        <div class="text-400-12 gray my-2">{{ t("deposit_confirm.text_8") }}</div>
-        <div class="text-400-10 gray">{{ t("deposit_confirm.text_9") }}</div>
-        <div class="text-400-10 gray">
+        <div class="text-400-14 gray my-2">{{ t("deposit_confirm.text_8") }}</div>
+        <div class="text-400-12 gray">{{ t("deposit_confirm.text_9") }}</div>
+        <div class="text-400-12 gray">
           {{ t("deposit_confirm.text_10") }}
           <span
-            class="text-700-10 yellow"
+            class="text-700-12 yellow"
           >${{ depositConfirmItem.deposit_amount }}</span>
         </div>
-        <div class="text-400-10 gray">{{ t("deposit_confirm.text_11") }}</div>
+        <div class="text-400-12 gray">{{ t("deposit_confirm.text_11") }}</div>
         <v-btn
           class="m-transfer-complete mt-4 mb-16"
           width="-webkit-fill-available"
