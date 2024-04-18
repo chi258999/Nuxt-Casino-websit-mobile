@@ -401,7 +401,10 @@ export default BannerComponent;
   }
 
   .m-slider-img-width {
-    height: fit-content !important;
+    // height: fit-content !important;
+    // object-fit: cover;
+    height: 195px;
+    width: 100%;
   }
 }
 </style>

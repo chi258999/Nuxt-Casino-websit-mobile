@@ -1145,7 +1145,7 @@ export const lang: langType = {
     "check_text": "Not participating in promotional activities",
     "other_text": "0.00% fee,",
     "other_text_1": " bonus into your account",
-    "deposit_btn_text": "DEPOSIT",
+    "deposit_btn_text": "Recharge Now",
     "personal_information": {
       "header_text": "Enter your Pix details",
       "id_text": "ID Number(CPF)",
@@ -1965,7 +1965,8 @@ export const lang: langType = {
   },
   "game_confirm": {
     "text_1": "Fun Mode",
-    "text_2": "Real Mode"
+    "text_2": "Real Mode",
+    "text_3": 'You have been banned from playing the game! Please contact customer service.',
   },
   "deposit_confirm": {
     "text_1": "Order Amount",
