@@ -22,6 +22,7 @@ import { useToast } from "vue-toastification";
 import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
 import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
 import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
+import icon_public_160 from "@/assets/public/svg/icon_public_160.svg";
 import { getUnitByCurrency } from '@/utils/currencyUnit';
 import currencyListValue from '@/utils/currencyList';
 import AdjustClass from '@/utils/adjust';
@@ -932,6 +933,8 @@ onMounted(async () => {
         <img src="@/assets/public/image/bg_public_02_01.png" style="width: 100%" />
       </div>
       <v-row class="mt-2 mx-10 text-400-12 gray">{{ t("deposit_dialog.deposit_amount") }}</v-row>
+      
+      <!-- 存款数额档次 -->
       <v-row class="mt-2 mx-4">
         <v-col
           cols="4"
@@ -973,6 +976,15 @@ onMounted(async () => {
                 }}
               </div>
             </div>
+            <div class="m-deposit-amount-hot animated infinite tada" v-if="depositAmountItem.depositSelect == 300 || depositAmountItem.depositSelect == 1000">
+              <inline-svg
+                :src="icon_public_160"
+                width="20"
+                height="20"
+                style="margin: 6px 0px 0px 6px"
+              ></inline-svg>
+                <!-- :transform-source="favoriteIconTransform" -->
+              </div>
           </v-btn>
         </v-col>
       </v-row>
@@ -1186,6 +1198,18 @@ onMounted(async () => {
     background: #f97001;
     border-radius: 0px 4px;
     height: 11px;
+  }
+  .m-deposit-amount-hot {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: -8px;
+    right: 40px;
+    svg {
+      width: 16px;
+      height: 16px;
+      margin: 0px !important;
+    }
   }
 
   .m-deposit-amount-rate-text {
