@@ -7,6 +7,7 @@ import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
 import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
 import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
 import icon_public_110 from "@/assets/public/svg/icon_public_110.svg";
+import icon_public_110_png from "@/assets/public/image/icon_public_110.png";
 import icon_public_111 from "@/assets/public/svg/icon_public_111.svg";
 import icon_public_112 from "@/assets/public/svg/icon_public_112.svg";
 import icon_public_113 from "@/assets/public/svg/icon_public_113.svg";
@@ -233,7 +234,7 @@ onUnmounted(() => {
       <div class="m-deposit-confirm-dailog-footer d-flex align-center px-10">
         <div class="text-400-12 gray">{{ t("deposit_confirm.text_13") }}</div>
         <div class="d-flex align-center" style="margin-left: auto">
-          <img :src="icon_public_110" class="mr-3" />
+          <img :src="icon_public_110_png" class="mr-3" />
           <img :src="icon_public_111" class="mr-3" />
           <img :src="icon_public_112" class="mr-3" />
           <img :src="icon_public_113" />

@@ -869,6 +869,7 @@ button:active:enabled {
         line-height: 16px;
         font-size: 10px;
         color: #fff;
+        max-width: 80vw;
     }
     .Vue-Toastification__close-button {
         background-image: url("@/assets/public/svg/icon_public_10.svg");
