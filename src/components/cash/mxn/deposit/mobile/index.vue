@@ -291,15 +291,21 @@ watch(depositConfig, (newValue) => {
         }
       }
     })
+
+    // 充值档位初始化
     depositAmountList.value.push({
       depositSelect: item,
       bonus: bonusAmount,
       type: bonusType
     })
-    console.log(depositAmountList.value,'depositAmountList.valuedepositAmountList.value')
+
     // 当没有充值活动时，不展示活动说明框
    showDepositBonusCard.value=depositAmountList.value.some((item:any)=>item.bonus!==0)
   })
+
+  // 默认选择300档位
+  handleDepositAmount('300')
+  
   // depositAmountList.value = newValue["list"];
   // bonusAmount.value = newValue["bonus"][0]["type"] == 0 ? Number(newValue["bonus"][0].award) : Number(newValue["bonus"][0].rate) * 100
 }, { deep: true });
@@ -966,7 +972,7 @@ onMounted(async () => {
                 >{{ platformCurrency }}{{countDepositAmount(depositAmountItem)}}</font>
               </div>
             </div>
-
+            <!-- 比例 -->
             <div class="m-deposit-amount-area" v-if="!bonusCheck && depositAmountItem.bonus != 0">
               <div class="m-deposit-amount-rate-text">
                 {{
@@ -976,6 +982,7 @@ onMounted(async () => {
                 }}
               </div>
             </div>
+            <!-- 火标志 -->
             <div class="m-deposit-amount-hot animated infinite tada" v-if="depositAmountItem.depositSelect == 300 || depositAmountItem.depositSelect == 1000">
               <inline-svg
                 :src="icon_public_160"
