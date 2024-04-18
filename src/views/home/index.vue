@@ -959,35 +959,35 @@ const Dashboard = defineComponent({
 
       // context.emit('inited')
 
-      nextTick(() => {
-        const stickyElement = document.getElementById('gameCategory');
-        const scrollContainer = document.getElementById('mainContainer');
-        const hscrollContainer = document.getElementById('home-scrollContainer');
-        console.log(scrollContainer, stickyElement, hscrollContainer, 'nextTick!!!!!! =============');
+      // nextTick(() => {
+      //   const stickyElement = document.getElementById('gameCategory');
+      //   const scrollContainer = document.getElementById('mainContainer');
+      //   const hscrollContainer = document.getElementById('home-scrollContainer');
+      //   console.log(scrollContainer, stickyElement, hscrollContainer, 'nextTick!!!!!! =============');
 
-        let stickyOffset = stickyElement.offsetTop;
-        hscrollContainer.addEventListener('scroll', () => {
-          console.log(window.pageYOffset, stickyOffset, 'hscrollContainer ===== scroll =============');
-        })
-        // 监听滚动事件
-        scrollContainer.addEventListener('scroll', () => {
-          console.log(window.pageYOffset, stickyOffset, 'scroll =============');
-        });
+      //   let stickyOffset = stickyElement.offsetTop;
+      //   hscrollContainer.addEventListener('scroll', () => {
+      //     console.log(window.pageYOffset, stickyOffset, 'hscrollContainer ===== scroll =============');
+      //   })
+      //   // 监听滚动事件
+      //   scrollContainer.addEventListener('scroll', () => {
+      //     console.log(window.pageYOffset, stickyOffset, 'scroll =============');
+      //   });
 
-        document.addEventListener('scroll',() => {
-          console.log(window.pageYOffset, stickyOffset, 'documentscroll =============');
-          if (window.pageYOffset > stickyOffset - 100) {
-            // 当滚动位置超过 sticky 元素的顶部偏移量时，添加 fixed 样式
-            stickyElement.style.position = 'fixed';
-            stickyElement.style.zIndex = '999999';
-            stickyElement.style.top = '92px';
-          } else {
-            // 移除 fixed 样式
-            stickyElement.style.position = 'relative';
-            stickyElement.style.top = 'auto';
-          }
-        } )
-      })
+      //   document.addEventListener('scroll',() => {
+      //     console.log(window.pageYOffset, stickyOffset, 'documentscroll =============');
+      //     if (window.pageYOffset > stickyOffset - 100) {
+      //       // 当滚动位置超过 sticky 元素的顶部偏移量时，添加 fixed 样式
+      //       stickyElement.style.position = 'fixed';
+      //       stickyElement.style.zIndex = '999999';
+      //       stickyElement.style.top = '92px';
+      //     } else {
+      //       // 移除 fixed 样式
+      //       stickyElement.style.position = 'relative';
+      //       stickyElement.style.top = 'auto';
+      //     }
+      //   } )
+      // })
     });
 
     // 跳转条款， 缓存home页面，返回到跳转前的位置

@@ -82,7 +82,8 @@ onMounted(() => {
       <v-btn
         rounded
         :height="mobileWidth < 600 ? '24px' : '28px'"
-        class="text-none ml-3 earn-btn-bg"
+        class="text-none ml-3 earn-btn-bg "
+        style=""
         @click="setAppConfirmDialogShow(true)"
       >
         EARM
@@ -161,7 +162,9 @@ onMounted(() => {
 
     @media (max-width: 600px) {
       .v-btn__content {
-        font-size: 12px;
+        // font-size: 12px;
+        font-size: 13px;
+        font-weight: 800;
       }
     }
   }
