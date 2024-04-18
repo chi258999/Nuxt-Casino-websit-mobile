@@ -126,7 +126,7 @@ onMounted(() => {
 
   @media (max-width: 600px) {
     .v-toolbar__content {
-      height: 32px !important;
+      height: 48px !important;
     }
     .wrap {
       min-width: 180px;
