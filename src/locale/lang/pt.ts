@@ -1118,7 +1118,7 @@ export const lang: langType = {
     "check_text": "Não participar de atividades promocionais",
     "other_text": "Taxa de 0,00%,",
     "other_text_1": " bônus em sua conta",
-    "deposit_btn_text": "DEPÓSITO",
+    "deposit_btn_text": "Recarregar Agora",
     "personal_information": {
       "header_text": "Insira seus detalhes do Pix",
       "id_text": "Número de identificação (CPF)",
