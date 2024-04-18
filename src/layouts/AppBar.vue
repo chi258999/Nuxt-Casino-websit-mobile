@@ -1424,7 +1424,7 @@ onMounted(async () => {
 
 @media (max-width: 600px) {
   .app-bar-position {
-    top: 32px !important;
+    top: 48px !important;
   }
 
   .app-bar-height {
