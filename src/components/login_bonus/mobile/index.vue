@@ -50,6 +50,10 @@ const { dispatchVipSignInReward } = vipStore();
 const { dispatchVipSignIn } = vipStore();
 const { dispatchVipSigninawardReceive } = vipStore();
 const { dispatchUserBalance } = userStore();
+const { setDepositWithdrawToggle } = appBarStore();
+const { setUserNavBarToggle } = appBarStore();
+const { setDepositDialogToggle } = appBarStore();
+const { setCashDialogToggle } = appBarStore();
 
 const vipGrade = ref("VIP1");
 const isShowReceiveValidation = ref(false);
@@ -254,6 +258,16 @@ const submitConfirm = async () => {
     localStorage.setItem("signin_day", (selectedDay.value + 1).toString());
   }
 };
+
+//打开充值页面
+const handleOpenRecharge=()=>{
+   emit('closeLoginBonusDialog')
+   setDepositWithdrawToggle(true);
+  setNavBarToggle(false);
+  setUserNavBarToggle(false);
+  setDepositDialogToggle(true);
+  setCashDialogToggle(true);
+}
 
 onMounted(async () => {
   AdjustClass.getInstance().adjustTrackEvent({
@@ -662,6 +676,7 @@ onMounted(async () => {
         Number(vipSignIn.limited_deposit) == 0
       "
         class="text-900-10 m-login-bonus-bottom-text"
+        @click="handleOpenRecharge"
       >{{ t("vip.login_bonus.footer_text_8") }}</font>
       <v-row class="m-login-bonus-footer mx-0 align-center">
         <v-col cols="2" class="pa-0 ma-0">
@@ -829,11 +844,11 @@ onMounted(async () => {
 }
 
 .m-login-bonus-bottom-text {
-  width: 220px;
+  width: 250px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 20px;
+  bottom: 10px;
   color: #7782aa;
 }
 
