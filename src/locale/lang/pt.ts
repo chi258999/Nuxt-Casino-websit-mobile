@@ -1858,7 +1858,8 @@ export const lang: langType = {
   },
   "game_confirm": {
     "text_1": "Modo de diversão",
-    "text_2": "Modo Real"
+    "text_2": "Modo Real",
+    "text_3": "Você foi banido de jogar o jogo! Entre em contato com o serviço de atendimento ao cliente.",
   },
   "deposit_confirm": {
     "text_1": "Valor do pedido",

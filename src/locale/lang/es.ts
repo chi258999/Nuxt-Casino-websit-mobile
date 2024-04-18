@@ -1902,7 +1902,8 @@ export const lang: langType = {
   },
   "game_confirm": {
     "text_1": "Modo divertido",
-    "text_2": "Modo real"
+    "text_2": "Modo real",
+    "text_3": '¡¡ ya te han prohibido jugar este juego! Póngase en contacto con el servicio al cliente.',
   },
   "deposit_confirm": {
     "text_1": "Importe del pedido",

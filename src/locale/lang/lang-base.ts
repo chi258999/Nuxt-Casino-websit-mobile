@@ -1969,6 +1969,7 @@ export type langType = {
   game_confirm: {
     text_1: string
     text_2: string
+    text_3: string
   },
   deposit_confirm: {
     text_1: string

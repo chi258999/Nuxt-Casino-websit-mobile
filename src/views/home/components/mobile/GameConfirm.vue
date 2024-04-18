@@ -110,7 +110,7 @@ const handleEnterGame = async (id: number, name: string, is_demo: string) => {
     loading.value = false;
     if (!success.value) {
       const toast = useToast();
-      toast.success("You have been banned from playing the game! Please contact customer service.", {
+      toast.success(t("game_confirm.text_3"), {
         timeout: 3000,
         closeOnClick: false,
         pauseOnFocusLoss: false,
@@ -142,7 +142,7 @@ watch(gameConfirmDialogShow, (value) => {
   favoriteSvgIconColor.value = is_favorite.value ? "#F9BC01" : "#7782AA";
 })
 onMounted(() => {
-  console.log('MGameConfirm ======================================== MGameConfirm');
+  // console.log('MGameConfirm ======================================== MGameConfirm');
 })
 </script>
 

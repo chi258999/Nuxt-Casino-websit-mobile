@@ -1965,7 +1965,8 @@ export const lang: langType = {
   },
   "game_confirm": {
     "text_1": "Fun Mode",
-    "text_2": "Real Mode"
+    "text_2": "Real Mode",
+    "text_3": 'You have been banned from playing the game! Please contact customer service.',
   },
   "deposit_confirm": {
     "text_1": "Order Amount",
