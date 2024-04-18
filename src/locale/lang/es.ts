@@ -1145,7 +1145,7 @@ export const lang: langType = {
     "check_text": "No participar en promociones.",
     "other_text": "tarifa del 0,00%,",
     "other_text_1": "Bono depositado en su cuenta",
-    "deposit_btn_text": "Depositar",
+    "deposit_btn_text": "Carga de inmediato",
     "personal_information": {
       "header_text": "Introduce los datos de tu foto",
       "id_text": "Número de identificación (CPF)",
@@ -1903,7 +1903,8 @@ export const lang: langType = {
   },
   "game_confirm": {
     "text_1": "Modo divertido",
-    "text_2": "Modo real"
+    "text_2": "Modo real",
+    "text_3": '¡¡ ya te han prohibido jugar este juego! Póngase en contacto con el servicio al cliente.',
   },
   "deposit_confirm": {
     "text_1": "Importe del pedido",
