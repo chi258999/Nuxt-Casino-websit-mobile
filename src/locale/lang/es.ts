@@ -1681,7 +1681,8 @@ export const lang: langType = {
         "text_15": "Niveles y rangos ",
         "text_16": "A medida que juegues y cambies, ganarás experiencia. Cuando ganes suficiente experiencia, pasarás al siguiente nivel. Obtén recompensas cada vez que llenes la barra de progreso. Tienes que mantener una cierta cantidad de recargas y apuestas en un plazo de 7 días para que el nivel VIP no baje.",
         "text_17": "Reciba bonificaciones gratuitas todos los miércoles y sea el primero en conocerlas.",
-        "text_18": "Los privilegios VIP sólo están disponibles para los jugadores activos, si un jugador no es un jugador activo será degradado y no podrá recibir sus recompensas VIP originales. El depósito semanal mínimo y el comportamiento de apuestas basado en su nivel VIP actual protegerán eficazmente su nivel VIP"
+        "text_18": "Los privilegios VIP sólo están disponibles para los jugadores activos, si un jugador no es un jugador activo será degradado y no podrá recibir sus recompensas VIP originales. El depósito semanal mínimo y el comportamiento de apuestas basado en su nivel VIP actual protegerán eficazmente su nivel VIP",
+        "text_19": "¿Ha reclamado su bonificación gratuita hoy?",
       },
       "bonus": {
         "text_1": "Devolución de dinero",
