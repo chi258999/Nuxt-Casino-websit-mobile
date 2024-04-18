@@ -960,6 +960,7 @@ onMounted(async () => {
 
       </div>
 
+      <!-- casino -->
       <v-list v-model:opened="casinoOpen">
         <v-list-group value="Casino">
           <template v-slot:activator="{ props }">
@@ -1196,6 +1197,9 @@ onMounted(async () => {
           </v-card>
         </v-list-group>
       </v-list>
+      <!-- casino -->
+
+      <!-- sport -->
       <v-list v-model:opened="sportOpen" class="mb-2">
         <v-list-group value="Sport">
           <template v-slot:activator="{ props }">
@@ -1480,6 +1484,8 @@ onMounted(async () => {
           </v-card>
         </v-list-group>
       </v-list>
+      <!-- sport -->
+
       <v-divider class="divider"></v-divider>
 
       <!--  -->
@@ -1953,7 +1959,7 @@ onMounted(async () => {
 
   :deep(.v-list-item-title) {
     font-weight: 700;
-    font-size: 12px !important;
+    font-size: 14px !important;
     color: #7782aa;
   }
 
@@ -2238,7 +2244,7 @@ onMounted(async () => {
 
 .m-nav-menu {
   :deep(.v-list-item-title) {
-    font-size: 12px !important;
+    font-size: 14px !important;
     font-weight: 700 !important;
   }
 
@@ -2249,7 +2255,7 @@ onMounted(async () => {
 
 .m-nav-sub-menu {
   :deep(.v-list-item-title) {
-    font-size: 11px !important;
+    font-size: 14px !important;
     font-weight: 500 !important;
   }
 
