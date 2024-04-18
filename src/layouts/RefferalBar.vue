@@ -129,12 +129,13 @@ onMounted(() => {
     }
     .wrap {
       min-width: 180px;
-      max-width: 220px;
       white-space: pre-wrap;
       word-break: keep-all;
       // word-warp: break-word;
       text-align: center;
-      line-height: 14px;
+      line-height: 13px;
+      font-size: 11px;
+      max-width: 55vw;
     }
   }
 
