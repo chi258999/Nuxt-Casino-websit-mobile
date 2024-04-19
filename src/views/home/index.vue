@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, nextTick, toRefs, reactive, watch, ref, computed, onMounted, onActivated, getCurrentInstance, defineAsyncComponent  } from "vue";
+import { defineComponent, nextTick, toRefs, reactive, watch, ref, computed, onMounted, onActivated, getCurrentInstance, defineAsyncComponent, onBeforeUnmount  } from "vue";
 import { RouteLocationNormalized, RouteLocationNormalizedLoaded, onBeforeRouteLeave } from 'vue-router'
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
@@ -1020,6 +1020,10 @@ const Dashboard = defineComponent({
 
       initSticky()
     });
+
+    onBeforeUnmount(() => {
+      document.addEventListener('remove', stickyScrollEvent);
+    })
 
     // 跳转条款， 缓存home页面，返回到跳转前的位置
     const placeScroll = ref()
