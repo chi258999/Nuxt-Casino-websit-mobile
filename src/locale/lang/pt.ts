@@ -1084,7 +1084,8 @@ export const lang: langType = {
       "footer_6": {
         "text": "© 2023 Hoy777.com Todos os direitos reservados."
       }
-    }
+    },
+    "viewall": "Ver todo",
   },
   "mobile_menu": {
     "home": "Início",
