@@ -6,7 +6,7 @@ import { refferalStore } from "@/store/refferal";
 import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { activityAppStore } from '@/store/activityApp';
-const { setAppConfirmDialogShow, downloadAppAcquisition, runningSystem } = activityAppStore();
+const { setAppConfirmDialogShow, downloadAppAcquisition, runningSystem, automaticPopUpApp } = activityAppStore();
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -47,6 +47,11 @@ const openRefferalDialogShow = () => {
 // 获取下载app活动信息
 downloadAppAcquisition()
 
+const downloadAppEvent = () => {
+  setAppConfirmDialogShow(true)
+  automaticPopUpApp(true)
+}
+
 // 获取模式
 const mobile = computed(() => {
   const { getMobile } = storeToRefs(activityAppStore());
@@ -84,7 +89,7 @@ onMounted(() => {
         :height="mobileWidth < 600 ? '24px' : '28px'"
         class="text-none ml-3 earn-btn-bg "
         style=""
-        @click="setAppConfirmDialogShow(true)"
+        @click="downloadAppEvent"
       >
         EARM
       </v-btn>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
 import { useDisplay } from "vuetify";
 import { storeToRefs } from 'pinia';
 import { activityAppStore } from '@/store/activityApp';
-const { setAppConfirmDialogShow } = activityAppStore();
+const { setAppConfirmDialogShow, setShowAppGuidance, setAppGuidance } = activityAppStore();
 import { toFormatNum } from '@/utils/numFormat';
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -57,6 +57,27 @@ const mobile = computed(() => {
   return getMobile.value;
 });
 
+const showAppGuidance = computed(() => {
+  const { getShowAppGuidance } = storeToRefs(activityAppStore());
+  return getShowAppGuidance.value;
+});
+
+watch(showAppGuidance, (value) => {
+  if (value) {
+    setAppGuidance(false)
+  }
+})
+
+const frequency = ref(0) // 监听控制引导弹框打开
+// 关闭app弹框执行
+const closeApp = () => {
+  setAppConfirmDialogShow(false)
+  if (frequency.value === 0) {
+    setShowAppGuidance(true)
+    frequency.value++
+  }
+}
+
 </script>
 
 <template>
@@ -70,14 +91,13 @@ const mobile = computed(() => {
       icon="true"
       width="24"
       height="24"
-      @click="setAppConfirmDialogShow(false)"
+      @click="closeApp"
     >
       <inline-svg :src="icon_public_10" width="20" height="20"></inline-svg>
     </v-btn>
 
     <div>
       <p class="m-app-illustrate">{{ t('activity_app.text_2') }}</p>
-      <p class="m-app-illustrate">{{ t('activity_app.text_3') }}</p>
       <p class="m-app-bonus">{{ platformCurrency }} {{ toFormatNum(activityAppBonus) }}</p>
       <p class="m-app-illustrate2">{{ t('activity_app.text_4') }}</p>
       <p class="m-app-illustrate2">{{ t('activity_app.text_5') }} <span>{{ t('activity_app.text_6') }}</span></p>
@@ -102,7 +122,9 @@ const mobile = computed(() => {
   position: fixed;
   bottom: 0;
   z-index: 1000000;
-  background-color: #10AB3B;
+  background-color: #0000008a;
+  backdrop-filter: blur(5px); /* 添加模糊效果，可以调整模糊半径 */
+  -webkit-backdrop-filter: blur(5px); /* 兼容WebKit浏览器 */
   background-image: url(@/assets/activity_app/activity-bg.svg);
   background-size: cover;
   padding: 16px 8px 24px 24px;
@@ -118,7 +140,9 @@ const mobile = computed(() => {
 
   .m-app-illustrate {
     font-weight: 900;
-    font-size: 14px;
+    font-size: 12px;
+    line-height: 14.52px;
+    max-width: 240px;
     color: #FFFFFF
   }
 
@@ -141,8 +165,8 @@ const mobile = computed(() => {
   .m-app-btn {
     font-size: 12px;
     font-weight: 700;
-    color: #000000;
-    background-color: #F9BC01;
+    color: #ffffff;
+    background-color: rgba(0, 155, 58, 1);
     display: block;
     margin: 12px auto 0;
   }
