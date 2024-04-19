@@ -6,11 +6,14 @@ import { getQueryParams } from "@/utils/getPublicInformation";
 export const activityAppStore = defineStore({
   id: 'activityApp',
   state: () => ({
-    appConfirmDialogShow: true as boolean, // 控制下载app弹框是否显示
+    appConfirmDialogShow: false as boolean, // 控制下载app弹框是否显示
     activityBonus: '0' as string, // 活动奖金
     downloadLink: '' as string, // app下载链接
     downloadID: '' as string, // app活动id
     mobile: true as boolean, // 是否浏览器运行/非app
+    automaticAppTimeout: null as NodeJS.Timeout | null,
+    appGuidanceTimeout: null as NodeJS.Timeout | null,
+    showAppGuidance: false as boolean, // 是否显示下载app引导框
   }),
   getters: {
     getAppConfirmDialogShow: (state) => state.appConfirmDialogShow,
@@ -18,6 +21,7 @@ export const activityAppStore = defineStore({
     getDownloadLink: (state) => state.downloadLink,
     getDownloadID: (state) => state.downloadID,
     getMobile: (state) => state.mobile,
+    getShowAppGuidance: (state) => state.showAppGuidance,
   },
   actions: {
     setAppConfirmDialogShow(param: boolean) {
@@ -70,7 +74,6 @@ export const activityAppStore = defineStore({
     },
     // 用户通过app登录，领取奖励
     async downloadApprReceive(data: any) {
-      console.log(data, 'downloadApprReceivedownloadApprReceivedownloadApprReceivedownloadApprReceivedownloadApprReceivedownloadApprReceive');
       const route: string = NETWORK.DOWNLOADAPP.DOWAPP_RECEIVE;
       const network: Network = Network.getInstance();
       // response call back function
@@ -81,5 +84,34 @@ export const activityAppStore = defineStore({
       }
       await network.sendMsg(route, data, next, 1);
     },
+    // 判断下载app是否需要自动弹出
+    automaticPopUpApp(state: boolean) {
+      if (state) {
+        if (this.automaticAppTimeout) {
+          clearTimeout(this.automaticAppTimeout); // 删除定时器
+          this.automaticAppTimeout = null; // 清空定时器变量
+        }
+      } else {
+        this.automaticAppTimeout = setTimeout(() => {
+          this.appConfirmDialogShow = true
+        }, 60000);
+      }
+    },
+    setShowAppGuidance(param: boolean) {
+      this.showAppGuidance = param;
+    },
+    // 定时关闭下载引导弹框
+    setAppGuidance(state: boolean) {
+      if (state) {
+        if (this.appGuidanceTimeout) {
+          clearTimeout(this.appGuidanceTimeout); // 删除定时器
+          this.automaticAppTimeout = null; // 清空定时器变量
+        }
+      } else {
+        this.appGuidanceTimeout = setTimeout(() => {
+          this.showAppGuidance = false
+        }, 5000);
+      }
+    }
   }
 })
