@@ -119,7 +119,7 @@ onMounted(() => {
   <div
     v-if="depositOrderDialog"
     class="m-order-container px-4"
-    :style="[refferalAppBarShow ? 'top: 92px' : 'top: 60px']"
+    :style="[refferalAppBarShow ? 'top: 108px' : 'top: 60px']"
   >
     <v-row class="ma-0 pa-0 align-center" style="height: 48px">
       <v-col cols="7" class="pa-0">

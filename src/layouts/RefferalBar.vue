@@ -67,6 +67,7 @@ onMounted(() => {
 
 <template>
   <v-app-bar
+    id="refferalBar"
     app
     class="refferal-app-bar-background justify-center"
     :class="headerBlurEffectShow ? 'header-bg-blur' : ''"

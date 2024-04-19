@@ -13,25 +13,12 @@ const router = useRouter();
 const route = useRoute();
 const { dispatchGameCategories } = gameStore();
 
-// const gameProviders = ref<Array<string>>([
-//   new URL("@/assets/home/image/img_gp_01.png", import.meta.url).href,
-//   new URL("@/assets/home/image/img_gp_02.png", import.meta.url).href,
-//   new URL("@/assets/home/image/img_gp_03.png", import.meta.url).href,
-//   new URL("@/assets/home/image/img_gp_04.png", import.meta.url).href,
-//   new URL("@/assets/home/image/img_gp_05.png", import.meta.url).href,
-//   new URL("@/assets/home/image/img_gp_06.png", import.meta.url).href,
-//   new URL("@/assets/home/image/img_gp_7.png", import.meta.url).href,
-// ]);
-
 const mobileWidth = computed(() => {
   return width.value;
 });
 
 const gameProviders = computed(() => {
   const { getGameProviders } = storeToRefs(gameStore());
-  // getGameProviders.value.map((item) => {
-  //   item.pictures = img_gp_01;
-  // });
   return getGameProviders.value;
 });
 

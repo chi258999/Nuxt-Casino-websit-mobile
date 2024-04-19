@@ -1111,7 +1111,8 @@ export const lang: langType = {
       "footer_6": {
         "text": "2023 HOY777.COM Todos los derechos reservados."
       }
-    }
+    },
+    "viewall": "Ver todo",
   },
   "mobile_menu": {
     "home": "Página de inicio",
