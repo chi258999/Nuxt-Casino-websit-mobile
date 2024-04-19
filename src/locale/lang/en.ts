@@ -2038,13 +2038,13 @@ export const lang: langType = {
   },
   "activity_app": {
     "text_1": "Get Download App Bonus",
-    "text_2": "USABLE FOR ",
-    "text_3": "App Login Rewards",
+    "text_2": "usable for App Login Rewards",
     "text_4": "Free Reward!",
     "text_5": "Claimed when",
     "text_6": "logging into the app",
     "text_7": "Download APP to get",
     "text_8": "Download APP",
+    "text_9": "Downloading and logging in with the app will get you",
   },
   "static_activity": {
     "text_1": "ANNOUNCE",

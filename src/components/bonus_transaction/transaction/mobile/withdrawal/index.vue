@@ -61,6 +61,7 @@ const loadingIndex = ref<number>(0)
 const startIndex = ref<number>(0);
 const endIndex = ref<number>(8);
 const currentList = ref<Array<WithdrawalHistoryItem>>([]);
+const isScrollRight=ref(false)
 
 const tempHistoryList = [
   {
@@ -218,7 +219,28 @@ watch(() => withdrawHistoryItem.value, (value) => {
 
 onMounted(async () => {
   // paginationLength.value = withdrawHistoryItem.value.total_pages
+  handleScroll()
 });
+
+const handleScroll=()=>{
+  const scrollContainer = document.getElementsByClassName('v-table__wrapper')[0];
+  scrollContainer.addEventListener('scroll', ()=> {
+  // 当前滚动位置
+  const scrollPosition = scrollContainer.scrollLeft;
+  // 容器总宽度
+  const totalWidth = scrollContainer.scrollWidth;
+  // 容器可视区域宽度
+  const containerWidth = scrollContainer.clientWidth;
+ 
+  // 检查是否滚动到最右边
+  if (scrollPosition + containerWidth >= totalWidth) {
+    isScrollRight.value=true
+    // 执行到达最右边时的操作
+  }else{
+     isScrollRight.value=false
+  }
+});
+}
 
 const formatCurrency = (currency: number, currencyUnit: string) => {
   if(!currency && !currencyUnit) {
@@ -257,7 +279,7 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
 <template>
   <v-row class="mx-2 mt-1 m-forms-bonus-table1">
     <v-table
-      class="m-forms-bonus-table-bg"
+      class="m-forms-bonus-table-bg relative"
       :class="fixPositionShow ? 'table-position-overflow' : ''"
       theme="dark"
       fixed-header
@@ -456,6 +478,9 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
             </td>
           </tr>
         </template>
+        <div class="arrow" v-if="!isScrollRight">
+          <img class="arrow-img" src="@/assets/public/svg/arrow-right.svg" />
+        </div>
       </tbody>
     </v-table>
   </v-row>
@@ -480,6 +505,23 @@ const formatCurrency = (currency: number, currencyUnit: string) => {
 
 .v-table__wrapper {
   padding-bottom: 20px;
+}
+
+.arrow {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateX(-50%, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 32px;
+  background: #000;
+  .arrow-img {
+    width: 14px;
+    height: 14px;
+  }
 }
 
 .m-forms-bonus-table1 {
