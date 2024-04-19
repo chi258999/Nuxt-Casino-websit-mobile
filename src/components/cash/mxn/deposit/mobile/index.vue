@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import ActivityDrawer from '../ActivityDrawer.vue'
 import { appBarStore } from '@/store/appBar';
 import { authStore } from "@/store/auth";
 import { userStore } from '@/store/user';
@@ -195,6 +196,8 @@ const notificationShow = ref<boolean>(false);
 const currencyMenuShow = ref<boolean>(false);
 const paymentMenuShow = ref<boolean>(false);
 const bonusAmount = ref<number>(0);
+const showActivityDrawer=ref<boolean>(false);
+const activityId=ref<string>('');
 
 const checkIcon = ref<any>(new URL("@/assets/public/svg/icon_public_18.svg", import.meta.url).href);
 
@@ -689,12 +692,11 @@ const promoBlurEffectShow = computed(() => {
 // 跳转活动页
 const jumpPromocione=()=>{
   if(!userInfo.value.is_first_deposit){
-     router.push({name: "Promo_Detail",query:{id:promoList.value.group_data[0].list_data[0].id}})
+    activityId.value=promoList.value.group_data[0].list_data[0].id
   }else{
-     router.push({name: "Promo_Detail",query:{id:promoList.value.group_data[0].list_data[1].id}})
+    activityId.value=promoList.value.group_data[0].list_data[1].id
   }
-  setDepositDialogToggle(false);
-  setCashDialogToggle(false);
+  showActivityDrawer.value=true
 }
 
 watch(bonusCheck, (newValue) => {
@@ -818,6 +820,7 @@ onMounted(async () => {
 </script>
 
 <template>
+<ActivityDrawer v-if="showActivityDrawer" v-model="showActivityDrawer" :id="activityId"></ActivityDrawer>
   <v-dialog
     v-model="modelValueNew"
     :class="depositBlurEffectShow ? 'm-deposit-dialog' : ''"
