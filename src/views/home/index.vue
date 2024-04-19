@@ -1042,8 +1042,8 @@ const Dashboard = defineComponent({
     });
 
     // 打开分类全部
-    const viewAllByKind = (type) => {
-
+    const viewAllByKind = (slug:string) => {
+      router.push({ name: "Provider", query: { slug: slug } });
     }
 
     return {
@@ -1424,7 +1424,7 @@ export default Dashboard;
           >
             <!-- <p @click="handleGameFilterBtn(item.slug)">{{ item.name }}</p> -->
             <span>{{ item.name }}</span>
-            <span class='viewall' @click="viewAllByKind">View all</span>
+            <span class='viewall' @click="viewAllByKind(item.slug)">{{ t('home.viewall')}}</span>
           </v-row>
 
           <!-- PC 游戏列表 -->

@@ -1111,7 +1111,8 @@ export type langType = {
       footer_6: {
         text: string
       }
-    }
+    },
+    viewall: string
   }
   mobile_menu: {
     home: string
