@@ -181,6 +181,7 @@ onMounted(async () => {
     >
       <img src="@/assets/public/svg/icon_public_10.svg" />
     </v-btn>
+    
     <div class="refferal-header-tabs">
       <div class="tab-item text-700-10"> 
         {{ t("refferal.dialog.header.tabs_text1") }}
@@ -195,85 +196,91 @@ onMounted(async () => {
         />
       </div>
     </div>
+    
     <div
       class="m-refferal-animation-container"
+      :class="[descriptionVisible ? 'mac-description' : '']"
       :style="{
         height: refferalContainerHeight + 'px',
         background: refferalContainerBackground,
       }"
     >
+      <!-- 详情说明 -->
       <template v-if="descriptionVisible">
-        <div class="mt-5 text-center text-700-14 white">
-          {{ t("refferal.dialog.header.body_text") }}
-        </div>
-        <div class="mt-2">
-          <img
-            src="@/assets/public/image/bg_public_02_01.png"
-            class="full-width"
-          />
-        </div>
-        <div class="mt-2 mx-6 white text-400-14">
-          {{ t("refferal.description.text_1") }}
-        </div>
-        <div
-          class="mt-2 mx-6 text-gray text-500-10"
-          style="word-break: break-all"
-        >
-          {{ t("refferal.description.text_2", [platformCurrency]) }}
-        </div>
-        <div
-          class="mt-2 mx-6 mb-1 text-gray text-500-10"
-          style="word-break: break-all"
-        >
-          {{ t("refferal.description.text_3", [platformCurrency]) }}
-        </div>
-        <div class="mt-2 mx-6">
-          <v-card
-            height="232"
-            theme="dark"
-            color="#15161C"
-            class="overflow-y-auto description-card"
-            style="scroll-padding: 20px"
+        <div class="mac-description-content">
+          <div class="mt-5 text-center text-700-14 white">
+            {{ t("refferal.dialog.header.body_text") }}
+          </div>
+          <div class="mt-2">
+            <img
+              src="@/assets/public/image/bg_public_02_01.png"
+              class="full-width"
+            />
+          </div>
+          <div class="mt-2 mx-6 white text-400-14">
+            {{ t("refferal.description.text_1") }}
+          </div>
+          <div
+            class="mt-2 mx-6 text-gray text-500-10"
+            style="word-break: break-all"
           >
-            <div class="mx-4 mt-2 text-600-14 text-gray">
-              {{ t("refferal.description.term_text_1") }}
-            </div>
-             <!-- <div class="mx-4 mt-2 text-600-14 text-gray">
-              {{ t("refferal.description.term_text_2") }}
-            </div> -->
-               <p
-              class="ml-4 mr-2 mt-2 text-400-10 text-gray"
-              style="word-break: break-all"
+            {{ t("refferal.description.text_2", [platformCurrency]) }}
+          </div>
+          <div
+            class="mt-2 mx-6 mb-1 text-gray text-500-10"
+            style="word-break: break-all"
+          >
+            {{ t("refferal.description.text_3", [platformCurrency]) }}
+          </div>
+          <div class="mt-2 mx-6">
+            <v-card
+              height="232"
+              theme="dark"
+              color="#15161C"
+              class="overflow-y-auto description-card"
+              style="scroll-padding: 20px"
             >
-              {{ t("refferal.description.term_text_2", [platformCurrency]) }}
-            </p>
-             <div class="mx-4 mt-2 text-600-14 text-gray">
-              {{ t("refferal.description.term_text_3") }}
-            </div>
-            <p
-              class="ml-4 mr-2 mt-2 text-400-10 text-gray"
-              style="word-break: break-all"
-            >
-              {{ t("refferal.description.text_4", [platformCurrency]) }}
-            </p>
-            <div class="mx-4 mt-2 text-600-14 text-gray">
-              {{ t("refferal.description.term_text_4") }}
-            </div>
-             <p
-              class="ml-4 mr-2 mt-2 text-400-10 text-gray"
-              style="word-break: break-all"
-            >
-              {{ t("refferal.description.text_5", [platformCurrency]) }}
-            </p>
-             <p
-              class="ml-4 mr-2 mt-2 mb-1 text-400-10 text-gray"
-              style="word-break: break-all"
-            >
-              {{ t("refferal.description.text_6", [platformCurrency]) }}
-            </p>
-          </v-card>
+              <div class="mx-4 mt-2 text-600-14 text-gray">
+                {{ t("refferal.description.term_text_1") }}
+              </div>
+              <!-- <div class="mx-4 mt-2 text-600-14 text-gray">
+                {{ t("refferal.description.term_text_2") }}
+              </div> -->
+                <p
+                class="ml-4 mr-2 mt-2 text-400-10 text-gray"
+                style="word-break: break-all"
+              >
+                {{ t("refferal.description.term_text_2", [platformCurrency]) }}
+              </p>
+              <div class="mx-4 mt-2 text-600-14 text-gray">
+                {{ t("refferal.description.term_text_3") }}
+              </div>
+              <p
+                class="ml-4 mr-2 mt-2 text-400-10 text-gray"
+                style="word-break: break-all"
+              >
+                {{ t("refferal.description.text_4", [platformCurrency]) }}
+              </p>
+              <div class="mx-4 mt-2 text-600-14 text-gray">
+                {{ t("refferal.description.term_text_4") }}
+              </div>
+              <p
+                class="ml-4 mr-2 mt-2 text-400-10 text-gray"
+                style="word-break: break-all"
+              >
+                {{ t("refferal.description.text_5", [platformCurrency]) }}
+              </p>
+              <p
+                class="ml-4 mr-2 mt-2 mb-1 text-400-10 text-gray"
+                style="word-break: break-all"
+              >
+                {{ t("refferal.description.text_6", [platformCurrency]) }}
+              </p>
+            </v-card>
+          </div>
         </div>
-        <div class="mt-3 mx-6">
+
+        <div class="mt-3 mx-6 back-btn">
           <v-btn
             class="button-dark m-reffer-btn-font text-none"
             width="-webkit-fill-available"
@@ -421,8 +428,9 @@ onMounted(async () => {
 
 .m-refferal-container {
   border-radius: 16px;
-  height: 634px;
-  overflow-y: auto;
+  // height: 634px;
+  height: 85vh;
+  overflow: hidden;
   margin-top: 16px;
   .refferal-header-tabs {
     display: flex;
@@ -469,17 +477,34 @@ onMounted(async () => {
     width: 328px;
     background: #15161c;
     border-radius: 16px;
-    height: 333px;
+    min-height: 333px;
+    max-height: calc(85vh - 16px - 44px);
+    padding-bottom: 20px;
     animation-name: heighting;
     animation-duration: 0.4s;
     animation-delay: 0.4s;
     animation-timing-function: linear;
     animation-iteration-count: 1;
     overflow: hidden;
+    overflow-y: auto;
     .v-card {
       border-radius: 8px;
       &.description-card {
         border-radius: 16px;
+      }
+    }
+
+    &.mac-description {
+      display: flex;
+      flex-direction: column;
+
+      .mac-description-content {
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      .back-btn {
+        height: 46px;
       }
     }
   }

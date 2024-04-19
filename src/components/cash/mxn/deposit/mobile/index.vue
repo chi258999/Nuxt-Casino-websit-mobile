@@ -22,6 +22,7 @@ import { useToast } from "vue-toastification";
 import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
 import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
 import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
+import icon_public_160 from "@/assets/public/svg/icon_public_160.svg";
 import { getUnitByCurrency } from '@/utils/currencyUnit';
 import currencyListValue from '@/utils/currencyList';
 import AdjustClass from '@/utils/adjust';
@@ -290,15 +291,21 @@ watch(depositConfig, (newValue) => {
         }
       }
     })
+
+    // 充值档位初始化
     depositAmountList.value.push({
       depositSelect: item,
       bonus: bonusAmount,
       type: bonusType
     })
-    console.log(depositAmountList.value,'depositAmountList.valuedepositAmountList.value')
+
     // 当没有充值活动时，不展示活动说明框
    showDepositBonusCard.value=depositAmountList.value.some((item:any)=>item.bonus!==0)
   })
+
+  // 默认选择300档位
+  handleDepositAmount('300')
+  
   // depositAmountList.value = newValue["list"];
   // bonusAmount.value = newValue["bonus"][0]["type"] == 0 ? Number(newValue["bonus"][0].award) : Number(newValue["bonus"][0].rate) * 100
 }, { deep: true });
@@ -932,6 +939,8 @@ onMounted(async () => {
         <img src="@/assets/public/image/bg_public_02_01.png" style="width: 100%" />
       </div>
       <v-row class="mt-2 mx-10 text-400-12 gray">{{ t("deposit_dialog.deposit_amount") }}</v-row>
+      
+      <!-- 存款数额档次 -->
       <v-row class="mt-2 mx-4">
         <v-col
           cols="4"
@@ -963,7 +972,7 @@ onMounted(async () => {
                 >{{ platformCurrency }}{{countDepositAmount(depositAmountItem)}}</font>
               </div>
             </div>
-
+            <!-- 比例 -->
             <div class="m-deposit-amount-area" v-if="!bonusCheck && depositAmountItem.bonus != 0">
               <div class="m-deposit-amount-rate-text">
                 {{
@@ -973,6 +982,16 @@ onMounted(async () => {
                 }}
               </div>
             </div>
+            <!-- 火标志 -->
+            <div class="m-deposit-amount-hot animated infinite tada" v-if="depositAmountItem.depositSelect == 300 || depositAmountItem.depositSelect == 1000">
+              <inline-svg
+                :src="icon_public_160"
+                width="20"
+                height="20"
+                style="margin: 6px 0px 0px 6px"
+              ></inline-svg>
+                <!-- :transform-source="favoriteIconTransform" -->
+              </div>
           </v-btn>
         </v-col>
       </v-row>
@@ -1047,7 +1066,7 @@ onMounted(async () => {
       </template>
       <div class="m-deposit-btn-position">
         <v-btn
-          class="my-4 mx-6 m-deposit-btn"
+          class="my-3 mx-6 m-deposit-btn"
           :class="isDepositBtnReady ? 'm-deposit-btn-ready' : ''"
           height="48px"
           :loading="loading"
@@ -1082,6 +1101,7 @@ onMounted(async () => {
   </v-dialog>
 </template>
 
+
 <style lang="scss">
 .m-deposit-payment-menu {
   left: 24px !important;
@@ -1090,7 +1110,7 @@ onMounted(async () => {
 // container
 .mobile-deposit-container {
   overflow-y: auto;
-  padding-bottom: 10px;
+  padding-bottom: 90px;
 
   .m-deposit-bonus-card {
     // height: 83px;
@@ -1185,6 +1205,18 @@ onMounted(async () => {
     background: #f97001;
     border-radius: 0px 4px;
     height: 11px;
+  }
+  .m-deposit-amount-hot {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: -8px;
+    right: 40px;
+    svg {
+      width: 16px;
+      height: 16px;
+      margin: 0px !important;
+    }
   }
 
   .m-deposit-amount-rate-text {
@@ -1297,11 +1329,14 @@ onMounted(async () => {
 }
 
 .m-deposit-btn-position {
-  // position: absolute;
-  // bottom: 48px;
-  // left: 50%;
-  // transform: translateX(-50%);
-  // width: 98%;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  background: #1d2027;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0px -4px 6px 1px #0000004D;
 }
 
 .m-deposit-footer-text-position {

@@ -7,6 +7,7 @@ import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
 import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
 import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
 import icon_public_110 from "@/assets/public/svg/icon_public_110.svg";
+import icon_public_110_png from "@/assets/public/image/icon_public_110.png";
 import icon_public_111 from "@/assets/public/svg/icon_public_111.svg";
 import icon_public_112 from "@/assets/public/svg/icon_public_112.svg";
 import icon_public_113 from "@/assets/public/svg/icon_public_113.svg";
@@ -38,7 +39,7 @@ const { t } = useI18n();
 const { setDepositConfirmDialogToggle } = depositStore();
 const { setTimerValue } = depositStore();
 
-const timer_value = ref<number>(3600);
+const timer_value = ref<number>(3599);
 
 const mxnPaymentChannel = ref<any>({
   spei: icon_public_106,
@@ -177,7 +178,7 @@ onUnmounted(() => {
             height="24"
             @click="depositInfoCopy(depositConfirmItem.bank_name)"
           >
-            <img src="@/assets/public/svg/icon_public_71.svg" width="18" />
+            <img src="@/assets/public/svg/icon_public_71.svg" width="28" />
           </v-btn>
         </div>
         <div class="text-400-12 gray my-2 ml-4 d-flex align-center">
@@ -193,7 +194,7 @@ onUnmounted(() => {
             height="24"
             @click="depositInfoCopy(depositConfirmItem.account_number)"
           >
-            <img src="@/assets/public/svg/icon_public_71.svg" width="18" />
+            <img src="@/assets/public/svg/icon_public_71.svg" width="28" />
           </v-btn>
         </div>
         <div class="text-400-12 gray my-2 mx-4">{{ t("deposit_confirm.text_6") }}</div>
@@ -206,22 +207,22 @@ onUnmounted(() => {
             height="24"
             @click="depositInfoCopy(depositConfirmItem.account_name)"
           >
-            <img src="@/assets/public/svg/icon_public_71.svg" width="18" />
+            <img src="@/assets/public/svg/icon_public_71.svg" width="28" />
           </v-btn>
         </div>
         <div class="text-400-12 blue my-2 d-flex align-center">
           <img :src="icon_public_104" />&nbsp;
           <div style="text-decoration: underline">{{ t("deposit_confirm.text_7") }}</div>
         </div>
-        <div class="text-400-12 gray my-2">{{ t("deposit_confirm.text_8") }}</div>
-        <div class="text-400-10 gray">{{ t("deposit_confirm.text_9") }}</div>
-        <div class="text-400-10 gray">
+        <div class="text-400-14 gray my-2">{{ t("deposit_confirm.text_8") }}</div>
+        <div class="text-400-12 gray">{{ t("deposit_confirm.text_9") }}</div>
+        <div class="text-400-12 gray">
           {{ t("deposit_confirm.text_10") }}
           <span
-            class="text-700-10 yellow"
+            class="text-700-12 yellow"
           >${{ depositConfirmItem.deposit_amount }}</span>
         </div>
-        <div class="text-400-10 gray">{{ t("deposit_confirm.text_11") }}</div>
+        <div class="text-400-12 gray">{{ t("deposit_confirm.text_11") }}</div>
         <v-btn
           class="m-transfer-complete mt-4 mb-16"
           width="-webkit-fill-available"
@@ -233,7 +234,7 @@ onUnmounted(() => {
       <div class="m-deposit-confirm-dailog-footer d-flex align-center px-10">
         <div class="text-400-12 gray">{{ t("deposit_confirm.text_13") }}</div>
         <div class="d-flex align-center" style="margin-left: auto">
-          <img :src="icon_public_110" class="mr-3" />
+          <img :src="icon_public_110_png" class="mr-3" />
           <img :src="icon_public_111" class="mr-3" />
           <img :src="icon_public_112" class="mr-3" />
           <img :src="icon_public_113" />

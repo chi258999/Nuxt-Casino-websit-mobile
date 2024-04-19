@@ -50,6 +50,10 @@ const { dispatchVipSignInReward } = vipStore();
 const { dispatchVipSignIn } = vipStore();
 const { dispatchVipSigninawardReceive } = vipStore();
 const { dispatchUserBalance } = userStore();
+const { setDepositWithdrawToggle } = appBarStore();
+const { setUserNavBarToggle } = appBarStore();
+const { setDepositDialogToggle } = appBarStore();
+const { setCashDialogToggle } = appBarStore();
 
 const vipGrade = ref("VIP1");
 const isShowReceiveValidation = ref(false);
@@ -140,7 +144,7 @@ const vipLevelText = (value: number) => {
         let levelText = "Hierro negro";
         switch (vipLevels.value[i].rank_name) {
           case "Iron":
-            levelText = "Hierro negro";
+            levelText = " Hierro negro";
             break;
           case "Bronze":
             levelText = "Bronce";
@@ -255,6 +259,16 @@ const submitConfirm = async () => {
   }
 };
 
+//打开充值页面
+const handleOpenRecharge=()=>{
+   emit('closeLoginBonusDialog')
+   setDepositWithdrawToggle(true);
+  setNavBarToggle(false);
+  setUserNavBarToggle(false);
+  setDepositDialogToggle(true);
+  setCashDialogToggle(true);
+}
+
 onMounted(async () => {
   AdjustClass.getInstance().adjustTrackEvent({
     key: "PAGE_VIEW",
@@ -279,7 +293,7 @@ onMounted(async () => {
     :width="mobileWidth < 600 ? '340' : '471'"
     @click:outside="emit('closeLoginBonusDialog')"
     :class="mobileWidth < 600 ? 'm-login-bonus-dialog' : ''"
-    style="z-index: 2147483646"
+    style="z-index: 2147483646;top: 60px"
   >
     <div class="m-login-bonus-dialog-container" :class="confirmDialog ? 'blur-effect' : ''">
       <img src="@/assets/public/image/bg_public_03_01.png" class="m-header-bar-img-position" />
@@ -301,32 +315,13 @@ onMounted(async () => {
           :key="index"
           :virtualIndex="index"
         >-->
-        <img
-          class="absolute m-login-bonus-card-select"
-          src="@/assets/vip/svg/img_vip_select.svg"
-          v-if="
-          vipSignIn.is_signin === 1 &&
-          vipSignIn.signin_day === 0 &&
-          showGuide === '0'
-        "
-          @click="handleLoginBonus(0, vipSignIn.award[0])"
-        />
-        <img
-          class="absolute m-login-bonus-card-finger"
-          src="@/assets/vip/svg/img_vip_finger.svg"
-          v-if="
-          vipSignIn.is_signin === 1 &&
-          vipSignIn.signin_day === 0 &&
-          showGuide === '0'
-        "
-          @click="handleLoginBonus(0, vipSignIn.award[0])"
-        />
+
         <div class="mt-2 text-center">
-          <Font class="color-F9BC01 text-900-16">{{ vipLevelText(vipSignIn.vip_level)+" " }}</Font>
+          <Font class="color-F9BC01 text-900-16">{{ 'VIP-'+vipLevelText(vipSignIn.vip_level)+" " }}</Font>
           <Font class="text-900-16 white">{{ t("vip.login_bonus.title_text") }}</Font>
         </div>
         <v-row class="mt-2 mx-2">
-          <v-col cols="4" class="pa-0 d-flex justify-center">
+          <v-col cols="4" class="pa-0 d-flex relative justify-center">
             <div class="m-login-bonus-card-checkout-bg relative" v-if="vipSignIn.signin_day > 0">
               <p
                 class="text-900-14 gray m-login-bonus-text-position"
@@ -364,6 +359,26 @@ onMounted(async () => {
                 class="text-900-12 white m-login-bonus-card-money-position"
               >{{ platformCurrency }}{{ vipSignIn.award[0] }}</p>
             </div>
+            <img
+              class="absolute m-login-bonus-card-select"
+              src="@/assets/vip/svg/img_vip_select.svg"
+              v-if="
+               vipSignIn.is_signin === 1 &&
+               vipSignIn.signin_day === 0 &&
+               showGuide === '0'
+               "
+              @click="handleLoginBonus(0, vipSignIn.award[0])"
+            />
+            <img
+              class="absolute m-login-bonus-card-finger"
+              src="@/assets/vip/svg/img_vip_finger.svg"
+              v-if="
+               vipSignIn.is_signin === 1 &&
+               vipSignIn.signin_day === 0 &&
+               showGuide === '0'
+              "
+              @click="handleLoginBonus(0, vipSignIn.award[0])"
+            />
           </v-col>
           <v-col cols="4" class="pa-0 d-flex justify-center">
             <div class="m-login-bonus-card-checkout-bg relative" v-if="vipSignIn.signin_day > 1">
@@ -661,6 +676,7 @@ onMounted(async () => {
         Number(vipSignIn.limited_deposit) == 0
       "
         class="text-900-10 m-login-bonus-bottom-text"
+        @click="handleOpenRecharge"
       >{{ t("vip.login_bonus.footer_text_8") }}</font>
       <v-row class="m-login-bonus-footer mx-0 align-center">
         <v-col cols="2" class="pa-0 ma-0">
@@ -828,11 +844,11 @@ onMounted(async () => {
 }
 
 .m-login-bonus-bottom-text {
-  width: 220px;
+  width: 250px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 20px;
+  bottom: 10px;
   color: #7782aa;
 }
 
@@ -887,18 +903,20 @@ onMounted(async () => {
   width: 80px;
   height: 80px;
   position: absolute;
-  top: 47px;
-  left: 18px;
+  top: 50%;
+  left:50%;
   z-index: 9999;
+  transform: translate(-50%,-50%);
 }
 
 .m-login-bonus-card-finger {
   width: 58px;
   height: 58px;
   position: absolute;
-  top: 84px;
-  left: 54px;
+  top: 50%;
+  left:50%;
   z-index: 9999;
+  transform: translate(-50%,-50%);
   animation: moveRight 1s linear infinite;
   // animation-iteration-count: 1;
 }
@@ -909,7 +927,7 @@ onMounted(async () => {
   }
 
   100% {
-    transform: translateY(0);
+    transform: translateY(-10px);
   }
 }
 

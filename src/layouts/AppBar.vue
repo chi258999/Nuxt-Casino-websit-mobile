@@ -815,7 +815,7 @@ onMounted(async () => {
                         style="height: 40px"
                       >
                         <!-- <p class="mr-1 text-700-12">{{ user.currency }}</p> -->
-                        <p class="text-700-12">{{ user.wallet }}</p>
+                        <p class="text-700-14 white">{{ user.wallet }}</p>
                         <img
                           src="@/assets/public/svg/icon_public_50.svg"
                           class="mr-3"
@@ -867,7 +867,7 @@ onMounted(async () => {
                       class="deposit-icon-position cursor-pointer"
                       width="20"
                     />
-                    <div class="text-700-8 white m-deposit-text-position">
+                    <div class="text-700-10 white m-deposit-text-position">
                       {{ t("appBar.deposit") }}
                     </div>
                   </div>
@@ -1424,7 +1424,7 @@ onMounted(async () => {
 
 @media (max-width: 600px) {
   .app-bar-position {
-    top: 32px !important;
+    top: 48px !important;
   }
 
   .app-bar-height {

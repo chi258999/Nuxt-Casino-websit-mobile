@@ -1638,6 +1638,7 @@ export type langType = {
       footer_text_6: string
       footer_text_7: string
       footer_text_8: string,
+      footer_text_9: string,
       validation_text_1: string
     }
     roulette_bonus: {
@@ -1969,6 +1970,7 @@ export type langType = {
   game_confirm: {
     text_1: string
     text_2: string
+    text_3: string
   },
   deposit_confirm: {
     text_1: string

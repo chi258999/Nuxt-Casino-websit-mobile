@@ -1145,7 +1145,7 @@ export const lang: langType = {
     "check_text": "Not participating in promotional activities",
     "other_text": "0.00% fee,",
     "other_text_1": " bonus into your account",
-    "deposit_btn_text": "DEPOSIT",
+    "deposit_btn_text": "Recharge Now",
     "personal_information": {
       "header_text": "Enter your Pix details",
       "id_text": "ID Number(CPF)",
@@ -1636,7 +1636,8 @@ export const lang: langType = {
       "footer_text_5": "Upgrade to become a ",
       "footer_text_6": "VIP ",
       "footer_text_7": "and receive higher rewards!",
-      "footer_text_8": "Turn the page to see more VIP awards",
+      "footer_text_8": "Make your first recharge and you will receive a bonus for 7 consecutive days!",
+      "footer_text_9": "One chance only",
       "validation_text_1": "You have already claimed today's sign-up bonus, so please remember to log in tomorrow to claim a new day's bonus consecutively."
     },
     "roulette_bonus": {
@@ -1687,8 +1688,9 @@ export const lang: langType = {
         "text_14": "We here at Hoy777 truly cherish our VIPs and believe you deserve more! That's why you'll get one of the highest VIP rewards on the market. Weekly,Personal bonuses,and much more perks await you. Keep conquering the platform,become a VIP,and get your stunning rewards.",
         "text_15": "Levels and Ranks",
         "text_16": "As you play and rechange,you will gain experience,When you gain enough experience,you will move on to the next level. Get rewarded every time you fill the progress bar. Leveling up entitles you to bigger and better rewards!You need to maintain a certain amount of top-ups and bets within 7 days for the VIP level not to be lowered",
-        "text_17": " Instant access to more events and bonuses",
+        "text_17": "Instant access to more events and bonuses",
         "text_18": "VIP privileges only apply to active players, if a player is not an active player they will be downgraded and will not be able to receive their original VIP rewards. Weekly minimum deposit and wagering behavior based on current VIP level will effectively protect your VIP level.",
+        "text_19": "Did you take out your free bonus today?",
       },
       "bonus": {
         "text_1": "Cashback",
@@ -1965,7 +1967,8 @@ export const lang: langType = {
   },
   "game_confirm": {
     "text_1": "Fun Mode",
-    "text_2": "Real Mode"
+    "text_2": "Real Mode",
+    "text_3": 'You have been banned from playing the game! Please contact customer service.',
   },
   "deposit_confirm": {
     "text_1": "Order Amount",
