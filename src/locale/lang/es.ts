@@ -1869,7 +1869,8 @@ export const lang: langType = {
     "text_48": "Todo:",
     "text_49": "Apuestas válidas:",
     "text_50": "No hay agentes de bajo nivel por lo que no hay ganancias.",
-    "text_51": "E1 ya no contribuye a A más allá del nivel 3"
+    "text_51": "E1 ya no contribuye a A más allá del nivel 3",
+    "text_52": "Agente",
   },
   "promo": {
     "text_1": "Todas las actividades",

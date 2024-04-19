@@ -95,16 +95,9 @@ onMounted(async () => {
   >
     <div class="vip-main" ref="vipNavigation">
       <div class="vip-main-header">
-        <!-- <v-btn
-          class="m-vip-drawer-close-button"
-          icon="true"
-          width="20"
-          height="20"
-          @click="setVipNavBarToggle('0')"
-        > -->
-        <span>VIP</span>
+        <!--  -->
+        <span>{{ t('transaction.tab.vip') }}</span>
         <img :src="icon_public_10" @click="setVipNavBarToggle('0')" width="18" class="m-vip-drawer-close-button" />
-        <!-- </v-btn> -->
       </div>
       <v-tabs center-active dark v-model="vipTab">
         <v-tab v-for="item in vipItems" :key="item" :value="item">

@@ -88,7 +88,8 @@ onMounted(() => {
   >
 
     <div class="m-agent-title">
-      <span>Agent</span>
+      <!-- Agent -->
+      <span>{{ t("agent.text_52") }}</span>
       <img :src="icon_public_10" @click="closeAgentNavBarToggle" width="18" class="m-agent-drawer-close-button" />
     </div>
     <div class="m-agent-header" :class="scrollTop == 0 ? '' : 'm-agent-header-active-bg'">
