@@ -73,7 +73,9 @@ const frequency = ref(0) // 监听控制引导弹框打开
 const closeApp = () => {
   setAppConfirmDialogShow(false)
   if (frequency.value === 0) {
-    setShowAppGuidance(true)
+    setTimeout(() => {
+      setShowAppGuidance(true)
+    }, 3000);
     frequency.value++
   }
 }
