@@ -1,30 +1,21 @@
 <script lang="ts">
-import { defineComponent, nextTick } from "vue";
-import { toRefs } from "vue";
-import { reactive } from "vue";
-import { watch } from "vue";
-import { ref } from "vue";
-import { computed } from "vue";
-import { onMounted } from "vue";
-import { onActivated } from "vue";
-import { getCurrentInstance } from "vue";
-import { defineAsyncComponent } from "vue";
+import { defineComponent, nextTick, toRefs, reactive, watch, ref, computed, onMounted, onActivated, getCurrentInstance, defineAsyncComponent  } from "vue";
 import { RouteLocationNormalized, RouteLocationNormalizedLoaded, onBeforeRouteLeave } from 'vue-router'
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-// import GameProviders from "@/components/global/game_provider/index.vue";
+
 import { type GetUserInfo } from "@/interface/user";
-import icon_public_92 from "@/assets/public/svg/icon_public_92.svg";
-import icon_public_91 from "@/assets/public/svg/icon_public_91.svg";
+// import icon_public_92 from "@/assets/public/svg/icon_public_92.svg";
+// import icon_public_91 from "@/assets/public/svg/icon_public_91.svg";
 import icon_public_34 from "@/assets/public/svg/icon_public_34.svg";
-import icon_public_35 from "@/assets/public/svg/icon_public_35.svg";
+// import icon_public_35 from "@/assets/public/svg/icon_public_35.svg";
 import icon_public_36 from "@/assets/public/svg/icon_public_36.svg";
-import icon_public_37 from "@/assets/public/svg/icon_public_37.svg";
-import icon_public_95 from "@/assets/public/svg/icon_public_95.svg";
-import icon_public_38 from "@/assets/public/svg/icon_public_38.svg";
-import icon_public_39 from "@/assets/public/svg/icon_public_39.svg";
+// import icon_public_37 from "@/assets/public/svg/icon_public_37.svg";
+// import icon_public_95 from "@/assets/public/svg/icon_public_95.svg";
+// import icon_public_38 from "@/assets/public/svg/icon_public_38.svg";
+// import icon_public_39 from "@/assets/public/svg/icon_public_39.svg";
 import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
-import img_public_42 from "@/assets/public/image/img_public_42.png";
+// import img_public_42 from "@/assets/public/image/img_public_42.png";
 import { mailStore } from "@/store/mail";
 import { refferalStore } from "@/store/refferal";
 import { appBarStore } from "@/store/appBar";
@@ -1049,23 +1040,29 @@ const Dashboard = defineComponent({
       })
 
     });
+
+    // 打开分类全部
+    const viewAllByKind = (type) => {
+
+    }
+
     return {
       t,
       ...toRefs(state),
       mobileVersion,
       mobileWidth,
       mailMenuShow,
-      icon_public_92,
-      icon_public_91,
+      // icon_public_92,
+      // icon_public_91,
       icon_public_34,
-      icon_public_35,
+      // icon_public_35,
       icon_public_36,
-      icon_public_37,
-      icon_public_95,
-      icon_public_38,
-      icon_public_39,
+      // icon_public_37,
+      // icon_public_95,
+      // icon_public_38,
+      // icon_public_39,
       icon_public_10,
-      img_public_42,
+      // img_public_42,
       gameCategories,
       handleEnterGame,
       selectedGameFilterBtn,
@@ -1106,7 +1103,8 @@ const Dashboard = defineComponent({
       gameConfirmDialogShow,
       selectedGameItem,
       refreshGameFavoriteList,
-      // comUserActivityList
+      // comUserActivityList,
+      viewAllByKind
     };
   },
 });
@@ -1419,13 +1417,14 @@ export default Dashboard;
       <template v-if="selectedGameFilterBtn == 'all_game'">
         <template v-for="(item, index) in allGames" :key="index">
           <v-row
-            class="ml-4 original_game_text"
+            class="original_game_text"
             :class="mobileWidth > 600 ? ' mt-12' : ' mt-4'"
             v-if="item.games != undefined && item.games.length > 0"
             style="margin-bottom: 6px !important"
           >
             <!-- <p @click="handleGameFilterBtn(item.slug)">{{ item.name }}</p> -->
-            <p>{{ item.name }}</p>
+            <span>{{ item.name }}</span>
+            <span class='viewall' @click="viewAllByKind">View all</span>
           </v-row>
 
           <!-- PC 游戏列表 -->
@@ -2216,10 +2215,26 @@ export default Dashboard;
 
 // original game
 .original_game_text {
+  width: 100%;
   color: #ffffff;
   font-weight: 700;
   font-size: 22px;
   align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0;
+
+  .viewall {
+    font-family: Inter;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+    text-align: left;
+    color: #009B3A;
+  }
 }
 
 @media (max-width: 600px) {
