@@ -219,6 +219,12 @@ const Dashboard = defineComponent({
 
     const customTransition = ref<string>('custom-slide-transition');
 
+    // 游戏分类粘性定位相关
+    const gameCategorySticky = ref(false);
+    const gameCategoryOffsetTop = ref(0)
+    const gameCategoryStickyEle = ref<any>(null); 
+    const navOffsetHeight = 60 // 导航栏高度
+
     const bannerLoad = async () => {
       const bannerValue = await import('@/views/home/components/Banner.vue');
       bannerComponent.value = bannerValue.default;
@@ -247,7 +253,6 @@ const Dashboard = defineComponent({
 
     const favoriteGameList = computed(() => {
       const { getFavoriteGameList } = storeToRefs(gameStore());
-      console.log("11111111111111", getFavoriteGameList.value);
       return getFavoriteGameList.value
     })
 
@@ -304,6 +309,24 @@ const Dashboard = defineComponent({
     const homeMenuBtnClicked = computed(() => {
       const { getHomeMenuBtnClicked } = storeToRefs(menuStore());
       return getHomeMenuBtnClicked.value
+    })
+
+    const refferalAppBarShow = computed(() => {
+      const { getRefferalAppBarShow } = storeToRefs(refferalStore());
+      return getRefferalAppBarShow.value;
+    });
+
+    watch(() => refferalAppBarShow.value, (newValue) => {
+      console.log('refferalAppBarShow -- watch', newValue);
+      
+      if(!newValue) {
+        document.addEventListener('remove', stickyScrollEvent)
+        
+        // console.log(`${navOffsetHeight}px`);
+        gameCategoryStickyEle.value.style.top = `${navOffsetHeight}px`;
+
+        initSticky()
+      }
     })
 
     watch(homeMenuBtnClicked, (newValue) => {
@@ -436,11 +459,16 @@ const Dashboard = defineComponent({
     const gameFilterBtnFlag = ref<boolean>(false);
 
     const handleGameFilterBtn = async (gamFilterBtn: string) => {
-      // window.scrollTo({
-      //   top: 450,
-      //   behavior: "smooth",
-      // });
-      console.log(gamFilterBtn, 'handleGameFilterBtn');
+      console.log(gamFilterBtn, 'handleGameFilterBtn ==========');
+
+      if(gameCategorySticky.value) {
+        console.log(gameCategoryOffsetTop.value, 'gameCategoryOffsetTop.value');
+        window.scrollTo({
+          top: gameCategoryOffsetTop.value,
+          behavior: "smooth",
+        });
+      }
+
       
       if (gameFilterBtnFlag.value) {
         return;
@@ -769,6 +797,46 @@ const Dashboard = defineComponent({
       handleGameFilterBtn(selectedGameFilterBtn.value)
     }, { flush: 'pre', immediate: true, deep: true })
 
+    let stickyBoxElement = null
+    let stickyElement = null
+    let refferalBar = null
+    let stickyBoxOffset = null
+    let refferalBarHeight = null
+    let topOffset = null
+    // 初始化游戏分类事件监听
+    let initSticky = () => {
+      stickyBoxElement = document.getElementById('gameCategoryBox');
+      stickyElement = document.getElementById('gameCategory');
+      refferalBar = document.getElementById('refferalBar');
+      
+      gameCategoryStickyEle.value = stickyElement;
+      
+      stickyBoxOffset = stickyBoxElement?.offsetTop;
+      refferalBarHeight = refferalBar ? refferalBar.offsetHeight : 0
+      // 相对顶部的距离 = 顶部refferal+导航栏高度
+      topOffset = refferalBarHeight + navOffsetHeight;
+      gameCategoryOffsetTop.value = stickyBoxOffset - topOffset;
+
+      document.addEventListener('scroll', stickyScrollEvent)
+    }
+    let stickyScrollEvent = () => {
+      // console.log(stickyBoxOffset,topOffset, 'stickyScrollEvent!!!!!! =============');
+      if(stickyElement && stickyBoxOffset) {
+        if (window.pageYOffset > stickyBoxOffset - topOffset) {
+          // 当滚动位置超过 sticky 元素的顶部偏移量时，添加 fixed 样式
+          stickyElement.classList.add('home-game-category-stick');
+          stickyElement.style.top = `${topOffset}px`;
+          gameCategorySticky.value = true;
+        } else {
+          // 移除 fixed 样式
+          // stickyElement.style.position = 'relative';
+          stickyElement.classList.remove('home-game-category-stick');
+          stickyElement.style.top = 'auto';
+          gameCategorySticky.value = false;
+        }
+      }
+    }
+
     onMounted(async () => {
       loading.value = true;
 
@@ -959,35 +1027,7 @@ const Dashboard = defineComponent({
 
       // context.emit('inited')
 
-      // nextTick(() => {
-      //   const stickyElement = document.getElementById('gameCategory');
-      //   const scrollContainer = document.getElementById('mainContainer');
-      //   const hscrollContainer = document.getElementById('home-scrollContainer');
-      //   console.log(scrollContainer, stickyElement, hscrollContainer, 'nextTick!!!!!! =============');
-
-      //   let stickyOffset = stickyElement.offsetTop;
-      //   hscrollContainer.addEventListener('scroll', () => {
-      //     console.log(window.pageYOffset, stickyOffset, 'hscrollContainer ===== scroll =============');
-      //   })
-      //   // 监听滚动事件
-      //   scrollContainer.addEventListener('scroll', () => {
-      //     console.log(window.pageYOffset, stickyOffset, 'scroll =============');
-      //   });
-
-      //   document.addEventListener('scroll',() => {
-      //     console.log(window.pageYOffset, stickyOffset, 'documentscroll =============');
-      //     if (window.pageYOffset > stickyOffset - 100) {
-      //       // 当滚动位置超过 sticky 元素的顶部偏移量时，添加 fixed 样式
-      //       stickyElement.style.position = 'fixed';
-      //       stickyElement.style.zIndex = '999999';
-      //       stickyElement.style.top = '92px';
-      //     } else {
-      //       // 移除 fixed 样式
-      //       stickyElement.style.position = 'relative';
-      //       stickyElement.style.top = 'auto';
-      //     }
-      //   } )
-      // })
+      initSticky()
     });
 
     // 跳转条款， 缓存home页面，返回到跳转前的位置
@@ -1085,7 +1125,6 @@ export default Dashboard;
   </div>
   <!-- game show -->
   <div
-    id="home-scrollContainer"
     class="home-body"
     :class="
       mobileWidth > 1024
@@ -1165,8 +1204,8 @@ export default Dashboard;
 
       <!-- buttons for filter -->
       <v-row
-        id='gameCategory'
-        :class="[mobileVersion == 'sm' ? 'mx-2 mb-0' : 'mx-4 mb-0', 'sticky-element']"
+        id='gameCategoryBox'
+        :class="[mobileVersion == 'sm' ? 'mx-2 mb-0' : 'mx-4 mb-0', 'home-game-category-container']"
         style="margin-top: 0px;"
       > 
         <!-- PC 分类按钮 -->
@@ -1276,8 +1315,9 @@ export default Dashboard;
         <!-- H5 分类按钮 -->
         <template v-else>
           <div
+            id="gameCategory"
             style="overflow: auto; color: white"
-            class="filter-btn-container mt-4 mb-0 d-flex"
+            class="filter-btn-container mb-0 d-flex"
           >
             <v-btn
               class="mr-3 text-none"
@@ -1371,6 +1411,8 @@ export default Dashboard;
           </div>
         </template>
       </v-row>
+      <!-- <div class="home-game-category-relative" >
+      </div> -->
 
       <!-- game list -->
       <!-- 全部游戏 -->
@@ -1562,7 +1604,7 @@ export default Dashboard;
             </div>
           </v-row>
           <v-row
-            class="mx-1 mt-6"
+            class="mx-1 mt-0"
             :class="otherGameItem.games.length > 0 ? '' : 'justify-center'"
             v-else
           >
@@ -1906,6 +1948,38 @@ export default Dashboard;
     background-repeat: no-repeat;
     background-size: contain;
     animation: opacityAnimation 0.6s ease-in infinite;
+  }
+
+  // 分类盒子
+  .home-game-category-container {
+    height: 68px;
+    position: relative
+  }
+  // 游戏分类定位类名
+  .home-game-category-stick {
+    max-width: 100vw;
+    width: 100vw;
+    overflow-x: auto; 
+    position: fixed;
+    z-index: 9999;
+    left: 0px;
+    padding-left: 16px;
+  }
+
+  .filter-btn-container {
+    overscroll-behavior: auto !important;
+    touch-action: manipulation;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    padding-top: 16px;
+    padding-bottom: 16px;
+    background: #15161C;
+  }
+
+  .filter-btn-container::-webkit-scrollbar {
+    display: none;
   }
 
   // .v-progressive-image-placeholder {
@@ -2347,18 +2421,7 @@ export default Dashboard;
   box-shadow: none !important;
 }
 
-.filter-btn-container {
-  overscroll-behavior: auto !important;
-  touch-action: manipulation;
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
-}
 
-.filter-btn-container::-webkit-scrollbar {
-  display: none;
-}
 
 /* 文字叠加在图片上 */
 .text-overlay {
