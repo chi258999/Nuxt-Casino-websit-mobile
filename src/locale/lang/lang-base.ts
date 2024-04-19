@@ -1771,6 +1771,13 @@ export type langType = {
         cash: string,
         mosaic: string,
         withdraw: string
+      },
+      rule: {
+        text1: string,
+        text2: string,
+        text3: string,
+        text4: string,
+        text5: string,
       }
     }
   }

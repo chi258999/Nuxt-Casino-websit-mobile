@@ -1706,6 +1706,13 @@ export const lang: langType = {
         "cash": "Nível 200+ Prêmio em dinheiro Blue Diamond",
         "mosaic": "Desconto de código (5,0%)",
         "withdraw": "Desconto na taxa de saque (1,0%), limite de saque de 80.000 sem taxas"
+      },
+      "rule": {
+        "text1": 'Level protection',
+        "text2": 'Deposit',
+        "text3": 'Bettors',
+        "text4": 'week',
+        "text5": 'month',
       }
     }
   },

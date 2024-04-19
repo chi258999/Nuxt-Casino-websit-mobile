@@ -1751,6 +1751,13 @@ export const lang: langType = {
         "cash": "Premio en efectivo de diamante azul para nivel 200 y superior",
         "mosaic": "Proporción de reembolso (0.8%)",
         "withdraw": "Descuento en la tarifa de retiro (1.5%)"
+      },
+      "rule": {
+        "text1": 'Level protection',
+        "text2": 'Deposit',
+        "text3": 'Bettors',
+        "text4": 'week',
+        "text5": 'month',
       }
     }
   },

@@ -259,6 +259,7 @@ const closeVipIllustrate = () => {
 </script>
 <template>
   <div class="progress-main">
+    <!-- part1 -->
     <div class="progress-main-card">
       <div class="progress-main-card-t">
         <div class="progress-main-card-t-icon">
@@ -312,21 +313,45 @@ const closeVipIllustrate = () => {
           </div>
         </div>
       </div>
-      <div class="m-vip--illustrate">
-        <InfoPopUp
-          v-if="popupShow"
-          :show="popupShow"
-          @close="closeVipIllustrate"
-          :validationTitleText="t('vip.vip_level_info.progress.text_17')"
-          :validationText="t('vip.vip_level_info.progress.text_18')"
-        />
-        <img
-          class="m-vip--illustrate--icon"
-          src="@/assets/vip/svg/illustrate.svg"
-          @click="popupShow = !popupShow"
-        />
+      <div class="progress-main-card-division">
+        <img src="@/assets/public/image/bg_public_02_01.png" class="full-width" />
       </div>
+      <div class="progress-main-card-rule">
+        <div class="rule-top">
+          <!-- Level protection -->
+          <div class="title">{{ t('vip.vip_level_info.rule.text1') }}</div>
+        </div>
+        <div class="rule-bopttom">
+          <!-- Deposit -->
+          <div class="rule-item">
+            <p class="label">{{ t('vip.vip_level_info.rule.text2') }}：</p>
+            <p class="content"><span>{{ platformCurrency }} {{'XX'}}</span><span>/{{ t('vip.vip_level_info.rule.text4') }}</span></p>
+          </div>
+          <!-- Bettors -->
+          <div class="rule-item">
+            <p class="label">{{ t('vip.vip_level_info.rule.text3') }}：</p>
+            <p class="content"><span>{{ platformCurrency }} {{'XX'}}</span><span>/{{ t('vip.vip_level_info.rule.text5') }}</span></p>
+          </div>
+        </div>
+        <div class="m-vip--illustrate">
+          <InfoPopUp
+            v-if="popupShow"
+            :show="popupShow"
+            @close="closeVipIllustrate"
+            :validationTitleText="t('vip.vip_level_info.progress.text_17')"
+            :validationText="t('vip.vip_level_info.progress.text_18')"
+          />
+          <img
+            class="m-vip--illustrate--icon"
+            src="@/assets/vip/svg/illustrate.svg"
+            @click="popupShow = !popupShow"
+          />
+        </div>
+      </div>
+
     </div>
+
+    <!-- part2 -->
     <div class="progress-main-reward">
       <!-- <div class="progress-main-reward" v-if="vipButtonTipShow"> -->
       <img src="@/assets/public/svg/img_public_26.svg" style="width: 100%" />
@@ -535,6 +560,75 @@ const closeVipIllustrate = () => {
               opacity: 1;
             }
           }
+        }
+      }
+    }
+    .progress-main-card-division {
+      margin-bottom: 16px;
+    }
+    .progress-main-card-rule {
+      position: relative;
+      .title {
+        font-family: Inter;
+        font-size: 12px;
+        font-weight: 400;
+        text-align: left;
+        color: #7782AA;
+      }
+      .rule-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+      }
+      .rule-bopttom {
+        display: flex;
+        justify-content: space-between;
+        padding-right: 50px;
+        .rule-item {
+          .label {
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 15px;
+            text-align: left;
+            color: #7782AA;
+          }
+          .content {
+            height: 14px;
+            line-height: 14px;
+            
+            span:first-child {
+              font-size: 12px;
+              font-weight: 700;
+              line-height: 14px;
+              text-align: left;
+              color: #fff;
+            }
+            span:last-child {
+              font-size: 10px;
+              font-weight: 400;
+              line-height: 12px;
+              text-align: left;
+              color: #7782AA;
+            }
+          }
+        }
+      }
+
+      .m-vip--illustrate {
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        width: 100%;
+        height: 16px;
+        // margin-top: 15px;
+        text-align: right;
+        // position: relative;
+        padding-right: 7px;
+
+        img {
+          width: 16px;
+          height: 16px;
         }
       }
     }
@@ -794,19 +888,7 @@ const closeVipIllustrate = () => {
   }
 }
 
-.m-vip--illustrate {
-  width: 100%;
-  height: 16px;
-  margin-top: 15px;
-  text-align: right;
-  position: relative;
-  padding-right: 7px;
 
-  img {
-    width: 16px;
-    height: 16px;
-  }
-}
 
 .faq-collapse-head {
   height: 49px;

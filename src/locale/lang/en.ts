@@ -1769,6 +1769,13 @@ export const lang: langType = {
         "cash": "Level 200+ Blue Diamond Cash Prize",
         "mosaic": "Code rebate (0.8%)",
         "withdraw": "Withdrawal fee discount (1.5%)"
+      },
+      "rule": {
+        "text1": 'Level protection',
+        "text2": 'Deposit',
+        "text3": 'Bettors',
+        "text4": 'week',
+        "text5": 'month',
       }
     }
   },
