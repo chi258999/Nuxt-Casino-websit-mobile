@@ -95,15 +95,9 @@ onMounted(async () => {
   >
     <div class="vip-main" ref="vipNavigation">
       <div class="vip-main-header">
-        <v-btn
-          class="m-vip-drawer-close-button"
-          icon="true"
-          width="20"
-          height="20"
-          @click="setVipNavBarToggle('0')"
-        >
-          <img :src="icon_public_10" width="18" />
-        </v-btn>
+        <!--  -->
+        <span>{{ t('transaction.tab.vip') }}</span>
+        <img :src="icon_public_10" @click="setVipNavBarToggle('0')" width="18" class="m-vip-drawer-close-button" />
       </div>
       <v-tabs center-active dark v-model="vipTab">
         <v-tab v-for="item in vipItems" :key="item" :value="item">
@@ -128,15 +122,6 @@ onMounted(async () => {
   z-index: 10000 !important;
   overflow: hidden;
 
-  .m-vip-drawer-close-button {
-    box-shadow: none !important;
-    background-color: transparent !important;
-    position: absolute !important;
-    top: 16px;
-    right: 16px;
-    z-index: 99;
-  }
-
   .vip-main-content {
     padding-bottom: 32px;
   }
@@ -148,6 +133,25 @@ onMounted(async () => {
   height: 100%;
   &-header {
     height: 40px;
+    width: 100vw;
+    // position: fixed;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+
+    .m-vip-drawer-close-button {
+      box-shadow: none !important;
+      background-color: transparent !important;
+      position: absolute !important;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      z-index: 99;
+    }
   }
   &-content {
     height: calc(100% - 100px);

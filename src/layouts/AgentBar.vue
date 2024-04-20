@@ -86,18 +86,15 @@ onMounted(() => {
     :touchless="true"
     class="m-agent-drawer"
   >
-    <v-btn
-      class="m-agent-drawer-close-button"
-      icon="true"
-      width="20"
-      height="20"
-      @click="closeAgentNavBarToggle"
-    >
-      <img :src="icon_public_10" width="18" />
-    </v-btn>
+
+    <div class="m-agent-title">
+      <!-- Agent -->
+      <span>{{ t("agent.text_52") }}</span>
+      <img :src="icon_public_10" @click="closeAgentNavBarToggle" width="18" class="m-agent-drawer-close-button" />
+    </div>
     <div class="m-agent-header" :class="scrollTop == 0 ? '' : 'm-agent-header-active-bg'">
       <div
-        class="d-flex mx-5 justify-between pt-8"
+        class="d-flex mx-5 justify-between"
         :class="[currentLang === 'es' ? 'tab-box' : '']"
       >
         <div class="tab-box-item">
@@ -161,14 +158,35 @@ onMounted(() => {
   top: 0px !important;
   z-index: 100000000 !important;
 
-  .m-agent-header {
-    z-index: 1000;
-    position: fixed;
-    width: 100% !important;
-    top: 0px !important;
-    border-style: none !important;
-    height: 70px !important;
+  .m-agent-title {
+    position: relative;
+    height: 40px;
+    width: 100vw;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
 
+    .m-agent-drawer-close-button {
+      box-shadow: none !important;
+      background-color: transparent !important;
+      position: absolute !important;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      z-index: 100000;
+    }
+  }
+
+  .m-agent-header {
+    // z-index: 1000;
+    // position: fixed;
+    // top: 40px !important;
+    width: 100% !important;
+    border-style: none !important;
+    height: 48px !important;
 
     .tab-box {
       display: grid !important;
@@ -196,22 +214,15 @@ onMounted(() => {
     background: $agent_card_notmet_bg !important;
   }
 
-  .m-agent-drawer-close-button {
-    box-shadow: none !important;
-    background-color: transparent !important;
-    position: absolute !important;
-    top: 6px;
-    right: 6px;
-    z-index: 100000;
-  }
+
 
   .m-agent-body {
     // margin-top: 70px;
     // padding-top: 8px;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 90px);
     overflow: hidden;
-    position: absolute;
-    top: 70px;
+    // position: absolute;
+    top: 90px;
     width: 100%;
   }
 

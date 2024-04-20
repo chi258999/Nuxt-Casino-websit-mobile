@@ -1769,6 +1769,13 @@ export const lang: langType = {
         "cash": "Level 200+ Blue Diamond Cash Prize",
         "mosaic": "Code rebate (0.8%)",
         "withdraw": "Withdrawal fee discount (1.5%)"
+      },
+      "rule": {
+        "text1": 'Level protection',
+        "text2": 'Deposit',
+        "text3": 'Bettors',
+        "text4": 'week',
+        "text5": 'month',
       }
     }
   },
@@ -1921,7 +1928,7 @@ export const lang: langType = {
     "text_49": "Valid bets: ",
     "text_50": " has no lower level agents So th ere's no profit.",
     "text_51": "E1 has more than 3 levels and no longer contributes to A",
-    "text_52": "",
+    "text_52": "Agent",
     "text_53": "",
     "text_54": "",
     "text_55": "",

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, nextTick, toRefs, reactive, watch, ref, computed, onMounted, onActivated, getCurrentInstance, defineAsyncComponent  } from "vue";
+import { defineComponent, nextTick, toRefs, reactive, watch, ref, computed, onMounted, onActivated, getCurrentInstance, defineAsyncComponent, onBeforeUnmount  } from "vue";
 import { RouteLocationNormalized, RouteLocationNormalizedLoaded, onBeforeRouteLeave } from 'vue-router'
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
@@ -453,7 +453,6 @@ const Dashboard = defineComponent({
       console.log(gamFilterBtn, 'handleGameFilterBtn ==========');
 
       if(gameCategorySticky.value) {
-        console.log(gameCategoryOffsetTop.value, 'gameCategoryOffsetTop.value');
         window.scrollTo({
           top: gameCategoryOffsetTop.value,
           behavior: "smooth",
@@ -795,7 +794,7 @@ const Dashboard = defineComponent({
     let refferalBarHeight = null
     let topOffset = null
     // 初始化游戏分类事件监听
-    let initSticky = () => {
+    const initSticky = () => {
       stickyBoxElement = document.getElementById('gameCategoryBox');
       stickyElement = document.getElementById('gameCategory');
       refferalBar = document.getElementById('refferalBar');
@@ -810,13 +809,14 @@ const Dashboard = defineComponent({
 
       document.addEventListener('scroll', stickyScrollEvent)
     }
-    let stickyScrollEvent = () => {
+    const stickyScrollEvent = () => {
       // console.log(stickyBoxOffset,topOffset, 'stickyScrollEvent!!!!!! =============');
       if(stickyElement && stickyBoxOffset) {
         if (window.pageYOffset > stickyBoxOffset - topOffset) {
           // 当滚动位置超过 sticky 元素的顶部偏移量时，添加 fixed 样式
           stickyElement.classList.add('home-game-category-stick');
           stickyElement.style.top = `${topOffset}px`;
+          filterContainer.value.style.top = `${topOffset}px`
           gameCategorySticky.value = true;
         } else {
           // 移除 fixed 样式
@@ -825,6 +825,20 @@ const Dashboard = defineComponent({
           stickyElement.style.top = 'auto';
           gameCategorySticky.value = false;
         }
+      }
+    }
+
+    // 
+    const filterContainer = ref(null)
+    const filterContainerShowMoreArrow = ref(false)
+    const filterContainerScroll = (e) => {
+      if (
+        filterContainer.value.scrollLeft + filterContainer.value.clientWidth >=
+        filterContainer.value.scrollWidth
+      ) {
+        filterContainerShowMoreArrow.value = false
+      } else {
+        filterContainerShowMoreArrow.value = true;
       }
     }
 
@@ -1018,8 +1032,20 @@ const Dashboard = defineComponent({
 
       // context.emit('inited')
 
+      // 分类粘性定位初始化
       initSticky()
+
+      nextTick(() => {
+        if(filterContainer.value.scrollWidth > filterContainer.value.clientWidth) {
+          filterContainerShowMoreArrow.value = true;
+        }
+      })
+
     });
+
+    onBeforeUnmount(() => {
+      document.addEventListener('remove', stickyScrollEvent);
+    })
 
     // 跳转条款， 缓存home页面，返回到跳转前的位置
     const placeScroll = ref()
@@ -1045,6 +1071,8 @@ const Dashboard = defineComponent({
     const viewAllByKind = (slug:string) => {
       router.push({ name: "Provider", query: { slug: slug } });
     }
+
+
 
     return {
       t,
@@ -1104,7 +1132,11 @@ const Dashboard = defineComponent({
       selectedGameItem,
       refreshGameFavoriteList,
       // comUserActivityList,
-      viewAllByKind
+      viewAllByKind,
+      filterContainer,
+      filterContainerScroll,
+      filterContainerShowMoreArrow,
+      gameCategorySticky,
     };
   },
 });
@@ -1316,6 +1348,8 @@ export default Dashboard;
             id="gameCategory"
             style="overflow: auto; color: white"
             class="filter-btn-container mb-0 d-flex"
+            @scroll="filterContainerScroll"
+            ref="filterContainer"
           >
             <v-btn
               class="mr-3 text-none"
@@ -1405,6 +1439,10 @@ export default Dashboard;
                 ></inline-svg> -->
                 {{ item.name }}
               </v-btn>
+            </div>
+
+            <div class="arrow" :class="[gameCategorySticky ? 'arrow-fixed' : 'arrow-absolute']" v-if="filterContainerShowMoreArrow">
+              <img src="@/assets/public/svg/arrow-right.svg" alt="">
             </div>
           </div>
         </template>
@@ -1975,6 +2013,31 @@ export default Dashboard;
     padding-top: 16px;
     padding-bottom: 16px;
     background: #15161C;
+
+    .arrow {
+      background: linear-gradient(to right, transparent, #15161c);
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 40px;
+      padding-left: 3px;
+
+      img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+    .arrow-absolute {
+      position: absolute;
+      right: 0px;
+      top: 50% !important;
+      transform: translateY(-50%);
+    }
+    .arrow-fixed {
+      position: fixed;
+      right: 0px;
+    }
   }
 
   .filter-btn-container::-webkit-scrollbar {
