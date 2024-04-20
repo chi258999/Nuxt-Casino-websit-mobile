@@ -330,7 +330,7 @@ watch(token, (value) => {
       "home.bet_history.text_2",
       "home.bet_history.text_3",
       "home.bet_history.text_4",
-      "home.bet_history.text_5",
+      // "home.bet_history.text_5",
     ];
   } else {
     betHistoryTabList.value = [
@@ -347,7 +347,7 @@ onMounted(async () => {
       "home.bet_history.text_2",
       "home.bet_history.text_3",
       "home.bet_history.text_4",
-      "home.bet_history.text_5",
+      // "home.bet_history.text_5",
     ];
   }
   await dispatchGameBigWin();

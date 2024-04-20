@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted,watch, toRefs } from "vue";
+import { ref, computed, onMounted,watch, onUnmounted } from "vue";
 import { defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
 
@@ -85,33 +85,24 @@ const bonusDashboardDialogShow = computed(() => {
   return getBonusDashboardDialogVisible.value;
 });
 
-const judgeScreen = () => {
-  if (window.orientation == 90 || window.orientation == -90) {
-    isScroll.value = true
-  }
-  window.addEventListener(
-    "onorientationchange" in window ? "orientationchange" : "resize",
-    function () {
-      if (window.orientation === 180 || window.orientation === 0) {
-        setTimeout(() => {
-          isScroll.value = false
-        }, 200);
-      }
-      if (window.orientation === 90 || window.orientation === -90) {
-        isScroll.value = true
-      }
-    },
-    false
-  );
+const updateOrientation = () => {
+  const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+  isScroll.value = isLandscape;
 };
+
+onMounted(() => {
+  updateOrientation(); // 初始化时检查一次屏幕方向
+  window.addEventListener("resize", updateOrientation); // 监听屏幕方向变化
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", updateOrientation); // 组件销毁时移除事件监听器
+});
 
 const handleScroll = () => {
   console.log("scroll");
 };
 
-onMounted(() => {
-  judgeScreen();
-});
 </script>
 
 <template>
