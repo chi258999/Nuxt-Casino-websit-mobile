@@ -1111,7 +1111,8 @@ export const lang: langType = {
       "footer_6": {
         "text": "2023 HOY777.COM Todos los derechos reservados."
       }
-    }
+    },
+    "viewall": "Ver todo",
   },
   "mobile_menu": {
     "home": "Página de inicio",
@@ -1750,6 +1751,13 @@ export const lang: langType = {
         "cash": "Premio en efectivo de diamante azul para nivel 200 y superior",
         "mosaic": "Proporción de reembolso (0.8%)",
         "withdraw": "Descuento en la tarifa de retiro (1.5%)"
+      },
+      "rule": {
+        "text1": 'Level protection',
+        "text2": 'Deposit',
+        "text3": 'Bettors',
+        "text4": 'week',
+        "text5": 'month',
       }
     }
   },
@@ -1861,7 +1869,8 @@ export const lang: langType = {
     "text_48": "Todo:",
     "text_49": "Apuestas válidas:",
     "text_50": "No hay agentes de bajo nivel por lo que no hay ganancias.",
-    "text_51": "E1 ya no contribuye a A más allá del nivel 3"
+    "text_51": "E1 ya no contribuye a A más allá del nivel 3",
+    "text_52": "Agente",
   },
   "promo": {
     "text_1": "Todas las actividades",
@@ -1961,13 +1970,13 @@ export const lang: langType = {
   },
   "activity_app": {
     "text_1": "Recibir recompensas por descargar aplicaciones",
-    "text_2": "DISPONIBLE PARA",
-    "text_3": "Recompensa de inicio de sesión de la aplicación",
-    "text_4": "¡Recompensa gratuita!",
-    "text_5": "Tiempo de reclamación",
-    "text_6": "Iniciar sesión en la aplicación",
+    "text_2": "utilizable para recompensas de inicio de sesión en la aplicación",
+    "text_4": "Recompensa gratuita",
+    "text_5": "Reclamado",
+    "text_6": "al iniciar sesión en la aplicación",
     "text_7": "Descargar la aplicación para obtener",
-    "text_8": "Descargar la aplicación"
+    "text_8": "Download APP",
+    "text_9": "Descargando e iniciando sesión con la aplicación obtendrás",
   },
   "static_activity": {
     "text_1": "ANUNCIO",
@@ -1979,6 +1988,6 @@ export const lang: langType = {
     "text_7": "VIP Plata: ¡Total de bonificaciones recibidas {0} 27!",
     "text_8": "VIP Oro: ¡Total de bonificaciones recibidas {0} 44!",
     "text_9": "¡Cuanto más alto sea el nivel VIP, mayores serán las bonificaciones!",
-    "text_10": "Retiros rápidos las 24 horas, los 7 días de la semana a SPEI."
+    "text_10": "Retiros rápidos las 24 horas, los 7 días de la semana a SPEI.",
   }
 };

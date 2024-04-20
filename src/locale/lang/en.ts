@@ -1111,7 +1111,8 @@ export const lang: langType = {
       "footer_6": {
         "text": "© 2023 HOY777.com All rights reserved."
       }
-    }
+    },
+    "viewall": "View all",
   },
   "mobile_menu": {
     "home": "Home",
@@ -1768,6 +1769,13 @@ export const lang: langType = {
         "cash": "Level 200+ Blue Diamond Cash Prize",
         "mosaic": "Code rebate (0.8%)",
         "withdraw": "Withdrawal fee discount (1.5%)"
+      },
+      "rule": {
+        "text1": 'Level protection',
+        "text2": 'Deposit',
+        "text3": 'Bettors',
+        "text4": 'week',
+        "text5": 'month',
       }
     }
   },
@@ -1920,7 +1928,7 @@ export const lang: langType = {
     "text_49": "Valid bets: ",
     "text_50": " has no lower level agents So th ere's no profit.",
     "text_51": "E1 has more than 3 levels and no longer contributes to A",
-    "text_52": "",
+    "text_52": "Agent",
     "text_53": "",
     "text_54": "",
     "text_55": "",
@@ -2030,13 +2038,13 @@ export const lang: langType = {
   },
   "activity_app": {
     "text_1": "Get Download App Bonus",
-    "text_2": "USABLE FOR ",
-    "text_3": "App Login Rewards",
+    "text_2": "usable for App Login Rewards",
     "text_4": "Free Reward!",
     "text_5": "Claimed when",
     "text_6": "logging into the app",
     "text_7": "Download APP to get",
     "text_8": "Download APP",
+    "text_9": "Downloading and logging in with the app will get you",
   },
   "static_activity": {
     "text_1": "ANNOUNCE",

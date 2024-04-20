@@ -6,7 +6,7 @@ import { refferalStore } from "@/store/refferal";
 import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { activityAppStore } from '@/store/activityApp';
-const { setAppConfirmDialogShow, downloadAppAcquisition, runningSystem } = activityAppStore();
+const { setAppConfirmDialogShow, downloadAppAcquisition, runningSystem, automaticPopUpApp } = activityAppStore();
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -47,6 +47,11 @@ const openRefferalDialogShow = () => {
 // 获取下载app活动信息
 downloadAppAcquisition()
 
+const downloadAppEvent = () => {
+  setAppConfirmDialogShow(true)
+  automaticPopUpApp(true)
+}
+
 // 获取模式
 const mobile = computed(() => {
   const { getMobile } = storeToRefs(activityAppStore());
@@ -62,6 +67,7 @@ onMounted(() => {
 
 <template>
   <v-app-bar
+    id="refferalBar"
     app
     class="refferal-app-bar-background justify-center"
     :class="headerBlurEffectShow ? 'header-bg-blur' : ''"
@@ -82,8 +88,9 @@ onMounted(() => {
       <v-btn
         rounded
         :height="mobileWidth < 600 ? '24px' : '28px'"
-        class="text-none ml-3 earn-btn-bg"
-        @click="setAppConfirmDialogShow(true)"
+        class="text-none ml-3 earn-btn-bg "
+        style=""
+        @click="downloadAppEvent"
       >
         EARM
       </v-btn>
@@ -125,7 +132,7 @@ onMounted(() => {
 
   @media (max-width: 600px) {
     .v-toolbar__content {
-      height: 32px !important;
+      height: 48px !important;
     }
     .wrap {
       min-width: 180px;
@@ -161,7 +168,9 @@ onMounted(() => {
 
     @media (max-width: 600px) {
       .v-btn__content {
-        font-size: 12px;
+        // font-size: 12px;
+        font-size: 13px;
+        font-weight: 800;
       }
     }
   }

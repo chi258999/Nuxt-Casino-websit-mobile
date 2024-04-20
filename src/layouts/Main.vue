@@ -52,6 +52,15 @@ import { useDialog } from "@/hooks/dialog";
 const { setLiveChatMaximize, LiveChatWidget } = liveChatStore();
 const { authDialog } = useDialog();
 
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
+
+import { toFormatNum } from '@/utils/numFormat';
+
 const GetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonus/index.vue"));
 const MGetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonus/mobile/index.vue"));
 const MenuSemiCircle = defineAsyncComponent(() => import("@/components/global/menu_semi_circle/index.vue"));
@@ -148,7 +157,7 @@ const nickNameDialog = ref<boolean>(false);
 const levelUpDialog = ref<boolean>(false);
 const searchDialog = ref<boolean>(false);
 const depositConfirmDialog = ref<boolean>(false);
-const groupVisible=ref<boolean>(false);
+const groupVisible = ref<boolean>(false);
 // const bonusDashboardDialog = ref<boolean>(false);
 const overlayScrimBackground = ref<string>('rgb(var(--v-theme-on-surface))')
 
@@ -561,9 +570,27 @@ const openLiveChat=()=>{
   }
 }
 
-const { setAppConfirmDialogShow } = activityAppStore();
+const { setAppConfirmDialogShow, automaticPopUpApp, setAppGuidance, setShowAppGuidance } = activityAppStore();
 // 打开下载app弹框
 const openActivityApp = () => {
+  setAppConfirmDialogShow(true)
+  automaticPopUpApp(true)
+}
+
+const activityAppBonus = computed(() => {
+  const { getActivityBonus } = storeToRefs(activityAppStore());
+  return getActivityBonus.value;
+});
+
+const showAppGuidance = computed(() => {
+  const { getShowAppGuidance } = storeToRefs(activityAppStore());
+  return getShowAppGuidance.value;
+});
+
+// 点击引导框执行函数
+const appGuidanceEvent = () => {
+  setAppGuidance(true)
+  setShowAppGuidance(false)
   setAppConfirmDialogShow(true)
 }
 
@@ -592,6 +619,9 @@ const token = computed(() => {
 onMounted(() => {
   // 在组件挂载时启动摇摆按钮定时器
   setInterval(swingButton, 10000); // 每10秒执行一次
+
+  // 判断下载app是否需要自动弹出
+  automaticPopUpApp(false)
 
   // console.log(route.query.code);
   // 带有邀请注册码的，直接打开注册弹窗
@@ -630,6 +660,7 @@ const routeInited = () => {
 
 <template>
   <v-main
+    id="mainContainer"
     class="main-background"
     :class="mainBlurEffectShow ? 'main-bg-blur' : ''"
     :style="{
@@ -980,9 +1011,20 @@ const routeInited = () => {
       </div>
 
       <!-- 点击打开下载app页面 -->
-      <div class="m-activity-app-btn" :class="{ 'm-activity-app-swinging-button': isSwinging }" @click="openActivityApp" v-if="mobile">
-        <img src="@/assets/activity_app/app-floating-button.svg" class="m-back-icon-position" />
-      </div>
+        <div class="m-activity-app-btn" v-if="mobile">
+          <transition
+            enter-active-class="animated-lr hinge-lr fadeInRight"
+            leave-active-class="animated-lr hinge-lr fadeOutRight"
+          >
+            <div v-show="showAppGuidance" class="app-content" @click="appGuidanceEvent">
+              {{ t('activity_app.text_9') }} <span>{{ platformCurrency }}{{ toFormatNum(activityAppBonus) }}</span>
+            </div>
+          </transition>
+
+          <div style="position: absolute;" :class="{ 'm-activity-app-swinging-button': isSwinging, 'm-activity-app-prompt': true }" @click="openActivityApp" >
+            <img src="@/assets/activity_app/app-floating-button.svg" class="m-back-icon-position" />
+          </div>
+        </div>
     </div>
 
 
@@ -1077,13 +1119,56 @@ const routeInited = () => {
   border-radius: 44px;
   filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
   z-index: 1000;
-  .m-back-icon-position {
+  &>.m-back-icon-position {
     width: 100%;
     height: 100%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+}
+
+.m-activity-app-prompt::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: rgba(222, 61, 18, 1);
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.app-content {
+  position: absolute;
+  top: 0;
+  left: -272px;
+  box-sizing: border-box;
+  padding: 5px 62px;
+  border-top-left-radius: 50px; /* 左上角圆角 */
+  border-bottom-left-radius: 50px; /* 左下角圆角 */
+  border-top-right-radius: 50px; /* 右上角圆角 */
+  border-bottom-right-radius: 50px; /* 右下角圆角 */
+  background-image: linear-gradient(to right, rgba(249, 188, 1, 1), rgba(228, 172, 0, 1)); /* 左到右的渐变，从红色到蓝色 */
+  width: 316px;
+  height: 44px;
+  font-size: 10px;
+  color: rgba(0, 0, 0, 1);
+  font-weight: 400;
+
+  span {
+    color: #fff;
+  }
+
+  &::after {
+    content: '';
+    width: 67.75px;
+    height: 44px;
+    background: url(@/assets/activity_app/img_ci_13.svg);
+    position: absolute;
+    top: -5px;
+    left: -18px;
   }
 }
 

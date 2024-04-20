@@ -1,30 +1,21 @@
 <script lang="ts">
-import { defineComponent, nextTick } from "vue";
-import { toRefs } from "vue";
-import { reactive } from "vue";
-import { watch } from "vue";
-import { ref } from "vue";
-import { computed } from "vue";
-import { onMounted } from "vue";
-import { onActivated } from "vue";
-import { getCurrentInstance } from "vue";
-import { defineAsyncComponent } from "vue";
+import { defineComponent, nextTick, toRefs, reactive, watch, ref, computed, onMounted, onActivated, getCurrentInstance, defineAsyncComponent, onBeforeUnmount  } from "vue";
 import { RouteLocationNormalized, RouteLocationNormalizedLoaded, onBeforeRouteLeave } from 'vue-router'
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
-// import GameProviders from "@/components/global/game_provider/index.vue";
+
 import { type GetUserInfo } from "@/interface/user";
-import icon_public_92 from "@/assets/public/svg/icon_public_92.svg";
-import icon_public_91 from "@/assets/public/svg/icon_public_91.svg";
+// import icon_public_92 from "@/assets/public/svg/icon_public_92.svg";
+// import icon_public_91 from "@/assets/public/svg/icon_public_91.svg";
 import icon_public_34 from "@/assets/public/svg/icon_public_34.svg";
-import icon_public_35 from "@/assets/public/svg/icon_public_35.svg";
+// import icon_public_35 from "@/assets/public/svg/icon_public_35.svg";
 import icon_public_36 from "@/assets/public/svg/icon_public_36.svg";
-import icon_public_37 from "@/assets/public/svg/icon_public_37.svg";
-import icon_public_95 from "@/assets/public/svg/icon_public_95.svg";
-import icon_public_38 from "@/assets/public/svg/icon_public_38.svg";
-import icon_public_39 from "@/assets/public/svg/icon_public_39.svg";
+// import icon_public_37 from "@/assets/public/svg/icon_public_37.svg";
+// import icon_public_95 from "@/assets/public/svg/icon_public_95.svg";
+// import icon_public_38 from "@/assets/public/svg/icon_public_38.svg";
+// import icon_public_39 from "@/assets/public/svg/icon_public_39.svg";
 import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
-import img_public_42 from "@/assets/public/image/img_public_42.png";
+// import img_public_42 from "@/assets/public/image/img_public_42.png";
 import { mailStore } from "@/store/mail";
 import { refferalStore } from "@/store/refferal";
 import { appBarStore } from "@/store/appBar";
@@ -219,6 +210,12 @@ const Dashboard = defineComponent({
 
     const customTransition = ref<string>('custom-slide-transition');
 
+    // 游戏分类粘性定位相关
+    const gameCategorySticky = ref(false);
+    const gameCategoryOffsetTop = ref(0)
+    const gameCategoryStickyEle = ref<any>(null); 
+    const navOffsetHeight = 60 // 导航栏高度
+
     const bannerLoad = async () => {
       const bannerValue = await import('@/views/home/components/Banner.vue');
       bannerComponent.value = bannerValue.default;
@@ -247,7 +244,6 @@ const Dashboard = defineComponent({
 
     const favoriteGameList = computed(() => {
       const { getFavoriteGameList } = storeToRefs(gameStore());
-      console.log("11111111111111", getFavoriteGameList.value);
       return getFavoriteGameList.value
     })
 
@@ -304,6 +300,24 @@ const Dashboard = defineComponent({
     const homeMenuBtnClicked = computed(() => {
       const { getHomeMenuBtnClicked } = storeToRefs(menuStore());
       return getHomeMenuBtnClicked.value
+    })
+
+    const refferalAppBarShow = computed(() => {
+      const { getRefferalAppBarShow } = storeToRefs(refferalStore());
+      return getRefferalAppBarShow.value;
+    });
+
+    watch(() => refferalAppBarShow.value, (newValue) => {
+      console.log('refferalAppBarShow -- watch', newValue);
+      
+      if(!newValue) {
+        document.addEventListener('remove', stickyScrollEvent)
+        
+        // console.log(`${navOffsetHeight}px`);
+        gameCategoryStickyEle.value.style.top = `${navOffsetHeight}px`;
+
+        initSticky()
+      }
     })
 
     watch(homeMenuBtnClicked, (newValue) => {
@@ -436,11 +450,15 @@ const Dashboard = defineComponent({
     const gameFilterBtnFlag = ref<boolean>(false);
 
     const handleGameFilterBtn = async (gamFilterBtn: string) => {
-      // window.scrollTo({
-      //   top: 450,
-      //   behavior: "smooth",
-      // });
-      console.log(gamFilterBtn, 'handleGameFilterBtn');
+      console.log(gamFilterBtn, 'handleGameFilterBtn ==========');
+
+      if(gameCategorySticky.value) {
+        window.scrollTo({
+          top: gameCategoryOffsetTop.value,
+          behavior: "smooth",
+        });
+      }
+
       
       if (gameFilterBtnFlag.value) {
         return;
@@ -769,9 +787,64 @@ const Dashboard = defineComponent({
       handleGameFilterBtn(selectedGameFilterBtn.value)
     }, { flush: 'pre', immediate: true, deep: true })
 
+    let stickyBoxElement = null
+    let stickyElement = null
+    let refferalBar = null
+    let stickyBoxOffset = null
+    let refferalBarHeight = null
+    let topOffset = null
+    // 初始化游戏分类事件监听
+    const initSticky = () => {
+      stickyBoxElement = document.getElementById('gameCategoryBox');
+      stickyElement = document.getElementById('gameCategory');
+      refferalBar = document.getElementById('refferalBar');
+      
+      gameCategoryStickyEle.value = stickyElement;
+      
+      stickyBoxOffset = stickyBoxElement?.offsetTop;
+      refferalBarHeight = refferalBar ? refferalBar.offsetHeight : 0
+      // 相对顶部的距离 = 顶部refferal+导航栏高度
+      topOffset = refferalBarHeight + navOffsetHeight;
+      gameCategoryOffsetTop.value = stickyBoxOffset - topOffset;
+
+      document.addEventListener('scroll', stickyScrollEvent)
+    }
+    const stickyScrollEvent = () => {
+      // console.log(stickyBoxOffset,topOffset, 'stickyScrollEvent!!!!!! =============');
+      if(stickyElement && stickyBoxOffset) {
+        if (window.pageYOffset > stickyBoxOffset - topOffset) {
+          // 当滚动位置超过 sticky 元素的顶部偏移量时，添加 fixed 样式
+          stickyElement.classList.add('home-game-category-stick');
+          stickyElement.style.top = `${topOffset}px`;
+          filterContainer.value.style.top = `${topOffset}px`
+          gameCategorySticky.value = true;
+        } else {
+          // 移除 fixed 样式
+          // stickyElement.style.position = 'relative';
+          stickyElement.classList.remove('home-game-category-stick');
+          stickyElement.style.top = 'auto';
+          gameCategorySticky.value = false;
+        }
+      }
+    }
+
+    // 
+    const filterContainer = ref(null)
+    const filterContainerShowMoreArrow = ref(false)
+    const filterContainerScroll = (e) => {
+      if (
+        filterContainer.value.scrollLeft + filterContainer.value.clientWidth >=
+        filterContainer.value.scrollWidth
+      ) {
+        filterContainerShowMoreArrow.value = false
+      } else {
+        filterContainerShowMoreArrow.value = true;
+      }
+    }
+
     onMounted(async () => {
       loading.value = true;
-      
+
       window.scrollTo({
         top: 0,
         behavior: "smooth",
@@ -958,7 +1031,21 @@ const Dashboard = defineComponent({
       AdjustClass.getInstance(isMobile).adjustTrackEvent({ key: "PAGE_VIEW", value: "home", params: "" });
 
       // context.emit('inited')
+
+      // 分类粘性定位初始化
+      initSticky()
+
+      nextTick(() => {
+        if(filterContainer.value.scrollWidth > filterContainer.value.clientWidth) {
+          filterContainerShowMoreArrow.value = true;
+        }
+      })
+
     });
+
+    onBeforeUnmount(() => {
+      document.addEventListener('remove', stickyScrollEvent);
+    })
 
     // 跳转条款， 缓存home页面，返回到跳转前的位置
     const placeScroll = ref()
@@ -979,23 +1066,31 @@ const Dashboard = defineComponent({
       })
 
     });
+
+    // 打开分类全部
+    const viewAllByKind = (slug:string) => {
+      router.push({ name: "Provider", query: { slug: slug } });
+    }
+
+
+
     return {
       t,
       ...toRefs(state),
       mobileVersion,
       mobileWidth,
       mailMenuShow,
-      icon_public_92,
-      icon_public_91,
+      // icon_public_92,
+      // icon_public_91,
       icon_public_34,
-      icon_public_35,
+      // icon_public_35,
       icon_public_36,
-      icon_public_37,
-      icon_public_95,
-      icon_public_38,
-      icon_public_39,
+      // icon_public_37,
+      // icon_public_95,
+      // icon_public_38,
+      // icon_public_39,
       icon_public_10,
-      img_public_42,
+      // img_public_42,
       gameCategories,
       handleEnterGame,
       selectedGameFilterBtn,
@@ -1036,7 +1131,12 @@ const Dashboard = defineComponent({
       gameConfirmDialogShow,
       selectedGameItem,
       refreshGameFavoriteList,
-      // comUserActivityList
+      // comUserActivityList,
+      viewAllByKind,
+      filterContainer,
+      filterContainerScroll,
+      filterContainerShowMoreArrow,
+      gameCategorySticky,
     };
   },
 });
@@ -1134,8 +1234,9 @@ export default Dashboard;
 
       <!-- buttons for filter -->
       <v-row
-        :class="[mobileVersion == 'sm' ? 'mx-2 mb-0' : 'mx-4 mb-0']"
-        style="margin-top: 0px"
+        id='gameCategoryBox'
+        :class="[mobileVersion == 'sm' ? 'mx-2 mb-0' : 'mx-4 mb-0', 'home-game-category-container']"
+        style="margin-top: 0px;"
       > 
         <!-- PC 分类按钮 -->
         <template v-if="mobileVersion != 'sm'">
@@ -1244,8 +1345,11 @@ export default Dashboard;
         <!-- H5 分类按钮 -->
         <template v-else>
           <div
+            id="gameCategory"
             style="overflow: auto; color: white"
-            class="filter-btn-container mt-4 mb-0 d-flex"
+            class="filter-btn-container mb-0 d-flex"
+            @scroll="filterContainerScroll"
+            ref="filterContainer"
           >
             <v-btn
               class="mr-3 text-none"
@@ -1336,22 +1440,29 @@ export default Dashboard;
                 {{ item.name }}
               </v-btn>
             </div>
+
+            <div class="arrow" :class="[gameCategorySticky ? 'arrow-fixed' : 'arrow-absolute']" v-if="filterContainerShowMoreArrow">
+              <img src="@/assets/public/svg/arrow-right.svg" alt="">
+            </div>
           </div>
         </template>
       </v-row>
+      <!-- <div class="home-game-category-relative" >
+      </div> -->
 
       <!-- game list -->
       <!-- 全部游戏 -->
       <template v-if="selectedGameFilterBtn == 'all_game'">
         <template v-for="(item, index) in allGames" :key="index">
           <v-row
-            class="ml-4 original_game_text"
+            class="original_game_text"
             :class="mobileWidth > 600 ? ' mt-12' : ' mt-4'"
             v-if="item.games != undefined && item.games.length > 0"
             style="margin-bottom: 6px !important"
           >
             <!-- <p @click="handleGameFilterBtn(item.slug)">{{ item.name }}</p> -->
-            <p>{{ item.name }}</p>
+            <span>{{ item.name }}</span>
+            <span class='viewall' @click="viewAllByKind(item.slug)">{{ t('home.viewall')}}</span>
           </v-row>
 
           <!-- PC 游戏列表 -->
@@ -1530,7 +1641,7 @@ export default Dashboard;
             </div>
           </v-row>
           <v-row
-            class="mx-1 mt-6"
+            class="mx-1 mt-0"
             :class="otherGameItem.games.length > 0 ? '' : 'justify-center'"
             v-else
           >
@@ -1876,6 +1987,63 @@ export default Dashboard;
     animation: opacityAnimation 0.6s ease-in infinite;
   }
 
+  // 分类盒子
+  .home-game-category-container {
+    height: 68px;
+    position: relative
+  }
+  // 游戏分类定位类名
+  .home-game-category-stick {
+    max-width: 100vw;
+    width: 100vw;
+    overflow-x: auto; 
+    position: fixed;
+    z-index: 9999;
+    left: 0px;
+    padding-left: 16px;
+  }
+
+  .filter-btn-container {
+    overscroll-behavior: auto !important;
+    touch-action: manipulation;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    padding-top: 16px;
+    padding-bottom: 16px;
+    background: #15161C;
+
+    .arrow {
+      background: linear-gradient(to right, transparent, #15161c);
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 40px;
+      padding-left: 3px;
+
+      img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+    .arrow-absolute {
+      position: absolute;
+      right: 0px;
+      top: 50% !important;
+      transform: translateY(-50%);
+    }
+    .arrow-fixed {
+      position: fixed;
+      right: 0px;
+    }
+  }
+
+  .filter-btn-container::-webkit-scrollbar {
+    display: none;
+  }
+
   // .v-progressive-image-placeholder {
   //   position: absolute;
   //   top: 50%;
@@ -2110,10 +2278,26 @@ export default Dashboard;
 
 // original game
 .original_game_text {
+  width: 100%;
   color: #ffffff;
   font-weight: 700;
   font-size: 22px;
   align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0;
+
+  .viewall {
+    font-family: Inter;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 15px;
+    text-align: left;
+    color: #009B3A;
+  }
 }
 
 @media (max-width: 600px) {
@@ -2315,18 +2499,7 @@ export default Dashboard;
   box-shadow: none !important;
 }
 
-.filter-btn-container {
-  overscroll-behavior: auto !important;
-  touch-action: manipulation;
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
-}
 
-.filter-btn-container::-webkit-scrollbar {
-  display: none;
-}
 
 /* 文字叠加在图片上 */
 .text-overlay {
