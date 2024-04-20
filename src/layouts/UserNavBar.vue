@@ -464,9 +464,9 @@ onMounted(async () => {
     :touchless="true"
     :on-scroll="handleScroll"
   >
-    <template v-slot:prepend>
+    <!-- <template v-slot:prepend>
       <div :class="refferalAppBarShow ? 'user-navbar-position' : ''"></div>
-    </template>
+    </template> -->
     <div ref="navScroll" class="v-navigation-drawer__content" @scroll="handleScroll">
       <div class="scroll-wrapper" ref='bscrollRef'>
         <div class="content">

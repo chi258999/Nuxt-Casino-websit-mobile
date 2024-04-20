@@ -49,6 +49,7 @@ const toFormatNumFun = val => {
 // member information  会员信息
 const vipInfo = computed(() => {
   const { getVipInfo } = storeToRefs(vipStore());
+  console.log(getVipInfo.value, 'getVipInfo.value');
   return getVipInfo.value;
 });
 
@@ -256,6 +257,11 @@ const closeVipIllustrate = () => {
   popupShow.value = !popupShow.value;
   console.log(popupShow.value);
 };
+// protection_days
+const protectionDaysName = computed(() => {
+  return vipInfo.value.protection_days === 7 ? t('vip.vip_level_info.rule.text4') : t('vip.vip_level_info.rule.text5')
+})
+
 </script>
 <template>
   <div class="progress-main">
@@ -325,12 +331,12 @@ const closeVipIllustrate = () => {
           <!-- Deposit -->
           <div class="rule-item">
             <p class="label">{{ t('vip.vip_level_info.rule.text2') }}：</p>
-            <p class="content"><span>{{ platformCurrency }} {{'XX'}}</span><span>/{{ t('vip.vip_level_info.rule.text4') }}</span></p>
+            <p class="content"><span>{{ platformCurrency }} {{ toFormatNum(vipInfo.protection_deposit_exp) }}</span><span>/{{ protectionDaysName }}</span></p>
           </div>
           <!-- Bettors -->
           <div class="rule-item">
             <p class="label">{{ t('vip.vip_level_info.rule.text3') }}：</p>
-            <p class="content"><span>{{ platformCurrency }} {{'XX'}}</span><span>/{{ t('vip.vip_level_info.rule.text5') }}</span></p>
+            <p class="content"><span>{{ platformCurrency }} {{ toFormatNum(vipInfo.protection_bet_exp) }}</span><span>/{{ protectionDaysName }}</span></p>
           </div>
         </div>
         <div class="m-vip--illustrate">
