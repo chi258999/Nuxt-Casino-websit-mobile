@@ -13,6 +13,7 @@ export const activityAppStore = defineStore({
     mobile: true as boolean, // 是否浏览器运行/非app
     automaticAppTimeout: null as NodeJS.Timeout | null,
     appGuidanceTimeout: null as NodeJS.Timeout | null,
+    openAppGuidanceTimeout: null as NodeJS.Timeout | null,
     showAppGuidance: false as boolean, // 是否显示下载app引导框
   }),
   getters: {
@@ -111,6 +112,19 @@ export const activityAppStore = defineStore({
         this.appGuidanceTimeout = setTimeout(() => {
           this.showAppGuidance = false
         }, 5000);
+      }
+    },
+    // 定时打开下载引导弹框
+    setOpenAppGuidance(state: boolean) {
+      if (state) {
+        if (this.openAppGuidanceTimeout) {
+          clearTimeout(this.openAppGuidanceTimeout); // 删除定时器
+          this.openAppGuidanceTimeout = null; // 清空定时器变量
+        }
+      } else {
+        this.openAppGuidanceTimeout = setTimeout(() => {
+          this.showAppGuidance = true
+        }, 30000);
       }
     }
   }

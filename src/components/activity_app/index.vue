@@ -4,7 +4,7 @@ import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
 import { useDisplay } from "vuetify";
 import { storeToRefs } from 'pinia';
 import { activityAppStore } from '@/store/activityApp';
-const { setAppConfirmDialogShow, setShowAppGuidance, setAppGuidance } = activityAppStore();
+const { setAppConfirmDialogShow, setShowAppGuidance, setAppGuidance, setOpenAppGuidance } = activityAppStore();
 import { toFormatNum } from '@/utils/numFormat';
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -64,9 +64,25 @@ const showAppGuidance = computed(() => {
 
 watch(showAppGuidance, (value) => {
   if (value) {
+    // 打开关闭定时器
     setAppGuidance(false)
+    // 关闭打开引导定时器
+    setOpenAppGuidance(true)
+  } else {
+    setOpenAppGuidance(false)
   }
 })
+// 判断下载页面是否打开状态，如果打开关闭引导框的显示，关闭时打开引导框的显示
+watch(appConfirmDialogShow, (value) => {
+  if (value) {
+    setOpenAppGuidance(true)
+  } else {
+    setOpenAppGuidance(false)
+  }
+})
+
+// 初始化执行一次
+setOpenAppGuidance(false)
 
 const frequency = ref(0) // 监听控制引导弹框打开
 // 关闭app弹框执行

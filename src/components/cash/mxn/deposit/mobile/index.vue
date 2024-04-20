@@ -24,6 +24,7 @@ import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
 import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
 import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
 import icon_public_160 from "@/assets/public/svg/icon_public_160.svg";
+import icon_public_161 from "@/assets/public/svg/icon_public_161.svg";
 import { getUnitByCurrency } from '@/utils/currencyUnit';
 import currencyListValue from '@/utils/currencyList';
 import AdjustClass from '@/utils/adjust';
@@ -189,7 +190,8 @@ const depositInfoDialogVisible = ref<boolean>(false);
 const mxnPaymentChannel = ref<any>({
   spei: icon_public_106,
   oxxo: icon_public_105,
-  codi: icon_public_107
+  codi: icon_public_107,
+  visa: icon_public_161
 })
 
 const notificationShow = ref<boolean>(false);

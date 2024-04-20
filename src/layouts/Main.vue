@@ -596,6 +596,11 @@ const appGuidanceEvent = () => {
   setAppConfirmDialogShow(true)
 }
 
+const appConfirmDialogShow = computed(() => {
+  const { getAppConfirmDialogShow } = storeToRefs(activityAppStore());
+  return getAppConfirmDialogShow.value
+})
+
 // 获取模式
 const mobile = computed(() => {
   const { getMobile } = storeToRefs(activityAppStore());
@@ -1022,24 +1027,19 @@ const routeInited = () => {
 
       <!-- 点击打开下载app页面 -->
       <div class="m-activity-app-btn" v-if="mobile">
-        <transition
-          enter-active-class="animated-lr hinge-lr fadeInRight"
-          leave-active-class="animated-lr hinge-lr fadeOutRight"
-        >
-          <div v-show="showAppGuidance" class="app-content" @click="appGuidanceEvent">
-            {{ t('activity_app.text_9') }}
-            <span>{{ platformCurrency }}{{ toFormatNum(activityAppBonus) }}</span>
-          </div>
-        </transition>
+          <transition
+            enter-active-class="animated-lr hinge-lr fadeInRight"
+            leave-active-class="animated-lr hinge-lr fadeOutRight"
+          >
+            <div v-show="showAppGuidance && !appConfirmDialogShow" class="app-content" @click="appGuidanceEvent">
+              {{ t('activity_app.text_9') }} <span>{{ platformCurrency }}{{ toFormatNum(activityAppBonus) }}</span>
+            </div>
+          </transition>
 
-        <div
-          style="position: absolute;"
-          :class="{ 'm-activity-app-swinging-button': isSwinging, 'm-activity-app-prompt': true }"
-          @click="openActivityApp"
-        >
-          <img src="@/assets/activity_app/app-floating-button.svg" class="m-back-icon-position" />
+          <div style="position: absolute;" :class="{ 'm-activity-app-swinging-button': isSwinging, 'm-activity-app-prompt': true }" @click="openActivityApp" >
+            <img src="@/assets/activity_app/app-floating-button.svg" class="m-back-icon-position" />
+          </div>
         </div>
-      </div>
     </div>
 
     <!-- back top -->
@@ -1155,7 +1155,7 @@ const routeInited = () => {
 .app-content {
   position: absolute;
   top: 0;
-  left: -272px;
+  left: -279px;
   box-sizing: border-box;
   padding: 5px 62px;
   border-top-left-radius: 50px; /* 左上角圆角 */
