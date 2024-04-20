@@ -99,8 +99,8 @@ onMounted(async () => {
         <span>{{ t('transaction.tab.vip') }}</span>
         <img :src="icon_public_10" @click="setVipNavBarToggle('0')" width="18" class="m-vip-drawer-close-button" />
       </div>
-      <v-tabs center-active dark v-model="vipTab">
-        <v-tab v-for="item in vipItems" :key="item" :value="item">
+      <v-tabs center-active v-model="vipTab" class="vip-tabs">
+        <v-tab v-for="item in vipItems" :tag="'div'" :key="item" :value="item">
           {{ item }}
         </v-tab>
       </v-tabs>
@@ -123,6 +123,7 @@ onMounted(async () => {
   overflow: hidden;
 
   .vip-main-content {
+    padding-top: 4px;
     padding-bottom: 32px;
   }
 }
@@ -151,6 +152,39 @@ onMounted(async () => {
       right: 16px;
       transform: translateY(-50%);
       z-index: 99;
+    }
+  }
+  .vip-tabs {
+    padding: 4px 16px;
+    ::v-deep(.v-tab) {
+      background: #15161c !important;
+      border-radius: 4px !important;
+      height: 35px;
+      position: relative;
+      border: none;
+      &::after {
+        border: none;
+      }
+    }
+    ::v-deep(.v-tab--selected) {
+      background: #1D2027 !important;
+      box-shadow: 0px 4px 6px 1px #0000004D;
+      height: 35px;
+
+      &::after {
+        content: '';
+        width: 24px;
+        height: 2px;
+        background: #009B3A;
+        position: absolute;
+        top: auto;
+        left: 50%;
+        bottom: 0px;
+        transform: translateX(-50%);
+        border-radius: 4px 0px 0px 0px;
+        opacity: 1;
+        border: none;
+      }
     }
   }
   &-content {
