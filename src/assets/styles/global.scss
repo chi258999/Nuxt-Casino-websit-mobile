@@ -1102,29 +1102,36 @@ button:active:enabled {
     animation-iteration-count: infinite;
   }
   .animated-lr.hinge-lr {
-    -webkit-animation-duration: 0.5s;
-    animation-duration: 0.5s;
+    -webkit-animation-duration: 0.3s;
+    animation-duration: 0.3s;
   }
   /*左淡出*/
   @-webkit-keyframes fadeOutRight {
     0% {
-      opacity: 1
+      opacity: 1;
+      transform: scaleX(100%);
+      transform-origin: right;
+      overflow: hidden;
     }
     100% {
-      opacity: 1;
-      -webkit-transform: translate3d(100%, 0, 0);
-      transform: translate3d(100%, 0, 0)
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: right;
+      overflow: hidden;
     }
   }
   @keyframes fadeOutRight {
     0% {
-      opacity: 1
+      opacity: 1;
+      transform: scaleX(100%);
+      transform-origin: right;
+      overflow: hidden;
     }
     100% {
-      opacity: 1;
-      -webkit-transform: translate3d(100%, 0, 0);
-      -ms-transform: translate3d(100%, 0, 0);
-      transform: translate3d(100%, 0, 0)
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: right;
+      overflow: hidden;
     }
   }
   .fadeOutRight {
@@ -1135,28 +1142,37 @@ button:active:enabled {
   /*右淡出*/
   @-webkit-keyframes fadeInRight {
     0% {
-      opacity: 1;
-      -webkit-transform: translate3d(100%, 0, 0);
-      transform: translate3d(100%, 0, 0)
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: right;
+      overflow: hidden;
     }
     100% {
       opacity: 1;
-      -webkit-transform: none;
-      transform: none
+      transform: scaleX(100%);
+      transform-origin: right;
+      overflow: hidden;
     }
   }
   @keyframes fadeInRight {
     0% {
-      opacity: 1;
-      -webkit-transform: translate3d(100%, 0, 0);
-      -ms-transform: translate3d(100%, 0, 0);
-      transform: translate3d(100%, 0, 0)
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: right;
+      overflow: hidden;
     }
     100% {
       opacity: 1;
-      -webkit-transform: none;
-      -ms-transform: none;
-      transform: none
+      transform: scaleX(100%);
+      transform-origin: right;
+      overflow: hidden;
+    }
+
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateX(0);
+    }
+    40% {
+      transform: translateX(-30px); /* 回弹的距离 */
     }
   }
   .fadeInRight {
