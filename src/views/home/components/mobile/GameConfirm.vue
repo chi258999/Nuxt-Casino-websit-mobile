@@ -242,14 +242,21 @@ onMounted(() => {
     }
   }
 }
-
+.m-game-confirm-drawer-close-button-box {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 6px;
+  padding-bottom: 26px;
+}
 .m-game-confirm-drawer-close-button {
+  // box-shadow: none !important;
+  // background-color: transparent !important;
+  // position: absolute !important;
+  // top: -26px;
+  // right: 6px;
+  // z-index: 100000;
   box-shadow: none !important;
   background-color: transparent !important;
-  position: absolute !important;
-  top: -26px;
-  right: 6px;
-  z-index: 100000;
 }
 
 /* 文字叠加在图片上 */
