@@ -6,10 +6,12 @@ import {
   computed,
   onMounted,
   onBeforeUnmount,
+  ref,
   watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
 import ValidationBox from "./ValidationBox.vue";
+import grecaptchaDrawer from './grecaptchaDrawer.vue'
 import { useDisplay } from "vuetify";
 import { authStore } from "@/store/auth";
 import { userStore } from "@/store/user";
@@ -33,6 +35,7 @@ const MSignup = defineComponent({
     ValidationBox,
     SuccessIcon,
     WarningIcon,
+    grecaptchaDrawer
   },
   emits: ["close", "switchAuthDialog","setSignInForm"],
   props: {
@@ -121,7 +124,8 @@ const MSignup = defineComponent({
       emailPartName: "",
       promoCodeDisabled:false,
       indexValue: "",
-      typeValue: ""
+      typeValue: "",
+      grecaptchaDrawer:true
     });
 
     watch(
@@ -420,7 +424,7 @@ const MSignup = defineComponent({
     };
 
     onMounted(() => {
-      console.log("promo code::::::::::::::::::::", route.query.code);
+      console.log("promo code::::::::::::::::::::", route.query.code,state.grecaptchaDrawer);
         // 带有邀请注册码的自动填入，并且邀请注册码输入框不让填写
       state.formData.promoCode = route.query.code ? route.query.code.toString() : "";
       if(route.query.code){
@@ -822,6 +826,7 @@ export default MSignup;
         </v-btn>
       </v-row>
     </div>
+    <!-- <grecaptchaDrawer v-if="grecaptchaDrawer" v-model="grecaptchaDrawer"></grecaptchaDrawer> -->
   </div>
 </template>
 
