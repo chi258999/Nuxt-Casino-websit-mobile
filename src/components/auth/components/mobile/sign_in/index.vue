@@ -8,6 +8,7 @@ import { inviteStore } from "@/store/invite";
 import { vipStore } from "@/store/vip";
 import { refferalStore } from "@/store/refferal";
 import { appBarStore } from "@/store/appBar";
+import { loginBonusStore } from "@/store/loginBonus";
 import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
 import { useDisplay } from "vuetify";
@@ -70,6 +71,7 @@ const Login = defineComponent({
     const {  downloadApprReceive } = activityAppStore();
     const {  userDownloadAppAcquisition } = activityAppStore();
     const { dispatchTimeunix } = mainStore()
+    const { setLoginBonusDialogVisible } = loginBonusStore();
 
     // initiate component state
     const state = reactive({
@@ -111,6 +113,10 @@ const Login = defineComponent({
       return width.value;
     });
 
+      const vipSignIn = computed(() => {
+        const { getVipSignIn } = storeToRefs(vipStore());
+        return getVipSignIn.value;
+      });
     // computed variables
     const isFormDataReady = computed(
       (): boolean =>
@@ -251,6 +257,13 @@ const Login = defineComponent({
       }else{
         localStorage.setItem(userInfo.value.name,'1');
       }
+      
+
+      // 打开VIP活动签到
+      if(vipSignIn.value.is_signin!=2){
+        setLoginBonusDialogVisible(true);
+      }
+
 
       setTimeout(async () => {
         const queryParams = getQueryParams()

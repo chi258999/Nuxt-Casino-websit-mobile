@@ -293,7 +293,7 @@ onMounted(async () => {
     :width="mobileWidth < 600 ? '340' : '471'"
     @click:outside="emit('closeLoginBonusDialog')"
     :class="mobileWidth < 600 ? 'm-login-bonus-dialog' : ''"
-    style="z-index: 2147483646;top: 60px"
+    style="z-index: 1000000;top: 60px"
   >
     <div class="m-login-bonus-dialog-container" :class="confirmDialog ? 'blur-effect' : ''">
       <img src="@/assets/public/image/bg_public_03_01.png" class="m-header-bar-img-position" />
