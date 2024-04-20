@@ -106,6 +106,7 @@ const { setMenuBlurEffectShow } = appBarStore();
 const { setOverlayScrimShow } = appBarStore();
 const { setAccountDialogShow } = appBarStore();
 const { setActiveAccountIndex } = appBarStore();
+const { dispatchVipSignIn } = vipStore();
 // const { setBonusDashboardDialogVisible } = appBarStore();
 const { setAuthModalType } = authStore();
 const { setNickNameDialogVisible,setAuthDialogVisible } = authStore();
@@ -245,6 +246,7 @@ const staticActivityDialog = ref<boolean>(true); // 静态活动页面显示
 // 关闭静态页面弹框
 const closeStaticActivityDialog = () => {
   staticActivityDialog.value = false
+  // 打开活动指引弹窗
 }
 
 // 判断是否已经勾选当天不显示静态活动弹框
@@ -616,7 +618,7 @@ const token = computed(() => {
   return getToken.value;
 });
 
-onMounted(() => {
+onMounted(async() => {
   // 在组件挂载时启动摇摆按钮定时器
   setInterval(swingButton, 10000); // 每10秒执行一次
 
@@ -685,14 +687,11 @@ const routeInited = () => {
       }"
       v-if="mobileWidth < 600"
     >
-      <MSearch
-        :searchDialogShow="searchDialogShow"
-        @searchCancel="setSearchDialogShow(false)"
-      />
+      <MSearch :searchDialogShow="searchDialogShow" @searchCancel="setSearchDialogShow(false)" />
     </v-navigation-drawer>
 
     <!---------------------- Deposit Dialog ----------------------------------------------->
-  <!-- 存款菜单弹窗 -->
+    <!-- 存款菜单弹窗 -->
     <!-- <v-dialog
       v-model="cashDialog"
       class="cash-header-dialog"
@@ -702,8 +701,8 @@ const routeInited = () => {
       :transition="'dialog-top-transition'"
       @click:outside="setCashDialogToggle(false)"
       v-if="mobileVersion == 'sm'"
-    > -->
-      <MCashHeader v-if="cashDialog&&mobileVersion == 'sm'" v-model="cashDialog"  />
+    >-->
+    <MCashHeader v-if="cashDialog&&mobileVersion == 'sm'" v-model="cashDialog" />
     <!-- </v-dialog> -->
     <!-- 存款充值 -->
     <!-- <v-dialog
@@ -717,11 +716,11 @@ const routeInited = () => {
       persistent
       v-if="mobileVersion == 'sm'"
     >
-      <template v-if="withdrawDialog"> -->
-        <!-- <Withdraw v-if="mobileWidth > 600" /> -->
-        <MWithdraw v-if="withdrawDialog&&mobileVersion == 'sm'" v-model="withdrawDialog" />
-      <!-- </template>
-    </v-dialog> -->
+    <template v-if="withdrawDialog">-->
+    <!-- <Withdraw v-if="mobileWidth > 600" /> -->
+    <MWithdraw v-if="withdrawDialog&&mobileVersion == 'sm'" v-model="withdrawDialog" />
+    <!-- </template>
+    </v-dialog>-->
     <!-- 存款选择 -->
     <!-- <v-dialog
       v-model="depositDialog"
@@ -735,10 +734,14 @@ const routeInited = () => {
       v-if="mobileVersion == 'sm'"
     >
       <template v-if="depositDialog">
-        <Deposit v-if="mobileWidth > 600" /> -->
-        <MDeposit class="m-deposit-sub-dialog"  v-if="depositDialog&&mobileVersion == 'sm'" v-model="depositDialog" />
-      <!-- </template>
-    </v-dialog> -->
+    <Deposit v-if="mobileWidth > 600" />-->
+    <MDeposit
+      class="m-deposit-sub-dialog"
+      v-if="depositDialog&&mobileVersion == 'sm'"
+      v-model="depositDialog"
+    />
+    <!-- </template>
+    </v-dialog>-->
 
     <v-dialog
       v-model="cashDialog"
@@ -762,7 +765,7 @@ const routeInited = () => {
     </v-dialog>
 
     <!---------------------------------- Deposit Confirm ----------------------------------------->
-  <!-- 充值确认 -->
+    <!-- 充值确认 -->
     <!-- <v-dialog
       class="m-deposit-cofirm-dialog"
       v-model="depositConfirmDialog"
@@ -772,8 +775,11 @@ const routeInited = () => {
       persistent
       v-if="mobileVersion == 'sm'"
       :transition="'dialog-top-transition'"
-    > -->
-      <MDepositConfirm  v-if="depositConfirmDialog&&mobileVersion == 'sm'" v-model="depositConfirmDialog" />
+    >-->
+    <MDepositConfirm
+      v-if="depositConfirmDialog&&mobileVersion == 'sm'"
+      v-model="depositConfirmDialog"
+    />
     <!-- </v-dialog> -->
 
     <!-----------------------Authentication Dialog --------------------------------------->
@@ -789,11 +795,11 @@ const routeInited = () => {
       :class="[mobileVersion == 'sm' ? 'mobile-auth-dialog-position' : '']"
       persistent
       style="z-index: 2147483646"
-    > -->
-      <template v-if="mobileVersion != 'sm'"> </template>
-      <template v-else>
-        <MAuth v-if="authDialog" v-model="authDialog" />
-      </template>
+    >-->
+    <template v-if="mobileVersion != 'sm'"></template>
+    <template v-else>
+      <MAuth v-if="authDialog" v-model="authDialog" />
+    </template>
     <!-- </v-dialog> -->
 
     <!-------------------------------      静态活动页面     ------------------------------------>
@@ -803,8 +809,12 @@ const routeInited = () => {
       :scrim="true"
       persistent
       style="z-index: 1000001"
-    > -->
-      <StaticActivityPage v-model="staticActivityDialog" v-if="staticActivityDialog && mobileVersion == 'sm'" @close="closeStaticActivityDialog" />
+    >-->
+    <StaticActivityPage
+      v-model="staticActivityDialog"
+      v-if="staticActivityDialog && mobileVersion == 'sm'"
+      @close="closeStaticActivityDialog"
+    />
     <!-- </v-dialog> -->
 
     <!-------------------------------      SIGNUP     ------------------------------------>
@@ -839,7 +849,7 @@ const routeInited = () => {
         @switch="switchDialog('signup')"
       />
       <MSignup v-else @close="closeDialog('signup')" @switch="switchDialog('signup')" />
-    </v-dialog> -->
+    </v-dialog>-->
 
     <!-------------------------------      LOGIN     ------------------------------------>
 
@@ -862,7 +872,7 @@ const routeInited = () => {
         @switch="switchDialog('login')"
       />
       <MLogin v-else @close="closeDialog('login')" @switch="switchDialog('login')" />
-    </v-dialog> -->
+    </v-dialog>-->
 
     <!-------------------------------      NICKNAME     ------------------------------------>
 
@@ -872,8 +882,8 @@ const routeInited = () => {
       :scrim="true"
       transition="scale-transition"
       @click:outside="closeNickNameDialog"
-    > -->
-      <MNickName v-if="nickNameDialog" @close="closeNickNameDialog" v-model="nickNameDialog" />
+    >-->
+    <MNickName v-if="nickNameDialog" @close="closeNickNameDialog" v-model="nickNameDialog" />
     <!-- </v-dialog> -->
 
     <!-------------------------------      SIGNOUT     ------------------------------------>
@@ -883,9 +893,17 @@ const routeInited = () => {
       :width="mobileWidth < 600 ? 328 : 471"
       :scrim="true"
       @click:outside="closeDialog('signout')"
-    > -->
-      <Signout v-if="signoutDialog && mobileVersion != 'sm'" @close="closeDialog('signout')" v-model="signoutDialog" />
-      <MSignout v-else-if="signoutDialog && mobileVersion == 'sm'" @close="closeDialog('signout')" v-model="signoutDialog" />
+    >-->
+    <Signout
+      v-if="signoutDialog && mobileVersion != 'sm'"
+      @close="closeDialog('signout')"
+      v-model="signoutDialog"
+    />
+    <MSignout
+      v-else-if="signoutDialog && mobileVersion == 'sm'"
+      @close="closeDialog('signout')"
+      v-model="signoutDialog"
+    />
     <!-- </v-dialog> -->
 
     <!----------------------------------- level up dialog --------------------------------->
@@ -908,9 +926,9 @@ const routeInited = () => {
       :width="mobileWidth < 600 ? '360' : '471'"
       :scrim="true"
       style="z-index: 2147483646"
-    > -->
-      <RefferalDialog v-if="mobileWidth > 600&&refferalDialog" v-model="refferalDialog" />
-      <MRefferalDialog v-if="mobileWidth <= 600&&refferalDialog" v-model="refferalDialog" />
+    >-->
+    <RefferalDialog v-if="mobileWidth > 600&&refferalDialog" v-model="refferalDialog" />
+    <MRefferalDialog v-if="mobileWidth <= 600&&refferalDialog" v-model="refferalDialog" />
     <!-- </v-dialog> -->
 
     <!----------------------------------- login bonus dialog --------------------------------->
@@ -921,14 +939,17 @@ const routeInited = () => {
       @click:outside="closeLoginBonusDialog"
       :class="mobileWidth < 600 ? 'm-login-bonus-dialog' : ''"
       style="z-index: 2147483646"
-    > -->
-      <LoginBonusDialog
-        v-if="mobileWidth > 600&&loginBonusDialog"
-        v-model="loginBonusDialog"
-        @closeLoginBonusDialog="closeLoginBonusDialog"
-        
-      />
-      <MLoginBonusDialog v-if="mobileWidth <= 600&&loginBonusDialog" v-model="loginBonusDialog" @closeLoginBonusDialog="closeLoginBonusDialog" />
+    >-->
+    <LoginBonusDialog
+      v-if="mobileWidth > 600&&loginBonusDialog"
+      v-model="loginBonusDialog"
+      @closeLoginBonusDialog="closeLoginBonusDialog"
+    />
+    <MLoginBonusDialog
+      v-if="mobileWidth <= 600&&loginBonusDialog"
+      v-model="loginBonusDialog"
+      @closeLoginBonusDialog="closeLoginBonusDialog"
+    />
     <!-- </v-dialog> -->
 
     <!----------------------------------- deposit and get bonus dialog --------------------------------->
@@ -939,10 +960,7 @@ const routeInited = () => {
       @click:outside="closeGetBonusDialog"
       :class="mobileWidth < 600 ? 'm-get-bonus-dialog' : ''"
     >
-      <GetBonusDialog
-        v-if="mobileWidth > 600"
-        @closeGetBonusDialog="closeGetBonusDialog"
-      />
+      <GetBonusDialog v-if="mobileWidth > 600" @closeGetBonusDialog="closeGetBonusDialog" />
       <MGetBonusDialog v-else @closeGetBonusDialog="closeGetBonusDialog" />
     </v-dialog>
 
@@ -963,14 +981,14 @@ const routeInited = () => {
     <!----------------------------------- account dialog --------------------------------->
 
     <!-- <v-dialog v-model="accountDialog" width="312" @click:outside="accountDialogClose"> -->
-      <MAccountDialog
-        v-if="accountDialog" 
-        v-model="accountDialog"
-        @mDialogHide="accountDialogClose"
-        :avatar="userInfo.avatar"
-        :nickName="userInfo.name"
-        @selectActiveIndex="selectActiveIndex"
-      />
+    <MAccountDialog
+      v-if="accountDialog"
+      v-model="accountDialog"
+      @mDialogHide="accountDialogClose"
+      :avatar="userInfo.avatar"
+      :nickName="userInfo.name"
+      @selectActiveIndex="selectActiveIndex"
+    />
     <!-- </v-dialog> -->
 
     <VipUpgradeDialog />
@@ -984,18 +1002,10 @@ const routeInited = () => {
     <router-view v-slot="{ Component, route }">
       <!-- 缓存路由 -->
       <keep-alive>
-        <component
-          v-if="route.meta.keepAlive"
-          :is="Component"
-          :key="route.path"
-        />
+        <component v-if="route.meta.keepAlive" :is="Component" :key="route.path" />
       </keep-alive>
       <!-- 正常路由 -->
-      <component
-        v-if="!route.meta.keepAlive"
-        :is="Component"
-        :key="route.path"
-      />
+      <component v-if="!route.meta.keepAlive" :is="Component" :key="route.path" />
     </router-view>
 
     <!-- fix钉 按钮集合 -->
@@ -1011,22 +1021,26 @@ const routeInited = () => {
       </div>
 
       <!-- 点击打开下载app页面 -->
-        <div class="m-activity-app-btn" v-if="mobile">
-          <transition
-            enter-active-class="animated-lr hinge-lr fadeInRight"
-            leave-active-class="animated-lr hinge-lr fadeOutRight"
-          >
-            <div v-show="showAppGuidance" class="app-content" @click="appGuidanceEvent">
-              {{ t('activity_app.text_9') }} <span>{{ platformCurrency }}{{ toFormatNum(activityAppBonus) }}</span>
-            </div>
-          </transition>
-
-          <div style="position: absolute;" :class="{ 'm-activity-app-swinging-button': isSwinging, 'm-activity-app-prompt': true }" @click="openActivityApp" >
-            <img src="@/assets/activity_app/app-floating-button.svg" class="m-back-icon-position" />
+      <div class="m-activity-app-btn" v-if="mobile">
+        <transition
+          enter-active-class="animated-lr hinge-lr fadeInRight"
+          leave-active-class="animated-lr hinge-lr fadeOutRight"
+        >
+          <div v-show="showAppGuidance" class="app-content" @click="appGuidanceEvent">
+            {{ t('activity_app.text_9') }}
+            <span>{{ platformCurrency }}{{ toFormatNum(activityAppBonus) }}</span>
           </div>
-        </div>
-    </div>
+        </transition>
 
+        <div
+          style="position: absolute;"
+          :class="{ 'm-activity-app-swinging-button': isSwinging, 'm-activity-app-prompt': true }"
+          @click="openActivityApp"
+        >
+          <img src="@/assets/activity_app/app-floating-button.svg" class="m-back-icon-position" />
+        </div>
+      </div>
+    </div>
 
     <!-- back top -->
 
@@ -1035,7 +1049,6 @@ const routeInited = () => {
         <img src="@/assets/public/svg/icon_public_101.svg" class="m-back-icon-position" />
       </div>
     </el-backtop>
-
 
     <!-- mobile menu semicircle toggle -->
 
@@ -1046,7 +1059,6 @@ const routeInited = () => {
 
     <!-- 下载app -->
     <ActivityApp />
-
   </v-main>
 </template>
 <style lang="scss">
@@ -1075,7 +1087,7 @@ const routeInited = () => {
   bottom: 190px;
   width: 44px;
   height: 44px;
-  background: rgba(22, 130, 241, 1);;
+  background: rgba(22, 130, 241, 1);
   border-radius: 44px;
   filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
   z-index: 1000;
@@ -1095,7 +1107,7 @@ const routeInited = () => {
   bottom: 130px;
   width: 44px;
   height: 44px;
-  background: rgba(22, 130, 241, 1);;
+  background: rgba(22, 130, 241, 1);
   border-radius: 44px;
   filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
   z-index: 1000;
@@ -1115,11 +1127,11 @@ const routeInited = () => {
   bottom: 250px;
   width: 44px;
   height: 44px;
-  background: #FFD632;
+  background: #ffd632;
   border-radius: 44px;
   filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
   z-index: 1000;
-  &>.m-back-icon-position {
+  & > .m-back-icon-position {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -1130,7 +1142,7 @@ const routeInited = () => {
 }
 
 .m-activity-app-prompt::after {
-  content: '';
+  content: "";
   width: 10px;
   height: 10px;
   background: rgba(222, 61, 18, 1);
@@ -1150,7 +1162,11 @@ const routeInited = () => {
   border-bottom-left-radius: 50px; /* 左下角圆角 */
   border-top-right-radius: 50px; /* 右上角圆角 */
   border-bottom-right-radius: 50px; /* 右下角圆角 */
-  background-image: linear-gradient(to right, rgba(249, 188, 1, 1), rgba(228, 172, 0, 1)); /* 左到右的渐变，从红色到蓝色 */
+  background-image: linear-gradient(
+    to right,
+    rgba(249, 188, 1, 1),
+    rgba(228, 172, 0, 1)
+  ); /* 左到右的渐变，从红色到蓝色 */
   width: 316px;
   height: 44px;
   font-size: 10px;
@@ -1162,7 +1178,7 @@ const routeInited = () => {
   }
 
   &::after {
-    content: '';
+    content: "";
     width: 67.75px;
     height: 44px;
     background: url(@/assets/activity_app/img_ci_13.svg);
@@ -1173,14 +1189,23 @@ const routeInited = () => {
 }
 
 @keyframes swing {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(20deg); }
-  50% { transform: rotate(-20deg); }
-  75% { transform: rotate(10deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(20deg);
+  }
+  50% {
+    transform: rotate(-20deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
 }
 
 .m-activity-app-swinging-button {
-  animation: swing .8s ease-in-out infinite;
+  animation: swing 0.8s ease-in-out infinite;
 }
 
 .m-back-top {
