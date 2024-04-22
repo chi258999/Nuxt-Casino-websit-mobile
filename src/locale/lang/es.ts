@@ -1691,7 +1691,7 @@ export const lang: langType = {
         "text_3": "Dia del miembro",
         "text_4": "Se pondrá retirar dentro de:",
         "text_5": "Regalos de la semana VIP",
-        "text_6": "Regalo mensual VIP",
+        "text_6": "Regalo mensual VIP", 
         "text_7": "Bonificación de nivel VIP"
       },
       "upgrade": {
@@ -1832,7 +1832,7 @@ export const lang: langType = {
     "text_11": "Copiar código de invitación",
     "text_12": "Facebook",
     "text_13": "Telegram",
-    "text_14": "¿Qué es la aplicación?",
+    "text_14": "WhatsApp",
     "text_15": "Twitter",
     "text_16": "E-mail",
     "text_17": "Total:",
