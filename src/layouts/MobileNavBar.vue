@@ -929,7 +929,7 @@ onMounted(async () => {
     <template v-slot:prepend>
       <v-list-item
         class="m-casino-toggle"
-        :class="refferalAppBarShow&&mobile ? 'mt-8' : ''"
+        :class="refferalAppBarShow&&mobile ? 'mt-9' : ''"
         style="height: 56px; visibility: hidden"
       >
         <input type="checkbox" id="m-casino-toggle" />

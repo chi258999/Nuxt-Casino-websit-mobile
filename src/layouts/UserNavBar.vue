@@ -854,7 +854,7 @@ onMounted(async () => {
 }
 
 .user-navbar-position {
-  margin-top: 35px;
+  margin-top: 45px;
 }
 
 .m-nav-drawer-content {
