@@ -359,6 +359,8 @@ const validateAmount = (): boolean => {
 }
 
 const handleAmountInputFocus = (): void => {
+  console.log('handleAmountInputFocus');
+  
   if (validateAmount()) {
     isShowAmountValidation.value = false;
   } else {
@@ -1001,6 +1003,8 @@ onMounted(async () => {
         </v-col>
       </v-row>
       <v-row class="mt-3 mx-3 relative">
+        <!-- :onfocus="handleAmountInputBlur"
+          :onblur="handleAmountInputFocus" -->
         <v-text-field
           :label="`${t('deposit_dialog.amount')}(${platformCurrency})`"
           class="form-textfield dark-textfield m-deposit-amount-text"
@@ -1009,8 +1013,6 @@ onMounted(async () => {
           color="#7782AA"
           style="border-radius: 8px"
           v-model="depositAmount"
-          :onfocus="handleAmountInputBlur"
-          :onblur="handleAmountInputFocus"
           @input="handleAmountInputChange"
         />
         <ValidationBox
