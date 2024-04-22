@@ -411,6 +411,13 @@ watch(getBonusDialogVisible, (newValue) => {
   setMainBlurEffectShow(newValue);
 }, { deep: true })
 
+// 判断是否在首页
+const isHomePage = ref(route.path === '/');
+// 使用 watch 监听路由变化
+watch(() => route.path, (newPath) => {
+  isHomePage.value = newPath === '/';
+});
+
 const closeLoginBonusDialog = () => {
   setLoginBonusDialogVisible(false);
   setMainBlurEffectShow(false);
@@ -594,6 +601,12 @@ const appGuidanceEvent = () => {
   setAppGuidance(true)
   setShowAppGuidance(false)
   setAppConfirmDialogShow(true)
+  // 如果在首页，就打开监听
+  if (isHomePage.value) {
+    automaticPopUpApp(false)
+  } else {
+    automaticPopUpApp(true)
+  }
 }
 
 const appConfirmDialogShow = computed(() => {
@@ -628,7 +641,12 @@ onMounted(async() => {
   setInterval(swingButton, 10000); // 每10秒执行一次
 
   // 判断下载app是否需要自动弹出
-  automaticPopUpApp(false)
+  // 如果在首页，就打开监听
+  if (isHomePage.value) {
+    automaticPopUpApp(false)
+  } else {
+    automaticPopUpApp(true)
+  }
 
   // console.log(route.query.code);
   // 带有邀请注册码的，直接打开注册弹窗
@@ -1031,7 +1049,7 @@ const routeInited = () => {
             enter-active-class="animated-lr hinge-lr fadeInRight"
             leave-active-class="animated-lr hinge-lr fadeOutRight"
           >
-            <div v-show="showAppGuidance && !appConfirmDialogShow" class="app-content" @click="appGuidanceEvent">
+            <div v-show="isHomePage && showAppGuidance && !appConfirmDialogShow" class="app-content" @click="appGuidanceEvent">
               {{ t('activity_app.text_9') }} <span>{{ platformCurrency }}{{ toFormatNum(activityAppBonus) }}</span>
             </div>
           </transition>
