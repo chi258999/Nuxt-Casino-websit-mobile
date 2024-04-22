@@ -127,12 +127,12 @@ onMounted(() => {
   background: url(@/assets/activity_app/activity-app-header.png) !important;
 
   .v-toolbar__content {
-    height: 48px;
+    height: $refferalBarHeight;
   }
 
   @media (max-width: 600px) {
     .v-toolbar__content {
-      height: 48px !important;
+      height: $refferalBarHeight !important;
     }
     .wrap {
       min-width: 180px;

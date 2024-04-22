@@ -1428,10 +1428,10 @@ onMounted(async () => {
   }
 
   .app-bar-height {
-    height: 60px !important;
+    height: $appBarHeight !important;
 
     .v-toolbar__content {
-      height: 60px !important;
+      height: $appBarHeight !important;
     }
   }
 }
