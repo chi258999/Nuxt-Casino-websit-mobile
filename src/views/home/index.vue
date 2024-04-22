@@ -2294,6 +2294,7 @@ export default Dashboard;
   margin: 0;
 
   .viewall {
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 12px;
     font-weight: 400;
     line-height: 15px;
