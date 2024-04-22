@@ -14,6 +14,7 @@ import Withdrawal from "./withdrawal/index.vue";
 import MWithdrawal from "./mobile/withdrawal/index.vue";
 import Vip from "./vip/index.vue";
 import MVip from "./mobile/vip/index.vue";
+import MReport from "./mobile/report/index.vue";
 import { withdrawStore } from "@/store/withdraw";
 import { depositStore } from "@/store/deposit";
 import { gameStore } from "@/store/game";
@@ -100,6 +101,10 @@ const transactionTabs = ref<any[]>([
   {
     value: BtTabEnum.vip,
     label: "transaction.tab.vip"
+  },
+  {
+    value: BtTabEnum.report,
+    label: "transaction.tab.report"
   }
   // t("transaction.tab.game_history"),
   // t("transaction.tab.transactions"),
@@ -166,6 +171,7 @@ const transactionTabToggle = async (item: string) => {
       inited();
       break;
   }
+  inited();
 };
 
 const inited = () => {
@@ -233,6 +239,7 @@ onMounted(async () => {
 });
 </script>
 <template>
+<div>
   <v-slide-group
     class="mt-2 slide-tab-btns slide-tabs"
     v-model="selectedTab"
@@ -321,6 +328,13 @@ onMounted(async () => {
         />
       </div>
     </v-window-item>
+
+    <!-- 记录 report -->
+    <v-window-item :value="BtTabEnum.report" style="margin-left: 10px; margin-right: 10px">
+      <MReport v-if="mobileWidth < 600" :pageSize="pageSize" @inited="inited">
+      </MReport>
+    </v-window-item>
+
     <!-- <v-window-item
       :value="t('transaction.tab.referral')"
       style="margin-left: 10px; margin-right: 10px"
@@ -337,6 +351,7 @@ onMounted(async () => {
       />
     </v-window-item>-->
   </v-window>
+</div>
 </template>
 <style lang="scss">
 .slide-tabs {

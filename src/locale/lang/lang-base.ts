@@ -1387,6 +1387,7 @@ export type langType = {
       withdrawal: string
       vip: string
       referral: string
+      report: string
     }
     game_history: {
       game: string
@@ -1423,6 +1424,13 @@ export type langType = {
       text_11: string
       text_12: string
       text_13: string
+    },
+    report: {
+      invitationbonus: string
+      bettingCommission: string
+      date: string
+      user: string
+      bonus: string
     }
   }
   account: {
