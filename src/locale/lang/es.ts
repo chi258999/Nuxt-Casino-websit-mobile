@@ -1419,6 +1419,13 @@ export const lang: langType = {
       "text_11": "Nivel VIP",
       "text_12": "Rango VIP",
       "text_13": "Bonificación por inicio de sesión VIP"
+    },
+    "report": {
+      invitationbonus: 'Invitation Bonus',
+      bettingCommission: 'Betting Commission',
+      date: 'Date',
+      user: 'User',
+      bonus: 'Bonus',
     }
   },
   "account": {
