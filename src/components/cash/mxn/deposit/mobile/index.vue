@@ -456,10 +456,10 @@ const handleDepositSubmit = async () => {
 
   // 先打开一个新页面，成功请求有url再赋值，不成功则关闭
   let winRef:any = null
-  // oxxo 7 codi 8 都会返回url，打开页面
+  // oxxo 7 codi 8 codi 9 都会返回url，打开页面
   // 浏览器端处理
   if(mobile.value) {
-    if(selectedPaymentItem.value.id === '7' || selectedPaymentItem.value.id === '8') {
+    if(selectedPaymentItem.value.id === '7' || selectedPaymentItem.value.id === '8'|| selectedPaymentItem.value.id === '9') {
       winRef = window.open('about:blank', '_blank')
     }
   }
@@ -1177,14 +1177,6 @@ onMounted(async () => {
           :onclick="handleDepositSubmit"
           style="width: -moz-available; width: -webkit-fill-available"
           >{{ t("deposit_dialog.deposit_btn_text") }}</v-btn
-        >
-        <v-btn
-          class="my-3 mx-6 m-deposit-btn"
-          :class="isDepositBtnReady ? 'm-deposit-btn-ready' : ''"
-       
-          :onclick="testJump"
-          style="width: -moz-available; width: -webkit-fill-available"
-          >{{'百度'}}</v-btn
         >
       </div>
       <v-dialog
