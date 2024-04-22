@@ -1385,7 +1385,8 @@ export const lang: langType = {
       "deposit": "Deposit",
       "withdrawal": "Withdrawal",
       "vip": "VIP",
-      "referral": "Referral"
+      "referral": "Referral",
+      "report": "Report",
     },
     "game_history": {
       "game": "Game",
@@ -1422,6 +1423,13 @@ export const lang: langType = {
       "text_11": "Vip Level",
       "text_12": "Vip Rank",
       "text_13": "VIP Login Bonus"
+    },
+    "report": {
+      invitationbonus: 'Invitation Bonus',
+      bettingCommission: 'Betting Commission',
+      date: 'Date',
+      user: 'User',
+      bonus: 'Bonus',
     }
   },
   "account": {

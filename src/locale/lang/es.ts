@@ -1381,7 +1381,8 @@ export const lang: langType = {
       "deposit": "Depósito",
       "withdrawal": "Retirar",
       "vip": "VIP",
-      "referral": "recomendar"
+      "referral": "recomendar",
+      "report": "Informe",
     },
     "game_history": {
       "game": "Juego",
