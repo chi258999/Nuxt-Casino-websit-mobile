@@ -10,6 +10,7 @@ import { type GetCurrencyItem } from '@/interface/deposit';
 import { type GetPaymentItem } from '@/interface/deposit';
 import { type GetPixInfo } from '@/interface/deposit';
 import { type GetUserInfo } from "@/interface/user";
+import { activityAppStore } from '@/store/activityApp';
 import ValidationBox from '@/components/cash/mxn/deposit/ValidationBox.vue';
 import SuccessIcon from '@/components/global/notification/SuccessIcon.vue';
 import WarningIcon from '@/components/global/notification/WarningIcon.vue';
@@ -31,7 +32,6 @@ import AdjustClass from '@/utils/adjust';
 import EventToken from '@/constants/EventToken';
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
-
 const props = defineProps({
   modelValue: {
     type: Boolean,
@@ -48,7 +48,7 @@ const modelValueNew = computed({
     emit("update:modelValue", val);
   },
 });
-
+const { runningSystem } = activityAppStore();
 const depositWithdrawToggle = computed(() => {
   const { getDepositWithdrawToggle } = storeToRefs(appBarStore());
   return getDepositWithdrawToggle.value;
@@ -155,6 +155,13 @@ const paymentList = ref<Array<GetPaymentItem>>([
 ])
 
 const depositAmountList = ref<Array<any>>([])
+
+  
+// 获取模式
+const mobile = computed(() => {
+  const { getMobile } = storeToRefs(activityAppStore());
+  return getMobile.value;
+});
 
 const depositBlurEffectShow = computed(() => {
   const { getDepositBlurEffectShow } = storeToRefs(appBarStore());
@@ -348,6 +355,7 @@ const formatCurrency = (currency: number, locale: string, currencyUnit: string) 
 
 const handleSelectPayment = (item: GetPaymentItem) => {
   selectedPaymentItem.value = item;
+  paymentMenuShow.value=false
 }
 
 const validateAmount = (): boolean => {
@@ -450,7 +458,7 @@ const handleDepositSubmit = async () => {
   let winRef:any = null
   // oxxo 7 codi 8 都会返回url，打开页面
   // 浏览器端处理
-  if(!appInstance) {
+  if(mobile.value) {
     if(selectedPaymentItem.value.id === '7' || selectedPaymentItem.value.id === '8') {
       winRef = window.open('about:blank', '_blank')
     }
@@ -489,10 +497,8 @@ const handleDepositSubmit = async () => {
       // form.method = 'POST';
       // document.body.appendChild(form);
       // form.submit();
-
       setTimeout(() => {
-        
-        if(!appInstance) { 
+        if(mobile.value) { 
          // 浏览器端打开新页面
          if(winRef) winRef.location = depositSubmit.value.url
         } else {
@@ -500,7 +506,6 @@ const handleDepositSubmit = async () => {
           window["AndroidWebView"].openUrl(depositSubmit.value.url)
         }
       }, 0)
-
       const toast = useToast();
       toast.success(t("deposit_dialog.text_1"), {
         timeout: 3000,
@@ -812,6 +817,7 @@ onMounted(async () => {
   setDepositWithdrawToggle(false);
   await dispatchUserDepositCfg();
   await dispatchUserActivityList();
+  runningSystem()
   selectedCurrencyUnit.value = userBalance.value.currency;
   currencyList.value.map(item => {
     if (item.name == userBalance.value.currency) {
@@ -822,7 +828,6 @@ onMounted(async () => {
 </script>
 
 <template>
-<ActivityDrawer v-if="showActivityDrawer" v-model="showActivityDrawer" :id="activityId"></ActivityDrawer>
   <v-dialog
     v-model="modelValueNew"
     :class="depositBlurEffectShow ? 'm-deposit-dialog' : ''"
@@ -833,8 +838,13 @@ onMounted(async () => {
     style="top: 60px"
     persistent
   >
-    <div class="mobile-deposit-container" :class="depositBlurEffectShow ? 'deposit-bg-blur' : ''">
-      <v-row class="mt-6 mx-10 text-400-12 gray">{{ t("deposit_dialog.deposit_currency") }}</v-row>
+    <div
+      class="mobile-deposit-container"
+      :class="depositBlurEffectShow ? 'deposit-bg-blur' : ''"
+    >
+      <v-row class="mt-6 mx-10 text-400-12 gray">{{
+        t("deposit_dialog.deposit_currency")
+      }}</v-row>
       <v-menu offset="4" class="mt-1" v-model:model-value="currencyMenuShow">
         <template v-slot:activator="{ props }">
           <v-card
@@ -851,7 +861,9 @@ onMounted(async () => {
               <template v-slot:prepend>
                 <img :src="selectedCurrencyItem.icon" width="20" />
               </template>
-              <v-list-item-title class="ml-2 text-400-12">{{ selectedCurrencyItem.name }}</v-list-item-title>
+              <v-list-item-title class="ml-2 text-400-12">{{
+                selectedCurrencyItem.name
+              }}</v-list-item-title>
             </v-list-item>
           </v-card>
         </template>
@@ -875,10 +887,77 @@ onMounted(async () => {
         </v-list-item>
         </v-list>-->
       </v-menu>
-      <v-row class="mt-6 mx-10 text-400-12 gray">{{ t("deposit_dialog.choose_payment_method") }}</v-row>
+      <v-row class="mt-6 mx-10 text-400-12 gray">{{
+        t("deposit_dialog.choose_payment_method")
+      }}</v-row>
 
       <!-- 付款方式 -->
-      <v-menu
+      <v-card
+        color="#15161C"
+        theme="dark"
+        class="mx-6 mt-4 m-deposit-card-height"
+        style="border-radius: 8px"
+      >
+        <v-list-item
+          v-bind="props"
+          class="payment-item m-deposit-card-height"
+          value="payment dropdown"
+          :append-icon="paymentMenuShow ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+          @click="paymentMenuShow = !paymentMenuShow"
+        >
+          <template v-slot:prepend>
+            <img :src="selectedPaymentItem.icon" width="52" />
+          </template>
+          <v-list-item-title class="ml-2 text-400-12">{{
+            selectedPaymentItem.name
+          }}</v-list-item-title>
+        </v-list-item>
+      </v-card>
+      <div v-if="paymentMenuShow">
+        <v-list theme="dark" bg-color="#15161C" class="mr-6">
+          <v-row class="m-payment-width-370 px-2">
+            <v-col
+              cols="12"
+              v-for="(paymentItem, paymentIndex) in paymentList"
+              :key="paymentIndex"
+              class="pa-1"
+            >
+              <v-card
+                color="#23262F"
+                theme="dark"
+                class="text-center"
+                :class="
+                  selectedPaymentItem.name == paymentItem.name
+                    ? 'border-active'
+                    : ''
+                "
+                style="border-radius: 8px; box-shadow: none"
+              >
+                <v-list-item
+                  class="payment-select-item pa-2"
+                  :value="paymentItem.name"
+                  @click="handleSelectPayment(paymentItem)"
+                >
+                  <v-row class="align-center">
+                    <v-col cols="4" class="text-center">
+                      <img :src="paymentItem.icon" width="62" />
+                    </v-col>
+                    <v-col cols="8" class="text-left">
+                      <v-list-item-title class="text-400-12">{{
+                        paymentItem.name
+                      }}</v-list-item-title>
+                      <v-list-item-title class="text-400-12">{{
+                        paymentItem.description
+                      }}</v-list-item-title>
+                    </v-col>
+                  </v-row>
+                </v-list-item>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-list>
+      </div>
+      <!-- <v-menu
         offset="4"
         class="mt-1"
         v-model:model-value="paymentMenuShow"
@@ -938,13 +1017,18 @@ onMounted(async () => {
             </v-col>
           </v-row>
         </v-list>
-      </v-menu>
+      </v-menu> -->
 
       <div class="mx-4 mt-2">
-        <img src="@/assets/public/image/bg_public_02_01.png" style="width: 100%" />
+        <img
+          src="@/assets/public/image/bg_public_02_01.png"
+          style="width: 100%"
+        />
       </div>
-      <v-row class="mt-2 mx-10 text-400-12 gray">{{ t("deposit_dialog.deposit_amount") }}</v-row>
-      
+      <v-row class="mt-2 mx-10 text-400-12 gray">{{
+        t("deposit_dialog.deposit_amount")
+      }}</v-row>
+
       <!-- 存款数额档次 -->
       <v-row class="mt-2 mx-4">
         <v-col
@@ -957,46 +1041,59 @@ onMounted(async () => {
             class="my-1 text-none"
             height="40px"
             :class="[
-            depositAmountItem.depositSelect == depositAmount
-              ? 'm-deposit-amout-btn-black'
-              : 'm-deposit-amout-btn-white',
-          ]"
+              depositAmountItem.depositSelect == depositAmount
+                ? 'm-deposit-amout-btn-black'
+                : 'm-deposit-amout-btn-white'
+            ]"
             @click="handleDepositAmount(depositAmountItem.depositSelect)"
           >
             <div class="m-deposit-amout-btn-text-box">
-              <span
-                class="m-deposit-amout-btn-text-price"
-              >{{ platformCurrency }}{{ depositAmountItem.depositSelect }}</span>
+              <span class="m-deposit-amout-btn-text-price"
+                >{{ platformCurrency
+                }}{{ depositAmountItem.depositSelect }}</span
+              >
               <div
                 class="m-deposit-amout-btn-text-award-price"
                 v-if="!bonusCheck && depositAmountItem.bonus != 0"
               >
-                <font class="text-700-6 white">{{ t("deposit_dialog.text_3")}}</font>
-                <font
-                  class="text-700-6 award-price-color"
-                >{{ platformCurrency }}{{countDepositAmount(depositAmountItem)}}</font>
+                <font class="text-700-6 white">{{
+                  t("deposit_dialog.text_3")
+                }}</font>
+                <font class="text-700-6 award-price-color"
+                  >{{ platformCurrency
+                  }}{{ countDepositAmount(depositAmountItem) }}</font
+                >
               </div>
             </div>
             <!-- 比例 -->
-            <div class="m-deposit-amount-area" v-if="!bonusCheck && depositAmountItem.bonus != 0">
+            <div
+              class="m-deposit-amount-area"
+              v-if="!bonusCheck && depositAmountItem.bonus != 0"
+            >
               <div class="m-deposit-amount-rate-text">
                 {{
-                depositAmountItem.type == 0
-                ? depositAmountItem.bonus
-                : Number(depositAmountItem.bonus) * 100 + "%"
+                  depositAmountItem.type == 0
+                    ? depositAmountItem.bonus
+                    : Number(depositAmountItem.bonus) * 100 + "%"
                 }}
               </div>
             </div>
             <!-- 火标志 -->
-            <div class="m-deposit-amount-hot animated infinite tada" v-if="depositAmountItem.depositSelect == 300 || depositAmountItem.depositSelect == 1000">
+            <div
+              class="m-deposit-amount-hot animated infinite tada"
+              v-if="
+                depositAmountItem.depositSelect == 300 ||
+                  depositAmountItem.depositSelect == 1000
+              "
+            >
               <inline-svg
                 :src="icon_public_160"
                 width="20"
                 height="20"
                 style="margin: 6px 0px 0px 6px"
               ></inline-svg>
-                <!-- :transform-source="favoriteIconTransform" -->
-              </div>
+              <!-- :transform-source="favoriteIconTransform" -->
+            </div>
           </v-btn>
         </v-col>
       </v-row>
@@ -1016,13 +1113,13 @@ onMounted(async () => {
         <ValidationBox
           v-if="isShowAmountValidation"
           :validationText2="
-          t('withdraw_dialog.validation.text_2') +
-          selectedPaymentItem.min +
-          ', ' +
-          t('withdraw_dialog.validation.text_3') +
-          selectedPaymentItem.max +
-          '.'
-        "
+            t('withdraw_dialog.validation.text_2') +
+              selectedPaymentItem.min +
+              ', ' +
+              t('withdraw_dialog.validation.text_3') +
+              selectedPaymentItem.max +
+              '.'
+          "
         />
       </v-row>
       <div class="mt-0 mx-4 d-flex align-center">
@@ -1057,11 +1154,13 @@ onMounted(async () => {
         >
           <div class="m-deposit-btn-check" @click="jumpPromocione">
             <span>{{ t("deposit_dialog.text_4") }}</span>
-            <span class="ml-1">{{'>'}}</span>
+            <span class="ml-1">{{ ">" }}</span>
           </div>
           <div class="d-flex align-center">
             <img src="@/assets/vip/image/img_vip_10.png" width="21" />
-            <div class="text-700-12 white" style="flex: 1;">{{ depositConfig.name }}</div>
+            <div class="text-700-12 white" style="flex: 1;">
+              {{ depositConfig.name }}
+            </div>
           </div>
           <div class="d-flex align-start ml-6">
             <img src="@/assets/public/svg/icon_public_03.svg" />
@@ -1077,7 +1176,16 @@ onMounted(async () => {
           :loading="loading"
           :onclick="handleDepositSubmit"
           style="width: -moz-available; width: -webkit-fill-available"
-        >{{ t("deposit_dialog.deposit_btn_text") }}</v-btn>
+          >{{ t("deposit_dialog.deposit_btn_text") }}</v-btn
+        >
+        <v-btn
+          class="my-3 mx-6 m-deposit-btn"
+          :class="isDepositBtnReady ? 'm-deposit-btn-ready' : ''"
+       
+          :onclick="testJump"
+          style="width: -moz-available; width: -webkit-fill-available"
+          >{{'百度'}}</v-btn
+        >
       </div>
       <v-dialog
         v-model="promotionDialogVisible"
@@ -1104,6 +1212,11 @@ onMounted(async () => {
       </v-dialog>
     </div>
   </v-dialog>
+  <ActivityDrawer
+    v-if="showActivityDrawer"
+    v-model="showActivityDrawer"
+    :id="activityId"
+  ></ActivityDrawer>
 </template>
 
 
@@ -1341,7 +1454,7 @@ onMounted(async () => {
   width: 100%;
   background: #1d2027;
   border-radius: 8px 8px 0 0;
-  box-shadow: 0px -4px 6px 1px #0000004D;
+  box-shadow: 0px -4px 6px 1px #0000004d;
 }
 
 .m-deposit-footer-text-position {
