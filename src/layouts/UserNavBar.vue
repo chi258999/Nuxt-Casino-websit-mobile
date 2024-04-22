@@ -8,6 +8,7 @@ import { appBarStore } from "@/store/appBar";
 import { authStore } from "@/store/auth";
 import { mailStore } from "@/store/mail";
 import { vipStore } from "@/store/vip";
+import { activityAppStore } from '@/store/activityApp';
 import { agentStore } from "@/store/agent";
 import { storeToRefs } from "pinia";
 import { useDisplay } from 'vuetify';
@@ -30,7 +31,6 @@ import img_vipemblem_200 from "@/assets/vip/image/img_vipemblem_200.png";
 import { menuStore } from "@/store/menu";
 import { BtTabEnum } from '@/enums/bonusTransactionEnum';
 import { toFormatNum } from '@/utils/numFormat';
-import { activityAppStore } from '@/store/activityApp';
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 import BScroll from '@better-scroll/core'
@@ -406,6 +406,12 @@ const betRateVal = computed(() => {
   }
 })
 
+// 获取模式
+const mobile = computed(() => {
+  const { getMobile } = storeToRefs(activityAppStore());
+  return getMobile.value;
+});
+
 watch(vipLevels, (value) => {
   value.map(item => {
     if (item.level == vipInfo.value.level) {
@@ -464,9 +470,9 @@ onMounted(async () => {
     :touchless="true"
     :on-scroll="handleScroll"
   >
-    <!-- <template v-slot:prepend>
-      <div :class="refferalAppBarShow ? 'user-navbar-position' : ''"></div>
-    </template> -->
+    <template v-slot:prepend>
+      <div :class="refferalAppBarShow&&mobile ? 'user-navbar-position' : ''"></div>
+    </template>
     <div ref="navScroll" class="v-navigation-drawer__content" @scroll="handleScroll">
       <div class="scroll-wrapper" ref='bscrollRef'>
         <div class="content">
@@ -848,7 +854,7 @@ onMounted(async () => {
 }
 
 .user-navbar-position {
-  margin-top: 35px;
+  margin-top: 45px;
 }
 
 .m-nav-drawer-content {

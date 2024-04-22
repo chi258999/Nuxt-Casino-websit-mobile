@@ -288,11 +288,13 @@ onMounted(async () => {
 </script>
 
 <template>
+<!--    @click:outside="emit('closeLoginBonusDialog')" -->
   <v-dialog
     v-model="modelValueNew"
     :width="mobileWidth < 600 ? '340' : '471'"
-    @click:outside="emit('closeLoginBonusDialog')"
     :class="mobileWidth < 600 ? 'm-login-bonus-dialog' : ''"
+    :scrim="true"
+    persistent
     style="z-index: 1000000;top: 60px"
   >
     <div class="m-login-bonus-dialog-container" :class="confirmDialog ? 'blur-effect' : ''">

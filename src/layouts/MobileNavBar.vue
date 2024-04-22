@@ -13,6 +13,7 @@ import { agentStore } from "@/store/agent";
 import { vipStore } from "@/store/vip";
 import { liveChatStore } from "@/store/liveChat";
 import { authStore } from "@/store/auth";
+import { activityAppStore } from '@/store/activityApp';
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { Network } from "@/net/Network";
@@ -898,6 +899,12 @@ const getCasinoCategoriesFunc = async () => {
   return result
 }
 
+// 获取模式
+const mobile = computed(() => {
+  const { getMobile } = storeToRefs(activityAppStore());
+  return getMobile.value;
+});
+
 onMounted(async () => {
   drawer.value = mobileWidth.value < 1280 ? false : true;
   languageText();
@@ -922,7 +929,7 @@ onMounted(async () => {
     <template v-slot:prepend>
       <v-list-item
         class="m-casino-toggle"
-        :class="refferalAppBarShow ? '' : ''"
+        :class="refferalAppBarShow&&mobile ? 'mt-9' : ''"
         style="height: 56px; visibility: hidden"
       >
         <input type="checkbox" id="m-casino-toggle" />

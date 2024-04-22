@@ -301,7 +301,9 @@ const MSignup = defineComponent({
       } else {
         if (
           errMessage.value ==
-          "The account you entered has been used by someone else, please input again"
+          "The account you entered has been used by someone else, please input again" ||
+          errMessage.value ==
+          "The account number you have entered has been used by someone else, please re-enter"
         ) {
           state.currentPage = state.PAGE_TYPE.ALREADY_REGISTERED;
         } else {
