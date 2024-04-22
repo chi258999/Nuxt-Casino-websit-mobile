@@ -4,10 +4,13 @@ import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
 import { useDisplay } from "vuetify";
 import { storeToRefs } from 'pinia';
 import { activityAppStore } from '@/store/activityApp';
-const { setAppConfirmDialogShow, setShowAppGuidance, setAppGuidance, setOpenAppGuidance } = activityAppStore();
+const { setAppConfirmDialogShow, setShowAppGuidance, setAppGuidance, setOpenAppGuidance, automaticPopUpApp } = activityAppStore();
 import { toFormatNum } from '@/utils/numFormat';
+import { mailStore } from "@/store/mail";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
+import { useRoute } from 'vue-router';
+const route = useRoute();
 
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
@@ -81,6 +84,17 @@ watch(appConfirmDialogShow, (value) => {
   }
 })
 
+const isHomePage = ref(route.path === '/');
+// 使用 watch 监听路由变化
+watch(() => route.path, (newPath) => {
+  isHomePage.value = newPath === '/';
+  if (newPath !== '/') {
+    automaticPopUpApp(true)
+  } else {
+    automaticPopUpApp(false)
+  }
+});
+
 // 初始化执行一次
 setOpenAppGuidance(false)
 
@@ -88,6 +102,12 @@ const frequency = ref(0) // 监听控制引导弹框打开
 // 关闭app弹框执行
 const closeApp = () => {
   setAppConfirmDialogShow(false)
+  // 如果在首页，就打开监听
+  if (isHomePage.value) {
+    automaticPopUpApp(false)
+  } else {
+    automaticPopUpApp(true)
+  }
   if (frequency.value === 0) {
     setTimeout(() => {
       setShowAppGuidance(true)
