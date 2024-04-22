@@ -942,7 +942,7 @@ onMounted(async () => {
                 >
                   <v-row class="align-center">
                     <v-col cols="4" class="text-center">
-                      <img :src="paymentItem.icon" width="62" />
+                      <img :src="paymentItem.icon" width="62" height="28" />
                     </v-col>
                     <v-col cols="8" class="text-left">
                       <v-list-item-title class="text-400-12">{{
