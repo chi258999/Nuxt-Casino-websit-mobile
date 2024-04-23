@@ -583,7 +583,7 @@ const { setAppConfirmDialogShow, automaticPopUpApp, setAppGuidance, setShowAppGu
 // 打开下载app弹框
 const openActivityApp = () => {
   setAppConfirmDialogShow(true)
-  automaticPopUpApp(true)
+  // automaticPopUpApp(true)
 }
 
 const activityAppBonus = computed(() => {
@@ -602,11 +602,11 @@ const appGuidanceEvent = () => {
   setShowAppGuidance(false)
   setAppConfirmDialogShow(true)
   // 如果在首页，就打开监听
-  if (isHomePage.value) {
-    automaticPopUpApp(false)
-  } else {
-    automaticPopUpApp(true)
-  }
+  // if (isHomePage.value) {
+  //   automaticPopUpApp(false)
+  // } else {
+  //   automaticPopUpApp(true)
+  // }
 }
 
 const appConfirmDialogShow = computed(() => {
@@ -640,13 +640,16 @@ onMounted(async() => {
   // 在组件挂载时启动摇摆按钮定时器
   setInterval(swingButton, 10000); // 每10秒执行一次
 
+  // 初始化，默认打开弹框
+  setAppConfirmDialogShow(true)
+
   // 判断下载app是否需要自动弹出
   // 如果在首页，就打开监听
-  if (isHomePage.value) {
-    automaticPopUpApp(false)
-  } else {
-    automaticPopUpApp(true)
-  }
+  // if (isHomePage.value) {
+  //   automaticPopUpApp(false)
+  // } else {
+  //   automaticPopUpApp(true)
+  // }
 
   // console.log(route.query.code);
   // 带有邀请注册码的，直接打开注册弹窗

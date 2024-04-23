@@ -49,7 +49,7 @@ downloadAppAcquisition()
 
 const downloadAppEvent = () => {
   setAppConfirmDialogShow(true)
-  automaticPopUpApp(true)
+  // automaticPopUpApp(true)
 }
 
 // 获取模式
