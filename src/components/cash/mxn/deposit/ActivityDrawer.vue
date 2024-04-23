@@ -12,7 +12,7 @@
         background: 'unset !important',
       }"
   >
-    <div class="m-promo-detail-body">
+    <div class="m-activity-detail-body">
       <div class="text-700-14 white text-center title">Event Details</div>
       <v-card class="m-promo-detail-card mt-2 pa-2">
         <template v-if="!detailShow">
@@ -103,7 +103,7 @@ onMounted(async () => {
 </script>
 
 <style lang="scss">
-.m-promo-detail-body {
+.m-activity-detail-body {
   height: 450px;
   background: #1d2027;
   .title {
