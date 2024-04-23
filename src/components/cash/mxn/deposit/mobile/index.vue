@@ -277,8 +277,6 @@ watch(depositConfig, (newValue) => {
       max: item.max
     })
   })
-  console.log(paymentList.value, 'paymentList');
-  
   const keyArray = Object.keys(newValue["cfg"]);
   const filteredObjects = filterByKeyArray(currencyTemplateList, 'name', keyArray);
   currencyList.value = filteredObjects;
@@ -952,7 +950,7 @@ onMounted(async () => {
                     </v-col>
                     <v-col cols="8" class="text-left">
                       <v-list-item-title class="text-400-12">{{
-                        paymentItem.icon
+                        paymentItem.name
                       }}</v-list-item-title>
                       <v-list-item-title class="text-400-12">{{
                         paymentItem.description
