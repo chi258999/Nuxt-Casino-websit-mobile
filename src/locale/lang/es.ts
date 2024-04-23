@@ -1074,7 +1074,10 @@ export const lang: langType = {
       "text_9": "Jugador/Familia",
       "text_10": "Tiempo",
       "text_11": "Apuesta",
-      "text_12": "Multiplicador"
+      "text_12": "Multiplicador",
+      "text_13": "Ganar",
+      "text_14": "Efectivo",
+      "text_15": "Apuesta",
     },
     "footer": {
       "game": {
