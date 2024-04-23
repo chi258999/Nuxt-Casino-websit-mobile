@@ -908,7 +908,8 @@ onMounted(async () => {
           @click="paymentMenuShow = !paymentMenuShow"
         >
           <template v-slot:prepend>
-            <img :src="selectedPaymentItem.icon" width="52" />
+            <!-- <img :src="selectedPaymentItem.icon" width="52" /> -->
+            <inline-svg :src="selectedPaymentItem.icon" width="62"></inline-svg>
           </template>
           <v-list-item-title class="ml-2 text-400-12">{{
             selectedPaymentItem.name
@@ -943,8 +944,9 @@ onMounted(async () => {
                   <v-row class="align-center">
                     <v-col cols="4" class="text-center">
                       <!-- ios端用img显示svg会显示模糊 -->
-                      <!-- <img :src="paymentItem.icon" width="62" height="28" /> -->
-                      <inline-svg :src="paymentItem.icon" width="62"></inline-svg>
+                      <img v-if="paymentItem.id !== '9'" :src="paymentItem.icon" width="62" height="28" />
+                      <inline-svg v-else :src="paymentItem.icon" width="62"></inline-svg>
+                      <!-- <inline-svg :src="paymentItem.icon" width="62"></inline-svg> -->
                     </v-col>
                     <v-col cols="8" class="text-left">
                       <v-list-item-title class="text-400-12">{{

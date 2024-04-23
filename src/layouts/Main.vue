@@ -146,8 +146,6 @@ const signUpForm = computed(() => {
   return getSignUpForm.value
 })
 
-// authentication dialog
-// const authDialog = ref<boolean>(false);
 const signupDialog = ref<boolean>(false);
 const signoutDialog = ref<boolean>(false);
 const loginDialog = ref<boolean>(false);
