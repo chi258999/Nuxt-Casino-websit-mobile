@@ -86,14 +86,14 @@ watch(appConfirmDialogShow, (value) => {
 
 const isHomePage = ref(route.path === '/');
 // 使用 watch 监听路由变化
-watch(() => route.path, (newPath) => {
-  isHomePage.value = newPath === '/';
-  if (newPath !== '/') {
-    automaticPopUpApp(true)
-  } else {
-    automaticPopUpApp(false)
-  }
-});
+// watch(() => route.path, (newPath) => {
+//   isHomePage.value = newPath === '/';
+//   if (newPath !== '/') {
+//     automaticPopUpApp(true)
+//   } else {
+//     automaticPopUpApp(false)
+//   }
+// });
 
 // 判断是否打开弹框
 const mailMenuShow = computed(() => {
@@ -109,11 +109,11 @@ const frequency = ref(0) // 监听控制引导弹框打开
 const closeApp = () => {
   setAppConfirmDialogShow(false)
   // 如果在首页，就打开监听
-  if (isHomePage.value) {
-    automaticPopUpApp(false)
-  } else {
-    automaticPopUpApp(true)
-  }
+  // if (isHomePage.value) {
+  //   automaticPopUpApp(false)
+  // } else {
+  //   automaticPopUpApp(true)
+  // }
   if (frequency.value === 0) {
     setTimeout(() => {
       setShowAppGuidance(true)
@@ -129,7 +129,7 @@ const closeApp = () => {
   enter-active-class="animated hinge fadeInUp"
   leave-active-class="animated hinge fadeOutDown"
 >
-  <div class="m-app slideInDown" v-if="appConfirmDialogShow && !mailMenuShow && mobileWidth < 600 && mobile">
+  <div class="m-app slideInDown" v-if="appConfirmDialogShow && mobileWidth < 600 && mobile">
     <v-btn
       class="m-app-confirm-drawer-close-button"
       icon="true"
