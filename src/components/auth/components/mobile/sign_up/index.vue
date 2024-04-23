@@ -7,11 +7,11 @@ import {
   onMounted,
   onBeforeUnmount,
   ref,
-  watch,
+  watch
 } from "vue";
 import { useI18n } from "vue-i18n";
 import ValidationBox from "./ValidationBox.vue";
-import grecaptchaDrawer from './grecaptchaDrawer.vue'
+import grecaptchaDrawer from "./grecaptchaDrawer.vue";
 import { useDisplay } from "vuetify";
 import { authStore } from "@/store/auth";
 import { userStore } from "@/store/user";
@@ -26,9 +26,16 @@ import { currencyStore } from "@/store/currency";
 import AdjustClass from "@/utils/adjust";
 import { googleTokenLogin } from "vue3-google-login";
 import EventToken from "@/constants/EventToken";
-import { loginWithSocialMedia, loginType, loginOrRegister } from "@/plugins/third-party-login";
-import { ThirdPartyWayEnum } from '@/enums/userEnum'
+import { useTimer } from "vue-timer-hook";
+import {
+  loginWithSocialMedia,
+  loginType,
+  loginOrRegister
+} from "@/plugins/third-party-login";
+import { ThirdPartyWayEnum } from "@/enums/userEnum";
 import { ElLoading } from "element-plus";
+import { NETWORK } from "@/net/NetworkCfg";
+import { Network } from "@/net/Network";
 
 const MSignup = defineComponent({
   components: {
@@ -37,12 +44,12 @@ const MSignup = defineComponent({
     WarningIcon,
     grecaptchaDrawer
   },
-  emits: ["close", "switchAuthDialog","setSignInForm"],
+  emits: ["close", "switchAuthDialog", "setSignInForm"],
   props: {
     signUpDialogCheck: {
       type: Boolean,
-      required: true,
-    },
+      required: true
+    }
   },
   setup(props, { emit }) {
     // translation
@@ -55,9 +62,12 @@ const MSignup = defineComponent({
     const { dispatchUserBalance } = userStore();
     const { dispatchSocketConnect } = socketStore();
     const { dispatchCurrencyList } = currencyStore();
+    const { dispatchRegisterConfig } = authStore();
 
     const { width } = useDisplay();
     const route = useRoute();
+
+    const network: Network = Network.getInstance();
 
     // initiate component state
     const state = reactive({
@@ -66,13 +76,19 @@ const MSignup = defineComponent({
       isAgreed: true,
       socialIconList: [
         {
-          url: new URL("@/assets/public/svg/icon_public_28.svg", import.meta.url).href,
+          url: new URL(
+            "@/assets/public/svg/icon_public_28.svg",
+            import.meta.url
+          ).href,
           value: ThirdPartyWayEnum.FACEBOOK_LOGIN
         },
         {
-          url: new URL("@/assets/public/svg/icon_public_google.svg", import.meta.url).href,
+          url: new URL(
+            "@/assets/public/svg/icon_public_google.svg",
+            import.meta.url
+          ).href,
           value: ThirdPartyWayEnum.GOOGLE_LOGIN
-        },
+        }
         // new URL("@/assets/public/svg/icon_public_28.svg", import.meta.url).href,
         // new URL("@/assets/public/svg/icon_public_29.svg", import.meta.url).href,
         // new URL("@/assets/public/svg/icon_public_30.svg", import.meta.url).href,
@@ -81,14 +97,17 @@ const MSignup = defineComponent({
       PAGE_TYPE: {
         SIGNUP_FORM: 0,
         CONFIRM_CANCEL: 1,
-        ALREADY_REGISTERED: 2,
+        ALREADY_REGISTERED: 2
       },
       formData: {
         emailAddress: "",
+        phone: "",
+        code: "",
         password: "",
         promoCode: "",
         isAgreed: true,
         visible: false,
+        areaCode: "+86"
       },
       userName: "",
       isShowPassword: false,
@@ -98,14 +117,14 @@ const MSignup = defineComponent({
       isShowPasswordValidation: false,
       isShowUsernameValidation: false,
       passwordValidationStrList: [
-        t("signup.formPage.validation.password.items[0]"),
+        t("signup.formPage.validation.password.items[0]")
         // t("signup.formPage.validation.password.items[1]"),
         // t("signup.formPage.validation.password.items[2]"),
         // t("signup.formPage.validation.password.items[3]"),
       ],
       userNameValidationStrList: [
         t("signup.displayNamePage.validation.username.items[0]"),
-        t("signup.displayNamePage.validation.username.items[1]"),
+        t("signup.displayNamePage.validation.username.items[1]")
       ],
       slides: [
         new URL("@/assets/public/image/ua_public_01.png", import.meta.url).href,
@@ -117,20 +136,34 @@ const MSignup = defineComponent({
         new URL("@/assets/public/image/ua_public_07.png", import.meta.url).href,
         new URL("@/assets/public/image/ua_public_08.png", import.meta.url).href,
         new URL("@/assets/public/image/ua_public_09.png", import.meta.url).href,
-        new URL("@/assets/public/image/ua_public_10.png", import.meta.url).href,
+        new URL("@/assets/public/image/ua_public_10.png", import.meta.url).href
       ],
       loading: false,
       mailCardHeight: 0,
       emailPartName: "",
-      promoCodeDisabled:false,
+      promoCodeDisabled: false,
       indexValue: "",
       typeValue: "",
-      grecaptchaDrawer:true
+      grecaptchaDrawer: true,
+      registerConfig: {
+        model: 1, //1:邮件登录 2:手机登录
+        is_verify: false //登录是否验证
+      }
     });
+
+    // const timer_value = ref<number>(60);
+    // const time = new Date();
+    // const timer = useTimer(Number(time));
+    // time.setSeconds(time.getSeconds() + timer_value.value); // 1hour timer
+    // timer.start();
+    const timer_value = ref<number>(0); //120秒
+    const time = new Date();
+    time.setSeconds(time.getSeconds() + timer_value.value);
+    const timer = useTimer(Number(time));
 
     watch(
       props,
-      (value) => {
+      value => {
         if (state.currentPage == state.PAGE_TYPE.SIGNUP_FORM) {
           state.currentPage = state.PAGE_TYPE.CONFIRM_CANCEL;
         } else if (state.currentPage == state.PAGE_TYPE.CONFIRM_CANCEL) {
@@ -150,7 +183,8 @@ const MSignup = defineComponent({
 
     // computed variables
     const isFormDataReady = computed(
-      (): boolean => validateEmail() && validatePassword() && state.formData.isAgreed
+      (): boolean =>
+        validateEmail() && validatePassword() && state.formData.isAgreed
     );
 
     const mobileVersion = computed(() => {
@@ -200,13 +234,21 @@ const MSignup = defineComponent({
       const condition1 = username.length <= 20 && username.length >= 2;
       // Nickname must not be like your email
       const condition2 = !(
-        username.toLowerCase().trim() === state.formData.emailAddress.toLowerCase().trim()
+        username.toLowerCase().trim() ===
+        state.formData.emailAddress.toLowerCase().trim()
       );
 
       return [condition1, condition2];
     });
 
-    const currentLanguage = computed((): string => localStorage.getItem("lang") || "en");
+    const timerValue = computed(() => {
+      const { getTimerValue } = storeToRefs(authStore());
+      return getTimerValue.value;
+    });
+
+    const currentLanguage = computed(
+      (): string => localStorage.getItem("lang") || "en"
+    );
 
     // validation functions
     const validateEmail = (): boolean => {
@@ -225,11 +267,17 @@ const MSignup = defineComponent({
     };
 
     const validatePassword = (): boolean => {
-      return passwordValidationList.value.reduce((res, item) => res && item, true);
+      return passwordValidationList.value.reduce(
+        (res, item) => res && item,
+        true
+      );
     };
 
     const validateUserName = (): boolean => {
-      return userNameValidationList.value.reduce((res, item) => res && item, true);
+      return userNameValidationList.value.reduce(
+        (res, item) => res && item,
+        true
+      );
     };
 
     // event handler functions, needs to be updated
@@ -252,9 +300,12 @@ const MSignup = defineComponent({
       state.isShowUsernameValidation = false;
     };
 
-    const handleOnEmailInputBlur = (e:any): void => {
+    const handleOnEmailInputBlur = (e: any): void => {
       // handleValidateEmail();
-      state.formData.emailAddress =e.target.value.replace(/([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g, '$1')
+      state.formData.emailAddress = e.target.value.replace(
+        /([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g,
+        "$1"
+      );
       state.isShowEmailValidaton = false;
       setTimeout(() => {
         state.mailCardHeight = 0;
@@ -289,21 +340,21 @@ const MSignup = defineComponent({
           hideProgressBar: true,
           closeButton: "button",
           icon: SuccessIcon,
-          rtl: false,
+          rtl: false
         });
 
         // 数据埋点
         AdjustClass.getInstance().adjustTrackEvent({
           key: "REGISTER",
           value: userInfo.value.id.toString(),
-          params: "",
+          params: ""
         });
       } else {
         if (
           errMessage.value ==
-          "The account you entered has been used by someone else, please input again" ||
+            "The account you entered has been used by someone else, please input again" ||
           errMessage.value ==
-          "The account number you have entered has been used by someone else, please re-enter"
+            "The account number you have entered has been used by someone else, please re-enter"
         ) {
           state.currentPage = state.PAGE_TYPE.ALREADY_REGISTERED;
         } else {
@@ -318,16 +369,16 @@ const MSignup = defineComponent({
             hideProgressBar: true,
             closeButton: "button",
             icon: WarningIcon,
-            rtl: false,
+            rtl: false
           });
         }
       }
     };
 
     // handle form submit  登录提交
-    const handleSignupFormSubmit = async (event) => {
+    const handleSignupFormSubmit = async event => {
       // 不是回车键不触发 event.keyCode判断是不是软键盘触发
-      if(event.keyCode !== undefined && event.keyCode !== 13) return
+      if (event.keyCode !== undefined && event.keyCode !== 13) return;
       //关闭手机软键盘
       document.activeElement.blur();
 
@@ -353,48 +404,55 @@ const MSignup = defineComponent({
           hideProgressBar: true,
           closeButton: "button",
           icon: WarningIcon,
-          rtl: false,
+          rtl: false
         });
         return;
       }
 
       state.loading = true;
       await dispatchSignUp({
-        uid: state.formData.emailAddress,
+        uid:
+          state.registerConfig.model != 2
+            ? state.formData.emailAddress
+            : state.formData.phone,
         password: state.formData.password,
-        referral_code: state.formData.promoCode.trim().replace(/\s+/g, ' '),
+        referral_code: state.formData.promoCode.trim().replace(/\s+/g, " "),
         browser: "",
         device: "",
         model: "",
         brand: "",
         imei: "",
+        code: state.formData.code
       });
       state.loading = false;
       await registerSuccess();
-      if(!localStorage.getItem(userInfo.value.name)){
-        localStorage.setItem(userInfo.value.name,'0');
-      }else{
-        localStorage.setItem(userInfo.value.name,'1');
+      if (!localStorage.getItem(userInfo.value.name)) {
+        localStorage.setItem(userInfo.value.name, "0");
+      } else {
+        localStorage.setItem(userInfo.value.name, "1");
       }
-      if(route.query.code){
-        funcUrlDel()
+      if (route.query.code) {
+        funcUrlDel();
       }
     };
     // 带有邀请码进来注册完后去掉url上的参数
-   const funcUrlDel=()=>{
-    let url = window.location.href;
-    if (url.indexOf("?") != -1) {
-      url = url.replace(/(\?|#)[^'"]*/, '');
-      window.history.pushState({}, '0', url);
-    }
-   }
+    const funcUrlDel = () => {
+      let url = window.location.href;
+      if (url.indexOf("?") != -1) {
+        url = url.replace(/(\?|#)[^'"]*/, "");
+        window.history.pushState({}, "0", url);
+      }
+    };
 
     const goRegisterPage = (): void => {
       state.currentPage = state.PAGE_TYPE.SIGNUP_FORM;
     };
 
-    const handleEmailChange = (e:any) => {
-      state.formData.emailAddress =e.target.value.replace(/([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g, '$1')
+    const handleEmailChange = (e: any) => {
+      state.formData.emailAddress = e.target.value.replace(
+        /([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g,
+        "$1"
+      );
       handleValidateEmail();
       if (state.formData.emailAddress.includes("@")) {
         state.emailPartName = state.formData.emailAddress.split("@")[0];
@@ -415,7 +473,8 @@ const MSignup = defineComponent({
     };
 
     const mergeEmail = (mail: string) => {
-      state.formData.emailAddress = state.formData.emailAddress.split("@")[0] + mail;
+      state.formData.emailAddress =
+        state.formData.emailAddress.split("@")[0] + mail;
       setTimeout(() => {
         state.mailCardHeight = 0;
       }, 100);
@@ -425,14 +484,36 @@ const MSignup = defineComponent({
       setAuthDialogVisible(false);
     };
 
-    onMounted(() => {
-      console.log("promo code::::::::::::::::::::", route.query.code,state.grecaptchaDrawer);
-        // 带有邀请注册码的自动填入，并且邀请注册码输入框不让填写
-      state.formData.promoCode = route.query.code ? route.query.code.toString() : "";
-      if(route.query.code){
-        state.promoCodeDisabled=true
+    onMounted(async () => {
+      console.log(
+        "promo code::::::::::::::::::::",
+        route.query.code,
+        state.grecaptchaDrawer
+      );
+      // 带有邀请注册码的自动填入，并且邀请注册码输入框不让填写
+      state.formData.promoCode = route.query.code
+        ? route.query.code.toString()
+        : "";
+      if (route.query.code) {
+        state.promoCodeDisabled = true;
       }
+      getRegisterConfig();
     });
+
+    // 获取注册配置
+    const getRegisterConfig = () => {
+      network
+        .request({
+          url: NETWORK.LOGIN.REGISTER_CONFIG,
+          method: "GET",
+          data: {}
+        })
+        .then((res: any) => {
+          if (res.code === 200) {
+            state.registerConfig = res.data;
+          }
+        });
+    };
 
     const router = useRouter();
 
@@ -445,7 +526,7 @@ const MSignup = defineComponent({
       AdjustClass.getInstance().adjustTrackEvent({
         key: "FB_REGISTER",
         value: userInfo.value.id.toString(),
-        params: "",
+        params: ""
       });
     };
 
@@ -453,7 +534,7 @@ const MSignup = defineComponent({
       AdjustClass.getInstance().adjustTrackEvent({
         key: "GOOGLE_REGISTER",
         value: userInfo.value.id.toString(),
-        params: "",
+        params: ""
       });
     };
 
@@ -461,7 +542,7 @@ const MSignup = defineComponent({
       if (response.access_token) {
         const params = {
           id_token: response.access_token,
-          type: 2,
+          type: 2
         };
         await dispatchQuickRegister(params);
         await registerSuccess();
@@ -473,8 +554,13 @@ const MSignup = defineComponent({
 
     // 接受android傳遞的token - google 登录模拟
     globalWindow.googleLogin = async (token: string) => {
-      const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
-      if(token) {
+      const elLoading = ElLoading.service({
+        lock: true,
+        text: "",
+        background: "rgba(0, 0, 0, 0.7)",
+        customClass: "top-loading"
+      });
+      if (token) {
         await loginOrRegister(token, state.indexValue, state.typeValue);
         await registerSuccess();
         elLoading.close();
@@ -491,15 +577,20 @@ const MSignup = defineComponent({
           hideProgressBar: true,
           closeButton: "button",
           icon: WarningIcon,
-          rtl: false,
+          rtl: false
         });
         elLoading.close();
       }
-    }
+    };
     // 接受android傳遞的token  - facebook 登录模拟
     globalWindow.fbrLogin = async (token: string) => {
-      const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
-      if(token) {
+      const elLoading = ElLoading.service({
+        lock: true,
+        text: "",
+        background: "rgba(0, 0, 0, 0.7)",
+        customClass: "top-loading"
+      });
+      if (token) {
         await loginOrRegister(token, state.indexValue, state.typeValue);
         await registerSuccess();
         elLoading.close();
@@ -516,28 +607,28 @@ const MSignup = defineComponent({
           hideProgressBar: true,
           closeButton: "button",
           icon: WarningIcon,
-          rtl: false,
+          rtl: false
         });
         elLoading.close();
       }
-    }
+    };
 
     // 一键注册
     const onSignInSuccessGoogle = async (value: string) => {
       // const elLoading = ElLoading.service({ lock: true, text: '', background: 'rgba(0, 0, 0, 0.7)', customClass: 'top-loading' });
       try {
         if (AdjustClass.getInstance().isMobileWebview) {
-            state.indexValue = value;
-            state.typeValue = 'register';
-            // 啟動android原生登錄流程
-            if (value === "google") {
-              globalWindow["AndroidWebView"].googleLogin();
-            }
-            if (value === "facebook") {
-              globalWindow["AndroidWebView"].facebookLogin();
-            }
+          state.indexValue = value;
+          state.typeValue = "register";
+          // 啟動android原生登錄流程
+          if (value === "google") {
+            globalWindow["AndroidWebView"].googleLogin();
+          }
+          if (value === "facebook") {
+            globalWindow["AndroidWebView"].facebookLogin();
+          }
         } else {
-          await loginWithSocialMedia(value, 'register');
+          await loginWithSocialMedia(value, "register");
           await registerSuccess();
           loginType(value);
         }
@@ -547,9 +638,41 @@ const MSignup = defineComponent({
         // elLoading.close();
       }
     };
+    // 倒计时
+    const countdownTime = computed(() => {
+      return timer.minutes.value.toString().padStart(1, "0") != "0"
+        ? timer.minutes.value.toString().padStart(1, "0") * 60 +
+            timer.seconds.value.toString().padStart(2, "0") * 1
+        : timer.seconds.value.toString().padStart(2, "0");
+    });
+    //发送验证码
+    const sendingCode = () => {
+      if (countdownTime.value != 0) return;
+      let data = {
+        type: state.registerConfig.model != 2 ? 2 : 1,
+        value:
+          state.registerConfig.model != 2
+            ? state.formData.emailAddress
+            : state.formData.phone
+      };
+      network
+        .request({
+          url: NETWORK.LOGIN.VERIFY_SEND,
+          method: "POST",
+          data
+        })
+        .then((res: any) => {
+          if (res.code === 200) {
+            const time = new Date();
+            time.setSeconds(time.getSeconds() + res.data.remaining_time);
+            timer.restart(Number(time));
+          }
+        });
+    };
 
     return {
       t,
+      timer,
       ...toRefs(state),
       isFormDataReady,
       currentLanguage,
@@ -574,8 +697,10 @@ const MSignup = defineComponent({
       goPrivatePolicy,
       registerSuccess,
       onSignInSuccessGoogle,
+      sendingCode,
+      countdownTime
     };
-  },
+  }
 });
 
 export default MSignup;
@@ -595,8 +720,33 @@ export default MSignup;
       </div>
     </div>
     <!-- S 表单 -->
-    <v-form @submit.prevent v-if="currentPage === PAGE_TYPE.SIGNUP_FORM" class="full-width">
-      <div class="relative mt-10 pa-0">
+    <v-form
+      @submit.prevent
+      v-if="currentPage === PAGE_TYPE.SIGNUP_FORM"
+      class="full-width"
+    >
+      <v-row class="mt-1" v-if="registerConfig.model === 2">
+        <v-col cols="4">
+          <v-text-field
+            :label="'captcha'"
+            class="form-textfield normal-textfield ma-0 m-signup-promo"
+            variant="solo"
+            density="comfortable"
+            v-model="formData.areaCode"
+          />
+        </v-col>
+        <v-col cols="8">
+          <v-text-field
+            :label="'Enter phone number'"
+            class="form-textfield normal-textfield ma-0 m-signup-promo"
+            variant="solo"
+            density="comfortable"
+            v-model="formData.phone"
+          />
+        </v-col>
+      </v-row>
+      <!-- 手机号 -->
+      <div class="relative mt-10 pa-0" v-else>
         <v-text-field
           :label="t('signup.formPage.emailAddress')"
           class="form-textfield dark-textfield ma-0 m-text-field m-signup-email"
@@ -619,7 +769,10 @@ export default MSignup;
           "
           :withCautionIcon="true"
         />
-        <div class="m-register-mail-card" :style="{ height: mailCardHeight + 'px' }">
+        <div
+          class="m-register-mail-card"
+          :style="{ height: mailCardHeight + 'px' }"
+        >
           <v-list theme="dark" bg-color="#1D2027">
             <v-list-item
               class="text-600-12 white"
@@ -657,7 +810,32 @@ export default MSignup;
       </div>
       <!-- 邮箱 / -->
 
-      <div class="mt-6 relative pa-0">
+      <v-row v-if="registerConfig.is_verify" class="mt-1">
+        <v-col cols="8">
+          <v-text-field
+            :label="'captcha'"
+            class="form-textfield normal-textfield ma-0 m-signup-promo"
+            variant="solo"
+            density="comfortable"
+            v-model="formData.code"
+          />
+        </v-col>
+        <v-col cols="4">
+          <v-btn
+            :class="
+              countdownTime == 0 ? 'm-signup-btn' : 'm-signup-disabled-btn'
+            "
+            width="100%"
+            height="40px"
+            :loading="loading"
+            :onclick="sendingCode"
+          >
+            {{ countdownTime == 0 ? "SENDING" : countdownTime }}
+          </v-btn>
+        </v-col>
+      </v-row>
+      <!-- 验证码 -->
+      <div class="relative pa-0 mt-2">
         <v-text-field
           :label="t('signup.formPage.password')"
           class="form-textfield dark-textfield ma-0 m-signup-password"
@@ -691,7 +869,7 @@ export default MSignup;
       </div>
       <!-- 密码 / -->
 
-      <v-row class="mt-2">
+      <v-row class="mt-1">
         <v-text-field
           :label="t('signup.formPage.promoCode')"
           class="form-textfield normal-textfield m-signup-promo"
@@ -704,7 +882,10 @@ export default MSignup;
       </v-row>
       <!-- 邀请码 / -->
 
-      <div class="mt-2" style="display: flex; align-items: center; height: 46px">
+      <div
+        class="mt-2"
+        style="display: flex; align-items: center; height: 46px"
+      >
         <v-checkbox
           v-model="formData.isAgreed"
           hide-details
@@ -740,7 +921,9 @@ export default MSignup;
       </v-row>
       <v-row class="mt-6 m-justify-content">
         <v-col cols="4">
-          <div class="d-flex justify-space-around bg-surface-variant social-icon-wrapper">
+          <div
+            class="d-flex justify-space-around bg-surface-variant social-icon-wrapper"
+          >
             <v-sheet
               v-for="(item, index) in socialIconList"
               :key="index"
@@ -836,9 +1019,9 @@ export default MSignup;
 @media (max-width: 600px) {
   .v-field__field {
     color: var(--sec-text-7782-aa, #7782aa);
-    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
-      Microsoft Yahei, sans-serif;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+      DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+      WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -882,18 +1065,18 @@ export default MSignup;
   margin-top: 80px;
   font-weight: 600;
   font-size: 16px;
-  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
-    sans-serif;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+    DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+    WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
 }
 
 .m-signup-continue-btn {
   .v-btn__content {
     color: var(--text-dark-black, white);
     text-align: center;
-    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
-      Microsoft Yahei, sans-serif;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+      DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+      WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -905,9 +1088,9 @@ export default MSignup;
 .m-signup-confirm-btn {
   .v-btn__content {
     text-align: center;
-    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
-      Microsoft Yahei, sans-serif;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+      DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+      WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -919,9 +1102,9 @@ export default MSignup;
   .v-btn__content {
     color: var(--text-dark-black, #fff);
     text-align: center;
-    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
-      Microsoft Yahei, sans-serif;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+      DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+      WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -949,9 +1132,9 @@ export default MSignup;
 
   .v-btn__content {
     text-align: center;
-    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
-      Microsoft Yahei, sans-serif;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+      DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+      WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -971,9 +1154,9 @@ export default MSignup;
   .v-btn__content {
     color: #ffffff;
     text-align: center;
-    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
-      Microsoft Yahei, sans-serif;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+      DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+      WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -1023,9 +1206,9 @@ export default MSignup;
 
 // divider
 .m-divide-text {
-  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
-    sans-serif;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+    DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+    WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -1056,9 +1239,9 @@ export default MSignup;
 
 // ask signin text
 .signin-text {
-  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
-    sans-serif;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+    DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+    WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -1069,9 +1252,9 @@ export default MSignup;
 
 .signin-text2 {
   cursor: pointer;
-  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
-    sans-serif;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+    DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+    WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
   font-style: normal;
   font-weight: 800;
   font-size: 16px;
@@ -1081,9 +1264,9 @@ export default MSignup;
 
 // agreement
 .agreement-text {
-  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
-    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
-    sans-serif;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+    DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+    WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
