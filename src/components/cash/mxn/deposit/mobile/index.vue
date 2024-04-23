@@ -942,7 +942,9 @@ onMounted(async () => {
                 >
                   <v-row class="align-center">
                     <v-col cols="4" class="text-center">
-                      <img :src="paymentItem.icon" width="62" height="28" />
+                      <!-- ios端用img显示svg会显示模糊 -->
+                      <!-- <img :src="paymentItem.icon" width="62" height="28" /> -->
+                      <inline-svg :src="paymentItem.icon" width="62"></inline-svg>
                     </v-col>
                     <v-col cols="8" class="text-left">
                       <v-list-item-title class="text-400-12">{{
