@@ -34,19 +34,35 @@ const platformCurrency = computed<string>(() => {
   return getPlatformCurrency.value;
 });
 
+enum BetHistoryTabList {
+  allBets = 'allBets',
+  highRollers = 'highRollers',
+  luckyBets = 'luckyBets',
+}
+
 const { t } = useI18n();
 const { width } = useDisplay();
-const selectedBtnText = ref<string>("home.bet_history.text_2");
+const selectedBtnText = ref<string>(BetHistoryTabList.allBets);
 const betHistoryInterval = ref<any>(null);
 const { dispatchGameBigWin } = gameStore();
 
 const modules = [Pagination, Virtual, Autoplay, Navigation];
 
-const betHistoryTabList = ref<Array<string>>([
-  "home.bet_history.text_2",
-  "home.bet_history.text_3",
-  "home.bet_history.text_4",
-]);
+const initTabArr = [
+  {
+    label: "home.bet_history.text_2", // 
+    value: BetHistoryTabList.allBets
+  },
+  {
+    label: "home.bet_history.text_3", // 
+    value: BetHistoryTabList.highRollers
+  },
+  {
+    label: "home.bet_history.text_4", // 
+    value: BetHistoryTabList.luckyBets
+  }
+]
+const betHistoryTabList = ref<Array<any>>([...initTabArr]);
 
 const imgList = ref<Array<any>>([
   img_public_35,
@@ -299,13 +315,19 @@ const imgList = ref<Array<any>>([
 // ]);
 
 const selectedBetHistoryList = ref<Array<GameBigWinItem>>([]);
-
+const allBetsList = ref<any[]>([])
 const handleBetHistoryTab = (item: string) => {
   selectedBtnText.value = item;
-  if (item == "home.bet_history.text_4") {
-    selectedBetHistoryList.value = gameBigWinItem.value.lucky_bets;
-  } else {
-    selectedBetHistoryList.value = gameBigWinItem.value.high_rollers;
+  switch(selectedBtnText.value) {
+    case BetHistoryTabList.allBets:
+      selectedBetHistoryList.value = allBetsList.value
+      break;
+    case BetHistoryTabList.highRollers:
+      selectedBetHistoryList.value = gameBigWinItem.value.high_rollers
+      break;
+    case BetHistoryTabList.luckyBets:
+      selectedBetHistoryList.value = gameBigWinItem.value.lucky_bets;
+      break;
   }
 };
 
@@ -327,16 +349,11 @@ const gameBigWinItem = computed(() => {
 watch(token, (value) => {
   if (value != undefined) {
     betHistoryTabList.value = [
-      "home.bet_history.text_2",
-      "home.bet_history.text_3",
-      "home.bet_history.text_4",
-      // "home.bet_history.text_5",
+      ...initTabArr
     ];
   } else {
     betHistoryTabList.value = [
-      "home.bet_history.text_2",
-      "home.bet_history.text_3",
-      "home.bet_history.text_4",
+      ...initTabArr
     ];
   }
 });
@@ -344,14 +361,15 @@ watch(token, (value) => {
 onMounted(async () => {
   if (token.value != undefined) {
     betHistoryTabList.value = [
-      "home.bet_history.text_2",
-      "home.bet_history.text_3",
-      "home.bet_history.text_4",
+      ...initTabArr
       // "home.bet_history.text_5",
     ];
   }
   await dispatchGameBigWin();
-  selectedBetHistoryList.value = gameBigWinItem.value.high_rollers;
+  // selectedBetHistoryList.value = [...gameBigWinItem.value.high_rollers, ...gameBigWinItem.value.lucky_bets];
+  allBetsList.value = [...gameBigWinItem.value.high_rollers, ...gameBigWinItem.value.lucky_bets].sort((a, b) => a.time - b.time)
+  selectedBetHistoryList.value = allBetsList.value
+  // .sort(item => )
   // betHistoryInterval.value = setInterval(() => {
   //   allBetHistoryList.value.push(allBetHistoryList.value[Math.floor(Math.random() * 10)]);
   // }, 100);
@@ -359,6 +377,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <!-- pc -->
   <div v-if="mobileWidth > 600" class="mt-4 mx-2">
     <div class="d-flex align-center mx-2">
       <!-- <img src="@/assets/public/svg/icon_public_99.svg" width="32" /> -->
@@ -369,16 +388,16 @@ onMounted(async () => {
       style="padding: 0px 2px"
       :style="{ minWidth: token != undefined ? '516px' : '388px' }"
     >
-      <template v-for="(item, index) in betHistoryTabList" :key="index">
+      <template v-for="(item) in betHistoryTabList" :key="item.value">
         <!-- width="128px" -->
         <v-btn
           class="text-none btn-width"
-          :class="item == selectedBtnText ? 'button-bright' : 'button-transparent'"
+          :class="item.value == selectedBtnText ? 'button-bright' : 'button-transparent'"
           height="36px"
           style="border-radius: 8px !important"
-          @click="handleBetHistoryTab(item)"
+          @click="handleBetHistoryTab(item.value)"
         >
-          {{ t(item) }}
+          {{ t(item.label) }} {{item.label}}11
         </v-btn>
       </template>
     </div>
@@ -477,6 +496,8 @@ onMounted(async () => {
       </swiper>
     </v-card>
   </div>
+
+  <!-- H5 -->
   <div v-else class="mt-4">
     <div class="d-flex align-center mx-4">
       <!-- <img src="@/assets/public/svg/icon_public_99.svg" /> -->
@@ -490,12 +511,12 @@ onMounted(async () => {
         <v-btn
           v-warp-label="{nodeName: '.v-btn__content', height: 28, maxWidth: 84, lineHeightOffset: 4}"
           class="text-none"
-          :class="[item == selectedBtnText ? 'button-bright' : 'button-transparent']"
+          :class="[item.value == selectedBtnText ? 'button-bright' : 'button-transparent']"
           height="28px"
           style="border-radius: 8px !important"
-          @click="handleBetHistoryTab(item)"
+          @click="handleBetHistoryTab(item.value)"
         >
-          {{ t(item) }}
+          {{ t(item.label) }}
         </v-btn>
       </template>
     </div>
@@ -512,7 +533,37 @@ onMounted(async () => {
         class="mx-1 mt-1"
         style="border-radius: 8px"
       >
-        <v-row class="mx-3 my-0 align-center" style="height: 100%">
+        <!-- allBets / luckyBets -->
+        <v-row v-show="selectedBtnText === BetHistoryTabList.allBets || selectedBtnText === BetHistoryTabList.luckyBets" class="mx-3 my-0 align-center" style="height: 100%">
+          <v-col cols="4" class="text-700-12 gray py-0">
+            {{ t("home.bet_history.text_6") }}
+          </v-col>
+          <!-- cash out -->
+          <v-col cols="4" class="text-700-12 gray py-0 text-center">
+            <p class="ml-2">{{ t("home.bet_history.text_14") }}</p>
+          </v-col>
+          <!-- win -->
+          <v-col cols="4" class="text-700-12 gray text-right py-0">
+            {{ t("home.bet_history.text_13") }}
+          </v-col>
+        </v-row>
+        
+        <!-- highRollers -->
+        <v-row v-show="selectedBtnText === BetHistoryTabList.highRollers" class="mx-3 my-0 align-center" style="height: 100%">
+          <v-col cols="4" class="text-700-12 gray py-0">
+            {{ t("home.bet_history.text_6") }}
+          </v-col>
+          <!-- bet -->
+          <v-col cols="4" class="text-700-12 gray py-0 text-center">
+            <p class="ml-2">{{ t("home.bet_history.text_15") }}</p>
+          </v-col>
+          <!-- win -->
+          <v-col cols="4" class="text-700-12 gray text-right py-0">
+            {{ t("home.bet_history.text_13") }}
+          </v-col>
+        </v-row>
+
+        <!-- <v-row class="mx-3 my-0 align-center" style="height: 100%">
           <v-col cols="4" class="text-700-12 gray py-0">
             {{ t("home.bet_history.text_6") }}
           </v-col>
@@ -522,7 +573,7 @@ onMounted(async () => {
           <v-col cols="4" class="text-700-12 gray text-right py-0">
             {{ t("home.bet_history.text_8") }}
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-card>
       <swiper
         :direction="'vertical'"
@@ -536,7 +587,8 @@ onMounted(async () => {
         :virtual="true"
       >
         <swiper-slide v-for="(item, index) in selectedBetHistoryList" :key="index">
-          <v-row class="mx-4 mt-1 align-center">
+          <!-- allBets / luckyBets -->
+          <v-row class="mx-4 mt-1 align-center" v-show="selectedBtnText === BetHistoryTabList.allBets || selectedBtnText === BetHistoryTabList.luckyBets">
             <v-col cols="4" class="py-1 d-flex align-center">
               <img :src="item.game_icon" width="22" style="aspect-ratio: 1/1;object-fit: cover;object-position: top;" />
               <!-- <img :src="item.game_icon" width="16"/> -->
@@ -550,6 +602,32 @@ onMounted(async () => {
                 :class="Number(item.multiplier) > 1 ? 'color-01983A' : 'gray'"
               >
                 {{ Number(item.multiplier) === 0 ? item.multiplier : item.multiplier + 'X' }}
+              </p>
+            </v-col>
+            <v-col
+              cols="4"
+              class="py-1 text-700-12 text-right"
+              :class="Number(item.win_amount) > 10 ? 'color-01983A' : 'gray'"
+            >
+              {{ platformCurrency }}{{ item.win_amount }}
+            </v-col>
+          </v-row>
+
+          <!-- highRollers -->
+          <v-row class="mx-4 mt-1 align-center" v-show="selectedBtnText === BetHistoryTabList.highRollers">
+            <v-col cols="4" class="py-1 d-flex align-center">
+              <img :src="item.game_icon" width="22" style="aspect-ratio: 1/1;object-fit: cover;object-position: top;" />
+              <!-- <img :src="item.game_icon" width="16"/> -->
+              <p class="text-400-12 gray text-left ml-2 game-text-overflow">
+                {{ item.game_name }}
+              </p>
+            </v-col>
+            <v-col cols="4" class="py-1 text-center">
+              <p
+                class="text-400-12"
+                :class="Number(item.bet_amount) > 10 ? 'color-01983A' : 'gray'"
+              >
+                {{ platformCurrency }}{{ item.bet_amount }}
               </p>
             </v-col>
             <v-col
