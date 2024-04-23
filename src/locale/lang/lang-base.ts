@@ -1075,6 +1075,8 @@ export type langType = {
       text_11: string
       text_12: string
       text_13: string
+      text_14: string
+      text_15: string
     }
     footer: {
       game: {

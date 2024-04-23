@@ -1075,7 +1075,9 @@ export const lang: langType = {
       "text_10": "Time",
       "text_11": "Wager",
       "text_12": "Multiplier",
-      "text_13": ""
+      "text_13": "Win",
+      "text_14": "Cash out",
+      "text_15": "Bet",
     },
     "footer": {
       "game": {
