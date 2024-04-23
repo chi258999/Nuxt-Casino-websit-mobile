@@ -6,6 +6,8 @@ export namespace NETWORK {
     static REGISTER: string = '/register' //Registration
     static QUICK_LOGIN: string = '/quick/login'
     static QUICK_REGISTER: string = '/quick/register'
+    static REGISTER_CONFIG: string = '/register/config' //注册配置信息
+    static VERIFY_SEND: string = '/verify/send' //发送验证码
   }
 
   //Business logic after entering the home page
