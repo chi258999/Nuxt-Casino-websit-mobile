@@ -95,6 +95,12 @@ watch(() => route.path, (newPath) => {
   }
 });
 
+// 判断是否打开弹框
+const mailMenuShow = computed(() => {
+  const { getMailMenuShow } = storeToRefs(mailStore());
+  return getMailMenuShow.value;
+});
+
 // 初始化执行一次
 setOpenAppGuidance(false)
 
@@ -123,7 +129,7 @@ const closeApp = () => {
   enter-active-class="animated hinge fadeInUp"
   leave-active-class="animated hinge fadeOutDown"
 >
-  <div class="m-app slideInDown" v-if="appConfirmDialogShow && mobileWidth < 600 && mobile">
+  <div class="m-app slideInDown" v-if="appConfirmDialogShow && !mailMenuShow && mobileWidth < 600 && mobile">
     <v-btn
       class="m-app-confirm-drawer-close-button"
       icon="true"
