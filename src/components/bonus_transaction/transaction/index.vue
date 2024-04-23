@@ -331,8 +331,9 @@ onMounted(async () => {
 
     <!-- 记录 report -->
     <v-window-item :value="BtTabEnum.report" style="margin-left: 10px; margin-right: 10px">
-      <MReport v-if="mobileWidth < 600" :pageSize="pageSize" @inited="inited">
-      </MReport>
+      <div v-if="selectedTab == BtTabEnum.report">
+        <MReport v-if="mobileWidth < 600" :pageSize="pageSize" @inited="inited"></MReport>
+      </div>
     </v-window-item>
 
     <!-- <v-window-item
