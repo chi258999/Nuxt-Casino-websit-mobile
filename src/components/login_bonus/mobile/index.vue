@@ -335,7 +335,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-14 gray m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[0] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[0]==0?1:vipSignIn.award[0] }}</p>
             </div>
             <div
               class="m-login-bonus-card-bg-2 relative"
@@ -359,7 +359,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-12 white m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[0] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[0]==0?1:vipSignIn.award[0] }}</p>
             </div>
             <img
               class="absolute m-login-bonus-card-select"
@@ -394,7 +394,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-14 gray m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[1] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[1]==0?2:vipSignIn.award[1] }}</p>
             </div>
             <div
               class="m-login-bonus-card-bg-2 relative"
@@ -418,7 +418,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-12 white m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[1] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[1]==0?2:vipSignIn.award[1] }}</p>
             </div>
           </v-col>
           <v-col cols="4" class="pa-0 d-flex justify-center">
@@ -433,7 +433,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-14 gray m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[2] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[2]==0?1:vipSignIn.award[2] }}</p>
             </div>
             <div
               class="m-login-bonus-card-bg-3 relative"
@@ -457,7 +457,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-12 white m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[2] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[2]==0?1:vipSignIn.award[2] }}</p>
             </div>
           </v-col>
         </v-row>
@@ -474,7 +474,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-14 gray login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[3] }}</p>
+              >{{ platformCurrency }}{{  vipSignIn.award[3]==0?2:vipSignIn.award[3] }}</p>
             </div>
             <div
               class="m-login-bonus-card-bg-4 relative"
@@ -498,7 +498,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-12 white m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[3] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[3]==0?2:vipSignIn.award[3] }}</p>
             </div>
           </v-col>
           <v-col cols="4" class="pa-0 d-flex justify-center">
@@ -513,7 +513,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-14 gray m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[4] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[4]==0?1:vipSignIn.award[4] }}</p>
             </div>
             <div
               class="m-login-bonus-card-bg-4 relative"
@@ -537,7 +537,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-12 white m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[4] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[4]==0?1:vipSignIn.award[4] }}</p>
             </div>
           </v-col>
           <v-col cols="4" class="pa-0 d-flex justify-center">
@@ -552,7 +552,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-14 gray m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[5] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[5]==0?2:vipSignIn.award[5] }}</p>
             </div>
             <div
               class="m-login-bonus-card-bg-4 relative"
@@ -576,7 +576,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-12 white m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[5] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[5]==0?2:vipSignIn.award[5] }}</p>
             </div>
           </v-col>
         </v-row>
@@ -593,7 +593,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-14 gray m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[6] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[6]==0?1:vipSignIn.award[6] }}</p>
             </div>
             <div
               class="m-login-bonus-card-bg-4 relative"
@@ -617,7 +617,7 @@ onMounted(async () => {
               />
               <p
                 class="text-900-12 white m-login-bonus-card-money-position"
-              >{{ platformCurrency }}{{ vipSignIn.award[6] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[6]==0?1:vipSignIn.award[6] }}</p>
             </div>
           </v-col>
           <v-col cols="8" class="pa-0 d-flex justify-center">
@@ -630,7 +630,7 @@ onMounted(async () => {
               >{{ t("vip.login_bonus.day_8_text") }}</p>
               <p
                 class="text-900-14 gray mt-2 m-login-bonus-card-money-position-1"
-              >{{ platformCurrency }}{{ vipSignIn.award[7] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[7]==0?2:vipSignIn.award[7] }}</p>
               <img
                 src="@/assets/public/svg/icon_public_18.svg"
                 class="m-login-bonus-card-cash-position"
@@ -659,7 +659,7 @@ onMounted(async () => {
               >{{ t("vip.login_bonus.day_8_text") }}</p>
               <p
                 class="text-900-12 white mt-2 m-login-bonus-card-money-position-1"
-              >{{ platformCurrency }}{{ vipSignIn.award[7] }}</p>
+              >{{ platformCurrency }}{{ vipSignIn.award[7]==0?2:vipSignIn.award[7] }}</p>
               <img
                 src="@/assets/vip/image/img_vip_27.png"
                 width="113"
