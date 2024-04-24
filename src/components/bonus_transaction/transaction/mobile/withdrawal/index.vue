@@ -18,6 +18,15 @@ const { width } = useDisplay();
 const { dispatchWithdrawalHistory } = withdrawStore();
 const { dispatchWithdrawalRefund } = withdrawStore();
 
+// 0-待处理
+// 1-处理中
+// 2-成功
+// 3-失败
+// 4-待人工处理
+// 5-已退款
+// 6-三方异常（失败）
+// 7-拒绝并退款（失败）
+// 8-拒绝不退款（失败）
 const withdrawalStatus = [
   {
     value: "Pending",
@@ -42,6 +51,18 @@ const withdrawalStatus = [
   {
     value: "Refunded",
     color: "gray",
+  },
+  {
+    value: "Third party failure",
+    color: "red",
+  },
+  {
+    value: "Refuse & refund",
+    color: "red",
+  },
+    {
+    value: "Refuse & No Refund",
+    color: "red",
   },
 ]
 
@@ -219,7 +240,9 @@ watch(() => withdrawHistoryItem.value, (value) => {
 
 onMounted(async () => {
   // paginationLength.value = withdrawHistoryItem.value.total_pages
-  handleScroll()
+  // handleScroll()
+  console.log(111111);
+  
 });
 
 const handleScroll=()=>{
