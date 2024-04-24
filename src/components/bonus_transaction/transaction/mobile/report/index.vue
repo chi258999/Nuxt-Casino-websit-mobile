@@ -134,9 +134,13 @@ const props = defineProps<{
 
 const { pageSize } = toRefs(props);
 const paginationLength = ref<number>(1);
+const currentDate = moment();
+// 获取今天之前的90天的日期 也就是三个月
+const dateBefore90Days = currentDate.clone().subtract(90, 'days');
 const startTime = ref(
-  Math.ceil(moment().valueOf() / 1000) + timeunix.value
+  Math.ceil(currentDate.valueOf() / 1000)
 );
+const endTime = ref(Math.ceil(dateBefore90Days.valueOf() / 1000))
 const loading = ref<boolean>(false);
 const startIndex = ref<number>(0);
 const endIndex = ref<number>(8);
@@ -196,11 +200,16 @@ const vipMenuTitle = computed(() => {
   return item?.label;
 });
 let query = (params: any) => {
+  // console.log(currentDate.format('YYYY-MM-DD'))
+  // console.log(dateBefore90Days.format('YYYY-MM-DD'))
+  // console.log(startTime.value)
+  // console.log(endTime.value)
   const temparams = {
     index: 1,
-    size: 9,
-    // first_time: startTime.value,
-    ...params,
+    size: 100,
+    first_time: endTime.value,
+    last_time: startTime.value,
+    // ...params,
   };
   switch (selectedMenuItem.value) {
     case Report.invitationbonus:
@@ -272,6 +281,7 @@ const handleNext = (page_no: number) => {
   if (tempArr.length == 0) {
     query({
       first_time: state.selectedList[state.currentList.length - 1].time,
+      last_time: '',
     });
   }
 };
@@ -285,6 +295,7 @@ const handlePrev = (page_no: number) => {
   if (tempArr.length == 0) {
     query({
       last_time: state.selectedList[0].time,
+      first_time: '',
     });
   }
 };
@@ -301,7 +312,7 @@ const handleTransactionMenuDropdown = (item: string) => {
   pageRef.value!.resetPageNo();
 
   query({
-    first_time: startTime.value,
+    // first_time: startTime.value,
   });
 };
 onMounted(() => {
@@ -318,9 +329,9 @@ onMounted(() => {
   //           return {};
   //         });
   //     });
-
+  
   query({
-    first_time: startTime.value,
+    // first_time: startTime.value,
   });
   // 初始化完成
   emit("inited");
