@@ -639,7 +639,7 @@ onMounted(async() => {
   setInterval(swingButton, 10000); // 每10秒执行一次
 
   // 初始化，默认打开弹框
-  setAppConfirmDialogShow(true)
+  // setAppConfirmDialogShow(true)
 
   // 判断下载app是否需要自动弹出
   // 如果在首页，就打开监听

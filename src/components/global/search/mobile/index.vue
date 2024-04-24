@@ -10,6 +10,9 @@ import { mailStore } from "@/store/mail";
 import { ProgressiveImage } from "vue-progressive-image";
 import img_public_42 from "@/assets/public/image/img_public_42.png";
 import { Swiper, SwiperSlide } from "swiper/vue";
+import MGameConfirm from "@/views/home/components/mobile/GameConfirm.vue";
+import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
+import type * as Game from "@/interface/game";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
@@ -114,20 +117,35 @@ const getSwiperRef = (swiperInstance: any) => {
   swiper.value = swiperInstance;
 };
 
-const handleEnterGame = async (id: number, name: string) => {
+// 是否打开二级确认框
+const gameConfirmDialogShow = ref<boolean>(false);
+// 游戏内容
+const selectedGameItem = ref<Game.GameItem>({
+  id: 0,
+  name: "",
+  image: "",
+  provider: "",
+  provider_name: '',
+  producer: "",
+  is_demo: false
+})
+
+const handleEnterGame = async (item: Game.GameItem, id: number, name: string) => {
   setSearchTextList(searchText.value);
-  searchText.value = "";
-  page_no.value = 1;
-  setGameSearchList({
-    list: [],
-    total: 0,
-  });
-  searchedGameList.value = [];
+  // searchText.value = "";
+  // page_no.value = 1;
+  // setGameSearchList({
+  //   list: [],
+  //   total: 0,
+  // });
+  // searchedGameList.value = [];
   let replaceName = name.replace(/ /g, "-");
   if (mobileWidth.value < 600) {
     setMailMenuShow(true);
   }
-  router.push(`/game-${id}-${replaceName}`);
+  // router.push(`/game-${id}-${replaceName}`);
+  selectedGameItem.value = item;
+  gameConfirmDialogShow.value = true
 };
 
 const handleSearchInput = async (event) => {
@@ -264,7 +282,7 @@ onMounted(async () => {
   // }
   window.addEventListener("resize", handleResize);
   await dispatchGameSearch(
-    `?game_categories_slug=recommend&page=${currentPage.value}&limit=${
+    `?game_categories_slug=HOT&page=${currentPage.value}&limit=${
       limit.value * page_no.value
     }`
   );
@@ -390,7 +408,7 @@ onMounted(async () => {
                   lazy-placeholder
                   :placeholder-src="img_public_42"
                   blur="30"
-                  @click="handleEnterGame(item.id, item.name)"
+                  @click="handleEnterGame(item, item.id, item.name)"
                 >
                   <div class="text-overlay">
                     <h2>{{ item.name }}</h2>
@@ -444,7 +462,7 @@ onMounted(async () => {
             <img
               :src="gameItem.image"
               class="m-home-search-swiper-img"
-              @click="handleEnterGame(gameItem.id, gameItem.name)"
+              @click="handleEnterGame(gameItem, gameItem.id, gameItem.name)"   
             />
             <div class="text-overlay--search">
               <h2>{{ gameItem.name }}</h2>
@@ -455,6 +473,43 @@ onMounted(async () => {
       </div>
     </div>
   </div>
+
+  <v-navigation-drawer
+    v-model="gameConfirmDialogShow"
+    location="bottom"
+    class="m-game-confirm-bar"
+    temporary
+    :touchless="true"
+    :style="{
+      height: 'unset',
+      bottom: '0px',
+      zIndex: 300000,
+      background: 'unset !important',
+    }"
+    v-if="mobileWidth < 600"
+  >
+    <template v-if="gameConfirmDialogShow">
+
+      <div  class="m-game-confirm-drawer-close-button-box" style="display:flex; justify-content: flex-end;">
+        <v-btn
+          class="m-game-confirm-drawer-close-button"
+          icon="true"
+          width="24"
+          height="24"
+          @click="gameConfirmDialogShow = false"
+        >
+          <inline-svg :src="icon_public_10" width="20" height="20"></inline-svg>
+        </v-btn>
+      </div>
+      <!-- 打开游戏 确认弹窗 - 二级页面 -->
+      <MGameConfirm
+        :selectedGameItem="selectedGameItem"
+        :is_favorite="false"
+        :gameConfirmDialogShow="gameConfirmDialogShow"
+        @closeGameConfirmDialog="gameConfirmDialogShow = false"
+      />
+    </template>
+  </v-navigation-drawer>
 </template>
 
 <style lang="scss">
