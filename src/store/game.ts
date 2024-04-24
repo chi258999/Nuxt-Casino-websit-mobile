@@ -98,8 +98,12 @@ export const gameStore = defineStore({
         },
         setSearchTextList(searchText: string) {
             let sameSearchText = this.searchTextList.filter(item => item == searchText)
+            console.log(sameSearchText, 'sameSearchTextsameSearchTextsameSearchTextsameSearchText');
+            
             if (sameSearchText.length == 0) {
                 this.searchTextList.push(searchText);
+                // 过滤掉['']空数据情况
+                this.searchTextList = this.searchTextList.filter(item => item !== "");
             }
         },
         removeSearchTextList(index: number) {
