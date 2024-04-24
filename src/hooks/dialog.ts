@@ -8,14 +8,14 @@ export function useDialog() {
 
     // 代理
     const agentNavBarDrawer = ref<boolean>(false);
-    const agentNavBarToggle = computed(() => {
-        const { getAgentNavBarToggle } = storeToRefs(agentStore());
-        return getAgentNavBarToggle.value;
-    });
-    watch(agentNavBarToggle, (value) => {
-        // console.log('agentNavBarToggle watchwatch', value);
-        agentNavBarDrawer.value = value;
-    });
+    // const agentNavBarToggle = computed(() => {
+    //     const { getAgentNavBarToggle } = storeToRefs(agentStore());
+    //     return getAgentNavBarToggle.value;
+    // });
+    // watch(agentNavBarToggle, (value) => {
+    //     // console.log('agentNavBarToggle watchwatch', value);
+    //     agentNavBarDrawer.value = value;
+    // });
 
     // VIP
     const vipDrawer = ref<boolean>(false);
