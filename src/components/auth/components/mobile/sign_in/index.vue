@@ -176,7 +176,7 @@ const Login = defineComponent({
         dispatchTimeunix()
         // await dispatchSocketConnect();
         setOverlayScrimShow(false);
-        setRefferalDialogShow(true);
+        // setRefferalDialogShow(true);
 
         const toast = useToast();
         toast.success(t("login.submit_result.success_text"), {
