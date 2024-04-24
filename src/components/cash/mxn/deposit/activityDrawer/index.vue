@@ -1,39 +1,28 @@
 <template>
-  <v-dialog
-    v-model="modelValueNew"
-    transition="dialog-top-transition"
-    class="m-activity-dialog"
-    :style="{
-      height: 'unset',
-      top: '0px',
-      zIndex: 90000000,
-    }"
-  >
-    <div class="m-activity-detail-body">
-      <div class="text-700-14 white text-center title">Event Details</div>
-      <v-card class="m-promo-detail-card mt-2 pa-2">
-        <template v-if="!detailShow">
-          <div class="m-loading-container relative">
-            <div class="loading-body">
-              <div class="dot-0"></div>
-              <div class="dot-1"></div>
-              <div class="dot-0"></div>
-            </div>
+  <div class="m-activity-detail-body">
+    <div class="text-700-14 white text-center title">Event Details</div>
+    <v-card class="m-promo-detail-card mt-2 pa-2">
+      <template v-if="!detailShow">
+        <div class="m-loading-container relative">
+          <div class="loading-body">
+            <div class="dot-0"></div>
+            <div class="dot-1"></div>
+            <div class="dot-0"></div>
           </div>
-        </template>
-        <template v-else>
-          <img :src="selectedItem.image_path" style="width: 100%" />
-          <div v-html="selectedItem.text" class="mx-1"></div>
-        </template>
-      </v-card>
-      <img
-        class="arrow-img"
-        src="@/assets/public/svg/arrow-bottom.svg"
-        style="width: 100%"
-        @click="handleClose"
-      />
-    </div>
-  </v-dialog>
+        </div>
+      </template>
+      <template v-else>
+        <img :src="selectedItem.image_path" style="width: 100%" />
+        <div v-html="selectedItem.text" class="mx-1"></div>
+      </template>
+    </v-card>
+    <img
+      class="arrow-img"
+      src="@/assets/public/svg/arrow-bottom.svg"
+      style="width: 100%"
+      @click="handleClose"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -42,26 +31,15 @@ import { storeToRefs } from "pinia";
 import { promoStore } from "@/store/promo";
 import { type PromoListData } from "@/interface/promo";
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
+  id: {
+    type: String,
   },
-  id:{
-    type:String,
-  }
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["close"]);
 
 const { dispatchUserActivityList } = promoStore();
 
-const modelValueNew = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(val) {
-    emit("update:modelValue", val);
-  },
-});
 const detailShow = ref<boolean>(false);
 const promoList = computed(() => {
   const { getUserActivityList } = storeToRefs(promoStore());
@@ -78,42 +56,29 @@ const selectedItem = ref<PromoListData>({
   content: "",
   click_feedback: 0,
   button_path: "",
-  button_text: ""
+  button_text: "",
 });
 // 关闭弹窗
-const handleClose=()=>{
-   emit("update:modelValue", false);
-}
-
+const handleClose = () => {
+  emit("close", false);
+};
 
 onMounted(async () => {
-  detailShow.value = false
+  detailShow.value = false;
   await dispatchUserActivityList();
-  promoList.value.group_data[0].list_data.map((item:any) => {
+  promoList.value.group_data[0].list_data.map((item: any) => {
     if (item.id == Number(props.id)) {
-      selectedItem.value = item
+      selectedItem.value = item;
     }
-  })
+  });
   detailShow.value = true;
 });
-
 </script>
 
-<style lang="scss" scoped>
-.m-activity-dialog {
-  width: 100vw !important;
-  ::v-deep(.v-overlay__content) {
-    top: 0px;
-    margin: 0;
-    width: 100vw !important;
-    max-width: 100vw !important;
-  }
-}
+<style lang="scss">
 .m-activity-detail-body {
   height: 450px;
   background: #1d2027;
-  border-radius: 0px 0px 8px 8px;
-  
   .title {
     padding-top: 12px;
   }

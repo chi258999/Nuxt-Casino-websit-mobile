@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import ActivityDrawer from '../ActivityDrawer.vue'
+// import ActivityDrawer from '../ActivityDrawer.vue'
+import ActivityDrawer from '../activityDrawer/activityDialog.vue'
 import { appBarStore } from '@/store/appBar';
 import { authStore } from "@/store/auth";
 import { userStore } from '@/store/user';
@@ -1211,7 +1212,6 @@ onMounted(async () => {
     </div>
   </v-dialog>
   <ActivityDrawer
-    v-if="showActivityDrawer"
     v-model="showActivityDrawer"
     :id="activityId"
   ></ActivityDrawer>
