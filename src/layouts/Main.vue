@@ -690,7 +690,7 @@ const routeInited = () => {
     class="main-background"
     :class="mainBlurEffectShow ? 'main-bg-blur' : ''"
     :style="{
-      height: mobileWidth < 600 && mailMenuShow ? mainHeight + 'px' : 'fit-content',
+      // height: mobileWidth < 600 && mailMenuShow ? mainHeight + 'px' : 'fit-content',
       overflow: mobileWidth < 600 && mailMenuShow ? 'hidden' : 'hidden',
     }"
   >
