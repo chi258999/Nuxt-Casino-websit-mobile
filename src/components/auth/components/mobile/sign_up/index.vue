@@ -148,7 +148,8 @@ const MSignup = defineComponent({
       registerConfig: {
         model: 1, //1:邮件登录 2:手机登录
         is_verify: false //登录是否验证
-      }
+      },
+      showPhoneAreaCode:false,
     });
 
     // const timer_value = ref<number>(60);
@@ -300,17 +301,6 @@ const MSignup = defineComponent({
       state.isShowUsernameValidation = false;
     };
 
-    const handleOnEmailInputBlur = (e: any): void => {
-      // handleValidateEmail();
-      state.formData.emailAddress = e.target.value.replace(
-        /([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g,
-        "$1"
-      );
-      state.isShowEmailValidaton = false;
-      setTimeout(() => {
-        state.mailCardHeight = 0;
-      }, 100);
-    };
 
     const handleClickContinueButton = (): void => {
       state.currentPage = state.PAGE_TYPE.SIGNUP_FORM;
@@ -448,6 +438,18 @@ const MSignup = defineComponent({
       state.currentPage = state.PAGE_TYPE.SIGNUP_FORM;
     };
 
+    const handleOnEmailInputBlur = (e: any): void => {
+      handleValidateEmail();
+      state.formData.emailAddress = e.target.value.replace(
+        /([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g,
+        "$1"
+      );
+      state.isShowEmailValidaton = false;
+      // setTimeout(() => {
+      //   state.mailCardHeight = 0;
+      // }, 100);
+    };
+
     const handleEmailChange = (e: any) => {
       state.formData.emailAddress = e.target.value.replace(
         /([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g,
@@ -478,6 +480,12 @@ const MSignup = defineComponent({
       setTimeout(() => {
         state.mailCardHeight = 0;
       }, 100);
+    };
+
+    //手机区号
+    const mergePhone=(code:string)=>{
+      state.formData.areaCode='+'+code
+      state.showPhoneAreaCode=false
     };
 
     const cancelConfirm = () => {
@@ -693,6 +701,7 @@ const MSignup = defineComponent({
       handleEmailChange,
       handleEmailFocus,
       mergeEmail,
+      mergePhone,
       cancelConfirm,
       goPrivatePolicy,
       registerSuccess,
@@ -726,14 +735,21 @@ export default MSignup;
       class="full-width"
     >
       <v-row class="mt-1" v-if="registerConfig.model === 2">
-        <v-col cols="4">
+        <v-col cols="4" class="relative" style="paddingRight:0">
           <v-text-field
             :label="'captcha'"
             class="form-textfield normal-textfield ma-0 m-signup-promo"
             variant="solo"
             density="comfortable"
             v-model="formData.areaCode"
+            @click="showPhoneAreaCode=!showPhoneAreaCode"
           />
+          <div class="m-register-mail-card m-register-phone-card" v-if="showPhoneAreaCode">
+          <v-list theme="dark" style="padding:0 8px" bg-color="#15161c">
+            <v-list-item class="text-600-12 white" value="85" @click="mergePhone('85')">+85</v-list-item>
+            <v-list-item class="text-600-12 white" value="86" @click="mergePhone('86')">+86</v-list-item>
+          </v-list>
+        </div>
         </v-col>
         <v-col cols="8">
           <v-text-field
@@ -822,9 +838,7 @@ export default MSignup;
         </v-col>
         <v-col cols="4">
           <v-btn
-            :class="
-              countdownTime == 0 ? 'm-signup-btn' : 'm-signup-disabled-btn'
-            "
+            :class="countdownTime == 0 ? 'm-signup-btn' : 'm-signup-disabled-btn'"
             width="100%"
             height="40px"
             :loading="loading"
@@ -1123,6 +1137,11 @@ export default MSignup;
   z-index: 200;
   overflow: hidden;
   transition: height 0.3s ease-out;
+}
+
+.m-register-phone-card {
+  padding-left: 12px;
+  top: 50px;
 }
 
 .m-signup-btn {
