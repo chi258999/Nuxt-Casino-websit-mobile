@@ -94,7 +94,7 @@ const authStoreData = authStore()
 const { t } = useI18n();
 const casinoOpen = ref<Array<string>>(['']);
 const sportOpen = ref<Array<string>>(['']);
-const language = ref<string>('English');
+const language = ref<string>('');
 const drawer = ref<boolean>(true);
 const languageMenu = ref<boolean>(false);
 const originalMenu = ref<boolean>(false);
@@ -458,21 +458,24 @@ const offIconTransform = (el: any) => {
 }
 
 const handleLanguageDropdown = (item: any) => {
-  const firstLetter = item.value.charAt(0).toUpperCase()
-  language.value = firstLetter + item.value.slice(1);
+  // const firstLetter = item.value.charAt(0).toUpperCase()
+  // language.value = firstLetter + item.value.slice(1);
 
   switch (item.id) {
     case 'en':
       setLang("en");
       setLanguage('en');
+      language.value = t('navBar.language.english');
       break;
     case 'pt':
       setLang("pt");
       setLanguage('pt');
+      language.value = t('navBar.language.portuguese');
       break;
     case 'es':
       setLang("es");
       setLanguage('es');
+      language.value = t('navBar.language.espanola');
       break;
   }
 }
