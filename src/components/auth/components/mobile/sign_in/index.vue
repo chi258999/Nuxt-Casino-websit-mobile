@@ -260,7 +260,7 @@ const Login = defineComponent({
       
 
       // 打开VIP活动签到
-      if(vipSignIn.value.is_signin!=2){
+      if(userInfo.value.id&&vipSignIn.value.is_signin!=2){
         setLoginBonusDialogVisible(true);
       }
 
