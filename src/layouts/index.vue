@@ -41,6 +41,12 @@ const MBonusDashboardDialog = defineAsyncComponent(
   () => import("@/components/vip/mobile/MBonusDashboard.vue")
 );
 const LiveChat = defineAsyncComponent(() => import("./live_chat/index.vue"));
+
+const agentNavBarToggle = computed(() => {
+  const { getAgentNavBarToggle } = storeToRefs(agentStore());
+  return getAgentNavBarToggle.value;
+});
+
 const { agentNavBarDrawer, vipDrawer } = useDialog();
 
 const route = useRoute();
@@ -117,7 +123,7 @@ const handleScroll = () => {
     <template v-else>
       <MNavBarLayout />
       <RewardBarLayout v-if="route.name !== 'Sports'&&rewardNavShow" v-model="rewardNavShow" />
-      <AgentBarLayout v-if="agentNavBarDrawer" v-model="agentNavBarDrawer" />
+      <AgentBarLayout v-if="agentNavBarToggle" v-model="agentNavBarToggle" />
       <VipBar v-if="vipDrawer" />
     </template>
     <UserNavBarLayout />
