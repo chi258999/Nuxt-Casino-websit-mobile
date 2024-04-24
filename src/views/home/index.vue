@@ -439,7 +439,8 @@ const Dashboard = defineComponent({
         if (mobileWidth.value < 600) {
           setMailMenuShow(true);
         }
-        router.push(`/game/${id}/${replaceName}`);
+        // router.push(`/game/${id}/${replaceName}`);
+        router.push(`/game-${id}-${replaceName}`);
       } else {
         setAuthModalType('login');
         setAuthDialogVisible(true);

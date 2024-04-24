@@ -510,7 +510,8 @@ const handleEnterGame = async (id: number, name: string) => {
   if (mobileWidth.value < 600) {
     setMailMenuShow(true);
   }
-  router.push(`/game/${id}/${replaceName}`);
+  // router.push(`/game/${id}/${replaceName}`);
+  router.push(`/game-${id}-${replaceName}`);
 };
 
 const casinoIconTransform = (el: any) => {
