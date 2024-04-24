@@ -36,7 +36,8 @@ export const authStore = defineStore({
       },
       withdraw: 111111,
       rate: 1000
-    }
+    },
+    timerValue: 0 as number, //倒计时存储
   }),
   getters: {
     getSuccess: (state) => state.success,
@@ -48,7 +49,8 @@ export const authStore = defineStore({
     getDialogCheckbox: (state) => state.dialogCheckbox,
     getAuthDialogVisible: (state) => state.authDialogVisible,
     getSignUpForm: (state) => state.signUpForm,
-    getNickNameDialogVisible: (state) => state.nickNameDialogVisible
+    getNickNameDialogVisible: (state) => state.nickNameDialogVisible,
+    getTimerValue: (state) => state.timerValue,
   },
   actions: {
     // set functions
@@ -60,6 +62,9 @@ export const authStore = defineStore({
     },
     setErrorMessage(message: string) {
       this.errMessage = message
+    },
+    setTimerValue(timerValue: number) {
+      this.timerValue = timerValue
     },
     setToken(token: string) {
       const networkData: NetworkData = NetworkData.getInstance();
