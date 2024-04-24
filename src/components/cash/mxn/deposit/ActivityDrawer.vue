@@ -1,24 +1,21 @@
 <template>
-  <v-navigation-drawer
+  <v-dialog
     v-model="modelValueNew"
-    location="top"
-    class="m-activity-drawerr"
-    temporary
-    :touchless="true"
+    transition="dialog-top-transition"
+    class="m-activity-dialog"
     :style="{
-        height: 'unset',
-        top: '0px',
-        zIndex: 90000000,
-        background: 'unset !important',
-      }"
+      height: 'unset',
+      top: '0px',
+      zIndex: 90000000,
+    }"
   >
     <div class="m-activity-detail-body">
-      <div class="text-700-14 white text-center title">Event Details</div>
+      <div class="text-700-14 white text-center title">Event Detail111s</div>
       <v-card class="m-promo-detail-card mt-2 pa-2">
         <template v-if="!detailShow">
           <div class="m-loading-container relative">
             <div class="loading-body">
-              <div class="dot-0"></div>
+              <div class="dot-0">111</div>
               <div class="dot-1"></div>
               <div class="dot-0"></div>
             </div>
@@ -36,7 +33,7 @@
         @click="handleClose"
       />
     </div>
-  </v-navigation-drawer>
+  </v-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -102,10 +99,21 @@ onMounted(async () => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.m-activity-dialog {
+  width: 100vw !important;
+  ::v-deep(.v-overlay__content) {
+    top: 0px;
+    margin: 0;
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
+}
 .m-activity-detail-body {
   height: 450px;
   background: #1d2027;
+  border-radius: 0px 0px 8px 8px;
+  
   .title {
     padding-top: 12px;
   }
