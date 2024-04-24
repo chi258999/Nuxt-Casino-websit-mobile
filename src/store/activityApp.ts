@@ -15,6 +15,8 @@ export const activityAppStore = defineStore({
     appGuidanceTimeout: null as NodeJS.Timeout | null,
     openAppGuidanceTimeout: null as NodeJS.Timeout | null,
     showAppGuidance: false as boolean, // 是否显示下载app引导框
+    appGuidanceNum: 0, // 黄色引导弹框最多弹出三次（在首页，30秒弹出一次）
+    appConfirmNum: 0, // app下载弹框最多弹出一次（在首页浏览2分钟后弹出）
   }),
   getters: {
     getAppConfirmDialogShow: (state) => state.appConfirmDialogShow,
@@ -86,7 +88,18 @@ export const activityAppStore = defineStore({
       await network.sendMsg(route, data, next, 1);
     },
     // 判断下载app是否需要自动弹出
-    automaticPopUpApp(state: boolean) {
+    automaticPopUpApp(state: boolean, isPopUp: boolean) {
+      // 如果已经弹出超过1次，清空定时器，不再执行弹框
+      if (this.appConfirmNum === 1) {
+        if (this.automaticAppTimeout) {
+          clearTimeout(this.automaticAppTimeout); // 删除定时器
+          this.automaticAppTimeout = null; // 清空定时器变量
+        }
+        return
+      } else {
+        this.appConfirmNum++
+      }
+
       if (state) {
         if (this.automaticAppTimeout) {
           clearTimeout(this.automaticAppTimeout); // 删除定时器
@@ -94,8 +107,11 @@ export const activityAppStore = defineStore({
         }
       } else {
         this.automaticAppTimeout = setTimeout(() => {
-          this.appConfirmDialogShow = true
-        }, 60000);
+          // 判断是否存在打开弹框
+          if (!isPopUp) {
+            this.appConfirmDialogShow = true
+          }
+        }, 120000);
       }
     },
     setShowAppGuidance(param: boolean) {
@@ -116,6 +132,18 @@ export const activityAppStore = defineStore({
     },
     // 定时打开下载引导弹框
     setOpenAppGuidance(state: boolean) {
+      // 如果已经弹出超过三次，清空定时器，不再执行弹框
+      if (this.appGuidanceNum === 3) {
+        if (this.openAppGuidanceTimeout) {
+          clearTimeout(this.openAppGuidanceTimeout); // 删除定时器
+          this.openAppGuidanceTimeout = null; // 清空定时器变量
+        }
+
+        return
+      } else {
+        this.appGuidanceNum++
+      }
+
       if (state) {
         if (this.openAppGuidanceTimeout) {
           clearTimeout(this.openAppGuidanceTimeout); // 删除定时器
