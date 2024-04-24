@@ -214,6 +214,15 @@ const handleScroll=()=>{
 onMounted(async () => {
   handleScroll()
 });
+// 存款状态
+// -2:订单已关闭
+// -1:支付失败
+// 0-订单生成
+// 1-支付中
+// 2-支付成功,
+// 3-业务处理完成
+// 4-已退款
+// 5-金额过低（订单失败）
 </script>
 <template>
   <v-row class="mx-2 mt-1 m-forms-bonus-table1">
@@ -318,6 +327,7 @@ onMounted(async () => {
               <div v-if="item.status == 2" class="color-01983A">Success</div>
               <div v-if="item.status == 3" class="color-01983A">Completion</div>
               <div v-if="item.status == 4" class="white">Refunded</div>
+              <div v-if="item.status == 5" class="white">Low Amount(Failed)</div>
             </td>
             <td
               class="text-400-12 text-center"
