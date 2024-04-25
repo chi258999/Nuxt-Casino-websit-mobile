@@ -18,17 +18,13 @@
       </div>
       <v-card class="m-grecaptcha-detail-card mt-2 pa-1">
         <div class="grecaptcha" id="grecaptcha"></div>
-        <vue-turnstile :site-key="sitekey" v-model="token" />
-       
       </v-card>
-      <div>Token: {{ token }}</div>
     </div>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, watch, onMounted } from "vue";
-import VueTurnstile from 'vue-turnstile';
 const props = defineProps({
   modelValue: {
     type: Boolean
@@ -38,7 +34,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue","grecaptchaSuccess"]);
 
 const modelValueNew = computed({
   get() {
@@ -49,9 +45,7 @@ const modelValueNew = computed({
   }
 });
 
-const sitekey = "exPA9EADI4AeTP5UI74XVk2UXKEVqTtOhO8CfFGN";
-
-const token=ref('')
+const sitekey = "0x4AAAAAAAYK2DjbkAyyZMSa";
 
 // 关闭弹窗
 const handleClose = () => {
@@ -59,6 +53,16 @@ const handleClose = () => {
 };
 
 onMounted(async () => {
+  turnstile.ready(function () {
+    turnstile.render('#grecaptcha', {
+        sitekey: sitekey,
+        callback: function(token:any) {
+            // console.log(`Challenge Success ${token}`);
+            emit("update:modelValue", false);
+            emit("grecaptchaSuccess")
+        },
+    });
+});
 });
 </script>
 
