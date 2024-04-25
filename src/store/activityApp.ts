@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { NETWORK } from '@/net/NetworkCfg';
 import { Network } from "@/net/Network";
-import { getQueryParams } from "@/utils/getPublicInformation";
+import { getQueryParams, getDeviceType } from "@/utils/getPublicInformation";
 
 export const activityAppStore = defineStore({
   id: 'activityApp',
@@ -39,7 +39,11 @@ export const activityAppStore = defineStore({
         if (response.code == 200) {
           const data = response.data          
           this.downloadID = String(data.id)
-          this.downloadLink = data.link
+          if (['mac', 'ios'].includes(getDeviceType())) {
+            this.downloadLink = data.ios_link
+          } else {
+            this.downloadLink = data.android_link
+          }
           this.activityBonus = data.bonus
         } else {
           
@@ -56,7 +60,12 @@ export const activityAppStore = defineStore({
         if (response.code == 200) {
           const data = response.data          
           this.downloadID = String(data.id)
-          this.downloadLink = data.link
+          if (['mac', 'ios'].includes(getDeviceType())) {
+            this.downloadLink = data.ios_link
+          } else {
+            this.downloadLink = data.android_link
+          }
+          
           this.activityBonus = data.bonus
         } else {
           
@@ -111,7 +120,7 @@ export const activityAppStore = defineStore({
           if (!isPopUp) {
             this.appConfirmDialogShow = true
           }
-        }, 20000);
+        }, 120000);
       }
     },
     setShowAppGuidance(param: boolean) {
