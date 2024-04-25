@@ -195,7 +195,7 @@ const checkboxChanged = () => {
     }
 
     .v-selection-control {
-      min-height: 20px !important;
+      height:30px !important;
     }
 
     .v-selection-control__wrapper,

@@ -92,16 +92,21 @@ const mailMenuShow = computed(() => {
 
 const isHomePage = ref(route.path === '/');
 // 使用 watch 监听路由变化
-watch(() => route.path, (newPath) => {
-  isHomePage.value = newPath === '/';
-  if (newPath !== '/') {
-    automaticPopUpApp(true)
-  } else {
-    automaticPopUpApp(false, mailMenuShow.value)
-  }
-});
+// watch(() => route.path, (newPath) => {
+//   isHomePage.value = newPath === '/';
+//   if (newPath !== '/') {
+//     automaticPopUpApp(true)
+//   } else {
+//     automaticPopUpApp(false, mailMenuShow.value)
+//   }
+// });
 
-
+// 如果在首页，就打开监听
+if (isHomePage.value) {
+  automaticPopUpApp(false, mailMenuShow.value)
+} else {
+  automaticPopUpApp(true)
+}
 
 // 初始化执行一次
 setOpenAppGuidance(false)
@@ -110,12 +115,7 @@ const frequency = ref(0) // 监听控制引导弹框打开
 // 关闭app弹框执行
 const closeApp = () => {
   setAppConfirmDialogShow(false)
-  // 如果在首页，就打开监听
-  if (isHomePage.value) {
-    automaticPopUpApp(false, mailMenuShow.value)
-  } else {
-    automaticPopUpApp(true)
-  }
+ 
   if (frequency.value === 0) {
     setTimeout(() => {
       setShowAppGuidance(true)

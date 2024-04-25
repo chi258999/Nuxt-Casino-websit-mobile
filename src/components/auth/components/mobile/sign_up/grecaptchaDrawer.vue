@@ -6,23 +6,29 @@
     temporary
     :touchless="true"
     :style="{
-        height: 'unset',
-        top: '0px',
-        zIndex: 9147483646,
-        background: 'unset !important',
-      }"
+      height: 'unset',
+      top: '0px',
+      zIndex: 9147483646,
+      background: 'unset !important'
+    }"
   >
     <div class="m-grecaptcha-body">
-      <div class="text-700-14 white text-center title">Tell us you are human</div>
+      <div class="text-700-14 white text-center title">
+        Tell us you are human
+      </div>
       <v-card class="m-grecaptcha-detail-card mt-2 pa-1">
-        <div class="grecaptcha"  id="grecaptcha"></div>
+        <div class="grecaptcha" id="grecaptcha"></div>
+        <vue-turnstile :site-key="sitekey" v-model="token" />
+       
       </v-card>
+      <div>Token: {{ token }}</div>
     </div>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed, watch, onMounted } from "vue";
+import VueTurnstile from 'vue-turnstile';
 const props = defineProps({
   modelValue: {
     type: Boolean
@@ -43,7 +49,9 @@ const modelValueNew = computed({
   }
 });
 
-const sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+const sitekey = "exPA9EADI4AeTP5UI74XVk2UXKEVqTtOhO8CfFGN";
+
+const token=ref('')
 
 // 关闭弹窗
 const handleClose = () => {
@@ -51,12 +59,6 @@ const handleClose = () => {
 };
 
 onMounted(async () => {
-  setTimeout(() => {
-        window.grecaptcha.render("grecaptcha", {
-          sitekey: sitekey,
-          callback:handleClose
-        });
-      }, 200);
 });
 </script>
 
