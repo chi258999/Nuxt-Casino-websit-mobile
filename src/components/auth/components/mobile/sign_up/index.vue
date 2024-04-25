@@ -144,12 +144,12 @@ const MSignup = defineComponent({
       promoCodeDisabled: false,
       indexValue: "",
       typeValue: "",
-      grecaptchaDrawer: true,
+      grecaptchaDrawer: false,
       registerConfig: {
         model: 1, //1:邮件登录 2:手机登录
         is_verify: false //登录是否验证
       },
-      showPhoneAreaCode:false,
+      showPhoneAreaCode: false
     });
 
     // const timer_value = ref<number>(60);
@@ -301,7 +301,6 @@ const MSignup = defineComponent({
       state.isShowUsernameValidation = false;
     };
 
-
     const handleClickContinueButton = (): void => {
       state.currentPage = state.PAGE_TYPE.SIGNUP_FORM;
     };
@@ -364,9 +363,8 @@ const MSignup = defineComponent({
         }
       }
     };
-
-    // handle form submit  登录提交
-    const handleSignupFormSubmit = async event => {
+    // 打开人机校验
+    const showGrecaptchaDrawer = (event: any) => {
       // 不是回车键不触发 event.keyCode判断是不是软键盘触发
       if (event.keyCode !== undefined && event.keyCode !== 13) return;
       //关闭手机软键盘
@@ -398,7 +396,11 @@ const MSignup = defineComponent({
         });
         return;
       }
+      state.grecaptchaDrawer = true;
+    };
 
+    // handle form submit  登录提交
+    const handleSignupFormSubmit = async event => {
       state.loading = true;
       await dispatchSignUp({
         uid:
@@ -483,9 +485,9 @@ const MSignup = defineComponent({
     };
 
     //手机区号
-    const mergePhone=(code:string)=>{
-      state.formData.areaCode='+'+code
-      state.showPhoneAreaCode=false
+    const mergePhone = (code: string) => {
+      state.formData.areaCode = "+" + code;
+      state.showPhoneAreaCode = false;
     };
 
     const cancelConfirm = () => {
@@ -707,7 +709,8 @@ const MSignup = defineComponent({
       registerSuccess,
       onSignInSuccessGoogle,
       sendingCode,
-      countdownTime
+      countdownTime,
+      showGrecaptchaDrawer
     };
   }
 });
@@ -742,14 +745,27 @@ export default MSignup;
             variant="solo"
             density="comfortable"
             v-model="formData.areaCode"
-            @click="showPhoneAreaCode=!showPhoneAreaCode"
+            @click="showPhoneAreaCode = !showPhoneAreaCode"
           />
-          <div class="m-register-mail-card m-register-phone-card" v-if="showPhoneAreaCode">
-          <v-list theme="dark" style="padding:0 8px" bg-color="#15161c">
-            <v-list-item class="text-600-12 white" value="85" @click="mergePhone('85')">+85</v-list-item>
-            <v-list-item class="text-600-12 white" value="86" @click="mergePhone('86')">+86</v-list-item>
-          </v-list>
-        </div>
+          <div
+            class="m-register-mail-card m-register-phone-card"
+            v-if="showPhoneAreaCode"
+          >
+            <v-list theme="dark" style="padding:0 8px" bg-color="#15161c">
+              <v-list-item
+                class="text-600-12 white"
+                value="85"
+                @click="mergePhone('85')"
+                >+85</v-list-item
+              >
+              <v-list-item
+                class="text-600-12 white"
+                value="86"
+                @click="mergePhone('86')"
+                >+86</v-list-item
+              >
+            </v-list>
+          </div>
         </v-col>
         <v-col cols="8">
           <v-text-field
@@ -772,7 +788,7 @@ export default MSignup;
           :onblur="handleOnEmailInputBlur"
           @input="handleEmailChange"
           :onfocus="handleEmailFocus"
-          @keypress="handleSignupFormSubmit"
+          @keypress="showGrecaptchaDrawer"
         />
         <ValidationBox
           v-if="isShowEmailValidaton"
@@ -838,7 +854,9 @@ export default MSignup;
         </v-col>
         <v-col cols="4">
           <v-btn
-            :class="countdownTime == 0 ? 'm-signup-btn' : 'm-signup-disabled-btn'"
+            :class="
+              countdownTime == 0 ? 'm-signup-btn' : 'm-signup-disabled-btn'
+            "
             width="100%"
             height="40px"
             :loading="loading"
@@ -859,7 +877,7 @@ export default MSignup;
           v-model="formData.password"
           :onfocus="handleOnPasswordInputFocus"
           :onblur="handleOnPasswordInputBlur"
-          @keypress="handleSignupFormSubmit"
+          @keypress="showGrecaptchaDrawer"
         />
         <img
           v-if="isShowPassword"
@@ -891,7 +909,7 @@ export default MSignup;
           density="comfortable"
           v-model="formData.promoCode"
           :disabled="promoCodeDisabled"
-          @keypress="handleSignupFormSubmit"
+          @keypress="showGrecaptchaDrawer"
         />
       </v-row>
       <!-- 邀请码 / -->
@@ -922,7 +940,7 @@ export default MSignup;
           width="94%"
           height="48px"
           :loading="loading"
-          :onclick="handleSignupFormSubmit"
+          :onclick="showGrecaptchaDrawer"
         >
           {{ t("signup.formPage.button") }}
         </v-btn>
@@ -1025,7 +1043,11 @@ export default MSignup;
         </v-btn>
       </v-row>
     </div>
-    <!-- <grecaptchaDrawer v-if="grecaptchaDrawer" v-model="grecaptchaDrawer"></grecaptchaDrawer> -->
+    <grecaptchaDrawer
+      v-if="grecaptchaDrawer"
+      v-model="grecaptchaDrawer"
+      @grecaptchaSuccess="handleSignupFormSubmit"
+    ></grecaptchaDrawer>
   </div>
 </template>
 
