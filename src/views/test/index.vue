@@ -1,21 +1,24 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, defineAsyncComponent } from "vue";
+const MSearch = defineAsyncComponent(() => import("@/components/global/search/mobile/index.vue"));
 
 onMounted(() => {});
 </script>
 
 <template>
-  <div class="image-container">
-    <img src="https://pix.kim/res/game/BGAMING/56469862184124429.jpg" alt="Image" />
+  <div class="test-container">
+    <!-- <img src="https://pix.kim/res/game/BGAMING/56469862184124429.jpg" alt="Image" /> -->
+    <MSearch></MSearch>
   </div>
 </template>
 
 <style lang="scss">
-.image-container {
-  width: 300px;
+.test-container {
+  // width: 300px;
   /* Set the desired width of the container */
-  height: 200px;
+  // height: 200px;
   /* Set the desired height of the container */
+  height: 100vh;
   overflow: hidden;
 }
 
