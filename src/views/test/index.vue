@@ -2,6 +2,10 @@
 import { ref, onMounted, defineAsyncComponent } from "vue";
 const MSearch = defineAsyncComponent(() => import("@/components/global/search/mobile/index.vue"));
 
+
+const searchText = ref()
+
+const handleSearchInput = () => {}
 onMounted(() => {});
 </script>
 
@@ -9,6 +13,24 @@ onMounted(() => {});
   <div class="test-container">
     <!-- <img src="https://pix.kim/res/game/BGAMING/56469862184124429.jpg" alt="Image" /> -->
     <MSearch></MSearch>
+
+    <form action="javascript:return true;" @submit.prevent>
+      <v-text-field
+        ref="searchRef"
+        :placeholder="'search'"
+        class="form-textfield dark-textfield"
+        variant="solo"
+        hide-details
+        filled
+        clearable
+        density="compact"
+        prepend-inner-icon="mdi-magnify"
+        color="#7782AA"
+        @input="handleSearchInput"
+        @keypress="handleSearchInput"
+        v-model="searchText"
+      />
+    </form>
   </div>
 </template>
 
@@ -20,6 +42,13 @@ onMounted(() => {});
   /* Set the desired height of the container */
   height: 100vh;
   overflow: hidden;
+
+  .form-textfield {
+
+    .v-field__input {
+      font-size: 16px;
+    }
+  }
 }
 
 .image-container img {
