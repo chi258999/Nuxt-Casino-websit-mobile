@@ -447,9 +447,9 @@ const MSignup = defineComponent({
         "$1"
       );
       state.isShowEmailValidaton = false;
-      // setTimeout(() => {
-      //   state.mailCardHeight = 0;
-      // }, 100);
+      setTimeout(() => {
+        state.mailCardHeight = 0;
+      }, 100);
     };
 
     const handleEmailChange = (e: any) => {
