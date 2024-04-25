@@ -25,7 +25,9 @@ const { dispatchGameFavoriteList } = gameStore();
 const { setMailMenuShow } = mailStore();
 
 const currentPage = ref<number>(1);
-const limit = ref<number>(8);
+// 初始展示数量 6
+const initLimit = 6
+const limit = ref<number>(30);
 const loading = ref<boolean>(false);
 const searchLoading = ref<boolean>(false);
 const moreLoading = ref<boolean>(false);
@@ -60,6 +62,10 @@ const providerGames = computed(() => {
 const favoriteGameList = computed(() => {
   const { getFavoriteGameList } = storeToRefs(gameStore());
   return getFavoriteGameList.value
+})
+
+const currentTotal = computed(() => {
+  return limit.value * (currentPage.value - 1) + initLimit
 })
 
 const goToBackPage = () => {
@@ -139,7 +145,7 @@ onMounted(async () => {
   });
   slug.value = route.query.slug ? route.query.slug : "";
   await dispatchGameSearch(
-    "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + limit.value
+    "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + initLimit
   );
   providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
   loading.value = false;
@@ -251,7 +257,7 @@ onMounted(async () => {
               md="2"
               sm="3"
               class="px-1 relative py-0 m-provider-game-img"
-              v-if="index < 6 * currentPage"
+              v-if="index < currentTotal"
             >
               <ProgressiveImage
                 :src="game.image"
@@ -269,10 +275,10 @@ onMounted(async () => {
         </v-row>
         <div
           class="mt-4 text-center text-700-14 gray"
-          v-if="providerGames.total > 6 && providerGames.total > 6 * currentPage"
+          v-if="providerGames.total > initLimit && providerGames.total > currentTotal"
         >
           {{ t("provider.text_3") }}
-          <font class="white">&nbsp;{{ 6 * currentPage }}&nbsp;</font>
+          <font class="white">&nbsp;{{ currentTotal }}&nbsp;</font>
           {{ t("provider.text_4") }}
           <font class="white">&nbsp;{{ providerGames.total }}&nbsp;</font>
           {{ t("provider.text_5") }}
@@ -282,7 +288,7 @@ onMounted(async () => {
           variant="outlined"
           :width="mobileWidth < 600 ? '100%' : 164"
           :height="mobileWidth < 600 ? 41 : 48"
-          v-if="providerGames.total > 6 && providerGames.total > 6 * currentPage"
+          v-if="providerGames.total > initLimit && providerGames.total > currentTotal"
           @click="handleMoreGame()"
         >
           <div v-if="!moreLoading">{{ t("home.more") }}</div>
