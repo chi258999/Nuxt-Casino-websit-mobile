@@ -697,8 +697,11 @@ const Dashboard = defineComponent({
       return result
     }
 
+    const { setControlLevel } = appBarStore();
+
     watch(gameConfirmDialogShow, (value: boolean) => {
       // setMailMenuShow(value);
+      setControlLevel(value)
     })
 
     watch(mailMenuShow, (value) => {
