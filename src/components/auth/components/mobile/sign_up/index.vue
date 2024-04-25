@@ -366,6 +366,41 @@ const MSignup = defineComponent({
     // 打开人机校验
     const showGrecaptchaDrawer = (event: any) => {
       // 不是回车键不触发 event.keyCode判断是不是软键盘触发
+      // if (event.keyCode !== undefined && event.keyCode !== 13) return;
+      // //关闭手机软键盘
+      // document.activeElement.blur();
+
+      // if (!validateEmail()) {
+      //   state.isShowEmailValidaton = true;
+      //   return;
+      // }
+
+      // if (!validatePassword()) {
+      //   state.isShowPasswordValidation = true;
+      //   return;
+      // }
+
+      // if (!state.formData.isAgreed) {
+      //   const toast = useToast();
+      //   toast.success(t("signup.formPage.agree_alert_text"), {
+      //     timeout: 3000,
+      //     closeOnClick: false,
+      //     pauseOnFocusLoss: false,
+      //     pauseOnHover: false,
+      //     draggable: false,
+      //     showCloseButtonOnHover: false,
+      //     hideProgressBar: true,
+      //     closeButton: "button",
+      //     icon: WarningIcon,
+      //     rtl: false
+      //   });
+      //   return;
+      // }
+      state.grecaptchaDrawer = true;
+    };
+
+    // handle form submit  登录提交
+    const handleSignupFormSubmit = async event => {
       if (event.keyCode !== undefined && event.keyCode !== 13) return;
       //关闭手机软键盘
       document.activeElement.blur();
@@ -396,11 +431,6 @@ const MSignup = defineComponent({
         });
         return;
       }
-      state.grecaptchaDrawer = true;
-    };
-
-    // handle form submit  登录提交
-    const handleSignupFormSubmit = async event => {
       state.loading = true;
       await dispatchSignUp({
         uid:
@@ -788,7 +818,7 @@ export default MSignup;
           :onblur="handleOnEmailInputBlur"
           @input="handleEmailChange"
           :onfocus="handleEmailFocus"
-          @keypress="showGrecaptchaDrawer"
+          @keypress="handleSignupFormSubmit"
         />
         <ValidationBox
           v-if="isShowEmailValidaton"
@@ -877,7 +907,7 @@ export default MSignup;
           v-model="formData.password"
           :onfocus="handleOnPasswordInputFocus"
           :onblur="handleOnPasswordInputBlur"
-          @keypress="showGrecaptchaDrawer"
+          @keypress="handleSignupFormSubmit"
         />
         <img
           v-if="isShowPassword"
@@ -909,7 +939,7 @@ export default MSignup;
           density="comfortable"
           v-model="formData.promoCode"
           :disabled="promoCodeDisabled"
-          @keypress="showGrecaptchaDrawer"
+          @keypress="handleSignupFormSubmit"
         />
       </v-row>
       <!-- 邀请码 / -->
@@ -940,7 +970,7 @@ export default MSignup;
           width="94%"
           height="48px"
           :loading="loading"
-          :onclick="showGrecaptchaDrawer"
+          :onclick="handleSignupFormSubmit"
         >
           {{ t("signup.formPage.button") }}
         </v-btn>
@@ -1043,11 +1073,11 @@ export default MSignup;
         </v-btn>
       </v-row>
     </div>
-    <grecaptchaDrawer
+    <!-- <grecaptchaDrawer
       v-if="grecaptchaDrawer"
       v-model="grecaptchaDrawer"
       @grecaptchaSuccess="handleSignupFormSubmit"
-    ></grecaptchaDrawer>
+    ></grecaptchaDrawer> -->
   </div>
 </template>
 
