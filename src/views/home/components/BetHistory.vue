@@ -503,13 +503,15 @@ onMounted(async () => {
       <!-- <img src="@/assets/public/svg/icon_public_99.svg" /> -->
       <p class="text-800-16 white ml-1">{{ t("home.bet_history.text_1") }}</p>
     </div>
+    
     <div
       class="m-bet-history-tabs mt-1"
-      :style="{ width: token != undefined ? 'unset' : '252px' }"
+      :style="{ width: token != undefined ? 'unset' : 'unset' }"
     >
+      <!-- :style="{ width: token != undefined ? 'unset' : '252px' }" -->
       <template v-for="(item, index) in betHistoryTabList">
+          <!-- v-warp-label="{nodeName: '.v-btn__content', height: 28, maxWidth: 84, lineHeightOffset: 4}" -->
         <v-btn
-          v-warp-label="{nodeName: '.v-btn__content', height: 28, maxWidth: 84, lineHeightOffset: 4}"
           class="text-none"
           :class="[item.value == selectedBtnText ? 'button-bright' : 'button-transparent']"
           height="28px"

@@ -78,11 +78,11 @@ const joinWatsapp = () => {
       <v-btn class="m-close-button" icon="true" @click="closeGroupDialog" width="30" height="30">
         <img src="@/assets/public/svg/icon_public_10.svg" />
       </v-btn>
-      <img
+      <!-- <img
         v-if="getLang=='en'"
         class="group-select-text-img"
         src="@/assets/vip/svg/group_select_en.svg"
-      />
+      /> -->
       <!-- <img v-else class="group-select-text-img" src="@/assets/vip/svg/group_select_es.svg"> -->
       <div class="group-text text-900-24">{{ t("vip.vip_level_info.progress.text_19") }}</div>
       <div class="join-text">

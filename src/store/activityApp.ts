@@ -88,7 +88,7 @@ export const activityAppStore = defineStore({
       await network.sendMsg(route, data, next, 1);
     },
     // 判断下载app是否需要自动弹出
-    automaticPopUpApp(state: boolean, isPopUp: boolean) {
+    automaticPopUpApp(state: boolean, isPopUp: boolean = false) {
       // 如果已经弹出超过1次，清空定时器，不再执行弹框
       if (this.appConfirmNum === 1) {
         if (this.automaticAppTimeout) {
@@ -111,7 +111,7 @@ export const activityAppStore = defineStore({
           if (!isPopUp) {
             this.appConfirmDialogShow = true
           }
-        }, 120000);
+        }, 20000);
       }
     },
     setShowAppGuidance(param: boolean) {

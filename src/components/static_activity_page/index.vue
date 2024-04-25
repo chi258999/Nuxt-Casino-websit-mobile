@@ -71,8 +71,8 @@ const checkboxChanged = () => {
         <p style="margin: 0;">✅ {{ t('static_activity.text_10') }}</p>
       </div>
 
-      <div class="d-flex align-center">
-        <div style="margin: auto;">
+      <div class=" d-flex align-center">
+        <div class="static-activity-checkbox_c" style="margin: auto;">
           <v-checkbox
             hide-details
             icon
@@ -102,16 +102,17 @@ const checkboxChanged = () => {
 
 <style lang="scss">
 .m-static-activity-container {
-  border-radius: 8px 8px 0px 0px;
   width: 328px;
   height: 569px;
 
   .m-static-activity-animation-container {
-    border-radius: 8px 8px 0px 0px;
+    border-radius: 8px 8px 8px 8px;
     background: #1d2027 !important;
     width: 328px;
     height: 569px;
     position: relative;
+    display: flex;
+    flex-direction: column;
 
     // close modal button
     .close-button {
@@ -124,10 +125,11 @@ const checkboxChanged = () => {
 
     .m-static-activity-content {
       width: 280px;
-      height: 435px;
+      // height: 435px;
+      flex: 1;
       border-radius: 8px;
       background: rgba(21, 22, 28, 1);
-      margin: 16px auto;
+      margin: 16px auto 0px;
       padding: 13px 16px 32px 16px;
       overflow-y: auto;
 
