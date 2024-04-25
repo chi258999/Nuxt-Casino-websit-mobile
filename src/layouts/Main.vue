@@ -146,6 +146,11 @@ const signUpForm = computed(() => {
   return getSignUpForm.value
 })
 
+const controlLevel = computed(() => {
+  const { getControlLevel } = storeToRefs(appBarStore());
+  return getControlLevel.value
+})
+
 const signupDialog = ref<boolean>(false);
 const signoutDialog = ref<boolean>(false);
 const loginDialog = ref<boolean>(false);
@@ -1035,17 +1040,17 @@ const routeInited = () => {
     <!-- fix钉 按钮集合 -->
     <div v-show="fixBtnContainer">
       <!-- message btn -->
-      <div class="m-message-btn" @click="openGroupDialog">
+      <div class="m-message-btn" @click="openGroupDialog" :style="{'z-index': controlLevel ? '9' : '1000'}">
         <img src="@/assets/public/svg/message.svg" class="m-back-icon-position" />
       </div>
 
       <!-- service btn -->
-      <div class="m-service-btn" @click="openLiveChat">
+      <div class="m-service-btn" @click="openLiveChat" :style="{'z-index': controlLevel ? '9' : '1000'}">
         <img src="@/assets/public/svg/service-icon.svg" class="m-back-icon-position" />
       </div>
 
       <!-- 点击打开下载app页面 -->
-      <div class="m-activity-app-btn" v-if="mobile">
+      <div class="m-activity-app-btn" v-if="mobile" :style="{'z-index': controlLevel ? '9' : '1000'}">
           <transition
             enter-active-class="animated-lr hinge-lr fadeInRight"
             leave-active-class="animated-lr hinge-lr fadeOutRight"
