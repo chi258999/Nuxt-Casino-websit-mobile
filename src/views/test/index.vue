@@ -18,7 +18,7 @@ onMounted(() => {});
       <v-text-field
         ref="searchRef"
         :placeholder="'search'"
-        class="form-textfield dark-textfield"
+        class="form-textfield1 dark-textfield"
         variant="solo"
         hide-details
         filled
@@ -43,7 +43,7 @@ onMounted(() => {});
   height: 100vh;
   overflow: hidden;
 
-  .form-textfield {
+  .form-textfield1 {
 
     .v-field__input {
       font-size: 16px;
