@@ -45,7 +45,7 @@ const modelValueNew = computed({
   }
 });
 
-const sitekey = "0x4AAAAAAAYK2DjbkAyyZMSa";
+const sitekey = import.meta.env.VITE_CLOUDFLARE_SITEKEY;
 
 // 关闭弹窗
 const handleClose = () => {
@@ -57,7 +57,7 @@ onMounted(async () => {
     turnstile.render('#grecaptcha', {
         sitekey: sitekey,
         callback: function(token:any) {
-            // console.log(`Challenge Success ${token}`);
+            console.log(`真人验证成功 ${token}`);
             emit("update:modelValue", false);
             emit("grecaptchaSuccess")
         },

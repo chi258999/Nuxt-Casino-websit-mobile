@@ -401,21 +401,53 @@ const MSignup = defineComponent({
 
     // handle form submit  登录提交
     const handleSignupFormSubmit = async event => {
-      state.loading = true;
-      await dispatchSignUp({
-        uid:
-          state.registerConfig.model != 2
-            ? state.formData.emailAddress
-            : state.formData.phone,
-        password: state.formData.password,
-        referral_code: state.formData.promoCode.trim().replace(/\s+/g, " "),
-        browser: "",
-        device: "",
-        model: "",
-        brand: "",
-        imei: "",
-        code: state.formData.code
-      });
+      // // 不是回车键不触发 event.keyCode判断是不是软键盘触发
+      // if (event.keyCode !== undefined && event.keyCode !== 13) return;
+      // if (event.keyCode !== undefined && event.keyCode !== 13) return;
+      // //关闭手机软键盘
+      // document.activeElement.blur();
+
+      // if (!validateEmail()) {
+      //   state.isShowEmailValidaton = true;
+      //   return;
+      // }
+
+      // if (!validatePassword()) {
+      //   state.isShowPasswordValidation = true;
+      //   return;
+      // }
+
+      // if (!state.formData.isAgreed) {
+      //   const toast = useToast();
+      //   toast.success(t("signup.formPage.agree_alert_text"), {
+      //     timeout: 3000,
+      //     closeOnClick: false,
+      //     pauseOnFocusLoss: false,
+      //     pauseOnHover: false,
+      //     draggable: false,
+      //     showCloseButtonOnHover: false,
+      //     hideProgressBar: true,
+      //     closeButton: "button",
+      //     icon: WarningIcon,
+      //     rtl: false
+      //   });
+      //   return;
+      // }
+      // state.loading = true;
+      // await dispatchSignUp({
+      //   uid:
+      //     state.registerConfig.model != 2
+      //       ? state.formData.emailAddress
+      //       : state.formData.phone,
+      //   password: state.formData.password,
+      //   referral_code: state.formData.promoCode.trim().replace(/\s+/g, " "),
+      //   browser: "",
+      //   device: "",
+      //   model: "",
+      //   brand: "",
+      //   imei: "",
+      //   code: state.formData.code
+      // });
       state.loading = false;
       await registerSuccess();
       if (!localStorage.getItem(userInfo.value.name)) {
@@ -805,7 +837,7 @@ export default MSignup;
           class="m-register-mail-card"
           :style="{ height: mailCardHeight + 'px' }"
         >
-          <v-list theme="dark" bg-color="#1D2027">
+          <v-list theme="dark" bg-color="#15161c">
             <v-list-item
               class="text-600-12 white"
               value="gmail"
@@ -1094,6 +1126,7 @@ export default MSignup;
 
   .v-list-item--density-default.v-list-item--one-line {
     min-height: 42px !important;
+    background: #15161c;
   }
 }
 

@@ -924,12 +924,12 @@ const routeInited = () => {
       @click:outside="closeDialog('signout')"
     >-->
     <Signout
-      v-if="signoutDialog && mobileVersion != 'sm'"
+      v-if="signoutDialog && mobileWidth > 600"
       @close="closeDialog('signout')"
       v-model="signoutDialog"
     />
     <MSignout
-      v-else-if="signoutDialog && mobileVersion == 'sm'"
+      v-else-if="signoutDialog"
       @close="closeDialog('signout')"
       v-model="signoutDialog"
     />

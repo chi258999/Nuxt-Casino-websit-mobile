@@ -12,6 +12,7 @@ import img_public_42 from "@/assets/public/image/img_public_42.png";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import MGameConfirm from "@/views/home/components/mobile/GameConfirm.vue";
 import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
+import { appBarStore } from "@/store/appBar";
 import type * as Game from "@/interface/game";
 // Import Swiper styles
 import "swiper/css";
@@ -147,6 +148,11 @@ const handleEnterGame = async (item: Game.GameItem, id: number, name: string) =>
   selectedGameItem.value = item;
   gameConfirmDialogShow.value = true
 };
+
+const { setControlLevel } = appBarStore();
+watch(gameConfirmDialogShow, (value: boolean) => {
+  setControlLevel(value)
+})
 
 const handleSearchInput = async (event) => {
   // 不是回车键不触发  event.keyCode判断是不是软键盘触发
