@@ -48,10 +48,10 @@ const joinTelegram = () => {
 
     if (!appInstance.isMobileWebview) {
       // 浏览器端打开页面
-      window.location.href = `https://t.me/HOY777Oficial`;
+      window.location.href = `https://t.me/Hoy777.comOficial`;
     } else {
       // app端打开页面
-      window["AndroidWebView"].openUrl(`https://t.me/HOY777Oficial`);
+      window["AndroidWebView"].openUrl(`https://t.me/Hoy777.comOficial`);
     }
   }, 0);
 };
