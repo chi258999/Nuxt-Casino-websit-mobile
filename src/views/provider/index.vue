@@ -13,6 +13,7 @@ import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
 import type * as Game from "@/interface/game";
 import MGameConfirm from "@/views/home/components/mobile/GameConfirm.vue";
 import AdjustClass from "@/utils/adjust";
+import { appBarStore } from "@/store/appBar";
 import EventToken from "@/constants/EventToken";
 
 const { t } = useI18n();
@@ -97,6 +98,11 @@ const showGameConfirmationDialog = async (game_item: Game.GameItem) => {
   gameConfirmDialogShow.value = true;
   selectedGameItem.value = game_item;
 }
+
+const { setControlLevel } = appBarStore();
+watch(gameConfirmDialogShow, (value: boolean) => {
+  setControlLevel(value)
+})
 
 const handleInputChange = async (event: any) => {
   providerGameList.value = [];
