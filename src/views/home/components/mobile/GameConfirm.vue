@@ -137,8 +137,10 @@ const close = () => {
   emit("closeGameConfirmDialog")
 }
 
+const { setControlLevel } = appBarStore();
 watch(gameConfirmDialogShow, (value) => {
-  console.log("favorite:::::::::::::::::", is_favorite.value)
+  // 打开游戏二级确认框，改变三个按钮的层级问题
+  setControlLevel(value)
   favoriteSvgIconColor.value = is_favorite.value ? "#F9BC01" : "#7782AA";
 })
 onMounted(() => {
