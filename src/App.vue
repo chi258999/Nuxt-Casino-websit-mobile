@@ -94,9 +94,14 @@ window.onload = function () {
           event.preventDefault();
       }
       lastTouchEnd = now;
-  }, false);/* 阻止双指指掐放大*/
+  }, false);
+  /* 阻止双指指掐放大*/
   document.addEventListener("gesturestart", function (event) {
       event.preventDefault();
+  });
+  /* 阻止双指点击放大*/
+  document.addEventListener('dblclick', function (e) {
+    e.preventDefault();
   });
 };
 
@@ -127,4 +132,11 @@ onMounted(async () => {
   font-family: "Bauhaus 93";
   src: local("Bauhaus 93"), url(./fonts/Bauhaus/BauhausRegular.ttf) format("truetype");
 }
+
+input:focus,
+textarea, textarea:focus,
+select, select:focus {
+  font-size: 16px !important;
+}
+
 </style>
