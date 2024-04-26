@@ -57,7 +57,7 @@ onMounted(async () => {
     turnstile.render('#grecaptcha', {
         sitekey: sitekey,
         callback: function(token:any) {
-            // console.log(`Challenge Success ${token}`);
+            console.log(`真人验证成功 ${token}`);
             emit("update:modelValue", false);
             emit("grecaptchaSuccess")
         },
