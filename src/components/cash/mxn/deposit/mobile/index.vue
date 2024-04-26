@@ -918,7 +918,7 @@ onMounted(async () => {
         </v-list-item>
       </v-card>
       <div v-if="paymentMenuShow">
-        <v-list theme="dark" bg-color="#15161C" class="mr-6">
+        <v-list theme="dark" bg-color="#15161C" class="mr-6 ml-6">
           <v-row class="m-payment-width-370 px-2">
             <v-col
               cols="12"
