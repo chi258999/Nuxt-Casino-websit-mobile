@@ -75,6 +75,7 @@ onMounted(() => {
     :inverted-scroll="invertedScroll"
     :elevate-on-scroll="elevateOnScroll"
     v-if="mobile"
+    @click="downloadAppEvent"
   >
     <v-toolbar-title class="d-flex align-center justify-center">
       <p class="white" :class="mobileWidth < 600 ? 'text-500-10 wrap' : 'text-700-16'">
