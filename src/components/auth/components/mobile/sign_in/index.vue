@@ -716,25 +716,25 @@ export default Login;
 
 <style lang="scss">
 @media (max-width: 600px) {
-  .form-textfield {
-    height: 40px !important;
+  // .form-textfield {
+  //   height: 40px !important;
 
-    .v-input__control {
-      height: 40px;
+  //   .v-input__control {
+  //     height: 40px;
 
-      .v-field__field {
-        height: 40px !important;
+  //     .v-field__field {
+  //       height: 40px !important;
 
-        .v-field__input {
-          padding-top: 10px !important;
-          height: 40px !important;
-          min-height: 40px !important;
-          line-height: 30px;
-          box-sizing: border-box;
-        }
-      }
-    }
-  }
+  //       .v-field__input {
+  //         padding-top: 10px !important;
+  //         height: 40px !important;
+  //         min-height: 40px !important;
+  //         line-height: 30px;
+  //         box-sizing: border-box;
+  //       }
+  //     }
+  //   }
+  // }
   .v-field__field {
     color: var(--sec-text-7782-aa, #7782aa);
     font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
