@@ -45,7 +45,7 @@ const modelValueNew = computed({
   }
 });
 
-const sitekey = "0x4AAAAAAAYK2DjbkAyyZMSa";
+const sitekey = import.meta.env.VITE_CLOUDFLARE_SITEKEY;
 
 // 关闭弹窗
 const handleClose = () => {
