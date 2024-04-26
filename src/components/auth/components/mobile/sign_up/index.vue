@@ -837,7 +837,7 @@ export default MSignup;
           class="m-register-mail-card"
           :style="{ height: mailCardHeight + 'px' }"
         >
-          <v-list theme="dark" bg-color="#1D2027">
+          <v-list theme="dark" bg-color="#15161c">
             <v-list-item
               class="text-600-12 white"
               value="gmail"
@@ -1126,6 +1126,7 @@ export default MSignup;
 
   .v-list-item--density-default.v-list-item--one-line {
     min-height: 42px !important;
+    background: #15161c;
   }
 }
 
