@@ -122,8 +122,8 @@ const handleScroll = () => {
     </template>
     <template v-else>
       <MNavBarLayout />
-      <RewardBarLayout v-if="route.name !== 'Sports'&&rewardNavShow" v-model="rewardNavShow" />
-      <AgentBarLayout v-if="agentNavBarToggle" v-model="agentNavBarToggle" />
+      <RewardBarLayout v-show="route.name !== 'Sports'&&rewardNavShow" v-model="rewardNavShow" />
+      <AgentBarLayout v-show="agentNavBarToggle" v-model="agentNavBarToggle" />
       <VipBar v-if="vipDrawer" />
     </template>
     <UserNavBarLayout />
