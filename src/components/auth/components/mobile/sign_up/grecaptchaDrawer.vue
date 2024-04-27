@@ -56,10 +56,22 @@ onMounted(async () => {
   turnstile.ready(function () {
     turnstile.render('#grecaptcha', {
         sitekey: sitekey,
+        action:(value:any)=>{
+          console.log(`action ${value}`);
+        },
+        cData:(value:any)=>{
+          console.log(`cData ${value}`);
+        },
         callback: function(token:any) {
             console.log(`真人验证成功 ${token}`);
             emit("update:modelValue", false);
             emit("grecaptchaSuccess")
+        },
+        errorCallback:(err:any)=>{
+          console.log(`验证失败 ${err}`);
+        },
+        beforeInteractiveCallback:(value:any)=>{
+          console.log(`校验进入交互模式之前调用 ${value}`);
         },
     });
 });
