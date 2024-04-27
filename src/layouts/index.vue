@@ -124,7 +124,7 @@ const handleScroll = () => {
       <MNavBarLayout />
       <RewardBarLayout v-show="route.name !== 'Sports'&&rewardNavShow" v-model="rewardNavShow" />
       <AgentBarLayout v-show="agentNavBarToggle" v-model="agentNavBarToggle" />
-      <VipBar v-if="vipDrawer" />
+      <VipBar />
     </template>
     <UserNavBarLayout />
     <MBonusDashboardDialog />
