@@ -516,7 +516,7 @@ onMounted(async () => {
   height: 100% !important;
   width: 100% !important;
   top: 0px !important;
-  z-index: 2147483645 !important;
+  z-index: 999999 !important;
   background: $agent_card_bg !important;
 
   .scale-btn-text {
@@ -546,7 +546,7 @@ onMounted(async () => {
     width: 100% !important;
     height: 110px !important;
     position: fixed;
-    z-index: 100000000 !important;
+    z-index: 999999 !important;
   }
 
   .m-reward-menu-log-out-active-bg {
@@ -555,7 +555,7 @@ onMounted(async () => {
     width: 100% !important;
     height: 30px !important;
     position: fixed;
-    z-index: 100000000 !important;
+    z-index: 999999 !important;
   }
 
   .m-reward-drawer-close-button {

@@ -17,7 +17,7 @@
         Tell us you are human
       </div>
       <v-card class="m-grecaptcha-detail-card mt-2 pa-1">
-        <div class="grecaptcha" id="grecaptcha"></div>
+        <div class="cf-turnstile" id="example-container"></div>
       </v-card>
     </div>
   </v-navigation-drawer>
@@ -54,12 +54,18 @@ const handleClose = () => {
 
 onMounted(async () => {
   turnstile.ready(function () {
-    turnstile.render('#grecaptcha', {
+    turnstile.render('#example-container', {
         sitekey: sitekey,
         callback: function(token:any) {
             console.log(`真人验证成功 ${token}`);
             emit("update:modelValue", false);
             emit("grecaptchaSuccess")
+        },
+        errorCallback:(err:any)=>{
+          console.log(`验证失败 ${err}`);
+        },
+        beforeInteractiveCallback:(value:any)=>{
+          console.log(`校验进入交互模式之前调用 ${value}`);
         },
     });
 });
