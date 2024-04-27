@@ -13,19 +13,19 @@ const betbyHeight = ref<number | undefined>(0);
 const betby = ref(null);
 type dialogType = "login" | "signup";
 
-
+let observer: null = null;
 let resizeTimer: any = null;
 // 监听嵌套体育页面高度，当有内容就会有高度，去掉页面loading
-const handleResize = (entries:any) => {
+const handleResize = (entries: any) => {
   clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-        for (const entry of entries) {
-            const { height } = entry.contentRect;
-            if(height>20){
-              betbyShow.value = false;
-            }
-        }
-    }, 200);
+  resizeTimer = setTimeout(() => {
+    for (const entry of entries) {
+      const { height } = entry.contentRect;
+      if (height > 20) {
+        betbyShow.value = false;
+      }
+    }
+  }, 200);
 };
 
 const getLang = computed(() => {
@@ -47,27 +47,33 @@ watch(
   { deep: true }
 );
 
- let observer:  null = null;
+watch(route, async () => {
+  betbyShow.value = true;
+  await closeKill();
+  await getGameBetbyInit();
+  observer = new ResizeObserver(handleResize);
+  observer.observe(betby.value);
+  // betbyShow.value = false;
+});
+
 onMounted(async () => {
   AdjustClass.getInstance().adjustTrackEvent({
     key: "PAGE_VIEW",
     value: "sports",
-    params: "",
+    params: ""
   });
   // window.addEventListener("resize", handleResize);
   betbyHeight.value = window.innerHeight;
   betbyShow.value = true;
   window.scrollTo({
     top: 0,
-    behavior: "smooth",
+    behavior: "smooth"
   });
   // await dispatchGameEnter({ id: "9999", demo: false });
   await getGameBetbyInit();
   // 监听嵌套体育页面高度，当有内容就会有高度，去掉页面loading
-   observer = new ResizeObserver(handleResize);
-   observer.observe(betby.value);
-
- 
+  observer = new ResizeObserver(handleResize);
+  observer.observe(betby.value);
 });
 </script>
 <template>
@@ -119,15 +125,14 @@ onMounted(async () => {
 // }
 
 .p-betby-main {
-    position: absolute;
-    z-index: 5;
-    width: 100%;
-    max-width: 1300px;
-    min-height: 500px;
-    margin: 0 auto;
-    // top:0
+  position: absolute;
+  z-index: 5;
+  width: 100%;
+  max-width: 1300px;
+  min-height: 500px;
+  margin: 0 auto;
+  // top:0
 }
-
 
 .m-loading-container {
   position: absolute;

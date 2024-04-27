@@ -9,7 +9,7 @@
       zIndex: 90000000,
     }"
   >
-    <ActivityDrawer :id="id" @close="handleClose"></ActivityDrawer>
+    <ActivityDrawer v-if="modelValueNew" :id="id" @close="handleClose"></ActivityDrawer>
   </v-dialog>
 </template>
 
