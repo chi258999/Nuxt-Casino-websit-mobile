@@ -911,20 +911,20 @@ export default MSignup;
           :onblur="handleOnPasswordInputBlur"
           @keypress="showGrecaptchaDrawer"
         />
+        <div v-if="isShowPassword" @click="showPassword" class="m-password-icon">
         <img
-          v-if="isShowPassword"
           src="@/assets/public/svg/icon_public_07.svg"
           class="m-disable-password"
-          @click="showPassword"
-          width="16"
+          width="20"
         />
+      </div>
+      <div v-else @click="showPassword" class="m-password-icon">
         <img
-          v-else
           src="@/assets/public/svg/icon_public_06.svg"
           class="m-disable-password"
-          @click="showPassword"
-          width="16"
+          width="20"
         />
+      </div>
         <ValidationBox
           v-if="isShowPasswordValidation"
           :descriptionList="passwordValidationStrList"
@@ -1236,6 +1236,14 @@ export default MSignup;
     font-weight: 700;
     line-height: normal;
   }
+}
+
+.m-password-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 70px;
+  height: 40px;
 }
 
 .m-disable-password {

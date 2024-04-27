@@ -546,14 +546,14 @@ export default Login;
             <img
               src="@/assets/public/svg/icon_public_07.svg"
               class="m-disable-password"
-              width="16"
+              width="20"
             />
           </div>
           <div v-else @click="showPassword" class="m-password-icon">
             <img
               src="@/assets/public/svg/icon_public_06.svg"
               class="m-disable-password"
-              width="16"
+              width="20"
             />
           </div>
         </div>
@@ -839,7 +839,7 @@ export default Login;
   position: absolute;
   top: 0;
   right: 0;
-  width: 50px;
+  width: 70px;
   height: 40px;
 }
 
