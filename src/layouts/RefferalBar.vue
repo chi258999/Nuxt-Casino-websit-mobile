@@ -5,8 +5,9 @@ import { appBarStore } from "@/store/appBar";
 import { refferalStore } from "@/store/refferal";
 import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
+import { authStore } from "@/store/auth";
 import { activityAppStore } from '@/store/activityApp';
-const { setAppConfirmDialogShow, downloadAppAcquisition, runningSystem, automaticPopUpApp } = activityAppStore();
+const { setAppConfirmDialogShow, downloadAppAcquisition,userDownloadAppAcquisition, runningSystem, automaticPopUpApp } = activityAppStore();
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const platformCurrency = computed(() => {
@@ -39,13 +40,16 @@ const activityAppBonus = computed(() => {
   return getActivityBonus.value;
 });
 
+const userInfo = computed(() => {
+  const { getUserInfo } = storeToRefs(authStore());
+  return getUserInfo.value;
+});
+
 const openRefferalDialogShow = () => {
   setOverlayScrimShow(false);
   setRefferalDialogShow(true);
 };
 
-// 获取下载app活动信息
-downloadAppAcquisition()
 
 const downloadAppEvent = () => {
   setAppConfirmDialogShow(true)
@@ -61,6 +65,13 @@ const mobile = computed(() => {
 onMounted(() => {
   // 获取当前运行的是否浏览器
   runningSystem()
+  if(userInfo.value.id){
+    // 获取登录之后下载app活动的数据
+    userDownloadAppAcquisition()
+  }else{
+    // 未登录时下载app活动的数据
+    downloadAppAcquisition()
+  }
 })
 
 </script>

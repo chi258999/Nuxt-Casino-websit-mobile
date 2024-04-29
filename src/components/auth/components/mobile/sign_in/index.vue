@@ -284,7 +284,6 @@ const Login = defineComponent({
               icon: SuccessIcon,
               rtl: false,
             });
-
             await userDownloadAppAcquisition()
           } catch (error) {
 
