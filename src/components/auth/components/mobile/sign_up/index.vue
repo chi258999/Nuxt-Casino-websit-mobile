@@ -107,7 +107,7 @@ const MSignup = defineComponent({
         promoCode: "",
         isAgreed: true,
         visible: false,
-        areaCode: "+86"
+        areaCode: "+85"
       },
       userName: "",
       isShowPassword: false,
@@ -793,8 +793,8 @@ export default MSignup;
               <v-list-item
                 class="text-600-12 white"
                 value="86"
-                @click="mergePhone('86')"
-                >+86</v-list-item
+                @click="mergePhone('852')"
+                >+852</v-list-item
               >
             </v-list>
           </div>
