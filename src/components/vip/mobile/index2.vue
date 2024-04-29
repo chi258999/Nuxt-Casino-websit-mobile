@@ -48,15 +48,15 @@ const initVip = async () => {
 watch(vipNavBarToggle, (value: string) => {
   if (value === "1") {
     initVip();
-    vipDrawer.value = true;
+    // vipDrawer.value = true;
     // 重置了body的高度为视口高度，就没有滚动了 影响首页游戏分类的监听时间监听
     // document.body.style.height =
     //   vipNavigation.value.getBoundingClientRect().height + "px";
   } else if(value === "2") { 
     initVip();
-    vipDrawer.value = true;
+    // vipDrawer.value = true;
   } else {
-    vipDrawer.value = false;
+    // vipDrawer.value = false;
     document.body.style.height = "auto";
   }
 });
@@ -64,14 +64,14 @@ watch(vipNavBarToggle, (value: string) => {
 onMounted(async () => {
   console.log('vipDrawer ========= mount')
   if (localStorage.getItem("vipBar") === "1") {
-    vipDrawer.value = true;
+    // vipDrawer.value = true;
     // 重置了body的高度为视口高度，就没有滚动了 影响首页游戏分类的监听时间监听
     // document.body.style.height =
     //   vipNavigation.value.getBoundingClientRect().height + "px";
   } else if(localStorage.getItem("vipBar") === "2") {
-    vipDrawer.value = true;
+    // vipDrawer.value = true;
   }else {
-    vipDrawer.value = false;
+    // vipDrawer.value = false;
   }
   await dispatchVipCycleawardList();
   await dispatchVipBetawardList();
