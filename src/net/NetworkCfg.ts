@@ -8,6 +8,7 @@ export namespace NETWORK {
     static QUICK_REGISTER: string = '/quick/register'
     static REGISTER_CONFIG: string = '/register/config' //注册配置信息
     static VERIFY_SEND: string = '/verify/send' //发送验证码
+    static CLOUDFLARE_VERIFY: string = '/cloudflare/verify' //验证CloudFlare token
   }
 
   //Business logic after entering the home page
