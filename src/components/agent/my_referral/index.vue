@@ -83,7 +83,7 @@ const goReportTab = () => {
 
 const sendTelegramAppInvite = () => {
   const Telegram_BASE_URL = "https://t.me/share/url?url=";
-  const BASE_URL = token
+  const BASE_URL = (token&&inviteItem.value.invite_code)
     ? `${import.meta.env.VITE_BASE_URL}?code=${inviteItem.value.invite_code}`
     : import.meta.env.VITE_BASE_URL;
   const url = `${Telegram_BASE_URL}${BASE_URL}`;
@@ -94,7 +94,7 @@ const sendTelegramAppInvite = () => {
 const sendWhatsAppInvite = () => {
   const inviteMessage = encodeURIComponent("message");
   const WHATSAPP_BASE_URL = "https://api.whatsapp.com/send?text=";
-  const BASE_URL = token
+  const BASE_URL = (token&&inviteItem.value.invite_code)
     ? `${import.meta.env.VITE_BASE_URL}?code=${inviteItem.value.invite_code}`
     : import.meta.env.VITE_BASE_URL;
   const url = `${WHATSAPP_BASE_URL}${BASE_URL}`;
@@ -104,7 +104,7 @@ const sendWhatsAppInvite = () => {
 
 const sendFacebookAppInvite = () => {
   const FACEBOOK_BASE_URL = "https://www.facebook.com/sharer/sharer.php?u=";
-  const BASE_URL = token
+  const BASE_URL = (token&&inviteItem.value.invite_code)
     ? `${import.meta.env.VITE_BASE_URL}?code=${inviteItem.value.invite_code}`
     : import.meta.env.VITE_BASE_URL;
   const url = `${FACEBOOK_BASE_URL}${BASE_URL}`;
@@ -114,7 +114,7 @@ const sendFacebookAppInvite = () => {
 
 const sendTwitterAppInvite = () => {
   const TWITTER_BASE_URL = "https://twitter.com/intent/tweet?url=";
-  const BASE_URL = token
+  const BASE_URL = (token&&inviteItem.value.invite_code)
     ? `${import.meta.env.VITE_BASE_URL}?code=${inviteItem.value.invite_code}`
     : import.meta.env.VITE_BASE_URL;
   const url = `${TWITTER_BASE_URL}${BASE_URL}`;
@@ -124,7 +124,7 @@ const sendTwitterAppInvite = () => {
 
 const sendEmailAppInvite = () => {
   const EMAIL_BASE_URL = "mailto:?body=";
-  const BASE_URL = token
+  const BASE_URL = (token&&inviteItem.value.invite_code)
     ? `${import.meta.env.VITE_BASE_URL}?code=${inviteItem.value.invite_code}`
     : import.meta.env.VITE_BASE_URL;
   const url = `${EMAIL_BASE_URL}${BASE_URL}`;
