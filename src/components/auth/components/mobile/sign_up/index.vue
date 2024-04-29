@@ -433,21 +433,21 @@ const MSignup = defineComponent({
       //   });
       //   return;
       // }
-      // state.loading = true;
-      // await dispatchSignUp({
-      //   uid:
-      //     state.registerConfig.model != 2
-      //       ? state.formData.emailAddress
-      //       : state.formData.phone,
-      //   password: state.formData.password,
-      //   referral_code: state.formData.promoCode.trim().replace(/\s+/g, " "),
-      //   browser: "",
-      //   device: "",
-      //   model: "",
-      //   brand: "",
-      //   imei: "",
-      //   code: state.formData.code
-      // });
+      state.loading = true;
+      await dispatchSignUp({
+        uid:
+          state.registerConfig.model != 2
+            ? state.formData.emailAddress
+            : state.formData.phone,
+        password: state.formData.password,
+        referral_code: state.formData.promoCode.trim().replace(/\s+/g, " "),
+        browser: "",
+        device: "",
+        model: "",
+        brand: "",
+        imei: "",
+        code: state.formData.code
+      });
       state.loading = false;
       await registerSuccess();
       if (!localStorage.getItem(userInfo.value.name)) {
