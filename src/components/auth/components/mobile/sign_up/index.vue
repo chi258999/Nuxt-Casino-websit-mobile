@@ -790,12 +790,12 @@ export default MSignup;
                 @click="mergePhone('85')"
                 >+85</v-list-item
               >
-              <v-list-item
+              <!-- <v-list-item
                 class="text-600-12 white"
                 value="86"
                 @click="mergePhone('852')"
                 >+852</v-list-item
-              >
+              > -->
             </v-list>
           </div>
         </v-col>
