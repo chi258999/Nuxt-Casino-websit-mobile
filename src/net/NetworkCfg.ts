@@ -155,8 +155,8 @@ export namespace NETWORK {
 
   // 下载app活动 api
   export class DOWNLOADAPP {
-    static  USER_DOWAPP_INFO_ACQUISTION = '/user/downloadapp/list';
-    static DOWAPP_INFO_ACQUISTION = '/downloadapp/list';
+    static USER_DOWAPP_INFO_ACQUISTION = '/user/downloadapp/list';//下載app送bonus活動信息顯示（登录后）
+    static DOWAPP_INFO_ACQUISTION = '/downloadapp/list';//下載app送bonus活動信息顯示（登陆前）
     static DOWAPP_RECEIVE = '/user/downloadapp/receive';
   }
 
