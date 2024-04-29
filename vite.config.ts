@@ -118,6 +118,7 @@ export default (configEnv: ConfigEnv): UserConfigExport => {
       }
     },
     server: {
+      hmr: true,
       port: 3000,
       proxy: {
         '/api': {
