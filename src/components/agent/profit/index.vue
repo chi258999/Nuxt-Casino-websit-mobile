@@ -275,7 +275,7 @@ onMounted(async () => {
     </v-col>
   </v-row>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 .m-agent-profit-summary-card-box {
   height: fit-content;
   width: 100%;

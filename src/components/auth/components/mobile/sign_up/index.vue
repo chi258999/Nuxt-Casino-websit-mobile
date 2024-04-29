@@ -107,7 +107,7 @@ const MSignup = defineComponent({
         promoCode: "",
         isAgreed: true,
         visible: false,
-        areaCode: "+86"
+        areaCode: "+85"
       },
       userName: "",
       isShowPassword: false,
@@ -433,21 +433,21 @@ const MSignup = defineComponent({
       //   });
       //   return;
       // }
-      // state.loading = true;
-      // await dispatchSignUp({
-      //   uid:
-      //     state.registerConfig.model != 2
-      //       ? state.formData.emailAddress
-      //       : state.formData.phone,
-      //   password: state.formData.password,
-      //   referral_code: state.formData.promoCode.trim().replace(/\s+/g, " "),
-      //   browser: "",
-      //   device: "",
-      //   model: "",
-      //   brand: "",
-      //   imei: "",
-      //   code: state.formData.code
-      // });
+      state.loading = true;
+      await dispatchSignUp({
+        uid:
+          state.registerConfig.model != 2
+            ? state.formData.emailAddress
+            : state.formData.phone,
+        password: state.formData.password,
+        referral_code: state.formData.promoCode.trim().replace(/\s+/g, " "),
+        browser: "",
+        device: "",
+        model: "",
+        brand: "",
+        imei: "",
+        code: state.formData.code
+      });
       state.loading = false;
       await registerSuccess();
       if (!localStorage.getItem(userInfo.value.name)) {
@@ -790,12 +790,12 @@ export default MSignup;
                 @click="mergePhone('85')"
                 >+85</v-list-item
               >
-              <v-list-item
+              <!-- <v-list-item
                 class="text-600-12 white"
                 value="86"
-                @click="mergePhone('86')"
-                >+86</v-list-item
-              >
+                @click="mergePhone('852')"
+                >+852</v-list-item
+              > -->
             </v-list>
           </div>
         </v-col>

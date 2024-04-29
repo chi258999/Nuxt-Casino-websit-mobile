@@ -258,13 +258,6 @@ const Login = defineComponent({
         localStorage.setItem(userInfo.value.name,'1');
       }
       
-
-      // 打开VIP活动签到
-      if(userInfo.value.id&&vipSignIn.value.is_signin!=2){
-        setLoginBonusDialogVisible(true);
-      }
-
-
       setTimeout(async () => {
         const queryParams = getQueryParams()
         // 如果用户是app登录，那就领取奖励
@@ -284,8 +277,11 @@ const Login = defineComponent({
               icon: SuccessIcon,
               rtl: false,
             });
-
             await userDownloadAppAcquisition()
+                // 打开VIP活动签到
+            if(userInfo.value.id&&vipSignIn.value.is_signin!=2){
+              setLoginBonusDialogVisible(true);
+            }
           } catch (error) {
 
           }
