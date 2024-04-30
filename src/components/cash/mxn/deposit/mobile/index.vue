@@ -1257,18 +1257,6 @@ onMounted(async () => {
     }
   }
 
-  // .form-textfield div.v-field__field {
-  //   box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset !important;
-  // }
-
-  // .form-textfield div.v-field--variant-solo,
-  // .v-field--variant-solo-filled {
-  //   // background: transparent;
-  //   background: pink;
-  // }
-
-
-
   .m-deposit-card-height {
     height: 40px;
   }
@@ -1378,23 +1366,11 @@ onMounted(async () => {
     }
   }
 
-  // .dark-textfield .v-field__field {
-  //   background-color: #15161c !important;
-  // }
   ::v-deep(.dark-textfield) {
     .v-field__field {
       background-color: #15161c !important;
     }
   }
-
-  // .v-field--variant-solo {
-  //   background: transparent !important;
-  // }
-
-  // .amount-checkbox .v-input--selection-controls__ripple {
-  //   padding: 16px !important;
-  //   border: 1px solid yellow !important;
-  // }
 
   .amount-checkbox {
     margin: 5px 0px 15px;
@@ -1445,35 +1421,6 @@ onMounted(async () => {
         opacity: 1;
       }
     }
-
-    // i.v-icon {
-    //   color: #15161c;
-    //   background-color: #01983a;
-    //   width: 16px;
-    //   height: 16px;
-    //   border-radius: 4px;
-    //   margin-top: 4px;
-    // }
-
-    // i.mdi-checkbox-blank-outline {
-    //   background-color: #15161c;
-    //   box-shadow: inset 1px 0px 2px 1px rgba(0, 0, 0, 0.11);
-    //   border-radius: 4px;
-    // }
-
-    // .v-selection-control {
-    //   min-height: 20px !important;
-    // }
-
-    // .v-selection-control__wrapper,
-    // .v-selection-control__input {
-    //   width: 20px;
-    //   height: 20px;
-    // }
-
-    // .v-selection-control__wrapper {
-    //   margin: 0 10px;
-    // }
   }
 
   .deposit-other-text {
