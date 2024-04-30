@@ -19,7 +19,10 @@ import "swiper/css";
 import "swiper/css/pagination";
 // import Swiper core and required modules
 import { Pagination } from "swiper/modules";
+import { NETWORK } from '@/net/NetworkCfg'
+import { Network } from '@/net/Network'
 
+const network: Network = Network.getInstance()
 const { t } = useI18n();
 const { width } = useDisplay();
 const router = useRouter();
@@ -32,44 +35,44 @@ const { setMailMenuShow } = mailStore();
 const searchText = ref<string>("");
 const searchLoading = ref<boolean>(false);
 const page_no = ref<number>(1);
-const currentPage = ref<number>(1);
 const moreCurrentPage = ref<number>(1);
-const limit = ref<number>(6);
+const limit = ref<number>(30);
+const initLimit = 6
 const moreLoading = ref<boolean>(false);
 const swiper = ref<any>(null);
 
 const modules = [Pagination];
 
-const testGames = [
-  new URL("@/assets/home/image/img_pg_01.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_02.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_03.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_04.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_05.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_06.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_07.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_01.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_02.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_03.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_04.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_05.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_06.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_07.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_01.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_02.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_03.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_04.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_05.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_06.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_07.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_01.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_02.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_03.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_04.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_05.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_06.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_07.png", import.meta.url).href,
-];
+// const testGames = [
+//   new URL("@/assets/home/image/img_pg_01.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_02.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_03.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_04.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_05.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_06.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_07.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_01.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_02.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_03.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_04.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_05.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_06.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_07.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_01.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_02.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_03.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_04.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_05.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_06.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_07.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_01.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_02.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_03.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_04.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_05.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_06.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_07.png", import.meta.url).href,
+// ];
 
 const searchedGameList = ref<Array<Search>>([]);
 
@@ -86,6 +89,10 @@ const props = defineProps<{ searchDialogShow: boolean }>();
 const { searchDialogShow } = toRefs(props);
 
 const searchContainerHeight = ref<number>(590);
+
+const currentTotal = computed(() => {
+  return limit.value * (page_no.value - 1) + initLimit
+})
 
 const mobileWidth = computed(() => {
   return width.value;
@@ -161,20 +168,23 @@ const handleSearchInput = async (event) => {
     document.activeElement.blur();
   }
   if (searchText.value.length >= 3) {
-    searchLoading.value = true;
-    await dispatchGameSearch(
-      `?search=${searchText.value}&page=${currentPage.value}&limit=${
-        limit.value * page_no.value
-      }`
-    );
-    searchLoading.value = false;
-    // if (success.value) {
-    searchedGameCount.value = gameSearchList.value.total;
-    searchedGameList.value = gameSearchList.value.list;
-    searchedGameList.value.map((item) => {
-      // item.image = testGames[Math.floor(Math.random() * 7)];
-    });
-    // }
+    // searchLoading.value = true;
+    // await dispatchGameSearch(
+      // `?search=${searchText.value}&page=${page_no.value}&limit=${
+      //   limit.value
+      // }`
+    // );
+    // searchLoading.value = false;
+
+    // searchedGameCount.value = gameSearchList.value.total;
+    // searchedGameList.value = gameSearchList.value.list;
+    // searchedGameList.value.map((item) => {
+    //   // item.image = testGames[Math.floor(Math.random() * 7)];
+    // });
+    page_no.value = 1;
+    gameSearch(`?search=${searchText.value}&page=${page_no.value}&limit=${
+        initLimit
+      }`, searchLoading)
   } else {
     page_no.value = 1;
     setGameSearchList({
@@ -193,22 +203,24 @@ const handleResize = () => {
 };
 
 const handleMoreGame = async () => {
-  moreLoading.value = true;
+  // moreLoading.value = true;
   page_no.value += 1;
   moreCurrentPage.value += 1;
   if (searchText.value.length >= 3) {
-    searchLoading.value = true;
-    await dispatchGameSearch(
-      `?search=${searchText.value}&page=${moreCurrentPage.value}&limit=${limit.value}`
-    );
-    moreLoading.value = false;
-    searchLoading.value = false;
-    if (success.value) {
-      searchedGameList.value = [...searchedGameList.value, ...gameSearchList.value.list];
-      searchedGameList.value.map((item) => {
-        // item.image = testGames[Math.floor(Math.random() * 28)];
-      });
-    }
+    // searchLoading.value = true;
+    // await dispatchGameSearch(
+    //   `?search=${searchText.value}&page=${moreCurrentPage.value}&limit=${limit.value}`
+    // );
+    // moreLoading.value = false;
+    // searchLoading.value = false;
+    // if (success.value) {
+    //   searchedGameList.value = [...searchedGameList.value, ...gameSearchList.value.list];
+    //   searchedGameList.value.map((item) => {
+    //     // item.image = testGames[Math.floor(Math.random() * 28)];
+    //   });
+    // }
+
+    gameSearch(`?search=${searchText.value}&page=${moreCurrentPage.value}&limit=${limit.value}&existing=${searchedGameList.value.length}`, moreLoading)
   }
 };
 
@@ -224,20 +236,22 @@ const removeAllSearchKeyword = () => {
 const handleSearchGame = async (keyword: string) => {
   searchText.value = keyword;
   if (searchText.value.length >= 3) {
-    searchLoading.value = true;
-    await dispatchGameSearch(
-      `?search=${searchText.value}&page=${currentPage.value}&limit=${
-        limit.value * page_no.value
-      }`
-    );
-    searchLoading.value = false;
-    // if (success.value) {
-    searchedGameCount.value = gameSearchList.value.total;
-    searchedGameList.value = gameSearchList.value.list;
-    searchedGameList.value.map((item) => {
-      // item.image = testGames[Math.floor(Math.random() * 7)];
-    });
-    // }
+    // searchLoading.value = true;
+    // await dispatchGameSearch(
+    //   `?search=${searchText.value}&page=${page_no.value}&limit=${
+    //     limit.value
+    //   }`
+    // );
+    // searchLoading.value = false;
+    // searchedGameCount.value = gameSearchList.value.total;
+    // searchedGameList.value = gameSearchList.value.list;
+    // searchedGameList.value.map((item) => {
+    //   // item.image = testGames[Math.floor(Math.random() * 7)];
+    // });
+    page_no.value = 1
+    gameSearch(`?search=${searchText.value}&page=${page_no.value}&limit=${
+        initLimit
+      }`, searchLoading)
   } else {
     page_no.value = 1;
     setGameSearchList({
@@ -286,19 +300,63 @@ onMounted(async () => {
   // if (searchRef.value != undefined) {
   //   searchRef.value.focus();
   // }
-  window.addEventListener("resize", handleResize);
-  await dispatchGameSearch(
-    `?game_categories_slug=HOT&page=${currentPage.value}&limit=${
-      limit.value * page_no.value
-    }`
-  );
-  recommendedGameList.value = gameSearchList.value.list;
-  if (recommendedGameList.value.length > 0) {
-    recommendedGameList.value.map((item) => {
-      // item.image = testGames[Math.floor(Math.random() * 28)];
-    });
-  }
+  // window.addEventListener("resize", handleResize);
+  // await dispatchGameSearch(
+  //   `?game_categories_slug=HOT&page=${page_no.value}&limit=${
+  //     limit.value
+  //   }`
+  // );
+  // recommendedGameList.value = gameSearchList.value.list;
+  // if (recommendedGameList.value.length > 0) {
+  //   recommendedGameList.value.map((item) => {
+  //     // item.image = testGames[Math.floor(Math.random() * 28)];
+  //   });
+  // }
+  init()
 });
+
+const init = async() => {
+  window.addEventListener("resize", handleResize);
+  
+  // 查询热门游戏
+  network.request({
+    url: NETWORK.GAME_INFO.GAME_SEARCH + `?game_categories_slug=HOT&page=${page_no.value}&limit=${
+      initLimit
+    }`,
+    method: 'GET',
+    data: {},
+  }).then(res => {
+    const { list } = res.data
+    recommendedGameList.value = list;
+    // if (recommendedGameList.value.length > 0) {
+    //   recommendedGameList.value.map((item) => {
+        // item.image = testGames[Math.floor(Math.random() * 28)];
+    //   });
+    // }
+  })
+}
+
+const gameSearch = (sub_api, apiloading) => {
+  apiloading.value = true;
+  network.request({
+    url: NETWORK.GAME_INFO.GAME_SEARCH + sub_api,
+    method: 'GET',
+    data: {},
+  })
+  .then((res: any) => {
+    if (res.code === 200) {
+      const { total, list } = res.data
+      searchedGameList.value = [...searchedGameList.value, ...list]
+      searchedGameCount.value = total
+      console.log(searchedGameList.value, 'providerGameList.value');
+      console.log(searchedGameCount.value, 'gameSearchTotal.value');
+    }
+  }).catch(err => {
+    console.log(err);
+  }).finally(() => {
+    apiloading.value = false;
+  })
+}
 </script>
 
 <template>
@@ -406,7 +464,7 @@ onMounted(async () => {
               <v-col
                 cols="4"
                 class="py-0 px-1"
-                v-if="index < 6 * page_no"
+                v-if="index < currentTotal"
                 style="position: relative"
               >
                 <ProgressiveImage
@@ -433,7 +491,7 @@ onMounted(async () => {
               variant="outlined"
               width="100%"
               height="41"
-              v-if="searchedGameCount > 3 && searchedGameCount > 3 * page_no"
+              v-if="searchedGameCount > initLimit && searchedGameCount > currentTotal"
               @click="handleMoreGame()"
             >
               <div v-if="!moreLoading">{{ t("home.more") }}</div>
