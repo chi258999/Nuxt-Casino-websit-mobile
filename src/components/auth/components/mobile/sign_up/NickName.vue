@@ -272,7 +272,7 @@ onMounted(() => {
   </v-dialog>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .m-nickname-container {
   width: 320px;
   height: 471px;
@@ -385,7 +385,7 @@ onMounted(() => {
     z-index: 1;
   }
 
-  .m-display-name-input {
+  :deep.m-display-name-input {
     .form-textfield div.v-field__field {
       box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset !important;
     }
@@ -397,7 +397,7 @@ onMounted(() => {
   }
 }
 
-.m-signup-btn {
+:deep.m-signup-btn {
   background: #009b3a;
 
   .v-btn__content {
@@ -409,7 +409,7 @@ onMounted(() => {
     line-height: normal;
   }
 }
-.m-signup-disabled-btn {
+:deep.m-signup-disabled-btn {
   border-radius: 8px;
   background: var(--Secondary-Button, #23262f);
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
@@ -424,7 +424,7 @@ onMounted(() => {
     line-height: normal;
   }
 }
-.m-signup-displayname {
+:deep.m-signup-displayname {
   transform-origin: top !important;
 
   .v-field__field {

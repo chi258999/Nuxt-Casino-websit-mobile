@@ -125,7 +125,7 @@ onMounted(() => {
 </v-dialog>
 
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 .m-auth-dialog-container {
   height: 100vh;
   width: 100%;
