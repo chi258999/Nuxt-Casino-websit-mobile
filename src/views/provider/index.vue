@@ -77,7 +77,7 @@ const handleMoreGame = async () => {
   moreLoading.value = true;
   currentPage.value += 1;
   await dispatchGameSearch(
-    "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + limit.value
+    "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + limit.value + "&existing=" + currentTotal.value
   );
   providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
   moreLoading.value = false;
@@ -104,34 +104,36 @@ watch(gameConfirmDialogShow, (value: boolean) => {
   setControlLevel(value)
 })
 
-const handleInputChange = async (event: any) => {
-  providerGameList.value = [];
-  searchLoading.value = true;
-  await dispatchGameSearch(
-    "?game_categories_slug=" + slug.value + "&search=" + searchText.value + "&page=" + currentPage.value + "&limit=" + limit.value
-  );
-  providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
-  searchLoading.value = false;
-}
+// const handleInputChange = async (event: any) => {
+//   providerGameList.value = [];
+//   searchLoading.value = true;
+//   await dispatchGameSearch(
+//     "?game_categories_slug=" + slug.value + "&search=" + searchText.value + "&page=" + currentPage.value + "&limit=" + initLimit
+//   );
+//   providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
+//   searchLoading.value = false;
+// }
 
 const refreshGameFavoriteList = (id: string | number) => {
 }
 
 watch(searchText, async (value) => {
-  console.log(slug.value, 'slug.value');
+  // console.log(slug.value, 'slug.value');
 
+  // 重置页数
+  currentPage.value = 1
   providerGameList.value = [];
   if (value) {
     searchLoading.value = true;
     await dispatchGameSearch(
-      "?game_categories_slug=" + slug.value + "&search=" + value + "&page=" + currentPage.value + "&limit=" + limit.value
+      "?game_categories_slug=" + slug.value + "&search=" + value + "&page=" + currentPage.value + "&limit=" + initLimit
     );
     providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
     searchLoading.value = false;
   } else {
     searchLoading.value = true;
     await dispatchGameSearch(
-      "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + limit.value
+      "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + initLimit
     );
     providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
     searchLoading.value = false;
