@@ -7,7 +7,7 @@ import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 
 const route = useRoute();
-const { dispatchGameEnter, getGameBetbyInit, closeKill } = gameStore();
+const { dispatchGameEnter, getGameBetbyInit,updateOptionsBy, closeKill } = gameStore();
 const betbyShow = ref<boolean>(false);
 const betbyHeight = ref<number | undefined>(0);
 const betby = ref(null);
@@ -48,11 +48,13 @@ watch(
 );
 
 watch(route, async () => {
-  betbyShow.value = true;
-  await closeKill();
-  await getGameBetbyInit();
-  observer = new ResizeObserver(handleResize);
-  observer.observe(betby.value);
+  console.log(route,route.query,'routerouteroute')
+  updateOptionsBy({url:route.query['bt-path']})
+  // betbyShow.value = true;
+  // await closeKill();
+  // await getGameBetbyInit();
+  // observer = new ResizeObserver(handleResize);
+  // observer.observe(betby.value);
   // betbyShow.value = false;
 });
 
