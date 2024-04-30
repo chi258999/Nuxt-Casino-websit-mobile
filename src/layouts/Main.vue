@@ -687,6 +687,8 @@ onMounted(async() => {
 const routeInited = () => {
   // scrollTo()
 }
+
+const test=ref(true)
 </script>
 
 <template>
