@@ -364,37 +364,37 @@ const MSignup = defineComponent({
     // handle form submit  登录提交
     const handleSignupFormSubmit = async (event) => {
       // // 不是回车键不触发 event.keyCode判断是不是软键盘触发
-      // if (event.keyCode !== undefined && event.keyCode !== 13) return;
-      // if (event.keyCode !== undefined && event.keyCode !== 13) return;
-      // //关闭手机软键盘
-      // document.activeElement.blur();
+      if (event.keyCode !== undefined && event.keyCode !== 13) return;
+      if (event.keyCode !== undefined && event.keyCode !== 13) return;
+      //关闭手机软键盘
+      document.activeElement.blur();
 
-      // if (!validateEmail()) {
-      //   state.isShowEmailValidaton = true;
-      //   return;
-      // }
+      if (!validateEmail()) {
+        state.isShowEmailValidaton = true;
+        return;
+      }
 
-      // if (!validatePassword()) {
-      //   state.isShowPasswordValidation = true;
-      //   return;
-      // }
+      if (!validatePassword()) {
+        state.isShowPasswordValidation = true;
+        return;
+      }
 
-      // if (!state.formData.isAgreed) {
-      //   const toast = useToast();
-      //   toast.success(t("signup.formPage.agree_alert_text"), {
-      //     timeout: 3000,
-      //     closeOnClick: false,
-      //     pauseOnFocusLoss: false,
-      //     pauseOnHover: false,
-      //     draggable: false,
-      //     showCloseButtonOnHover: false,
-      //     hideProgressBar: true,
-      //     closeButton: "button",
-      //     icon: WarningIcon,
-      //     rtl: false
-      //   });
-      //   return;
-      // }
+      if (!state.formData.isAgreed) {
+        const toast = useToast();
+        toast.success(t("signup.formPage.agree_alert_text"), {
+          timeout: 3000,
+          closeOnClick: false,
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+          draggable: false,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: WarningIcon,
+          rtl: false
+        });
+        return;
+      }
       state.loading = true
       await dispatchSignUp({
         uid: state.registerConfig.model != 2 ? state.formData.emailAddress : state.formData.phone,
@@ -744,7 +744,7 @@ export default MSignup
           :onblur="handleOnEmailInputBlur"
           @input="handleEmailChange"
           :onfocus="handleEmailFocus"
-          @keypress="showGrecaptchaDrawer"
+          @keypress="handleSignupFormSubmit"
         />
         <ValidationBox v-if="isShowEmailValidaton" :title="t(`signup.formPage.validation.email.${formData.emailAddress.length ? 'title2' : 'title'}`)" :withCautionIcon="true" />
         <div class="m-register-mail-card" :style="{ height: mailCardHeight + 'px' }">
@@ -780,7 +780,7 @@ export default MSignup
           v-model="formData.password"
           :onfocus="handleOnPasswordInputFocus"
           :onblur="handleOnPasswordInputBlur"
-          @keypress="showGrecaptchaDrawer"
+          @keypress="handleSignupFormSubmit"
         />
         <div v-if="isShowPassword" @click="showPassword" class="m-password-icon">
           <img src="@/assets/public/svg/icon_public_07.svg" class="m-disable-password" width="20" />
@@ -800,7 +800,7 @@ export default MSignup
           density="comfortable"
           v-model="formData.promoCode"
           :disabled="promoCodeDisabled"
-          @keypress="showGrecaptchaDrawer"
+          @keypress="handleSignupFormSubmit"
         />
       </v-row>
       <!-- 邀请码 / -->
@@ -816,7 +816,7 @@ export default MSignup
         </p>
       </div>
       <v-row>
-        <v-btn class="mt-8 mx-3" :class="isFormDataReady ? 'm-signup-btn' : 'm-signup-disabled-btn'" width="94%" height="48px" :loading="loading" :onclick="showGrecaptchaDrawer">
+        <v-btn class="mt-8 mx-3" :class="isFormDataReady ? 'm-signup-btn' : 'm-signup-disabled-btn'" width="94%" height="48px" :loading="loading" :onclick="handleSignupFormSubmit">
           {{ t('signup.formPage.button') }}
         </v-btn>
       </v-row>
@@ -882,7 +882,7 @@ export default MSignup
         </v-btn>
       </v-row>
     </div>
-    <grecaptchaDrawer v-if="grecaptchaDrawer" v-model="grecaptchaDrawer" @grecaptchaSuccess="handleSignupFormSubmit"></grecaptchaDrawer>
+    <!-- <grecaptchaDrawer v-if="grecaptchaDrawer" v-model="grecaptchaDrawer" @grecaptchaSuccess="handleSignupFormSubmit"></grecaptchaDrawer> -->
   </div>
 </template>
 

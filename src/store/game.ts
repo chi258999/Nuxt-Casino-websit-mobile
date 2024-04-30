@@ -162,6 +162,9 @@ export const gameStore = defineStore({
         setGameBigWinItem(gameBigWinItem: Game.GameBigWinData) {
             this.gameBigWinItem = gameBigWinItem;
         },
+        updateOptionsBy(options:any){
+            (this.betby as any)?.updateOptions(options);
+        },
         async getGameBetbyInit() {
             const { setRefferalAppBarShow } = refferalStore();
             setRefferalAppBarShow(false)
@@ -199,6 +202,9 @@ export const gameStore = defineStore({
                     },
                     onRecharge: () => {
                         this.openDepositDialog();
+                    },
+                    onRouteChange:()=>{
+                        console.log('路由切换','onRouteChangeonRouteChangeonRouteChangeonRouteChange')
                     }
                 });
         },
