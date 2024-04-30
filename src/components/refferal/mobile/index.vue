@@ -397,7 +397,7 @@ onMounted(async () => {
   </v-dialog> 
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @keyframes scaling {
   0% {
     transform: scale(0);
