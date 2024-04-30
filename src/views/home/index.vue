@@ -585,12 +585,15 @@ const Dashboard = defineComponent({
         // }
       }
     })
+
+    // 显示更多游戏
     const handleMoreGame = async (
-      slug: string,
-      page_no: number,
+      moreGameItem: any,
       index: number,
       gamFilterBtn: string
     ) => {
+      const { slug, page_no, games} = moreGameItem;
+      const existingGames = games ? games.length : 0;
       let new_page_no = page_no + 1;
       moreGameCurrentPage.value += 1;
       moreLoading.value = true;
@@ -600,6 +603,7 @@ const Dashboard = defineComponent({
           game_categories_slug: selectedCategoryName.value,
           page: new_page_no,
           limit: limit.value,
+          existing: existingGames
         });
       } else {
         await dispatchGameSearch(
@@ -608,7 +612,8 @@ const Dashboard = defineComponent({
           "&page=" +
           new_page_no +
           "&limit=" +
-          limit.value
+          limit.value + 
+          "&existing=" + existingGames
         );
       }
       moreLoading.value = false;
@@ -1562,7 +1567,7 @@ export default Dashboard;
                 :width="mobileWidth < 600 ? '100%' : 164"
                 :height="mobileWidth < 600 ? 41 : 48"
                 @click="
-                  handleMoreGame(item.slug, item.page_no, index, selectedGameFilterBtn)
+                  handleMoreGame(item, index, selectedGameFilterBtn)
                 "
               >
                 <div class="loading-body" v-if="moreLoading && index == moreIndex">
@@ -1744,10 +1749,10 @@ export default Dashboard;
                 :height="mobileWidth < 600 ? 41 : 48"
                 @click="
                   handleMoreGame(
-                    otherGameItem.slug,
-                    otherGameItem.page_no,
+                    otherGameItem,
                     otherIndex,
-                    selectedGameFilterBtn
+                    selectedGameFilterBtn,
+                    otherGameItem,
                   )
                 "
               >
