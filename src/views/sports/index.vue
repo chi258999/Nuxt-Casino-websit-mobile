@@ -87,7 +87,7 @@ onMounted(async () => {
         <div class="dot-0"></div>
       </div>
     </div>
-    <div id="betby" ref="betby"></div>
+    <div id="betby" ref="betby" class="betby"></div>
   </div>
 </template>
 <style lang="scss">
@@ -119,21 +119,18 @@ onMounted(async () => {
   }
 }
 
-// .p-betby-main {
-//   width: 100%;
-//   max-width: 1300px;
-//   min-height: 500px;
-//   margin: 0 auto;
-// }
-
 .p-betby-main {
-  position: absolute;
-  z-index: 5;
+  position: relative;
   width: 100%;
   max-width: 1300px;
-  min-height: 500px;
+  // min-height: 500px;
+  height: 100vh;
+  overflow: auto;
   margin: 0 auto;
-  // top:0
+}
+
+.betby {
+  height: 100%;
 }
 
 .m-loading-container {

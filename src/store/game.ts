@@ -7,7 +7,6 @@ import { authStore } from "@/store/auth";
 import { appBarStore } from "@/store/appBar";
 import Cookies from "js-cookie";
 import CacheKey from "@/constants/cacheKey";
-import {activityAppStore} from './activityApp'
 import { refferalStore } from "@/store/refferal";
 
 type dialogType = "login" | "signup";
@@ -176,9 +175,9 @@ export const gameStore = defineStore({
                     lang: this.language,
                     target: document.getElementById('betby'),
                     brand_id: "2331516940205559808",
-                    betSlipOffsetTop: activityAppStore().mobile?60:0,
+                    betSlipOffsetTop: 0,
                     betslipZIndex: 999,
-                    stickyTop: activityAppStore().mobile?60:0,
+                    stickyTop: 0,
                     themeName: "demo-green-dark-table",
                     onLogin: async () => {
                         if (Cookies.get(CacheKey.TOKEN) == "" || !Cookies.get(CacheKey.TOKEN)) {
