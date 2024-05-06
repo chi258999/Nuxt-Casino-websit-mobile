@@ -1278,7 +1278,7 @@ onMounted(async () => {
                 value="sport_1"
                 style="margin-bottom: -4px !important; margin-top: -4px !important"
                 @click="
-                  handleSportGame('/soccer/brazil/brasileiro-serie-a-1666079971237564416')
+                  handleSportGame('/Fsoccer-1')
                 "
               >
                 <template v-slot:prepend>
@@ -1292,7 +1292,7 @@ onMounted(async () => {
                 class="m-casino-sub-img m-nav-sub-menu ml-2"
                 value="sport_1"
                 style="margin-bottom: -4px !important; margin-top: -4px !important"
-                @click="handleSportGame('/soccer/spain/laliga-1666080196081618944')"
+                @click="handleSportGame('/Fbaseball-3')"
               >
                 <template v-slot:prepend>
                   <inline-svg :src="icon_public_117" width="16"></inline-svg>
@@ -1306,7 +1306,7 @@ onMounted(async () => {
                 value="sport_1"
                 style="margin-bottom: -4px !important; margin-top: -4px !important"
                 @click="
-                  handleSportGame('/soccer/england/premier-league-1666080041827700736')
+                  handleSportGame('/Ftennis-5')
                 "
               >
                 <template v-slot:prepend>
@@ -1321,11 +1321,7 @@ onMounted(async () => {
                 class="m-casino-sub-img m-nav-sub-menu ml-2"
                 value="sport_1"
                 style="margin-bottom: -4px !important; margin-top: -4px !important"
-                @click="
-                  handleSportGame(
-                    '/soccer/international-clubs/uefa-champions-league-1666080270903808000'
-                  )
-                "
+                @click="handleSportGame('/Fboxing-10')"
               >
                 <template v-slot:prepend>
                   <inline-svg :src="icon_public_119" width="16"></inline-svg>
@@ -1338,7 +1334,7 @@ onMounted(async () => {
                 class="m-casino-sub-img m-nav-sub-menu ml-2"
                 value="sport_1"
                 style="margin-bottom: -4px !important; margin-top: -4px !important"
-                @click="handleSportGame('/soccer/italy/serie-a-1666080211319525376')"
+                @click="handleSportGame('/formula-1-40')"
               >
                 <template v-slot:prepend>
                   <inline-svg :src="icon_public_119" width="16"></inline-svg>
@@ -1351,7 +1347,7 @@ onMounted(async () => {
                 class="m-casino-sub-img m-nav-sub-menu ml-2"
                 value="sport_1"
                 style="margin-bottom: -4px !important; margin-top: -4px !important"
-                @click="handleSportGame('/soccer/germany/bundesliga-1666080125223047168')"
+                @click="handleSportGame('/Fsoccer/Funited-arab-emirates/Farabian-gulf-league-1666080020474499072')"
               >
                 <template v-slot:prepend>
                   <inline-svg :src="icon_public_119" width="16"></inline-svg>
@@ -1364,7 +1360,7 @@ onMounted(async () => {
                 class="m-casino-sub-img m-nav-sub-menu ml-2"
                 value="sport_1"
                 style="margin-bottom: -4px !important; margin-top: -4px !important"
-                @click="handleSportGame('/soccer/france/ligue-1-1666080025423777792')"
+                @click="handleSportGame('/Famerican-football-16')"
               >
                 <template v-slot:prepend>
                   <inline-svg :src="icon_public_119" width="16"></inline-svg>
@@ -1377,7 +1373,7 @@ onMounted(async () => {
                 class="m-casino-sub-img m-nav-sub-menu ml-2"
                 value="sport_1"
                 style="margin-bottom: -4px !important; margin-top: -4px !important"
-                @click="handleSportGame('/soccer-1')"
+                @click="handleSportGame('/Fice-hockey-4')"
               >
                 <template v-slot:prepend>
                   <inline-svg :src="icon_public_119" width="16"></inline-svg>
@@ -1390,7 +1386,7 @@ onMounted(async () => {
                 class="m-casino-sub-img m-nav-sub-menu ml-2"
                 value="sport_1"
                 style="margin-bottom: -4px !important; margin-top: -4px !important"
-                @click="handleSportGame('/fifa-300')"
+                @click="handleSportGame('/Ftable-tennis-20')"
               >
                 <template v-slot:prepend>
                   <inline-svg :src="icon_public_120" width="16"></inline-svg>
@@ -1399,7 +1395,111 @@ onMounted(async () => {
                   {{ t("navBar.sport_sub_menu.text_11") }}
                 </v-list-item-title>
               </v-list-item>
+              <v-list-item
+                class="m-casino-sub-img m-nav-sub-menu ml-2"
+                value="sport_1"
+                style="margin-bottom: -4px !important; margin-top: -4px !important"
+                @click="handleSportGame('/Ftable-tennis-20')"
+              >
+                <template v-slot:prepend>
+                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                </template>
+                <v-list-item-title class="ml-1 gray">
+                  {{ t("navBar.sport_sub_menu.text_41") }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                class="m-casino-sub-img m-nav-sub-menu ml-2"
+                value="sport_1"
+                style="margin-bottom: -4px !important; margin-top: -4px !important"
+                @click="handleSportGame('/Fvolleyball-23')"
+              >
+                <template v-slot:prepend>
+                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                </template>
+                <v-list-item-title class="ml-1 gray">
+                  {{ t("navBar.sport_sub_menu.text_35") }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                class="m-casino-sub-img m-nav-sub-menu ml-2"
+                value="sport_1"
+                style="margin-bottom: -4px !important; margin-top: -4px !important"
+                @click="handleSportGame('/Fhandball-6')"
+              >
+                <template v-slot:prepend>
+                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                </template>
+                <v-list-item-title class="ml-1 gray">
+                  {{ t("navBar.sport_sub_menu.text_24") }}
+                </v-list-item-title>
+              </v-list-item>
 
+              <v-list-item
+                class="m-casino-sub-img m-nav-sub-menu ml-2"
+                value="sport_1"
+                style="margin-bottom: -4px !important; margin-top: -4px !important"
+                @click="handleSportGame('/Frugby/Frugby-league/Frfl-league-1-1707434130024828928')"
+              >
+                <template v-slot:prepend>
+                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                </template>
+                <v-list-item-title class="ml-1 gray">
+                  {{ t("navBar.sport_sub_menu.text_31") }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                class="m-casino-sub-img m-nav-sub-menu ml-2"
+                value="sport_1"
+                style="margin-bottom: -4px !important; margin-top: -4px !important"
+                @click="handleSportGame('/Fcricket-21')"
+              >
+                <template v-slot:prepend>
+                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                </template>
+                <v-list-item-title class="ml-1 gray">
+                  {{ t("navBar.sport_sub_menu.text_42") }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                class="m-casino-sub-img m-nav-sub-menu ml-2"
+                value="sport_1"
+                style="margin-bottom: -4px !important; margin-top: -4px !important"
+                @click="handleSportGame('/snooker-19')"
+              >
+                <template v-slot:prepend>
+                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                </template>
+                <v-list-item-title class="ml-1 gray">
+                  {{ t("navBar.sport_sub_menu.text_32") }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                class="m-casino-sub-img m-nav-sub-menu ml-2"
+                value="sport_1"
+                style="margin-bottom: -4px !important; margin-top: -4px !important"
+                @click="handleSportGame('/Fdarts-22')"
+              >
+                <template v-slot:prepend>
+                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                </template>
+                <v-list-item-title class="ml-1 gray">
+                  {{ t("navBar.sport_sub_menu.text_20") }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item
+                class="m-casino-sub-img m-nav-sub-menu ml-2"
+                value="sport_1"
+                style="margin-bottom: -4px !important; margin-top: -4px !important"
+                @click="handleSportGame('/Fmma-117')"
+              >
+                <template v-slot:prepend>
+                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                </template>
+                <v-list-item-title class="ml-1 gray">
+                  {{ t("navBar.sport_sub_menu.text_43") }}
+                </v-list-item-title>
+              </v-list-item>
               <v-menu
                 location="center"
                 offset="10"

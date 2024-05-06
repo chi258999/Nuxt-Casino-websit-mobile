@@ -2,6 +2,7 @@
 import { ref, computed, watch, onMounted, onUnmounted, defineAsyncComponent } from "vue";
 import { gameStore } from "@/store/game";
 import { mailStore } from "@/store/mail";
+import { vipStore } from '@/store/vip'
 import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
@@ -29,6 +30,7 @@ const { setMailMenuShow } = mailStore();
 const { dispatchGameEnter } = gameStore();
 const { setIsScroll } = gameStore();
 const { setMobileMenuShow } = gameStore();
+const { dispatchVipInfo } = vipStore()
 const route = useRoute();
 const router = useRouter();
 const mobileHeight = ref<number | undefined>(0);
@@ -398,9 +400,11 @@ const handleResize = () => {
 const queryParams = getQueryParams()
 
 // 点击关闭按钮回调
-const closeGame = () => {
+const closeGame = async() => {
   // 关闭游戏，打开横屏遮罩层的监听
   setIsScroll(true)
+  //退出游戏获取进度条 
+  await dispatchVipInfo()
   router.go(-1);
   // router.push({path: "/", query: queryParams})
   // 关闭按钮显示
