@@ -1063,11 +1063,11 @@ onMounted(async () => {
                 class="m-deposit-amout-btn-text-award-price"
                 v-if="!bonusCheck && depositAmountItem.bonus != 0"
               >
-                <font class="text-700-6 white">{{
+                <!-- <font class="text-700-6 white">{{
                   t("deposit_dialog.text_3")
-                }}</font>
+                }}</font> -->
                 <font class="text-700-6 award-price-color"
-                  >{{ platformCurrency
+                  >= {{ platformCurrency
                   }}{{ countDepositAmount(depositAmountItem) }}</font
                 >
               </div>
@@ -1081,7 +1081,7 @@ onMounted(async () => {
                 {{
                   depositAmountItem.type == 0
                     ? depositAmountItem.bonus
-                    : Number(depositAmountItem.bonus) * 100 + "%"
+                    : '+' + Number(depositAmountItem.bonus) * 100 + "%"
                 }}
               </div>
             </div>
