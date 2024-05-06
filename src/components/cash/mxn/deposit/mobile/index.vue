@@ -1378,7 +1378,7 @@ onMounted(async () => {
     position: relative;
 
     .m-deposit-amout-btn-text-price {
-      font-family: Inter;
+      font-family: Inter, -apple-system;
       font-size: 12px;
       line-height: 15px;
       font-weight: 700;

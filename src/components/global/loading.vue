@@ -25,10 +25,12 @@ const porps = defineProps({
   .loading-body {
     display: flex;
     align-items: center;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translateX(-50%);
+    justify-content: center;
+    height: 100%;
+    // position: absolute;
+    // top: 40%;
+    // left: 50%;
+    // transform: translateX(-50%);
 
     .dot-0 {
       width: 10px;
