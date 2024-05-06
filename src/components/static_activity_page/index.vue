@@ -61,14 +61,14 @@ const checkboxChanged = () => {
 
       <div class="m-static-activity-content">
         <p class="content-title">{{ t('static_activity.text_2') }}</p>
-        <p>🎁 {{ t('static_activity.text_3', [platformCurrency]) }}</p>
-        <p>🎁 {{ t('static_activity.text_4', [platformCurrency]) }}</p>
-        <p>🎁 {{ t('static_activity.text_5') }}</p>
-        <p style="margin: 0;">👉 {{ t('static_activity.text_6', [platformCurrency]) }}</p>
-        <p style="margin: 0;">👉 {{ t('static_activity.text_7', [platformCurrency]) }}</p>
-        <p>👉 {{ t('static_activity.text_8', [platformCurrency]) }}</p>
+        <p>🎁 {{ t('static_activity.text_3') }} <span style="color: #ffc83d;">{{ t('static_activity.text_3_1', [platformCurrency]) }}</span> {{ t('static_activity.text_3_2') }}</p>
+        <p>🎁 {{ t('static_activity.text_4') }} <span style="color: #ffc83d;">{{ t('static_activity.text_4_1', [platformCurrency]) }}</span> {{ t('static_activity.text_4_2') }}</p>
+        <p>🎁 {{ t('static_activity.text_5') }} <span style="color: #ffc83d;">{{ t('static_activity.text_5_1') }}</span></p>
+        <p style="margin: 0;">👉 {{ t('static_activity.text_6') }} <span style="color: #ffc83d;">{{ t('static_activity.text_6_1', [platformCurrency]) }}</span> {{ t('static_activity.text_6_2') }}</p>
+        <p style="margin: 0;">👉 {{ t('static_activity.text_7') }} <span style="color: #ffc83d;">{{ t('static_activity.text_7_1', [platformCurrency]) }}</span> {{ t('static_activity.text_7_2') }}</p>
+        <p>👉 {{ t('static_activity.text_8') }} <span style="color: #ffc83d;">{{ t('static_activity.text_8_1', [platformCurrency]) }}</span> {{ t('static_activity.text_8_2') }}</p>
         <p>{{ t('static_activity.text_9') }}</p>
-        <p style="margin: 0;">✅ {{ t('static_activity.text_10') }}</p>
+        <p style="margin: 0;color: #c9372c;">✅ {{ t('static_activity.text_10') }}</p>
       </div>
 
       <div class=" d-flex align-center">
@@ -144,6 +144,9 @@ const checkboxChanged = () => {
       .content-title {
         text-align: center;
         margin-bottom: 20px;
+        font-weight: 700;
+        color: white;
+        font-size: 18px;
       }
     }
 
