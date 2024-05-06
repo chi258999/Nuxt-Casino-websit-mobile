@@ -401,8 +401,8 @@ const queryParams = getQueryParams()
 const closeGame = () => {
   // 关闭游戏，打开横屏遮罩层的监听
   setIsScroll(true)
-  // router.go(-1);
-  router.push({path: "/", query: queryParams})
+  router.go(-1);
+  // router.push({path: "/", query: queryParams})
   // 关闭按钮显示
   // displayedCloseBtn.value = false
 }

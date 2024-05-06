@@ -153,7 +153,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .refferal-container {
     background: #2E274C;
     border-radius: 16px;

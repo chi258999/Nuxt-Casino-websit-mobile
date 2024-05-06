@@ -228,7 +228,7 @@ const handleLoginBonus = (day: number) => {
     </v-dialog>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login-bonus-dialog-container {
     height: 620px;
     border-radius: 16px;
