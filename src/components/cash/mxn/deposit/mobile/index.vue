@@ -25,7 +25,8 @@ import { useToast } from "vue-toastification";
 import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
 import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
 import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
-import icon_public_160 from "@/assets/public/svg/icon_public_160.svg";
+// import icon_public_160 from "@/assets/public/svg/icon_public_160.svg";
+import icon_public_Vector from "@/assets/public/svg/Vector.svg";
 import icon_public_161 from "@/assets/public/svg/icon_public_161.svg";
 import { getUnitByCurrency } from '@/utils/currencyUnit';
 import currencyListValue from '@/utils/currencyList';
@@ -1075,6 +1076,13 @@ onMounted(async () => {
               class="m-deposit-amount-area"
               v-if="!bonusCheck && depositAmountItem.bonus != 0"
             >
+              <inline-svg
+                v-if="depositAmountItem.depositSelect == 300 || depositAmountItem.depositSelect == 1000"
+                class="svg-hot"
+                :src="icon_public_Vector"
+                width="8"
+                height="11"
+              ></inline-svg>
               <div class="m-deposit-amount-rate-text">
                 {{
                   depositAmountItem.type == 0
@@ -1084,7 +1092,7 @@ onMounted(async () => {
               </div>
             </div>
             <!-- 火标志 -->
-            <div
+            <!-- <div
               class="m-deposit-amount-hot animated infinite tada"
               v-if="
                 depositAmountItem.depositSelect == 300 ||
@@ -1092,13 +1100,12 @@ onMounted(async () => {
               "
             >
               <inline-svg
-                :src="icon_public_160"
+                :src="icon_public_Vector"
                 width="20"
                 height="20"
                 style="margin: 6px 0px 0px 6px"
               ></inline-svg>
-              <!-- :transform-source="favoriteIconTransform" -->
-            </div>
+            </div> -->
           </v-btn>
         </v-col>
       </v-row>
@@ -1249,7 +1256,7 @@ onMounted(async () => {
     border: 1px solid #009b3a;
   }
 
-  ::v-deep(.form-textfield) {
+  :deep(.form-textfield) {
     .v-field__field {
       box-shadow: 12px 0px 4px 1px rgba(0, 0, 0, 0.12) inset !important;
     }
@@ -1259,7 +1266,7 @@ onMounted(async () => {
     height: 40px;
   }
 
-  ::v-deep(.v-list-item__prepend) {
+  :deep(.v-list-item__prepend) {
     padding-left: 20px;
   }
 
@@ -1281,9 +1288,9 @@ onMounted(async () => {
     width: 100% !important;
     box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21) !important;
     color: #ffffff;
-    border-radius: 4px;
+    border-radius: 8px;
 
-    ::v-deep(.v-btn__content) {
+    :deep(.v-btn__content) {
       font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
         DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
         WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
@@ -1303,37 +1310,44 @@ onMounted(async () => {
   }
 
   .m-deposit-amount-area {
-    width: 37px;
+    width: 60px;
     position: absolute;
     top: 0;
     right: 0;
-    background: #f97001;
-    border-radius: 0px 4px;
-    height: 11px;
-  }
-  .m-deposit-amount-hot {
-    width: 16px;
-    height: 16px;
-    position: absolute;
-    top: -8px;
-    right: 40px;
-    svg {
-      width: 16px;
-      height: 16px;
-      margin: 0px !important;
+    background: #F94B01;
+    border-radius: 0px 8px;
+    height: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .svg-hot {
+      margin-right: 4px;
+      margin-bottom: 2px;
+    }
+
+    .m-deposit-amount-rate-text {
+      font-family: Inter;
+      font-size: 10px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: normal;
     }
   }
+  // .m-deposit-amount-hot {
+  //   width: 16px;
+  //   height: 16px;
+  //   position: absolute;
+  //   top: -8px;
+  //   right: 40px;
+  //   svg {
+  //     width: 16px;
+  //     height: 16px;
+  //     margin: 0px !important;
+  //   }
+  // }
 
-  .m-deposit-amount-rate-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 8px;
-    font-weight: 400;
-    color: #ffffff;
-    letter-spacing: normal;
-  }
+
 
   .m-deposit-btn {
     text-align: center;
@@ -1342,7 +1356,7 @@ onMounted(async () => {
     /* Button Shadow */
     box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
 
-    ::v-deep(.v-btn__content) {
+    :deep(.v-btn__content) {
       color: #fff;
       text-align: center;
       font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
@@ -1355,7 +1369,7 @@ onMounted(async () => {
     }
   }
 
-  ::v-deep(.dark-textfield) {
+  :deep(.dark-textfield) {
     .v-field__field {
       background-color: #15161c !important;
     }
@@ -1364,7 +1378,7 @@ onMounted(async () => {
   .amount-checkbox {
     margin: 5px 0px 15px;
 
-    ::v-deep(.v-input__control) {
+    :deep(.v-input__control) {
       .v-input--selection-controls__ripple {
         padding: 16px !important;
         border: 1px solid yellow !important;
@@ -1427,6 +1441,7 @@ onMounted(async () => {
     position: relative;
 
     .m-deposit-amout-btn-text-price {
+      font-family: Inter;
       font-size: 12px;
       line-height: 15px;
       font-weight: 700;
@@ -1469,7 +1484,7 @@ onMounted(async () => {
     /* Button Shadow */
     box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
 
-    ::v-deep(.v-btn__content) {
+    :deep(.v-btn__content) {
       color: white;
     }
   }
@@ -1526,7 +1541,7 @@ onMounted(async () => {
 // .v-dialog--persistent .v-dialog__content {
 //   transform: none !important;
 // }
-::v-deep(.v-dialog--persistent) {
+:deep(.v-dialog--persistent) {
   .v-dialog__content {
     transform: none !important;
   }
@@ -1535,7 +1550,7 @@ onMounted(async () => {
 .m-deposit-amount-text {
   transform-origin: top !important;
 
-  ::v-deep(.v-field__field) {
+  :deep(.v-field__field) {
     .v-label.v-field-label {
       font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
         DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
