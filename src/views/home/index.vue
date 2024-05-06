@@ -30,6 +30,7 @@ import MGameConfirm from "@/views/home/components/mobile/GameConfirm.vue";
 import { ProgressiveImage } from "vue-progressive-image";
 import { mainStore } from "@/store/main";
 import MOrder from "@/views/home/components/mobile/Order.vue";
+import Loading from "@/components/global/loading.vue";
 import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import { Network } from "@/net/Network";
@@ -54,6 +55,7 @@ const Dashboard = defineComponent({
     MGameConfirm,
     MOrder,
     ProgressiveImage,
+    Loading
   },
   setup(props, context) {
     const { t } = useI18n();
@@ -1166,13 +1168,14 @@ export default Dashboard;
 
 <template>
   <!-- spin show while game get from api -->
-  <div class="m-home-loading" v-if="loading">
+  <!-- <div class="m-home-loading" v-if="loading">
     <div class="loading-body">
       <div class="dot-0"></div>
       <div class="dot-1"></div>
       <div class="dot-0"></div>
     </div>
-  </div>
+  </div> -->
+  <Loading v-if="loading"></Loading>
   <!-- game show -->
   <div
     class="home-body"
@@ -1878,38 +1881,38 @@ export default Dashboard;
   overflow-x: hidden;
 }
 
-.m-home-loading {
-  height: 100vh;
-  position: relative;
-  overflow-y: hidden;
+// .m-home-loading {
+//   height: 100vh;
+//   position: relative;
+//   overflow-y: hidden;
 
-  .loading-body {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translateX(-50%);
+//   .loading-body {
+//     display: flex;
+//     align-items: center;
+//     position: absolute;
+//     top: 40%;
+//     left: 50%;
+//     transform: translateX(-50%);
 
-    .dot-0 {
-      width: 10px;
-      height: 10px;
-      background: #12ff76;
-      border-radius: 10px;
-      margin: 0px 4px;
-      animation: expandAnimation 0.6s 0.1s ease-in infinite;
-    }
+//     .dot-0 {
+//       width: 10px;
+//       height: 10px;
+//       background: #12ff76;
+//       border-radius: 10px;
+//       margin: 0px 4px;
+//       animation: expandAnimation 0.6s 0.1s ease-in infinite;
+//     }
 
-    .dot-1 {
-      width: 16px;
-      height: 16px;
-      background: #12ff76;
-      border-radius: 16px;
-      margin: 0px 4px;
-      animation: expandReverseAnimation 0.6s 0.1s ease-in infinite;
-    }
-  }
-}
+//     .dot-1 {
+//       width: 16px;
+//       height: 16px;
+//       background: #12ff76;
+//       border-radius: 16px;
+//       margin: 0px 4px;
+//       animation: expandReverseAnimation 0.6s 0.1s ease-in infinite;
+//     }
+//   }
+// }
 
 .more-btn-color {
   .loading-body {
