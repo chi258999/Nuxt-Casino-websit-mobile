@@ -314,10 +314,13 @@ const Dashboard = defineComponent({
       if(!newValue) {
         document.addEventListener('remove', stickyScrollEvent)
         
-        // console.log(`${navOffsetHeight}px`);
-        gameCategoryStickyEle.value.style.top = `${navOffsetHeight}px`;
 
-        initSticky()
+        nextTick(() => {
+          console.log(`${navOffsetHeight}px`, gameCategoryStickyEle.value);
+          gameCategoryStickyEle.value.style.top = `${navOffsetHeight}px !important`;
+          // stickyElement.style.top = `${navOffsetHeight}px !important`;
+          initSticky()
+        })
       }
     })
 
