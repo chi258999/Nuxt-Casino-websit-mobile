@@ -1045,8 +1045,7 @@ onMounted(async () => {
           :key="depositAmountIndex"
         >
           <v-btn
-            class="my-1 text-none"
-            height="40px"
+            class="text-none"
             :class="[
               depositAmountItem.depositSelect == depositAmount
                 ? 'm-deposit-amout-btn-black'
@@ -1061,13 +1060,12 @@ onMounted(async () => {
               >
               <div
                 class="m-deposit-amout-btn-text-award-price"
-                v-if="!bonusCheck && depositAmountItem.bonus != 0"
               >
-                <font class="text-700-6 white">{{
+                <!-- <font class="text-700-6 white">{{
                   t("deposit_dialog.text_3")
-                }}</font>
-                <font class="text-700-6 award-price-color"
-                  >{{ platformCurrency
+                }}</font> -->
+                <font v-if="!bonusCheck && depositAmountItem.bonus != 0" class="text-700-6 award-price-color"
+                  >= {{ platformCurrency
                   }}{{ countDepositAmount(depositAmountItem) }}</font
                 >
               </div>
@@ -1081,7 +1079,7 @@ onMounted(async () => {
                 {{
                   depositAmountItem.type == 0
                     ? depositAmountItem.bonus
-                    : Number(depositAmountItem.bonus) * 100 + "%"
+                    : '+' + Number(depositAmountItem.bonus) * 100 + "%"
                 }}
               </div>
             </div>
@@ -1277,12 +1275,13 @@ onMounted(async () => {
     color: #ffffff;
   }
 
-  .m-deposit-amout-btn-black {
-    background: #009b3a;
-    border-radius: 4px;
-    box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21) !important;
+  .m-deposit-amout-btn-black,
+  .m-deposit-amout-btn-white {
+    height: 52px;
     width: 100% !important;
-    color: white !important;
+    box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21) !important;
+    color: #ffffff;
+    border-radius: 4px;
 
     ::v-deep(.v-btn__content) {
       font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
@@ -1295,22 +1294,12 @@ onMounted(async () => {
     }
   }
 
+  .m-deposit-amout-btn-black {
+    background: #009b3a;
+  }
+
   .m-deposit-amout-btn-white {
     background: #23262f;
-    border-radius: 4px;
-    color: #ffffff;
-    box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21) !important;
-    width: 100% !important;
-
-    ::v-deep(.v-btn__content) {
-      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
-        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
-        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
-      font-size: 12px;
-      font-style: normal;
-      font-weight: 700;
-      line-height: normal;
-    }
   }
 
   .m-deposit-amount-area {
@@ -1432,12 +1421,28 @@ onMounted(async () => {
   .m-deposit-amout-btn-text-box {
     display: flex;
     flex-direction: column;
-    margin-top: 6px;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+    position: relative;
+
+    .m-deposit-amout-btn-text-price {
+      font-size: 12px;
+      line-height: 15px;
+      font-weight: 700;
+    }
 
     .m-deposit-amout-btn-text-award-price {
-      display: flex;
-      align-items: center;
-      scale: 0.6;
+      // display: flex;
+      // align-items: center;
+      // scale: 0.6;
+      height: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     .award-price-color {
