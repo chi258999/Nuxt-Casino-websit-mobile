@@ -82,6 +82,7 @@ const MSignup = defineComponent({
       },
       formData: {
         emailAddress: '',
+        emailFormat: ['g', 'h', 'y', 'i', 'o'], // 用于判断输入的是否需要预选弹框
         phone: '',
         code: '',
         password: '',
@@ -444,8 +445,12 @@ const MSignup = defineComponent({
       state.formData.emailAddress = e.target.value.replace(/([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g, '$1')
       handleValidateEmail()
       if (state.formData.emailAddress.includes('@')) {
-        state.emailPartName = state.formData.emailAddress.split('@')[0]
-        state.mailCardHeight = 220
+        if (state.formData.emailFormat.includes(state.formData.emailAddress.split('@')[1].charAt(0)) || !state.formData.emailAddress.split('@')[1].charAt(0)) {
+          state.emailPartName = state.formData.emailAddress.split('@')[0]
+          state.mailCardHeight = 220
+        } else {
+          state.mailCardHeight = 0
+        }
       } else {
         setTimeout(() => {
           state.mailCardHeight = 0
@@ -456,8 +461,12 @@ const MSignup = defineComponent({
     const handleEmailFocus = () => {
       handleValidateEmail()
       if (state.formData.emailAddress.includes('@')) {
-        state.emailPartName = state.formData.emailAddress.split('@')[0]
-        state.mailCardHeight = 220
+        if (state.formData.emailFormat.includes(state.formData.emailAddress.split('@')[1].charAt(0)) || !state.formData.emailAddress.split('@')[1].charAt(0)) {
+          state.emailPartName = state.formData.emailAddress.split('@')[0]
+          state.mailCardHeight = 220
+        } else {
+          state.mailCardHeight = 0
+        }
       }
     }
 
