@@ -1207,7 +1207,7 @@ export const lang: langType = {
     "text_4": "Tiempo de pago: 5 minutos a 72 horas.",
     "other_text": "% costo,",
     "other_text_1": "Deposite en su cuenta",
-    "withdraw_btn_text": "Depositar",
+    "withdraw_btn_text": "RETIRAR",
     "withdraw_warning_text": "La cantidad de efectivo que se puede retirar excede el límite",
     "text_5": "cuota de servicio",
     "text_6": "cobrable",
