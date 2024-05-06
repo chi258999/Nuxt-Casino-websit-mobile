@@ -426,7 +426,6 @@ onMounted(async () => {
         </div>
         <v-btn
           class="text-none m-reward-join-btn"
-          width="96"
           height="32"
           @click="openLoginDialog"
         >{{ t("reward.text_22") }}</v-btn>
@@ -624,6 +623,7 @@ onMounted(async () => {
       position: absolute;
       right: 16px;
       bottom: 30px;
+      padding: 0 6px;
 
       .v-btn__content {
         color: #fff;
