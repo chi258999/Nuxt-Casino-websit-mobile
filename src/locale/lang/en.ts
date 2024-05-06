@@ -2081,5 +2081,9 @@ export const lang: langType = {
     "text_8_2": "in bonuses.",
     "text_9": "The higher the VIP level, the higher the bonus!",
     "text_10": "Retire quickly 24 hours a day, 7 days a week.",
+  },
+  "game":{
+    "text_1": "Bonuses cannot be used in this game",
+    "text_2": "Your current available amount is ",
   }
 };
