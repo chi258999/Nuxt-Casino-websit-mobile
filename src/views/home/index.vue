@@ -198,7 +198,8 @@ const Dashboard = defineComponent({
 
     const currentPage = ref<number>(1);
     const moreGameCurrentPage = ref<number>(1);
-    const limit = ref<number>(6);
+    const limit = ref<number>(30);
+    const initLimit = ref<number>(6);
 
     const moreLoading = ref<boolean>(false);
     const moreIndex = ref<number>(0);
@@ -504,7 +505,7 @@ const Dashboard = defineComponent({
         await dispatchUserGame({
           game_categories_slug: selectedCategoryName.value,
           page: currentPage.value,
-          limit: limit.value,
+          limit: initLimit.value,
         });
         pagingGames.value.map(async (item: { slug: any; page_no: number; games: any; game_count: any; }) => {
           if (item.slug == selectedCategoryName.value) {
@@ -585,12 +586,15 @@ const Dashboard = defineComponent({
         // }
       }
     })
+
+    // 显示更多游戏
     const handleMoreGame = async (
-      slug: string,
-      page_no: number,
+      moreGameItem: any,
       index: number,
       gamFilterBtn: string
     ) => {
+      const { slug, page_no, games} = moreGameItem;
+      const existingGames = games ? games.length : 0;
       let new_page_no = page_no + 1;
       moreGameCurrentPage.value += 1;
       moreLoading.value = true;
@@ -600,21 +604,25 @@ const Dashboard = defineComponent({
           game_categories_slug: selectedCategoryName.value,
           page: new_page_no,
           limit: limit.value,
+          existing: existingGames
         });
       } else {
+        // 首页是6+6 其余的是6+30
+        const limitNum = gamFilterBtn == 'all_game' ? initLimit.value : limit.value
         await dispatchGameSearch(
           "?game_categories_slug=" +
           slug +
           "&page=" +
           new_page_no +
           "&limit=" +
-          limit.value
+          limitNum + 
+          "&existing=" + existingGames
         );
       }
       moreLoading.value = false;
-      gameSearchList.value.list.map((item: { image: any; }) => {
+      // gameSearchList.value.list.map((item: { image: any; }) => {
         // item.image = state.testGames[Math.floor(Math.random() * 28)];
-      });
+      // });
       if (gamFilterBtn == 'all_game') {
         allGames.value.map((item: { slug: string; games: any[]; page_no: number; }) => {
           if (item.slug == slug) {
@@ -738,7 +746,7 @@ const Dashboard = defineComponent({
         await dispatchUserGame({
           game_categories_slug: selectedCategoryName.value,
           page: currentPage.value,
-          limit: limit.value,
+          limit: initLimit.value,
         });
         pagingGames.value.map(async (item: { slug: any; page_no: number; games: any; game_count: any; }) => {
           if (item.slug == selectedCategoryName.value) {
@@ -876,7 +884,7 @@ const Dashboard = defineComponent({
           "&page=" +
           currentPage.value +
           "&limit=" +
-          limit.value
+          initLimit.value
         );
         if (gameSearchList.value.list.length > 0) {
           let index = 0;
@@ -949,7 +957,7 @@ const Dashboard = defineComponent({
             await dispatchUserGame({
               game_categories_slug: item.slug,
               page: currentPage.value,
-              limit: limit.value,
+              limit: initLimit.value,
             });
           } else {
             await dispatchGameSearch(
@@ -958,7 +966,7 @@ const Dashboard = defineComponent({
               "&page=" +
               currentPage.value +
               "&limit=" +
-              limit.value
+              initLimit.value
             );
           }
           if (gameSearchList.value.list.length > 0) {
@@ -1076,7 +1084,9 @@ const Dashboard = defineComponent({
       router.push({ name: "Provider", query: { slug: slug } });
     }
 
-
+    const returnGamesCount = (page: any) => {
+      return initLimit.value + limit.value * (page - 1)
+    }
 
     return {
       t,
@@ -1141,6 +1151,9 @@ const Dashboard = defineComponent({
       filterContainerScroll,
       filterContainerShowMoreArrow,
       gameCategorySticky,
+      limit,
+      initLimit,
+      returnGamesCount
     };
   },
 });
@@ -1562,7 +1575,7 @@ export default Dashboard;
                 :width="mobileWidth < 600 ? '100%' : 164"
                 :height="mobileWidth < 600 ? 41 : 48"
                 @click="
-                  handleMoreGame(item.slug, item.page_no, index, selectedGameFilterBtn)
+                  handleMoreGame(item, index, selectedGameFilterBtn)
                 "
               >
                 <div class="loading-body" v-if="moreLoading && index == moreIndex">
@@ -1589,6 +1602,7 @@ export default Dashboard;
               selectedCategoryName.toLocaleLowerCase() && paginGameShow
           "
         >
+          <!-- pc -->
           <v-row
             class="ml-4 mr-2 mt-2 pt-8"
             v-if="mobileWidth > 600"
@@ -1647,6 +1661,8 @@ export default Dashboard;
               <p class="text-400-12 gray">{{ t("home.search_dialog.text_2") }}</p>
             </div>
           </v-row>
+
+          <!-- h5 -->
           <v-row
             class="mx-1 mt-0"
             :class="otherGameItem.games.length > 0 ? '' : 'justify-center'"
@@ -1669,7 +1685,7 @@ export default Dashboard;
                   md="2"
                   sm="3"
                   class="px-1 pb-0 relative original-game-img-width"
-                  v-if="gameIndex < 6 * otherGameItem.page_no"
+                  v-if="gameIndex < returnGamesCount(otherGameItem.page_no)"
                 >
                   <ProgressiveImage
                     :src="gameItem.image"
@@ -1714,7 +1730,7 @@ export default Dashboard;
             v-if="
               ((mobileWidth < 600 &&
                 Number(otherGameItem.game_count) > 6 &&
-                6 * Number(otherGameItem.page_no) < Number(otherGameItem.game_count)) ||
+                Number(returnGamesCount(otherGameItem.page_no)) < Number(otherGameItem.game_count)) ||
                 (mobileWidth > 600 &&
                   Number(otherGameItem.game_count) > 7 &&
                   7 * Number(otherGameItem.page_no) <
@@ -1725,7 +1741,7 @@ export default Dashboard;
             <div class="text-center" style="width: 100%">
               <p class="text-700-14 gray text-center" v-if="mobileWidth < 600">
                 {{ t("home.more_text_1") }}
-                <font color="white">{{ 6 * otherGameItem.page_no }}</font>
+                <font color="white">{{ returnGamesCount(otherGameItem.page_no) }}</font>
                 {{ t("home.more_text_2") }}
                 <font color="white">{{ otherGameItem.game_count }}</font>
                 {{ t("home.more_text_3") }}
@@ -1744,10 +1760,9 @@ export default Dashboard;
                 :height="mobileWidth < 600 ? 41 : 48"
                 @click="
                   handleMoreGame(
-                    otherGameItem.slug,
-                    otherGameItem.page_no,
+                    otherGameItem,
                     otherIndex,
-                    selectedGameFilterBtn
+                    selectedGameFilterBtn,
                   )
                 "
               >

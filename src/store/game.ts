@@ -162,6 +162,9 @@ export const gameStore = defineStore({
         setGameBigWinItem(gameBigWinItem: Game.GameBigWinData) {
             this.gameBigWinItem = gameBigWinItem;
         },
+        updateOptionsBy(options:any){
+            (this.betby as any)?.updateOptions(options);
+        },
         async getGameBetbyInit() {
             const { setRefferalAppBarShow } = refferalStore();
             setRefferalAppBarShow(false)
@@ -172,7 +175,7 @@ export const gameStore = defineStore({
                     lang: this.language,
                     target: document.getElementById('betby'),
                     brand_id: "2331516940205559808",
-                    betSlipOffsetTop: 60,
+                    betSlipOffsetTop: 0,
                     betslipZIndex: 999,
                     stickyTop: 0,
                     themeName: "demo-green-dark-table",
@@ -199,6 +202,9 @@ export const gameStore = defineStore({
                     },
                     onRecharge: () => {
                         this.openDepositDialog();
+                    },
+                    onRouteChange:()=>{
+                        console.log('路由切换','onRouteChangeonRouteChangeonRouteChangeonRouteChange')
                     }
                 });
         },
@@ -232,6 +238,7 @@ export const gameStore = defineStore({
             const next = (response: Game.GetGameSearchResponse) => {
                 if (response.code == 200) {
                     this.setSuccess(true);
+                    
                     this.setGameSearchList(response.data);
                 } else {
                     this.setGameSearchList({ list: [], total: 0 });
