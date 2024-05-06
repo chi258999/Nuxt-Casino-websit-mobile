@@ -34,11 +34,6 @@ const handleGameProviderPage = (slug: string) => {
   router.push({ name: "Provider", query: { slug: slug } });
 };
 
-window.scrollTo({
-  top: 0,
-  behavior: "smooth",
-});
-
 onMounted(async () => {
   AdjustClass.getInstance().adjustTrackEvent({
     key: "PAGE_VIEW",
