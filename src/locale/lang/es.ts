@@ -2014,5 +2014,9 @@ export const lang: langType = {
     "text_8_2": "",
     "text_9": "¡Cuanto más alto sea el nivel VIP, mayores serán las bonificaciones!",
     "text_10": "Retiros rápidos las 24 horas, los 7 días de la semana a SPEI.",
+  },
+  "game":{
+    "text_1": "Los bonos no se pueden utilizar en este juego",
+    "text_2": "Su importe disponible actual es ",
   }
 };

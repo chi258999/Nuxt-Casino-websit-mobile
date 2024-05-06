@@ -18,11 +18,14 @@ import { useRoute, useRouter } from "vue-router";
 import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import CloseIframe from "@/components/close_iframe/index.vue";
+import gameBonusDrawer from "./components/gameBonusDrawer.vue";
 import { getDeviceType } from "@/utils/getPublicInformation";
 import { getQueryParams } from "@/utils/getPublicInformation";
 
 // 是否显示关闭按钮
 const displayedCloseBtn = ref<boolean>(false)
+// 奖金使用弹窗
+const bonusDrawer=ref(true)
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -483,7 +486,7 @@ onUnmounted(() => {
 <template>
 
   <CloseIframe v-if="displayedCloseBtn" @close="closeGame"></CloseIframe>
-
+  <gameBonusDrawer v-if="bonusDrawer" v-model="bonusDrawer"></gameBonusDrawer>
   <div class="game-body" v-if="mobileWidth < 600 || ['ios', 'android'].includes(getDeviceType())">
     <div class="m-game-frame-body">
       <div class="m-loading-container relative" v-if="!frameShow">
@@ -687,7 +690,6 @@ _:future,
     scale: 0.8;
   }
 }
-
 .game-body {
   width: 100%;
 

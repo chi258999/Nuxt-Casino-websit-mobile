@@ -2051,4 +2051,8 @@ export type langType = {
     text_2: string
     text_3: string
   }
+  game: {
+    text_1: string
+    text_2: string
+  }
 };
