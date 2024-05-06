@@ -45,13 +45,13 @@ const joinTelegram = () => {
   // window.location.href = `https://t.me/${vipInfo.value.telegram}`
   setTimeout(() => {
     console.log(appInstance);
-
+    const url = 'https://t.me/HOY777Oficial'
     if (!appInstance.isMobileWebview) {
       // 浏览器端打开页面
-      window.location.href = `https://t.me/Hoy777.comOficial`;
+      window.location.href = url;
     } else {
       // app端打开页面
-      window["AndroidWebView"].openUrl(`https://t.me/Hoy777.comOficial`);
+      window["AndroidWebView"].openUrl(url);
     }
   }, 0);
 };
