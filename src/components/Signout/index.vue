@@ -40,37 +40,10 @@ const signOut = (): void => {
 </script>
 
 <template>
-  <v-dialog
-    v-model="signoutDialog"
-    :width="mobileWidth < 600 ? 328 : 471"
-    :scrim="true"
-    @click:outside="$emit('close')"
-  >
-    <div class="signout-container">
-      <div class="header">
-        <img src="@/assets/public/image/img_public_03.png" class="logout-logo" />
-        <p class="text-700-20 white">{{ t("signout.text_1") }}</p>
-      </div>
-      <p class="signout-text">{{ t("signout.text_2") }}</p>
-      <p class="signout-notice">{{ t("signout.text_3") }}</p>
-      <v-row class="my-12 justify-center">
-        <v-btn
-          class="signout-btn button-bright text-none"
-          width="-webkit-fill-available"
-          height="60px"
-          @click="signOut"
-        >
-          {{ t("signout.button") }}
-        </v-btn>
-      </v-row>
-      <v-btn class="close-button" icon="true" @click="$emit('close')">
-        <v-icon color="#FFFFFF"> mdi-close </v-icon>
-      </v-btn>
-    </div>
-  </v-dialog>
+ 
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // container
 .signout-container {
   background-color: #2e274c;

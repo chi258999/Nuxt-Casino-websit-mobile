@@ -788,7 +788,7 @@ onMounted(async () => {
   </v-dialog>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .blur-effect {
   filter: blur(3px);
   -webkit-filter: blur(3px);

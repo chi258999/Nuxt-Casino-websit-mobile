@@ -82,13 +82,14 @@ const MSignup = defineComponent({
       },
       formData: {
         emailAddress: '',
+        emailFormat: ['g', 'h', 'y', 'i', 'o'], // 用于判断输入的是否需要预选弹框
         phone: '',
         code: '',
         password: '',
         promoCode: '',
         isAgreed: true,
         visible: false,
-        areaCode: '+85',
+        areaCode: '+52',
       },
       userName: '',
       isShowPassword: false,
@@ -444,8 +445,12 @@ const MSignup = defineComponent({
       state.formData.emailAddress = e.target.value.replace(/([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g, '$1')
       handleValidateEmail()
       if (state.formData.emailAddress.includes('@')) {
-        state.emailPartName = state.formData.emailAddress.split('@')[0]
-        state.mailCardHeight = 220
+        if (state.formData.emailFormat.includes(state.formData.emailAddress.split('@')[1].charAt(0)) || !state.formData.emailAddress.split('@')[1].charAt(0)) {
+          state.emailPartName = state.formData.emailAddress.split('@')[0]
+          state.mailCardHeight = 220
+        } else {
+          state.mailCardHeight = 0
+        }
       } else {
         setTimeout(() => {
           state.mailCardHeight = 0
@@ -456,8 +461,12 @@ const MSignup = defineComponent({
     const handleEmailFocus = () => {
       handleValidateEmail()
       if (state.formData.emailAddress.includes('@')) {
-        state.emailPartName = state.formData.emailAddress.split('@')[0]
-        state.mailCardHeight = 220
+        if (state.formData.emailFormat.includes(state.formData.emailAddress.split('@')[1].charAt(0)) || !state.formData.emailAddress.split('@')[1].charAt(0)) {
+          state.emailPartName = state.formData.emailAddress.split('@')[0]
+          state.mailCardHeight = 220
+        } else {
+          state.mailCardHeight = 0
+        }
       }
     }
 
@@ -719,7 +728,7 @@ export default MSignup
           />
           <div class="m-register-mail-card m-register-phone-card" v-if="showPhoneAreaCode">
             <v-list theme="dark" style="padding: 0 8px" bg-color="#15161c">
-              <v-list-item class="text-600-12 white" value="85" @click="mergePhone('85')">+85</v-list-item>
+              <v-list-item class="text-600-12 white" value="52" @click="mergePhone('52')">+52</v-list-item>
               <!-- <v-list-item
                 class="text-600-12 white"
                 value="86"

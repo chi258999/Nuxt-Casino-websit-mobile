@@ -238,6 +238,7 @@ export const gameStore = defineStore({
             const next = (response: Game.GetGameSearchResponse) => {
                 if (response.code == 200) {
                     this.setSuccess(true);
+                    
                     this.setGameSearchList(response.data);
                 } else {
                     this.setGameSearchList({ list: [], total: 0 });
