@@ -1,5 +1,6 @@
 import { ref, defineEmits } from 'vue'
 import Loading from "@/components/global/loading.vue";
+import LoadingBtn from "@/components/global/loadingBtn.vue"
 
 export default function usePageLoading() {
     const pageLoading = ref<boolean>(false);
@@ -11,5 +12,6 @@ export default function usePageLoading() {
         pageLoading,
         setPageLoading,
         Loading,
+        LoadingBtn
     }
 }

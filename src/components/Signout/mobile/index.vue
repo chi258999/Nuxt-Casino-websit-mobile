@@ -7,6 +7,8 @@ import { resetAllStores } from "@/store";
 import { gameStore } from "@/store/game";
 import { getQueryParams } from "@/utils/getPublicInformation";
 import { useDisplay } from 'vuetify';
+import LoadingBtn from "@/components/global/loadingBtn.vue"
+
 const { name, width } = useDisplay();
 const mobileWidth = computed(() => {
   return width.value
@@ -35,14 +37,16 @@ const { dispatchSignout } = authStore();
 const signoutContainerBackground = ref<string>("transparent");
 const signoutContainerHeight = ref<number>(201);
 const signoutContainerOverflow = ref<string>("hidden");
-
+const loading = ref<boolean>(false)
 const queryParams = getQueryParams()
 
 const signOut = (): void => {
-  emit("close");
+  loading.value = true
   dispatchSignout();
   resetAllStores();
+  emit("close");
   router.push({ path: '/', query: queryParams })
+  loading.value = false
   // setTimeout(() => {
   //   window.location.reload();
   // }, 300);
@@ -88,7 +92,10 @@ onMounted(() => {
             height="48px"
             @click="signOut"
           >
-            {{ t("signout.button") }}
+            <LoadingBtn v-if="loading"></LoadingBtn>
+            <div v-else>
+              {{ t("signout.button") }}
+            </div>
           </v-btn>
         </div>
         <v-btn

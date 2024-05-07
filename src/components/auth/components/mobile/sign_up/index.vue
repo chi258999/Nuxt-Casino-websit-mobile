@@ -23,6 +23,7 @@ import { ThirdPartyWayEnum } from '@/enums/userEnum'
 import { ElLoading } from 'element-plus'
 import { NETWORK } from '@/net/NetworkCfg'
 import { Network } from '@/net/Network'
+import LoadingBtn from "@/components/global/loadingBtn.vue"
 
 const MSignup = defineComponent({
   components: {
@@ -30,6 +31,7 @@ const MSignup = defineComponent({
     SuccessIcon,
     WarningIcon,
     grecaptchaDrawer,
+    LoadingBtn
   },
   emits: ['close', 'switchAuthDialog', 'setSignInForm'],
   props: {
@@ -825,8 +827,11 @@ export default MSignup
         </p>
       </div>
       <v-row>
-        <v-btn class="mt-8 mx-3" :class="isFormDataReady ? 'm-signup-btn' : 'm-signup-disabled-btn'" width="94%" height="48px" :loading="loading" :onclick="handleSignupFormSubmit">
-          {{ t('signup.formPage.button') }}
+        <v-btn class="mt-8 mx-3" :class="isFormDataReady ? 'm-signup-btn' : 'm-signup-disabled-btn'" width="94%" height="48px" :onclick="handleSignupFormSubmit">
+          <LoadingBtn v-if="loading"></LoadingBtn>
+          <div v-else>
+            {{ t('signup.formPage.button') }}
+          </div>
         </v-btn>
       </v-row>
       <v-row class="mt-6">
