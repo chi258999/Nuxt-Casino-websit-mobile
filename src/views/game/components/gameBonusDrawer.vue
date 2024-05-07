@@ -1,16 +1,10 @@
 <template>
-  <v-navigation-drawer
+  <v-dialog 
     v-model="modelValueNew"
-    location="top"
-    class="game-bonus-drawer"
-    temporary
-    :touchless="true"
-    :style="{
-      height: 'unset',
-      top: '0px',
-      zIndex: 9947483646,
-      background: 'unset !important'
-    }"
+    width="100%"
+    :scrim="true"
+    transition="scale-transition"
+    style="z-index: 9147483646"
   >
 
     <div class="game-bonus-drawer-body">
@@ -22,7 +16,7 @@
         <span class="num">$999.999.000</span>
       </div>
     </div>
-  </v-navigation-drawer>
+  </v-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -55,10 +49,10 @@ onMounted(async () => {});
 </script>
 
 <style lang="scss" scoped>
-:deep.v-navigation-drawer__scrim {
-  background: black !important;
-  opacity: 0.72 !important;
-  z-index: 99999931 !important;
+:deep.v-dialog .v-overlay__content {
+  top: 0;
+  margin: 0;
+  max-width: 100% !important;
 }
 .game-bonus-drawer-body {
   height: 190px;
