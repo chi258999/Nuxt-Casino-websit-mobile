@@ -6,10 +6,12 @@ import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
 import MReferral from "@/components/agent/my_referral/index.vue";
+import usePageLoading from "@/hooks/pageLoading"
 // import MFAQ from "@/components/agent/faq/index.vue";
 // import MProfit from "@/components/agent/profit/index.vue";
 // import MReport from "@/components/agent/report/index.vue";
 // import MGrade from "@/components/agent/grade/mobile/index.vue";
+const { pageLoading, setPageLoading, Loading } = usePageLoading()
 
 const MFAQ = defineAsyncComponent(
   () => import("@/components/agent/faq/index.vue")
@@ -62,6 +64,7 @@ const currentLang = computed(() => {
 // });
 
 const handleTab = (index: number) => {
+  setPageLoading(true)
   activeIndex.value = index;
 };
 
@@ -82,6 +85,9 @@ onMounted(() => {
   // setAgentNavBarToggle(false);
   console.log("mount ============== agentNavBarDrawer");
 });
+const inited = (val:boolean) => {
+  setPageLoading(val)
+}
 </script>
 
 <template>
@@ -146,12 +152,15 @@ onMounted(() => {
         </div> -->
       </div>
     </div>
-    <div class="m-agent-body" @scroll="handleScroll">
-      <MReferral v-if="activeIndex == 0" @goReportTab="goReportTab" />
-      <MFAQ v-if="activeIndex == 1" />
-      <MProfit v-if="activeIndex == 2" />
-      <MReport v-if="activeIndex == 3" />
-      <MGrade v-if="activeIndex == 4" />
+    <div class="m-agent-body" v-show="pageLoading">
+      <Loading height="100%"></Loading>
+    </div>
+    <div class="m-agent-body" v-show="!pageLoading" @scroll="handleScroll">
+      <MReferral @inited="inited" v-if="activeIndex == 0" @goReportTab="goReportTab" />
+      <MFAQ @inited="inited" v-if="activeIndex == 1" />
+      <MProfit @inited="inited" v-if="activeIndex == 2" />
+      <MReport @inited="inited" v-if="activeIndex == 3" />
+      <MGrade @inited="inited" v-if="activeIndex == 4" />
     </div>
   </v-navigation-drawer>
 </template>

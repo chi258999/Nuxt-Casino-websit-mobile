@@ -22,7 +22,7 @@ const platformCurrency = computed(() => {
   return getPlatformCurrency.value;
 });
 
-const emit = defineEmits<{ (e: "goReportTab", index: number): void }>();
+const emit = defineEmits<{ (e: "goReportTab", index: number): void, (e: 'inited', val: boolean): void }>();
 
 const { t } = useI18n();
 const svgColor = ref<string>("#ffffff");
@@ -154,6 +154,7 @@ const inviteAward = async () => {
 
 onMounted(async () => {
   await dispatchUserInvite();
+  emit('inited', false)
 });
 </script>
 

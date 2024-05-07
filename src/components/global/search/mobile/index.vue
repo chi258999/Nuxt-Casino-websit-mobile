@@ -21,6 +21,7 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { NETWORK } from '@/net/NetworkCfg'
 import { Network } from '@/net/Network'
+import { debounce } from "lodash-es"
 
 const network: Network = Network.getInstance()
 const { t } = useI18n();
@@ -194,6 +195,7 @@ const handleSearchInput = async (event) => {
     searchedGameList.value = [];
   }
 };
+const debouncedHandleSearchInput = debounce(handleSearchInput, 300)
 
 const handleResize = () => {
   if (window.visualViewport?.height != undefined) {
@@ -389,8 +391,8 @@ const gameSearch = (sub_api, apiloading) => {
           prepend-inner-icon="mdi-magnify"
           color="#7782AA"
           :class="mobileWidth < 600 ? 'home-search-text-height' : ''"
-          @input="handleSearchInput"
-          @keypress="handleSearchInput"
+          @input="debouncedHandleSearchInput"
+          @keypress="debouncedHandleSearchInput"
           v-model="searchText"
         />
       </form>

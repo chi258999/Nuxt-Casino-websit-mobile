@@ -20,6 +20,7 @@ import WarningIcon from '@/components/global/notification/WarningIcon.vue';
 import { useToast } from "vue-toastification";
 import { liveChatStore } from "@/store/liveChat";
 import { useRoute, useRouter } from "vue-router";
+import LoadingBtn from "@/components/global/loadingBtn.vue"
 
 const { t } = useI18n();
 const { width } = useDisplay()
@@ -291,10 +292,12 @@ onMounted(async () => {
           class="text-none m-email-verify-btn-color"
           @click="handleVerifyCode"
           height="40px"
-          :loading="loading"
           v-if="!userInfo.email_confirmd"
         >
-          {{ t("account.verify_code_text") }}
+          <LoadingBtn v-if="loading"></LoadingBtn>
+          <div v-else>
+            {{ t("account.verify_code_text") }}
+          </div>
         </v-btn>
       </v-col>
     </v-row>

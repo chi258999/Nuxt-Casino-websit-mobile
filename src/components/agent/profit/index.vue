@@ -12,6 +12,7 @@ const platformCurrency = computed(() => {
   const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
   return getPlatformCurrency.value;
 });
+const emit = defineEmits<{ (e: 'inited', val:boolean): void }>();
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -83,6 +84,7 @@ onMounted(async () => {
     await dispatchStatisticsList();
     selectedItem.value = statisticsItem.value.today_profit
     console.log(selectedItem.value);
+    emit('inited', false)
 });
 </script>
 <template>

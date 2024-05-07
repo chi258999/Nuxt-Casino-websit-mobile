@@ -13,6 +13,7 @@ import icon_public_103 from "@/assets/public/svg/icon_public_103.svg";
 import { useToast } from "vue-toastification";
 import SuccessIcon from "@/components/global/notification/SuccessIcon.vue";
 import WarningIcon from "@/components/global/notification/WarningIcon.vue";
+import LoadingBtn from "@/components/global/loadingBtn.vue"
 
 const { t } = useI18n();
 const router = useRouter();
@@ -193,19 +194,24 @@ onMounted(() => {
             height="40"
             @click="handleEnterGame(selectedGameItem.id, selectedGameItem.name, 'false')"
           >
-            {{ t("game_confirm.text_2") }}
+            <LoadingBtn v-if="loading"></LoadingBtn>
+            <div v-else>
+              {{ t("game_confirm.text_2") }}
+            </div>
           </v-btn>
         </v-col>
       </v-row>
       <div class="text-center" v-else>
         <v-btn
-          :loading="loading"
           class="my-4 mb-11 text-none m-game-confirm-real-more-btn"
           width="280"
           height="40"
           @click="handleEnterGame(selectedGameItem.id, selectedGameItem.name, 'false')"
         >
-          {{ t("game_confirm.text_2") }}
+          <LoadingBtn v-if="loading"></LoadingBtn>
+          <div v-else>
+            {{ t("game_confirm.text_2") }}
+          </div>
         </v-btn>
       </div>
 </div>
