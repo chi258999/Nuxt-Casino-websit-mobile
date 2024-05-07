@@ -15,7 +15,7 @@ const submitPromotion = async () => {
   <div class="m-promotion-dialog-container">
     <v-row class="mx-4 mt-10 text-700-12 text-gray">
       <p class="text-center" style="width: 100%">
-        Not participating in promotional activities
+        No participar en actividades promocionales
       </p>
     </v-row>
     <v-row class="mx-10 mt-12 text-700-14">
@@ -27,7 +27,7 @@ const submitPromotion = async () => {
           @click="submitPromotion"
           :loading="loading"
         >
-          Ok
+         Aceptar 
         </v-btn>
       </div>
       <div class="m-promotion-cancel-btn ml-auto">
@@ -37,7 +37,7 @@ const submitPromotion = async () => {
           width="88"
           @click="emit('promotionDialogHide', 'cancel')"
         >
-          Cancel
+         Cancelar
         </v-btn>
       </div>
     </v-row>

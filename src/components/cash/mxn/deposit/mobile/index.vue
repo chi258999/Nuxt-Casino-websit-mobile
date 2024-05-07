@@ -1090,7 +1090,7 @@ onMounted(async () => {
               icon
               class="amount-checkbox"
               v-model="bonusCheck"
-              label="Not participating in promotional activities"
+              label="No participar en actividades promocionales"
             />
           </div>
 
