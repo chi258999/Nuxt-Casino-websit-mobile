@@ -35,6 +35,9 @@ import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import { Network } from "@/net/Network";
 import { NETWORK } from '@/net/NetworkCfg';
+import { appCurrencyStore } from "@/store/app";
+// 设置首屏是否显示
+const { setIsShowSkeleton } = appCurrencyStore()
 
 const GameProviders = defineAsyncComponent(() => import("@/components/global/game_provider/index.vue"));
 
@@ -1056,6 +1059,9 @@ const Dashboard = defineComponent({
         if(filterContainer.value.scrollWidth > filterContainer.value.clientWidth) {
           filterContainerShowMoreArrow.value = true;
         }
+
+        // 设置首屏加载动画关闭
+        setIsShowSkeleton(false)
       })
 
     });
