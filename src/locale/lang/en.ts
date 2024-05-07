@@ -2085,5 +2085,10 @@ export const lang: langType = {
   "game":{
     "text_1": "Bonuses cannot be used in this game",
     "text_2": "Your current available amount is ",
+  },
+  "screen": {
+    "text_1": "HOY777 only supports cell phone version to open for the time being",
+    "text_2": "Download the App for Extra Rewards",
+    "text_3": "Scan the code on your cell phone to visit the website directly",
   }
 };
