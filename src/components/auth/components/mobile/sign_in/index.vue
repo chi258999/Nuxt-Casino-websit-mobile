@@ -30,6 +30,8 @@ import { getQueryParams } from '@/utils/getPublicInformation'
 import { activityAppStore } from '@/store/activityApp'
 import { mainStore } from '@/store/main'
 import { ElLoading } from 'element-plus'
+import LoadingBtn from "@/components/global/loadingBtn.vue"
+
 // 获取平台货币
 import { appCurrencyStore } from '@/store/app'
 const platformCurrency = computed(() => {
@@ -41,6 +43,7 @@ const Login = defineComponent({
   components: {
     SuccessIcon,
     WarningIcon,
+    LoadingBtn
   },
   emits: ['close', 'switch'],
   props: {
@@ -533,8 +536,11 @@ export default Login
         </v-row>
       </form>
       <v-row style="margin-top: 100px">
-        <v-btn type="search" class="ma-3 button-bright m-signin-btn-text" width="94%" height="48px" :loading="loading" :onclick="handleLoginFormSubmit">
-          {{ t('login.formPage.button') }}
+        <v-btn type="search" class="ma-3 button-bright m-signin-btn-text" width="94%" height="48px" :onclick="handleLoginFormSubmit">
+          <LoadingBtn v-if="loading"></LoadingBtn>
+          <div v-else>
+            {{ t('login.formPage.button') }}
+          </div>
         </v-btn>
       </v-row>
       <v-row class="mt-4">

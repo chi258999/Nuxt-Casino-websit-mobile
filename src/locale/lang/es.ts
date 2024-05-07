@@ -1773,6 +1773,21 @@ export const lang: langType = {
         "text3": 'Apuestas',
         "text4": 'week',
         "text5": 'month',
+        "text6":'Participantes',
+        "text7":'La recompensa por inicio de sesión VIP consecutiva es una actividad de reembolso de depósito diseñada especialmente por HOY777 para usuarios VIP activos.',
+        "text8": 'Esta actividad solo es aplicable para los usuarios VIP de HOY777.',
+        "text9":'Detalles de la actividad',
+        "text10":'Después de convertirse en usuario VIP de HOY777, aquellos que realicen depósitos podrán recibir el bono por inicio de sesión VIP cada día durante 7 días consecutivos.',
+        "text11": 'Cuanto mayor sea el nivel VIP del usuario, mayor será la cantidad del bono por inicio de sesión que podrá recibir.',
+        "text12": 'Reglas de reinicio de bonificación',
+        "text13":'Si un usuario no mantiene un inicio de sesión continuo o no reclama el bono, comenzará de nuevo desde el primer día para reclamar el bono nuevamente',
+        "text14":'El usuario debe cumplir con el requisito mínimo de depósito acumulado correspondiente a su nivel VIP dentro de 7 días, sólo entonces podrá reclamar la bonificación.',
+        "text15":'Los usuarios deben cumplir con los requisitos de apuesta correspondientes cada día para poder reclamar la bonifición.',
+        "text16":'Términos y Condiciones.',
+        "text17":'HOY777 se reserva el derecho de interpretación final de esta actividad, y tiene la autoridad para ajustar las reglas de la actividad o cancelarla según las circunstancias reales.',
+        "text18":'El usuario debe cumplir con todos los términos y condiciones de uso de la plataforma HOY777.',
+        "text19":'HOY777 se reserva el derecho de cambiar las reglas de las actividades o finalizarlas en cualquier momento.',
+        "text20":'Obtener una bonificación'
       }
     }
   },

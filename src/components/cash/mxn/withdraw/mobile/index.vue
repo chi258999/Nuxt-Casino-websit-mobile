@@ -20,7 +20,6 @@ import { useToast } from "vue-toastification";
 import icon_public_09 from "@/assets/public/svg/icon_public_09.svg";
 import BindingPhone from "./BindingPhone.vue";
 import WithdrawInfo from "./WithdrawInfo.vue";
-import Loading from "@/components/global/loading.vue";
 import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
 import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
 import icon_public_107 from "@/assets/public/svg/icon_public_107.svg";
@@ -35,6 +34,8 @@ import router from '@/router';
 import { currencyStore } from '@/store/currency';
 import { BtTabEnum } from '@/enums/bonusTransactionEnum';
 import { toFormatNum } from '@/utils/numFormat';
+import usePageLoading from "@/hooks/pageLoading"
+import LoadingBtn from "@/components/global/loadingBtn.vue"
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 
@@ -45,7 +46,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue"]);
-
+const { pageLoading, setPageLoading, Loading } = usePageLoading()
 const modelValueNew = computed({
   get() {
     return props.modelValue;
@@ -54,7 +55,6 @@ const modelValueNew = computed({
     emit("update:modelValue", val);
   },
 });
-const pageLoading = ref<boolean>(false);
 
 const platformCurrency = computed<string>(() => {
   const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
@@ -540,7 +540,7 @@ const goWithdrawPage = () => {
 }
 
 onMounted(async () => {
-  pageLoading.value = true;
+  setPageLoading(true)
   AdjustClass.getInstance().adjustTrackEvent({
     key: "PAGE_VIEW",
     value: "withdraw",
@@ -567,7 +567,7 @@ onMounted(async () => {
   const filteredObjects = filterByKeyArray(currencyTemplateList, 'name', keyArray);
   currencyList.value = filteredObjects;
   selectedPaymentItem.value = paymentList.value[0];
-  pageLoading.value = false;
+  setPageLoading(false)
 })
 </script>
 
@@ -816,9 +816,13 @@ onMounted(async () => {
             :class="isDepositBtnReady ? 'm-deposit-btn-ready' : ''"
             height="48px"
             style="width: -moz-available !important; width: -webkit-fill-available"
-            :loading="loading"
             :onclick="handleWithdrawSubmit"
-          >{{ t("withdraw_dialog.withdraw_btn_text") }}</v-btn>
+          >
+            <LoadingBtn v-if="loading"></LoadingBtn>
+            <div v-else>
+              {{ t("withdraw_dialog.withdraw_btn_text") }}
+            </div>
+          </v-btn>
           <div class="d-flex align-center justify-center mt-2" @click="goWithdrawPage">
             <img src="@/assets/public/svg/icon_public_108.svg" />
             <span

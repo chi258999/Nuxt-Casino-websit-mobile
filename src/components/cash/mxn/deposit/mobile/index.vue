@@ -21,7 +21,6 @@ import { storeToRefs } from 'pinia';
 import router from '@/router';
 import MParticipatingDialog from "./MParticipatingDialog.vue";
 import MDepositInfoDialog from "./MDepositInfoDialog.vue";
-import Loading from "@/components/global/loading.vue";
 import { useToast } from "vue-toastification";
 import icon_public_105 from "@/assets/public/svg/icon_public_105.svg";
 import icon_public_106 from "@/assets/public/svg/icon_public_106.svg";
@@ -33,6 +32,9 @@ import { getUnitByCurrency } from '@/utils/currencyUnit';
 import currencyListValue from '@/utils/currencyList';
 import AdjustClass from '@/utils/adjust';
 import EventToken from '@/constants/EventToken';
+import usePageLoading from "@/hooks/pageLoading"
+import LoadingBtn from "@/components/global/loadingBtn.vue"
+
 // 获取平台货币
 import { appCurrencyStore } from "@/store/app";
 const props = defineProps({
@@ -42,6 +44,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue"]);
+const { pageLoading, setPageLoading, Loading } = usePageLoading()
 
 const modelValueNew = computed({
   get() {
@@ -192,7 +195,6 @@ const bonusCheck = ref<boolean>(false);
 const codeUrl = ref<string>('00020126890014BR.GOV.BCB.PIX2567api-pix.bancobs2.com.br/spi/v2/cdbd7c5c-0465-41da-bf4f-2abc393011ec520400005303986540510.305802BR5908PAGSMILE6014Belo Horizonte61083038040362070503***63044D55');
 
 const loading = ref<boolean>(false);
-const pageLoading = ref<boolean>(false);
 
 const promotionDialogVisible = ref<boolean>(false);
 
@@ -815,7 +817,7 @@ const countDepositAmount=(item:any)=>{
 }
 
 onMounted(async () => {
-  pageLoading.value = true;
+  setPageLoading(true)
   AdjustClass.getInstance().adjustTrackEvent({
     key: "PAGE_VIEW",
     value: "deposit",
@@ -831,7 +833,7 @@ onMounted(async () => {
       selectedCurrencyItem.value = item;
     }
   })
-  pageLoading.value = false;
+  setPageLoading(false)
 })
 </script>
 
@@ -1124,10 +1126,14 @@ onMounted(async () => {
             class="my-3 mx-6 m-deposit-btn"
             :class="isDepositBtnReady ? 'm-deposit-btn-ready' : ''"
             height="48px"
-            :loading="loading"
             :onclick="handleDepositSubmit"
             style="width: -moz-available; width: -webkit-fill-available"
-            >{{ t("deposit_dialog.deposit_btn_text") }}</v-btn
+          >
+            <LoadingBtn v-if="loading"></LoadingBtn>
+            <div v-else>
+              {{ t("deposit_dialog.deposit_btn_text") }}
+            </div>
+          </v-btn
           >
         </div>
       </template>

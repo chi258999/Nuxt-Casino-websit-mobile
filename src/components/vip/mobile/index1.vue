@@ -19,6 +19,7 @@ const {
 } = vipStore();
 const vipItems = ["Progress", "Benefits", "VIP Bonus"];
 const vipDrawer = ref<boolean>(true);
+const pageLoading = ref<boolean>(false)
 const Benefits = defineAsyncComponent(
   () => import("@/components/vip/components/benefits/index.vue")
 );
@@ -63,6 +64,7 @@ watch(vipNavBarToggle, (value: string) => {
 
 onMounted(async () => {
   console.log('vipDrawer ========= mount')
+  pageLoading.value = true;
   if (localStorage.getItem("vipBar") === "1") {
     vipDrawer.value = true;
     // 重置了body的高度为视口高度，就没有滚动了 影响首页游戏分类的监听时间监听
@@ -84,6 +86,7 @@ onMounted(async () => {
     value: "vip",
     params: "",
   });
+  pageLoading.value = false;
 });
 </script>
 
@@ -106,10 +109,14 @@ onMounted(async () => {
           {{ item }}
         </v-tab>
       </v-tabs>
-      <div class="vip-main-content">
-        <Progress v-if="vipTab === 'Progress'"></Progress>
-        <Benefits v-if="vipTab === 'Benefits'"></Benefits>
-        <VipBonus v-if="vipTab === 'VIP Bonus'"></VipBonus>
+
+      <div class="vip-main-content" v-show="pageLoading">
+        <Loading  height="100%"></Loading>
+      </div>
+      <div class="vip-main-content" v-show="!pageLoading">
+        <Progress v-show="vipTab === 'Progress'"></Progress>
+        <Benefits v-show="vipTab === 'Benefits'"></Benefits>
+        <VipBonus v-show="vipTab === 'VIP Bonus'"></VipBonus>
       </div>
     </div>
   </v-navigation-drawer>

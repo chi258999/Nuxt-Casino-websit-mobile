@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { vipStore } from "@/store/vip";
 import { gameStore } from "@/store/game";
 import AdjustClass from "@/utils/adjust";
+import usePageLoading from "@/hooks/pageLoading"
+import bgImg from "@/assets/vip/image/group_select.png"
+
 const props = defineProps({
   modelValue: {
     type: Boolean
@@ -13,6 +16,8 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "dialogHandle"]);
 
+const { pageLoading, setPageLoading, Loading } = usePageLoading()
+setPageLoading(true)
 const modelValueNew = computed({
   get() {
     return props.modelValue;
@@ -70,11 +75,28 @@ const joinWatsapp = () => {
     }
   }, 0);
 };
+const container = ref(null)
+onMounted(() => {
+  const image = new Image();
+  image.onload = () => {
+    container.value.style.backgroundImage = `url(${bgImg})`
+    onImageLoad()
+  }
+  image.src = bgImg
+})
+
+const onImageLoad = () => {
+  setPageLoading(false)
+}
 </script>
 
 <template>
   <v-dialog v-model="modelValueNew" @click:outside="closeGroupDialog" style="z-index: 20000">
-    <div class="group_dialog-container">
+    <div class="group_dialog-container" v-show="pageLoading">
+      <Loading height="100%"></Loading>
+    </div>
+    <div class="group_dialog-container" ref="container" v-show="!pageLoading">
+      <!-- <img src="@/assets/vip/image/group_select.png" @load="onImageLoad" class="m-img" alt=""> -->
       <v-btn class="m-close-button" icon="true" @click="closeGroupDialog" width="30" height="30">
         <img src="@/assets/public/svg/icon_public_10.svg" />
       </v-btn>
@@ -111,7 +133,8 @@ const joinWatsapp = () => {
   flex-shrink: 1;
   margin: auto;
   position: relative;
-  background: url("@/assets/vip/image/group_select.png") no-repeat;
+  // background: url("@/assets/vip/image/group_select.png") no-repeat;
+  background: transparent;
   background-size: 100% 100%;
   padding: 24px;
   box-sizing: border-box;
@@ -174,6 +197,14 @@ const joinWatsapp = () => {
   }
   .watsapp_btn-btn {
     margin-left: 15px;
+  }
+  .m-img {
+    position: absolute;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
   }
 }
 </style>

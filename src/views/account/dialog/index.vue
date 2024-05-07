@@ -170,7 +170,7 @@ const accountDialogClose = () => {
 
   ::v-deep(.v-list) {
     // background: inherit !important;
-    background: #000 !important;
+    background: transparent !important;
   }
 }
 
