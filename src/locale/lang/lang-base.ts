@@ -1791,6 +1791,21 @@ export type langType = {
         text3: string,
         text4: string,
         text5: string,
+        text6: string,
+        text7: string,
+        text8: string,
+        text9: string,
+        text10: string,
+        text11: string,
+        text12: string,
+        text13: string,
+        text14: string,
+        text15: string,
+        text16: string,
+        text17: string,
+        text18: string,
+        text19: string,
+        text20: string,
       }
     }
   }
