@@ -136,7 +136,7 @@ const handleScroll = () => {
 
 <style lang="scss">
 .v-navigation-drawer__scrim {
-  z-index: 99999931 !important;
+  // z-index: 99999931 !important;
 }
 
 .v-navigation-drawer {

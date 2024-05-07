@@ -1,5 +1,5 @@
 <template>
-  <div class="m-loading" :style="{ height: height }">
+  <div class="m-loading" :style="`height: ${porps.height}`">
     <div class="loading-body">
       <div class="dot-0"></div>
       <div class="dot-1"></div>
@@ -12,7 +12,7 @@
 const porps = defineProps({
   height: {
     type: String,
-    defalut: "100vh",
+    default: "100vh",
   },
 });
 </script>

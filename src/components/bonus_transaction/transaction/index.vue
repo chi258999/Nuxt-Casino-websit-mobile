@@ -143,6 +143,8 @@ const touchless = () => {
 
 // 交易记录tab栏切换
 const transactionTabToggle = async (item: string) => {
+  console.log('transactionTabToggle');
+  
   selectedTab.value = item;
   loading.value = true;
   switch (selectedTab.value) {
@@ -152,7 +154,7 @@ const transactionTabToggle = async (item: string) => {
         page_size: pageSize.value,
         start_time: Math.ceil(moment().valueOf() / 1000 + timeunix.value)
       });
-      inited();
+      setLoading();
       break;
     case BtTabEnum.deposit:
       setDepositHistoryIteEmpty();
@@ -160,7 +162,7 @@ const transactionTabToggle = async (item: string) => {
         page_size: pageSize.value,
         start_time: Math.ceil(moment().valueOf() / 1000 + timeunix.value)
       });
-      inited();
+      setLoading();
       break;
     case BtTabEnum.withdrawal:
       setWithdrawHistoryItemEmpty();
@@ -168,15 +170,15 @@ const transactionTabToggle = async (item: string) => {
         page_size: pageSize.value,
         start_time: Math.ceil(moment().valueOf() / 1000 + timeunix.value)
       });
-      inited();
+      setLoading();
       break;
   }
-  inited();
 };
 
-const inited = () => {
-  loading.value = false;
+const setLoading = (value = false) => {
+  loading.value = value;
 };
+
 
 watch(selectedTab, async value => {
   // if (value == t("transaction.tab.withdrawal")) {
@@ -193,8 +195,9 @@ watch(selectedTab, async value => {
 });
 
 onMounted(async () => {
-  console.log(selectedTab.value);
-  console.log(transactionTab.value);
+  // console.log(selectedTab.value);
+  // console.log(transactionTab.value);
+  setLoading(true)
   selectedTab.value = route.query.tab
     ? route.query.tab
     : BtTabEnum.transactions;
@@ -203,39 +206,12 @@ onMounted(async () => {
   await dispatchTimeunix();
   console.log(timeunix.value, "timeunixDValue");
 
-  // await dispatchGameHistory({
-  //   page_size: pageSize.value,
-  //   start_time: Math.ceil(moment().valueOf() / 1000),
-  // });
-  // await dispatchUserDepositHistory({
-  //   page_size: pageSize.value,
-  //   start_time: Math.ceil(moment().valueOf() / 1000),
-  // });
-  // await dispatchWithdrawalHistory({
-  //   page_size: pageSize.value,
-  //   start_time: Math.ceil(moment().valueOf() / 1000),
-  // });
   await dispatchTransactionHistory({
     page_size: pageSize.value,
     start_time: Math.ceil(moment().valueOf() / 1000 + timeunix.value),
     lid: Number(0).toString()
   });
-  // await dispatchVipRebateHistory({
-  //   page_num: pageNum.value,
-  //   page_size: pageSize.value,
-  //   start_time: Math.ceil(moment().valueOf() / 1000),
-  // });
-  // await dispatchVipLevelRewardHistory({
-  //   page_num: pageNum.value,
-  //   page_size: pageSize.value,
-  //   start_time: Math.ceil(moment().valueOf() / 1000),
-  // });
-  // await dispatchVipTimesHistory({
-  //   index: vipTimesHistoryIndex.value,
-  //   page_num: pageNum.value,
-  //   page_size: pageSize.value,
-  //   start_time: Math.ceil(moment().valueOf() / 1000),
-  // });
+  setLoading(false)
 });
 </script>
 <template>
@@ -323,7 +299,7 @@ onMounted(async () => {
           :vipRebateHistory="vipRebateHistory"
           :vipLevelRewardHistory="vipLevelRewardHistory"
           :vipTimesHistory="vipTimesHistory"
-          @inited="inited"
+          @inited="setLoading"
           v-else
         />
       </div>
@@ -332,7 +308,7 @@ onMounted(async () => {
     <!-- 记录 report -->
     <v-window-item :value="BtTabEnum.report" style="margin-left: 10px; margin-right: 10px">
       <div v-if="selectedTab == BtTabEnum.report">
-        <MReport v-if="mobileWidth < 600" :pageSize="pageSize" @inited="inited"></MReport>
+        <MReport v-if="mobileWidth < 600" :pageSize="pageSize" @inited="setLoading"></MReport>
       </div>
     </v-window-item>
 

@@ -199,17 +199,12 @@ const vipMenuTitle = computed(() => {
   );
   return item?.label;
 });
-let query = (params: any) => {
-  // console.log(currentDate.format('YYYY-MM-DD'))
-  // console.log(dateBefore90Days.format('YYYY-MM-DD'))
-  // console.log(startTime.value)
-  // console.log(endTime.value)
+let query = (init: boolean = false) => {
   const temparams = {
     index: 1,
     size: 100,
     first_time: endTime.value,
     last_time: startTime.value,
-    // ...params,
   };
   switch (selectedMenuItem.value) {
     case Report.invitationbonus:
@@ -229,14 +224,6 @@ let query = (params: any) => {
       },
     })
     .then((res) => {
-        //   测试数据
-        //   const testArr = Array(9).fill({
-        //     bonus: "0.06",
-        //     time: 1712087993,
-        //     user: "usernnhpi3",
-        //   });
-        //   testArr[8].time = 1732087993;
-        //   res.data.list = testArr;
       const baseArr = [0, 1, 2, 3, 4, 5, 6, 7];
       const tempResData = res.data;
       //  是否显示下一页
@@ -268,8 +255,12 @@ let query = (params: any) => {
       } else if (selectedMenuItem.value === Report.bettingCommission) {
         bettingCommission.value.push(...currentArr);
       }
-    });
-  //   paginationLength.value =
+
+      // 初始化完成
+      if(init) {
+        emit("inited");
+      }
+    })
 };
 
 const handleNext = (page_no: number) => {
@@ -279,10 +270,7 @@ const handleNext = (page_no: number) => {
   
   //   如果下一页得到的数据是空的，就查询
   if (tempArr.length == 0) {
-    query({
-      first_time: state.selectedList[state.currentList.length - 1].time,
-      last_time: '',
-    });
+    query();
   }
 };
 
@@ -293,10 +281,7 @@ const handlePrev = (page_no: number) => {
 
   //   如果下一页得到的数据是空的，就查询
   if (tempArr.length == 0) {
-    query({
-      last_time: state.selectedList[0].time,
-      first_time: '',
-    });
+    query();
   }
 };
 
@@ -311,30 +296,11 @@ const handleTransactionMenuDropdown = (item: string) => {
   selectedMenuItem.value = item;
   pageRef.value!.resetPageNo();
 
-  query({
-    // first_time: startTime.value,
-  });
+  query();
 };
 onMounted(() => {
-  //   network
-  //     .request({
-  //       url: api1,
-  //       method: "POST",
-  //       data: {},
-  //     })
-  //     .then(({ data }) => {
-  //       console.log(data, "api1 --- POST");
-  //         reportMenuList.value = data.list.map((item) => {
-  //           let name = item.index === 1;
-  //           return {};
-  //         });
-  //     });
-  
-  query({
-    // first_time: startTime.value,
-  });
-  // 初始化完成
-  emit("inited");
+      console.log(222);
+  query(true);
 });
 </script>
 
