@@ -1220,7 +1220,7 @@ export const lang: langType = {
     "text_11": "Successful withdrawal of funds",
     "text_12": "Non-withdrawable balance",
     "text_13": "Need to complete the corresponding coding tasks, the part of the balance to withdraw cash.",
-    "text_14": "",
+    "text_14": "Not participating in promotional activities",
     "text_15": ""
   },
   "mail_dialog": {
