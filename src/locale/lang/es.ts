@@ -2034,5 +2034,10 @@ export const lang: langType = {
   "game":{
     "text_1": "Los bonos no se pueden utilizar en este juego",
     "text_2": "Su importe disponible actual es ",
+  },
+  "screen": {
+    "text_1": "HOY777 sólo admite la versión de teléfono móvil para abrir por el momento",
+    "text_2": "Descargar APP Consigue un bono extra",
+    "text_3": "Escanee el código en su móvil para visitar directamente el sitio web",
   }
 };
