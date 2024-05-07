@@ -1121,13 +1121,13 @@ export const lang: langType = {
     "viewall": "Ver todo",
   },
   "mobile_menu": {
-    "home": "Página de inicio",
+    "home": "Hogar",
     "menu": "Menú",
     "casino": "Casino",
     "share": "Bono",
     "sport": "Deportes",
     "mail": "Correo",
-    "reward": "Remuneración",
+    "reward": "Premio",
     "search": "Buscar",
     "promo": "Promoción"
   },
@@ -1220,7 +1220,8 @@ export const lang: langType = {
     "text_10": "Exceso del importe retirable",
     "text_11": "Retirada de fondos con éxito",
     "text_12": "Saldo no disponible",
-    "text_13": "Necesidad de completar las tareas de codificación correspondientes, la parte de la balanza para retirar dinero en efectivo."
+    "text_13": "Necesidad de completar las tareas de codificación correspondientes, la parte de la balanza para retirar dinero en efectivo.",
+    "text_14": "No participar en actividades promocionales"
   },
   "mail_dialog": {
     "header_text": "Email personal"
@@ -1767,9 +1768,9 @@ export const lang: langType = {
         "withdraw": "Descuento en la tarifa de retiro (1.5%)"
       },
       "rule": {
-        "text1": 'Level protection',
-        "text2": 'Deposit',
-        "text3": 'Bettors',
+        "text1": 'Nivel de  Protección',
+        "text2": 'Depósitos',
+        "text3": 'Apuestas',
         "text4": 'week',
         "text5": 'month',
       }

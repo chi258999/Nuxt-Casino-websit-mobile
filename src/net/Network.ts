@@ -3,7 +3,7 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import { get } from "lodash-es"
 import { createWebSocket } from '@/plugins/socket'
 import { getFingerprintInfor } from "@/utils/getPublicInformation";
-
+import { getErrorInfoCollector } from '@/utils/errorInfoCollector'
 /**
  * Event Object
  */
@@ -343,6 +343,14 @@ export class Network {
         }
       },
       (error: any) => {
+        const { code, message } = error
+        if (code === 'ECONNABORTED' || message.indexOf('timeout') !== -1) {
+          // 请求超时
+          const currentUrl = error.config.url;
+          const params = error.config.params;
+          getErrorInfoCollector(`api network connection timeout: "${currentUrl}". Parameters passed: "${params}"`)
+        }
+
         // Status is the HTTP status code
         const status = get(error, 'response.status')
         switch (status) {

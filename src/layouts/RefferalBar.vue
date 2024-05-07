@@ -104,7 +104,7 @@ onMounted(() => {
         style=""
         @click="downloadAppEvent"
       >
-        EARM
+      GANAR
       </v-btn>
     </v-toolbar-title>
     <v-btn

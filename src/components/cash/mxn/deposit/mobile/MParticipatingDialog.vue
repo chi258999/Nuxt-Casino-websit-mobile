@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useI18n } from 'vue-i18n';
 
 const emit = defineEmits<{ (e: "promotionDialogHide", type: string): void }>();
-
+const { t } = useI18n();
 const loading = ref<boolean>(false);
 
 const submitPromotion = async () => {
@@ -14,9 +15,7 @@ const submitPromotion = async () => {
 <template>
   <div class="m-promotion-dialog-container">
     <v-row class="mx-4 mt-10 text-700-12 text-gray">
-      <p class="text-center" style="width: 100%">
-        Not participating in promotional activities
-      </p>
+      <p class="text-center" style="width: 100%">{{ t("withdraw_dialog.text_14")  }}</p>
     </v-row>
     <v-row class="mx-10 mt-12 text-700-14">
       <div class="m-promotion-confirm-btn">
@@ -27,7 +26,7 @@ const submitPromotion = async () => {
           @click="submitPromotion"
           :loading="loading"
         >
-          Ok
+         Aceptar 
         </v-btn>
       </div>
       <div class="m-promotion-cancel-btn ml-auto">
@@ -37,7 +36,7 @@ const submitPromotion = async () => {
           width="88"
           @click="emit('promotionDialogHide', 'cancel')"
         >
-          Cancel
+         Cancelar
         </v-btn>
       </div>
     </v-row>

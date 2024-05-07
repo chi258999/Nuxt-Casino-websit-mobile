@@ -102,11 +102,11 @@ const isHomePage = ref(route.path === '/');
 // });
 
 // 如果在首页，就打开监听
-if (isHomePage.value) {
-  automaticPopUpApp(false, mailMenuShow.value)
-} else {
-  automaticPopUpApp(true)
-}
+// if (isHomePage.value) {
+//   automaticPopUpApp(false, mailMenuShow.value)
+// } else {
+//   automaticPopUpApp(true)
+// }
 
 // 初始化执行一次
 setOpenAppGuidance(false)

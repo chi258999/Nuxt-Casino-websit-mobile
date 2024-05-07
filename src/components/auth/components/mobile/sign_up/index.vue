@@ -77,6 +77,14 @@ const MSignup = defineComponent({
         // new URL("@/assets/public/svg/icon_public_30.svg", import.meta.url).href,
         // new URL("@/assets/public/svg/icon_public_31.svg", import.meta.url).href,
       ],
+      emailCollection: [
+        'gmail.com',
+        'hotmail.com',
+        'yahoo.com',
+        'icloud.com',
+        'outlook.com'
+      ], // 邮箱集合
+      emailFormat: <any>[], // 用于显示
       PAGE_TYPE: {
         SIGNUP_FORM: 0,
         CONFIRM_CANCEL: 1,
@@ -84,7 +92,6 @@ const MSignup = defineComponent({
       },
       formData: {
         emailAddress: '',
-        emailFormat: ['g', 'h', 'y', 'i', 'o'], // 用于判断输入的是否需要预选弹框
         phone: '',
         code: '',
         password: '',
@@ -447,11 +454,20 @@ const MSignup = defineComponent({
       state.formData.emailAddress = e.target.value.replace(/([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g, '$1')
       handleValidateEmail()
       if (state.formData.emailAddress.includes('@')) {
-        if (state.formData.emailFormat.includes(state.formData.emailAddress.split('@')[1].charAt(0)) || !state.formData.emailAddress.split('@')[1].charAt(0)) {
-          state.emailPartName = state.formData.emailAddress.split('@')[0]
+        if (!state.formData.emailAddress.split('@')[1].charAt(0)) {
+          state.emailFormat = state.emailCollection
           state.mailCardHeight = 220
+          return
         } else {
-          state.mailCardHeight = 0
+          // 查找包含符合的字符串
+          const filteredEmails = state.emailCollection.filter(email => email.includes(state.formData.emailAddress.split('@')[1]) && email !== state.formData.emailAddress.split('@')[1]);
+          if (filteredEmails[0]) {
+            state.emailFormat = [filteredEmails[0]]
+            state.mailCardHeight = 220
+          } else {
+            state.emailFormat = []
+            state.mailCardHeight = 0
+          }
         }
       } else {
         setTimeout(() => {
@@ -463,11 +479,20 @@ const MSignup = defineComponent({
     const handleEmailFocus = () => {
       handleValidateEmail()
       if (state.formData.emailAddress.includes('@')) {
-        if (state.formData.emailFormat.includes(state.formData.emailAddress.split('@')[1].charAt(0)) || !state.formData.emailAddress.split('@')[1].charAt(0)) {
-          state.emailPartName = state.formData.emailAddress.split('@')[0]
+        if (!state.formData.emailAddress.split('@')[1].charAt(0)) {
+          state.emailFormat = state.emailCollection
           state.mailCardHeight = 220
+          return
         } else {
-          state.mailCardHeight = 0
+          // 查找包含符合的字符串
+          const filteredEmails = state.emailCollection.filter(email => email.includes(state.formData.emailAddress.split('@')[1]) && email !== state.formData.emailAddress.split('@')[1]);
+          if (filteredEmails[0]) {
+            state.emailFormat = [filteredEmails[0]]
+            state.mailCardHeight = 220
+          } else {
+            state.emailFormat = []
+            state.mailCardHeight = 0
+          }
         }
       }
     }
@@ -758,13 +783,14 @@ export default MSignup
           @keypress="handleSignupFormSubmit"
         />
         <ValidationBox v-if="isShowEmailValidaton" :title="t(`signup.formPage.validation.email.${formData.emailAddress.length ? 'title2' : 'title'}`)" :withCautionIcon="true" />
-        <div class="m-register-mail-card" :style="{ height: mailCardHeight + 'px' }">
+        <div class="m-register-mail-card" :style="{ 'max-height': mailCardHeight + 'px' }">
           <v-list theme="dark" bg-color="#15161c">
-            <v-list-item class="text-600-12 white" value="gmail" @click="mergeEmail('@gmail.com')"> {{ emailPartName }}@gmail.com </v-list-item>
+            <!-- <v-list-item class="text-600-12 white" value="gmail" @click="mergeEmail('@gmail.com')"> {{ emailPartName }}@gmail.com </v-list-item>
             <v-list-item class="text-600-12 white" value="hotmail" @click="mergeEmail('@hotmail.com')">{{ emailPartName }}@hotmail.com</v-list-item>
             <v-list-item class="text-600-12 white" value="yahoo" @click="mergeEmail('@yahoo.com')">{{ emailPartName }}@yahoo.com</v-list-item>
             <v-list-item class="text-600-12 white" value="icloud" @click="mergeEmail('@icloud.com')">{{ emailPartName }}@icloud.com</v-list-item>
-            <v-list-item class="text-600-12 white" value="outlook" @click="mergeEmail('@outlook.com')">{{ emailPartName }}@outlook.com</v-list-item>
+            <v-list-item class="text-600-12 white" value="outlook" @click="mergeEmail('@outlook.com')">{{ emailPartName }}@outlook.com</v-list-item> -->
+            <v-list-item v-for="item in emailFormat" :key="item" class="text-600-12 white" :value="`@${item}`" @click="mergeEmail(`@${item}`)">{{ emailPartName }}@{{ item }}</v-list-item>
           </v-list>
         </div>
       </div>

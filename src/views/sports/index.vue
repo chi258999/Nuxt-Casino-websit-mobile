@@ -23,6 +23,7 @@ const handleResize = (entries: any) => {
       const { height } = entry.contentRect;
       if (height > 20) {
         betbyShow.value = false;
+        document.body.style.overflow = 'scroll';
       }
     }
   }, 200);
@@ -42,6 +43,7 @@ watch(
       // await dispatchGameEnter({ id: "9999", demo: false });
       await getGameBetbyInit();
       betbyShow.value = false;
+      document.body.style.overflow = 'scroll';
     }
   },
   { deep: true }
@@ -67,6 +69,7 @@ onMounted(async () => {
   // window.addEventListener("resize", handleResize);
   betbyHeight.value = window.innerHeight;
   betbyShow.value = true;
+  document.body.style.overflow = 'hidden';
   window.scrollTo({
     top: 0,
     behavior: "smooth"

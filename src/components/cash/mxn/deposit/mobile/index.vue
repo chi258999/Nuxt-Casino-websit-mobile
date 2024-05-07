@@ -1092,7 +1092,7 @@ onMounted(async () => {
               icon
               class="amount-checkbox"
               v-model="bonusCheck"
-              label="Not participating in promotional activities"
+              :label="t('withdraw_dialog.text_14')"
             />
           </div>
 
