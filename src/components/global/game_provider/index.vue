@@ -36,6 +36,10 @@ const gameProviderslength = computed(() => {
 const handleThirdParthVendor = () => {
   router.push({ name: "Third_Parth_Vendor" });
 };
+// 打开某个厂商
+const handleGameProviderPage = (slug: string) => {
+  router.push({ name: "Provider", query: { slug: slug } });
+};
 
 const handleMoreProvider = () => {
   page_no.value = page_no.value + 1;
@@ -70,6 +74,7 @@ onMounted(async () => {
         v-ripple.center
         v-for="(item, index) in gameProviders"
         :key="index"
+        @click="handleGameProviderPage(item)"
       >
         <img :src="item.pictures" class="game-provider-img-width" />
       </div>
@@ -100,7 +105,7 @@ onMounted(async () => {
           >
             <img
               :src="gameProviderItem.pictures"
-              @click="handleThirdParthVendor"
+              @click="handleGameProviderPage(gameProviderItem.slug)"
             />
           </div>
         </template>
