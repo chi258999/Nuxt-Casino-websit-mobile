@@ -4,7 +4,7 @@
     width="100%"
     :scrim="true"
     transition="scale-transition"
-    style="z-index: 9147483646"
+    style="z-index: 99999999"
   >
 
     <div class="game-bonus-drawer-body">
