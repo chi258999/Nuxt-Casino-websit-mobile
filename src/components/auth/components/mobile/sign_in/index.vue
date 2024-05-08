@@ -65,7 +65,7 @@ const Login = defineComponent({
     const { setToken } = authStore()
     const { dispatchSocketConnect } = socketStore()
     const { dispatchUserInvite } = inviteStore()
-    const { dispatchVipInfo } = vipStore()
+    const { dispatchVipInfo, dispatchVipSignIn } = vipStore()
     const { dispatchVipLevels } = vipStore()
     const { dispatchVipLevelAward } = vipStore()
     const { width } = useDisplay()
@@ -178,6 +178,7 @@ const Login = defineComponent({
         await dispatchVipInfo()
         await dispatchVipLevels()
         await dispatchVipLevelAward()
+        await dispatchVipSignIn();
 
         // 获取服务器时间戳
         dispatchTimeunix()
@@ -264,6 +265,11 @@ const Login = defineComponent({
         localStorage.setItem(userInfo.value.name, '1')
       }
 
+      // 打开VIP活动签到  is_signin = 2就是领取了
+      if (userInfo.value.id && vipSignIn.value.is_signin != 2) {
+        setLoginBonusDialogVisible(true)
+      }
+
       setTimeout(async () => {
         const queryParams = getQueryParams()
         // 如果用户是app登录，那就领取奖励
@@ -287,10 +293,7 @@ const Login = defineComponent({
             }
             
             await userDownloadAppAcquisition()
-            // 打开VIP活动签到
-            if (userInfo.value.id && vipSignIn.value.is_signin != 2) {
-              setLoginBonusDialogVisible(true)
-            }
+
           } catch (error) {}
         }
       }, 500)

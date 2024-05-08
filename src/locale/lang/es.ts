@@ -182,7 +182,7 @@ export const lang: langType = {
       "text_28": "NFL",
       "text_29": "Carreras de motos",
       "text_30": "Política y entretenimiento",
-      "text_31": "Rugby", //11
+      "text_31": "Rugby League", //11
       "text_32": "Snooker",  //11
       "text_33": "Tenis de mesa",
       "text_34": "Tenis",
@@ -191,7 +191,23 @@ export const lang: langType = {
       "text_37": "contraataque",
       "text_38": "Dota 2",
       "text_39": "Ligas Electrónicas",
-      "text_40": "League of Legends"
+      "text_40": "League of Legends",
+      "text_44": "MotoGP",
+      "text_45":"Moto2",
+      "text_46":"Moto3",
+      "text_47":"Nascar",
+      "text_48":"Formula E",
+      "text_49":"Indycar",
+      "text_50":"Rally",
+      "text_51":"Speedway",
+      "text_52":"Counter-Strike Battles",
+      "text_53":"Counter-Strike",
+      "text_54":"Dota 2",
+      "text_55":"League of Legends",
+      "text_56":"Valorant",
+      "text_57":"Kings of Glory",
+      "text_58":"StarCraft 2",
+      "text_59":"Moblie Legends"
     },
     "language": {
       "title": "Idioma",

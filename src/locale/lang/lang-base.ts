@@ -189,7 +189,22 @@ export type langType = {
       text_40: string
       text_41: string
       text_42: string
-      text_43: string
+      text_44: string
+      text_45: string
+      text_46: string
+      text_47: string
+      text_48: string
+      text_49: string
+      text_50: string
+      text_51: string
+      text_52: string
+      text_53: string
+      text_54: string
+      text_55: string
+      text_56: string
+      text_57: string
+      text_58: string
+      text_59: string
     }
     language: {
       title: string

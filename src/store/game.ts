@@ -300,6 +300,25 @@ export const gameStore = defineStore({
             }
             await network.sendMsg(route, data, next, 1);
         },
+        async dispatchGameEnterRequest(data: Game.GameEnterBody) {
+            const route: string = NETWORK.GAME_INFO.GAME_ENTER;
+            const network: Network = Network.getInstance();
+            return new Promise(async (resolve, reject) => {
+                network.request({
+                    url: route,
+                    method: 'POST',
+                    data
+                }).then((response:any )=> {
+                    if (response.code == 200) {
+                        resolve(response.data)
+                    } else {
+                        reject(response)
+                    }
+                }).catch((err:any) => {
+                    reject(err)
+                })
+            })
+        },
         // game history api response
         async dispatchGameHistory(data: any) {
             this.setSuccess(false);
