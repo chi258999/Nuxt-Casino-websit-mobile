@@ -18,7 +18,7 @@ import { useI18n } from "vue-i18n";
   width: 100%;
   height: 100VH;
   background: #15161c;
-  z-index: 111111111111111111111111111111;
+  z-index: 1000000008;
   display: flex;
   justify-content: center;
   align-items: center;

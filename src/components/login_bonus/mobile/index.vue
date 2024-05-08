@@ -17,6 +17,7 @@ import { Pagination } from "swiper/modules";
 import MConfirm from "@/components/global/confirm/mobile/index.vue";
 import GiftIcon from "@/components/global/notification/GiftIcon.vue";
 import ReceiveValidationBox from "@/components/cash/mxn/deposit/ReceiveValidationBox.vue";
+import ruleDialog from './ruleDialog.vue'
 import AdjustClass from "@/utils/adjust";
 import EventToken from "@/constants/EventToken";
 import { useToast } from "vue-toastification";
@@ -66,6 +67,7 @@ const swiper = ref<any>(null);
 const confirmDialog = ref<boolean>(false);
 const selectedDay = ref<number>(0);
 const selectedAward = ref<number>(0);
+const ruleDialogVisible=ref(false)
 
 // 保存定时器
 const isShowReceiveTimeout = ref<null | ReturnType<typeof setTimeout>>(null);
@@ -248,6 +250,11 @@ const handleLoginBonus = async (day: number, moeny: any) => {
   //   loginBonusItem.value.signin_day = day;
   // }
 };
+
+// 打开规则弹窗
+const showRuleDialog=()=>{
+  ruleDialogVisible.value=true
+}
 
 const showGuide = computed({
   get: () => {
@@ -777,6 +784,10 @@ onMounted(async () => {
             </font>
           </p>
         </v-col>
+        <div class="reward-btn-box">
+          <v-btn class="mr-3 text-none button-bright reward-btn" height="36" @click="showRuleDialog">Reward Guide</v-btn>
+        </div>
+        
         <v-col cols="2" class="pa-0 ma-0 text-right">
           <!-- <v-btn
           class="m-left-login-bonus-button"
@@ -792,6 +803,7 @@ onMounted(async () => {
       <v-dialog v-model="confirmDialog" width="280">
         <MConfirm @submitConfirm="submitConfirm" :selectedAward="selectedAward" />
       </v-dialog>
+      <ruleDialog v-if="ruleDialogVisible" v-model="ruleDialogVisible"></ruleDialog>
     </div>
   </v-dialog>
 </template>
@@ -811,7 +823,7 @@ onMounted(async () => {
 
 .m-login-bonus-dialog-container {
   width: 340px;
-  height: 435px;
+  height: 495px;
   border-radius: 16px;
   background: #1d2027;
   position: relative;
@@ -858,7 +870,7 @@ onMounted(async () => {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 10px;
+  bottom: 57px;
   color: #7782aa;
 }
 
@@ -1051,4 +1063,13 @@ onMounted(async () => {
 :deep.Vue-Toastification__toast {
   z-index: 3147483647 !important;
 }
+.reward-btn-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+ 
+}
+:deep button .v-btn__content {
+    font-size: 14px;
+  }
 </style>

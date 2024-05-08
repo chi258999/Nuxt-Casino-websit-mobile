@@ -79,6 +79,14 @@ const Login = defineComponent({
     // initiate component state
     const state = reactive({
       currentPage: 0, // default login form
+      emailCollection: [
+        'gmail.com',
+        'hotmail.com',
+        'yahoo.com',
+        'icloud.com',
+        'outlook.com'
+      ], // 邮箱集合
+      emailFormat: <any>[], // 用于显示
       PAGE_TYPE: {
         LOGIN_FORM: 0,
         FORGOT_PASSWORD: 1,
@@ -307,8 +315,21 @@ const Login = defineComponent({
       // 去除空格和特殊符号
       state.formData.emailAddress = e.target.value.replace(/([^@.])[\s~`!#$%^&*()_+=[\]{};:"<>?/,]/g, '$1')
       if (state.formData.emailAddress.includes('@')) {
-        state.emailPartName = state.formData.emailAddress.split('@')[0]
-        state.mailCardHeight = 220
+        if (!state.formData.emailAddress.split('@')[1].charAt(0)) {
+          state.emailFormat = state.emailCollection
+          state.mailCardHeight = 220
+          return
+        } else {
+          // 查找包含符合的字符串
+          const filteredEmails = state.emailCollection.filter(email => email.includes(state.formData.emailAddress.split('@')[1]) && email !== state.formData.emailAddress.split('@')[1]);
+          if (filteredEmails[0]) {
+            state.emailFormat = [filteredEmails[0]]
+            state.mailCardHeight = 220
+          } else {
+            state.emailFormat = []
+            state.mailCardHeight = 0
+          }
+        }
       } else {
         setTimeout(() => {
           state.mailCardHeight = 0
@@ -319,8 +340,21 @@ const Login = defineComponent({
     const handleEmailFocus = () => {
       // console.log("onFocus")
       if (state.formData.emailAddress.includes('@')) {
-        state.emailPartName = state.formData.emailAddress.split('@')[0]
-        state.mailCardHeight = 220
+        if (!state.formData.emailAddress.split('@')[1].charAt(0)) {
+          state.emailFormat = state.emailCollection
+          state.mailCardHeight = 220
+          return
+        } else {
+          // 查找包含符合的字符串
+          const filteredEmails = state.emailCollection.filter(email => email.includes(state.formData.emailAddress.split('@')[1]) && email !== state.formData.emailAddress.split('@')[1]);
+          if (filteredEmails[0]) {
+            state.emailFormat = [filteredEmails[0]]
+            state.mailCardHeight = 220
+          } else {
+            state.emailFormat = []
+            state.mailCardHeight = 0
+          }
+        }
       }
     }
 
@@ -507,11 +541,13 @@ export default Login
           />
           <div class="m-login-mail-card" :style="{ height: mailCardHeight + 'px' }">
             <v-list theme="dark" bg-color="#15161C">
-              <v-list-item class="text-600-12 white" value="gmail" @click="mergeEmail('@gmail.com')"> {{ emailPartName }}@gmail.com </v-list-item>
+              <!-- <v-list-item class="text-600-12 white" value="gmail" @click="mergeEmail('@gmail.com')"> {{ emailPartName }}@gmail.com </v-list-item>
               <v-list-item class="text-600-12 white" value="hotmail" @click="mergeEmail('@hotmail.com')">{{ emailPartName }}@hotmail.com</v-list-item>
               <v-list-item class="text-600-12 white" value="yahoo" @click="mergeEmail('@yahoo.com')">{{ emailPartName }}@yahoo.com</v-list-item>
               <v-list-item class="text-600-12 white" value="icloud" @click="mergeEmail('@icloud.com')">{{ emailPartName }}@icloud.com</v-list-item>
-              <v-list-item class="text-600-12 white" value="outlook" @click="mergeEmail('@outlook.com')">{{ emailPartName }}@outlook.com</v-list-item>
+              <v-list-item class="text-600-12 white" value="outlook" @click="mergeEmail('@outlook.com')">{{ emailPartName }}@outlook.com</v-list-item> -->
+              <v-list-item v-for="item in emailFormat" :key="item" class="text-600-12 white" :value="`@${item}`" @click="mergeEmail(`@${item}`)">{{ emailPartName }}@{{ item }}</v-list-item>
+
             </v-list>
           </div>
         </div>

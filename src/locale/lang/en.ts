@@ -1789,6 +1789,21 @@ export const lang: langType = {
         "text3": 'Bettors',
         "text4": 'week',
         "text5": 'month',
+        "text6":'Participants',
+        "text7":'The Consecutive VIP Login Reward is a deposit refund activity specially designed by HOY777 for active VIP members.',
+        "text8": 'This activity is only applicable for HOY777 VIP members.',
+        "text9":'Activity Details',
+        "text10":'After becoming a HOY777 VIP member, those who make deposits can receive the VIP sign up bonus every day for 7 consecutive days.',
+        "text11": 'The higher the VIP level of the user, the higher the amount of the login bonus he/she will be able to receive.',
+        "text12": 'Bonus Reset Rules',
+        "text13":'If a user does not maintain a continuous login or does not claim the bonus, they will start over from the first day to claim the bonus again.',
+        "text14":'The user must meet the minimum accumulated deposit requirement corresponding to their VIP level within 7 days, only then will they be able to claim the bonus.',
+        "text15":'Users must meet the corresponding wagering requirements each day in order to claim the bonus.',
+        "text16":'Terms and Conditions.',
+        "text17":'HOY777 reserves the right of final interpretation of this activity, and has the authority to adjust the rules of the activity or cancel it according to actual circumstances.',
+        "text18":'User must comply with all terms and conditions of use of the HOY777 platform.',
+        "text19":'HOY777 reserves the right to change activity rules or terminate activities at any time.',
+        "text20":'Getting a bonus'
       }
     }
   },
@@ -2085,5 +2100,10 @@ export const lang: langType = {
   "game":{
     "text_1": "Bonuses cannot be used in this game",
     "text_2": "Your current available amount is ",
+  },
+  "screen": {
+    "text_1": "HOY777 only supports cell phone version to open for the time being",
+    "text_2": "Download the App for Extra Rewards",
+    "text_3": "Scan the code on your cell phone to visit the website directly",
   }
 };

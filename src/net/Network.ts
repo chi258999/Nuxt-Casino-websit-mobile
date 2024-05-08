@@ -4,6 +4,7 @@ import { get } from "lodash-es"
 import { createWebSocket } from '@/plugins/socket'
 import { getFingerprintInfor } from "@/utils/getPublicInformation";
 import { getErrorInfoCollector } from '@/utils/errorInfoCollector'
+import { getUrl } from '@/utils';
 /**
  * Event Object
  */
@@ -416,11 +417,41 @@ export class Network {
           "X-Currency": sessionStorage.getItem('currency')
         },
         timeout: timeout,
-        baseURL: import.meta.env.VITE_BASE_API,
+        baseURL: getUrl('api'),
         data: {}
       }
 
       return service(Object.assign(configDefault, config))
     }
+  }
+
+
+
+  public commonGet(route: string, data: any) {
+    return new Promise((resolve,reject)=>{
+      this.request({
+        url: route,
+        method: 'GET',
+        params: data
+      }).then((response: any) => {
+        resolve(response);
+      }).catch((error:any)=>{
+        reject(error)
+      })
+    })
+  }
+
+  public commonPost(route: string, data: any) {
+    return new Promise((resolve,reject)=>{
+      this.request({
+        url: route,
+        method: 'post',
+        data
+      }).then((response: any) => {
+        resolve(response);
+      }).catch((error:any)=>{
+        reject(error)
+      })
+    })
   }
 }
