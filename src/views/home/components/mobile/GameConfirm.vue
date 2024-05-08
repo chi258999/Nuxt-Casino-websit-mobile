@@ -104,10 +104,10 @@ const addFavoriteGame = async (id: string | number) => {
 const handleEnterGame = async (id: number, name: string, is_demo: string) => {
   if (token.value) {
     loading.value = true
-    await dispatchGameEnter({
-      id: id.toString(),
-      demo: is_demo == "true" ? true : false,
-    });
+    // await dispatchGameEnter({
+    //   id: id.toString(),
+    //   demo: is_demo == "true" ? true : false,
+    // });
     loading.value = false;
     if (!success.value) {
       const toast = useToast();
