@@ -168,34 +168,18 @@ const handleSearchInput = async (event) => {
     //关闭手机软键盘
     document.activeElement.blur();
   }
-  if (searchText.value.length >= 3) {
-    // searchLoading.value = true;
-    // await dispatchGameSearch(
-      // `?search=${searchText.value}&page=${page_no.value}&limit=${
-      //   limit.value
-      // }`
-    // );
-    // searchLoading.value = false;
 
-    // searchedGameCount.value = gameSearchList.value.total;
-    // searchedGameList.value = gameSearchList.value.list;
-    // searchedGameList.value.map((item) => {
-    //   // item.image = testGames[Math.floor(Math.random() * 7)];
-    // });
-    page_no.value = 1;
-    gameSearch(`?search=${searchText.value}&page=${page_no.value}&limit=${
+  // 查询触发重置数组和页码
+  page_no.value = 1;
+  searchedGameList.value = [];
+
+  if (searchText.value.length >= 3) {
+    gameSearchFunc(`?search=${searchText.value}&page=${page_no.value}&limit=${
         initLimit
       }`, searchLoading)
-  } else {
-    page_no.value = 1;
-    setGameSearchList({
-      list: [],
-      total: 0,
-    });
-    searchedGameList.value = [];
-  }
+  } 
 };
-const debouncedHandleSearchInput = debounce(handleSearchInput, 300)
+const debouncedHandleSearchInput = debounce(handleSearchInput, 500)
 
 const handleResize = () => {
   if (window.visualViewport?.height != undefined) {
@@ -204,25 +188,13 @@ const handleResize = () => {
   }
 };
 
+// 更多游戏
 const handleMoreGame = async () => {
   // moreLoading.value = true;
   page_no.value += 1;
   moreCurrentPage.value += 1;
   if (searchText.value.length >= 3) {
-    // searchLoading.value = true;
-    // await dispatchGameSearch(
-    //   `?search=${searchText.value}&page=${moreCurrentPage.value}&limit=${limit.value}`
-    // );
-    // moreLoading.value = false;
-    // searchLoading.value = false;
-    // if (success.value) {
-    //   searchedGameList.value = [...searchedGameList.value, ...gameSearchList.value.list];
-    //   searchedGameList.value.map((item) => {
-    //     // item.image = testGames[Math.floor(Math.random() * 28)];
-    //   });
-    // }
-
-    gameSearch(`?search=${searchText.value}&page=${moreCurrentPage.value}&limit=${limit.value}&existing=${searchedGameList.value.length}`, moreLoading)
+    gameSearchFunc(`?search=${searchText.value}&page=${moreCurrentPage.value}&limit=${limit.value}&existing=${searchedGameList.value.length}`, moreLoading)
   }
 };
 
@@ -251,15 +223,15 @@ const handleSearchGame = async (keyword: string) => {
     //   // item.image = testGames[Math.floor(Math.random() * 7)];
     // });
     page_no.value = 1
-    gameSearch(`?search=${searchText.value}&page=${page_no.value}&limit=${
+    gameSearchFunc(`?search=${searchText.value}&page=${page_no.value}&limit=${
         initLimit
       }`, searchLoading)
   } else {
     page_no.value = 1;
-    setGameSearchList({
-      list: [],
-      total: 0,
-    });
+    // setGameSearchList({
+    //   list: [],
+    //   total: 0,
+    // });
     searchedGameList.value = [];
   }
 };
@@ -269,11 +241,11 @@ watch(
   (value) => {
     if (value == null) searchText.value = "";
     if (searchText.value == "") {
+      // setGameSearchList({
+      //   list: [],
+      //   total: 0,
+      // });
       page_no.value = 1;
-      setGameSearchList({
-        list: [],
-        total: 0,
-      });
       searchedGameList.value = [];
     }
   },
@@ -338,7 +310,7 @@ const init = async() => {
   })
 }
 
-const gameSearch = (sub_api, apiloading) => {
+const gameSearchFunc = (sub_api:string, apiloading: any) => {
   apiloading.value = true;
   network.request({
     url: NETWORK.GAME_INFO.GAME_SEARCH + sub_api,
