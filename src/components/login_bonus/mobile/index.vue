@@ -176,8 +176,10 @@ const vipLevelText = (value: number) => {
   }
 };
 
+const signLoading = ref(false)
 const handleLoginBonus = async (day: number, moeny: any) => {
   console.log(vipSignIn.value, "vipSignIn.value");
+
   if (token.value == undefined) {
     setAuthModalType("login");
     setAuthDialogVisible(true);
@@ -195,6 +197,11 @@ const handleLoginBonus = async (day: number, moeny: any) => {
     return;
   }
   if (vipSignIn.value.signin_day === day && vipSignIn.value.is_signin === 1) {
+
+    // 防止二次点击
+    if(signLoading.value) return;
+
+    signLoading.value = true;
     await dispatchVipSigninawardReceive();
     const toast = useToast();
     toast.success(
@@ -214,6 +221,7 @@ const handleLoginBonus = async (day: number, moeny: any) => {
     );
     // 给已经领取的账号打上标识
     showGuide.value = "1";
+    signLoading.value = false;
   } else if (
     vipSignIn.value.signin_day !== day ||
     vipSignIn.value.is_signin === 2
