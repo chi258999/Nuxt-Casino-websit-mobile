@@ -1,19 +1,8 @@
 <script lang="ts" setup>
-import { computed, onMounted, Suspense, defineAsyncComponent } from "vue";
+import { computed, onMounted, Suspense, defineAsyncComponent, nextTick, ref } from "vue";
 import { RouterView } from "vue-router";
 import { useToast } from "vue-toastification";
 const FirstScreenSkeleton = defineAsyncComponent(() => import("@/components/first_screen_skeleton/index.vue"));
-import { storeToRefs } from 'pinia';
-import { appCurrencyStore } from "@/store/app";
-
-const { setIsShowSkeleton } = appCurrencyStore()
-
-// 获取显示状态
-const isShowSkeleton = computed(() => {
-  const { getIsShowSkeleton } = storeToRefs(appCurrencyStore());
-  return getIsShowSkeleton.value;
-});
-
 // // 自动更新
 // function autoUpdate(): void {
 //   if (window.plus) {
@@ -169,7 +158,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <FirstScreenSkeleton v-if="isShowSkeleton"></FirstScreenSkeleton>
+  <FirstScreenSkeleton></FirstScreenSkeleton>
   <Suspense>
     <template #default>
       <router-view />
