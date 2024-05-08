@@ -1396,7 +1396,7 @@ onMounted(async () => {
                 "
               >
                 <template v-slot:prepend>
-                  <inline-svg :src="icon_public_118" width="16"></inline-svg>
+                  <inline-svg :src="icon_public_141" width="16"></inline-svg>
                 </template>
                 <v-list-item-title class="ml-1 gray">
                   {{ t("navBar.sport_sub_menu.text_5") }}
@@ -1410,7 +1410,7 @@ onMounted(async () => {
                 @click="handleSportGame('/Fboxing-10')"
               >
                 <template v-slot:prepend>
-                  <inline-svg :src="icon_public_119" width="16"></inline-svg>
+                  <inline-svg :src="icon_public_118" width="16"></inline-svg>
                 </template>
                 <v-list-item-title class="ml-1 gray">
                   {{ t("navBar.sport_sub_menu.text_6") }}
@@ -1607,7 +1607,7 @@ onMounted(async () => {
                 @click="handleSportGame('/Fhandball-6')"
               >
                 <template v-slot:prepend>
-                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                  <inline-svg :src="icon_public_131" width="16"></inline-svg>
                 </template>
                 <v-list-item-title class="ml-1 gray">
                   {{ t("navBar.sport_sub_menu.text_24") }}
@@ -1618,10 +1618,10 @@ onMounted(async () => {
                 class="m-casino-sub-img m-nav-sub-menu ml-2"
                 value="sport_1"
                 style="margin-bottom: -4px !important; margin-top: -4px !important"
-                @click="handleSportGame('/Frugby/Frugby-league/Frfl-league-1-1707434130024828928')"
+                @click="handleSportGame('/Frugby-12')"
               >
                 <template v-slot:prepend>
-                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                  <inline-svg :src="icon_public_138" width="16"></inline-svg>
                 </template>
                 <v-list-item-title class="ml-1 gray">
                   {{ t("navBar.sport_sub_menu.text_31") }}
@@ -1634,7 +1634,7 @@ onMounted(async () => {
                 @click="handleSportGame('/Fcricket-21')"
               >
                 <template v-slot:prepend>
-                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                  <inline-svg :src="icon_public_125" width="16"></inline-svg>
                 </template>
                 <v-list-item-title class="ml-1 gray">
                   {{ t("navBar.sport_sub_menu.text_42") }}
@@ -1647,7 +1647,7 @@ onMounted(async () => {
                 @click="handleSportGame('/Fsnooker-19')"
               >
                 <template v-slot:prepend>
-                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                  <inline-svg :src="icon_public_139" width="16"></inline-svg>
                 </template>
                 <v-list-item-title class="ml-1 gray">
                   {{ t("navBar.sport_sub_menu.text_32") }}
@@ -1660,7 +1660,7 @@ onMounted(async () => {
                 @click="handleSportGame('/Fdarts-22')"
               >
                 <template v-slot:prepend>
-                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                  <inline-svg :src="icon_public_127" width="16"></inline-svg>
                 </template>
                 <v-list-item-title class="ml-1 gray">
                   {{ t("navBar.sport_sub_menu.text_20") }}
@@ -1673,7 +1673,7 @@ onMounted(async () => {
                 @click="handleSportGame('/Fmma-117')"
               >
                 <template v-slot:prepend>
-                  <inline-svg :src="icon_public_120" width="16"></inline-svg>
+                  <inline-svg :src="icon_public_134" width="16"></inline-svg>
                 </template>
                 <v-list-item-title class="ml-1 gray">
                   {{ t("navBar.sport_sub_menu.text_43") }}
@@ -2307,7 +2307,7 @@ onMounted(async () => {
     align-self: center;
     grid-area: content;
     overflow: hidden;
-    width: 100px;
+    width: 125px;
   }
 
   :deep(.v-list-item__append > .v-icon) {
