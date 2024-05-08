@@ -143,7 +143,7 @@ window.addEventListener('resize', () => {
 .draggable-button {
   width: 40px;
   height: 40px;
-  position: absolute;
+  position: fixed;
   left: 20px;
   top: 20px;
   cursor: pointer;
