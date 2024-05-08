@@ -67,7 +67,7 @@ const checkboxChanged = () => {
         <p style="margin: 0;">👉 {{ t('static_activity.text_7') }} <span class="highline-text-1">{{ t('static_activity.text_7_1', [platformCurrency]) }}</span> {{ t('static_activity.text_7_2') }}</p>
         <p>👉 {{ t('static_activity.text_8') }} <span class="highline-text-1">{{ t('static_activity.text_8_1', [platformCurrency]) }}</span> {{ t('static_activity.text_8_2') }}</p>
         <p>{{ t('static_activity.text_9') }}</p>
-        <p style="margin: 0;color: #c9372c;">✅ {{ t('static_activity.text_10') }}</p>
+        <p style="margin: 0;" class="highline-text-2">✅ {{ t('static_activity.text_10') }}</p>
       </div>
 
       <div class=" d-flex align-center">
@@ -173,9 +173,14 @@ const checkboxChanged = () => {
     }
 
     .highline-text-1 {
-      color: #ffc83d;
-      font-weight: 900;
-      font-family: $font_family;
+      color: #F9BC01 !important;
+      font-weight: 800 !important;
+      font-family: $font_family !important;
+    }
+    .highline-text-2 {
+      color: #DE3D12 !important;
+      font-weight: 800 !important;
+      font-family: $font_family !important;
     }
   }
 
