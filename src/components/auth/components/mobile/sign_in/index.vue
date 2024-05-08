@@ -269,20 +269,23 @@ const Login = defineComponent({
         // 如果用户是app登录，那就领取奖励
         if (queryParams['mobile']) {
           try {
-            await downloadApprReceive({ id: Number(downloadID.value) })
-            const toast = useToast()
-            toast.success(`${t('activity_app.text_1')} ${platformCurrency.value}${activityAppBonus.value}`, {
-              timeout: 3000,
-              closeOnClick: false,
-              pauseOnFocusLoss: false,
-              pauseOnHover: false,
-              draggable: false,
-              showCloseButtonOnHover: false,
-              hideProgressBar: true,
-              closeButton: 'button',
-              icon: SuccessIcon,
-              rtl: false,
-            })
+            if (Number(activityAppBonus.value)) {
+              await downloadApprReceive({ id: Number(downloadID.value) })
+              const toast = useToast()
+              toast.success(`${t('activity_app.text_1')} ${platformCurrency.value}${activityAppBonus.value}`, {
+                timeout: 3000,
+                closeOnClick: false,
+                pauseOnFocusLoss: false,
+                pauseOnHover: false,
+                draggable: false,
+                showCloseButtonOnHover: false,
+                hideProgressBar: true,
+                closeButton: 'button',
+                icon: SuccessIcon,
+                rtl: false,
+              })
+            }
+            
             await userDownloadAppAcquisition()
             // 打开VIP活动签到
             if (userInfo.value.id && vipSignIn.value.is_signin != 2) {

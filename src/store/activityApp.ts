@@ -44,7 +44,7 @@ export const activityAppStore = defineStore({
           } else {
             this.downloadLink = data.android_link
           }
-          this.activityBonus = data.bonus
+          this.activityBonus = data.bonus || 0
         } else {
           
         }
@@ -66,7 +66,7 @@ export const activityAppStore = defineStore({
             this.downloadLink = data.android_link
           }
           
-          this.activityBonus = data.bonus
+          this.activityBonus = data.bonus || 0
         } else {
           
         }
