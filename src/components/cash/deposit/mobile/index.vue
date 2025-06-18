@@ -21,6 +21,14 @@ import MDepositInfoDialog from "@/components/cash/deposit/mobile/MDepositInfoDia
 import store from '@/store';
 import { load } from 'webfontloader';
 import { useToast } from "vue-toastification";
+import { toFormatNum } from '@/utils/numFormat';
+import { useOpenUrl } from '@/plugins/openPage'
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { name, width } = useDisplay();
 const { t } = useI18n();
@@ -38,17 +46,18 @@ const { dispatchUserDepositCfg } = depositStore();
 const { dispatchUserDepositSubmit } = depositStore();
 const { setPixInfoToggle } = depositStore();
 const { dispatchUserProfile } = authStore();
+const { openUrl } = useOpenUrl()
 
 const selectedCurrencyItem = ref<GetCurrencyItem>({
   icon: new URL("@/assets/public/svg/icon_public_84.svg", import.meta.url).href,
-  name: "BRL",
+  name: platformCurrency.value,
   value: 5.25
 })
 const selectedPaymentItem = ref<GetPaymentItem>({
   id: "",
   icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
   name: "PIX",
-  description: "20~150.000 BRL",
+  description: "20~150.000 " + platformCurrency.value,
   min: 149,
   max: 588.88
 })
@@ -98,7 +107,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     id: "1",
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_1",
-    description: "20~150.000 BRL",
+    description: "20~150.000 " + platformCurrency.value,
     min: 149,
     max: 588.88
   },
@@ -106,7 +115,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     id: "2",
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_2",
-    description: "20~150.000 BRL",
+    description: "20~150.000 " + platformCurrency.value,
     min: 149,
     max: 588.88
   },
@@ -114,7 +123,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     id: "3",
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_3",
-    description: "20~150.000 BRL",
+    description: "20~150.000 " + platformCurrency.value,
     min: 149,
     max: 588.88
   },
@@ -122,7 +131,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     id: "4",
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_4",
-    description: "20~150.000 BRL",
+    description: "20~150.000 " + platformCurrency.value,
     min: 149,
     max: 588.88
   },
@@ -130,7 +139,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     id: "5",
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_5",
-    description: "20~150.000 BRL",
+    description: "20~150.000 " + platformCurrency.value,
     min: 149,
     max: 588.88
   },
@@ -138,7 +147,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     id: "6",
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_6",
-    description: "20~150.000 BRL",
+    description: "20~150.000 " + platformCurrency.value,
     min: 149,
     max: 588.88
   },
@@ -146,7 +155,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     id: "7",
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_7",
-    description: "20~150.000 BRL",
+    description: "20~150.000 " + platformCurrency.value,
     min: 149,
     max: 588.88
   },
@@ -154,7 +163,7 @@ const paymentList = ref<Array<GetPaymentItem>>([
     id: "8",
     icon: new URL("@/assets/public/svg/icon_public_74.svg", import.meta.url).href,
     name: "PIX_8",
-    description: "20~150.000 BRL",
+    description: "20~150.000 " + platformCurrency.value,
     min: 149,
     max: 588.88
   },
@@ -170,8 +179,6 @@ const depositBlurEffectShow = computed(() => {
 const { setOverlayScrimShow } = appBarStore();
 
 const depositToggleSwitch = ref<boolean>(false);
-
-const depositAmountUnit = ref<string>("R$");
 
 const depositRate = ref<number>(0);
 
@@ -249,7 +256,9 @@ watch(depositConfig, (newValue) => {
     })
   })
   const keyArray = Object.keys(newValue["cfg"]);
+  console.log("11111111111111111", keyArray);
   const filteredObjects = filterByKeyArray(currencyTemplateList, 'name', keyArray);
+  console.log("11111111111111111", filteredObjects);
   currencyList.value = filteredObjects;
   selectedPaymentItem.value = paymentList.value[0];
   newValue["list"].map((item: string) => {
@@ -355,18 +364,21 @@ const errMessage = computed(() => {
 
 const handleDepositSubmit = async () => {
   if (Number(depositAmount.value) == 0) return;
-  if (pixInfo.value.id == '' || pixInfo.value.id == undefined) {
+  if (depositConfig.value.deposit_user_switch) {
     setPixInfoToggle(true);
     return;
   }
   loading.value = true
-  await dispatchUserDepositSubmit({
-    id_number: pixInfo.value.id,
-    first_name: pixInfo.value.first_name,
-    last_name: pixInfo.value.last_name,
-    channels_id: selectedPaymentItem.value.id,
-    amount: depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
-  })
+  let formData = {} as any;
+  if (depositConfig.value.deposit_user_switch) {
+    formData.id_number = pixInfo.value.id
+    formData.first_name = pixInfo.value.first_name
+    formData.last_name = pixInfo.value.last_name
+  }
+  formData.channels_id = selectedPaymentItem.value.id;
+  formData.amount = depositConfig.value["bonus"][0]["type"] == 0 ? Number(depositAmount.value) + Number(depositRate.value) : Number((Number(depositAmount.value) * (1 + Number(depositRate.value))).toFixed(2))
+  formData.is_bonus = bonusCheck.value ? false : true;
+  await dispatchUserDepositSubmit(formData);
   loading.value = false;
   if (success.value) {
     await dispatchUserProfile();
@@ -406,7 +418,8 @@ const handleDepositSubmit = async () => {
       }, 10)
       return;
     }
-    window.open(depositSubmit.value.url, '_blank');
+    // window.open(depositSubmit.value.url, '_blank');
+    openUrl(depositSubmit.value.url, true)
     const toast = useToast();
     toast.success("Successfully submitted", {
       timeout: 3000,
@@ -710,7 +723,7 @@ onMounted(async () => {
           ]"
           @click="handleDepositAmount(depositAmountItem.depositSelect)"
         >
-          {{ depositAmountUnit }} {{ depositAmountItem.depositSelect }}
+          {{ platformCurrency }} {{ toFormatNum(depositAmountItem.depositSelect) }}
           <div
             class="m-deposit-amount-area"
             v-if="!bonusCheck && depositAmountItem.bonus != 0"
@@ -765,7 +778,7 @@ onMounted(async () => {
       <img src="@/assets/public/svg/icon_public_22.svg" class="ml-auto" width="16" />
     </div>
     <v-row class="m-deposit-footer-text-position text-600-10 white justify-center mx-2">
-      R${{ depositAmount }} + R${{
+      {{ platformCurrency }}{{ toFormatNum(depositAmount) }} + {{ platformCurrency }}{{
         depositConfig["bonus"][0]["type"] == 0 && depositConfig["bonus"] != undefined
           ? depositRate
           : (Number(depositAmount) * depositRate).toFixed(2)
@@ -822,7 +835,7 @@ onMounted(async () => {
     background: transparent;
   }
 
-  background-color: #1D2027;
+  background-color: #1d2027;
   height: 100%;
 
   .m-deposit-card-height {
@@ -846,13 +859,13 @@ onMounted(async () => {
   }
 
   .m-deposit-amout-btn-black {
-    background: #009B3A;
+    background: #009b3a;
     border-radius: 4px;
     box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21) !important;
     width: 100% !important;
-    color:white !important;
+    color: white !important;
     .v-btn__content {
-      font-family: Inter;
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 12px;
       font-style: normal;
       font-weight: 700;
@@ -861,14 +874,14 @@ onMounted(async () => {
   }
 
   .m-deposit-amout-btn-white {
-    background: #23262F;
+    background: #23262f;
     border-radius: 4px;
     color: #ffffff;
     box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21) !important;
     width: 100% !important;
 
     .v-btn__content {
-      font-family: Inter;
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 12px;
       font-style: normal;
       font-weight: 700;
@@ -899,7 +912,7 @@ onMounted(async () => {
 
   .m-deposit-btn {
     text-align: center;
-    background: #23262F;
+    background: #23262f;
 
     /* Button Shadow */
     box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
@@ -907,7 +920,7 @@ onMounted(async () => {
     .v-btn__content {
       color: #fff;
       text-align: center;
-      font-family: Inter;
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 14px;
       font-style: normal;
       font-weight: 700;
@@ -916,7 +929,7 @@ onMounted(async () => {
   }
 
   .m-deposit-btn-ready {
-    background: #009B3A;
+    background: #009b3a;
     /* Button Shadow */
     box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
 
@@ -926,7 +939,7 @@ onMounted(async () => {
   }
 
   .dark-textfield .v-field__field {
-    background-color: #15161C !important;
+    background-color: #15161c !important;
   }
 
   .v-field--variant-solo {
@@ -940,7 +953,7 @@ onMounted(async () => {
 
   .amount-checkbox {
     i.v-icon {
-      color: #15161C;
+      color: #15161c;
       background-color: #01983a;
       width: 16px;
       height: 16px;
@@ -949,7 +962,7 @@ onMounted(async () => {
     }
 
     i.mdi-checkbox-blank-outline {
-      background-color: #15161C;
+      background-color: #15161c;
       box-shadow: inset 1px 0px 2px 1px rgba(0, 0, 0, 0.11);
       border-radius: 4px;
     }
@@ -998,7 +1011,7 @@ onMounted(async () => {
     // background: rgba(119, 130, 170, 1);
     font-weight: 400;
     font-size: 10px !important;
-    font-family: "Inter";
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     opacity: 1;
   }
 }
@@ -1021,7 +1034,7 @@ onMounted(async () => {
 
   .v-field__field {
     .v-label.v-field-label {
-      font-family: "Inter";
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 12px !important;
       font-style: normal;
       font-weight: 400;

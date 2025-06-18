@@ -6,6 +6,13 @@ import { type StatisticsItem } from "@/interface/affiliate/invite"
 import { storeToRefs } from 'pinia';
 import { inviteStore } from '@/store/invite';
 import {type InviteData} from "@/interface/invite";
+import { toFormatNum } from '@/utils/numFormat';
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -53,13 +60,13 @@ const statisticsItem = ref<StatisticsItem>({
                 {{ t("affiliate.invite.text_3") }}
               </div>
               <div class="m-invite-url-right-text mt-2">
-                R$ {{ Number(inviteItem.bonus_today).toFixed(2) }}
+                {{ platformCurrency }} {{ toFormatNum(inviteItem.bonus_today) }}
               </div>
             </v-col>
             <v-col cols="6" md="3" lg="3" class="text-center py-2 mb-4">
               <div class="text-400-10 gray">{{ t("affiliate.invite.text_4") }}</div>
               <div class="m-invite-url-right-text mt-2">
-                R$ {{ Number(inviteItem.bonus_yesterdays).toFixed(2) }}
+                {{ platformCurrency }} {{ toFormatNum(inviteItem.bonus_yesterdays) }}
               </div>
             </v-col>
           </v-row>
@@ -87,7 +94,7 @@ const statisticsItem = ref<StatisticsItem>({
                 {{ t("affiliate.invite.text_7") }}
               </div>
               <div class="m-invite-url-right-text mt-2">
-                R$ {{ Number(inviteItem.bonus_month).toFixed(2) }}
+                {{ platformCurrency }} {{ toFormatNum(inviteItem.bonus_month) }}
               </div>
             </v-col>
             <v-col cols="6" md="3" lg="3" class="text-center py-2 mb-4">
@@ -105,7 +112,7 @@ const statisticsItem = ref<StatisticsItem>({
                 {{ t("affiliate.invite.text_9") }}
               </div>
               <div class="m-invite-url-right-text mt-2">
-                R$ {{ Number(inviteItem.bonus_total).toFixed(2) }}
+                {{ platformCurrency }} {{ toFormatNum(inviteItem.bonus_total) }}
               </div>
             </v-col>
           </v-row>
@@ -125,7 +132,7 @@ const statisticsItem = ref<StatisticsItem>({
           <v-row class="mx-2 my-0">
             <v-col cols="12">
               <div class="d-flex mt-2">
-                <div class="m-invite-revenu-cash-text">R$ {{ revenuCash }}</div>
+                <div class="m-invite-revenu-cash-text">{{ platformCurrency }} {{ revenuCash }}</div>
                 <v-menu v-model="revenuCashMenuShow">
                   <template v-slot:activator="{ props }">
                     <img

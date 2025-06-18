@@ -14,6 +14,9 @@ import { vipStore } from "@/store/vip";
 import { useToast } from "vue-toastification";
 import { useRoute } from "vue-router";
 import { gameStore } from "@/store/game";
+import { bannerStore } from "@/store/banner";
+import { currencyStore } from "@/store/currency";
+import { loginBonusStore } from "@/store/loginBonus";
 
 const Login = defineComponent({
   components: {
@@ -29,11 +32,13 @@ const Login = defineComponent({
     const { setAuthModalType } = authStore();
     const { setToken } = authStore();
     const { dispatchUserBalance } = userStore();
+    const { dispatchCurrencyList } = currencyStore();
     const { dispatchSocketConnect } = socketStore();
     const { dispatchVipInfo } = vipStore();
     const { dispatchVipLevels } = vipStore();
     const route = useRoute();
     const { dispatchGameEnter, getGameBetbyInit, closeKill } = gameStore();
+    const { setLoginBonusDialogVisible } = loginBonusStore();
 
     // initiate component state
     const state = reactive({
@@ -66,6 +71,11 @@ const Login = defineComponent({
       (): boolean =>
         state.formData.emailAddress.length > 0 && state.formData.password.length > 0
     );
+
+    const vipSignIn = computed(() => {
+        const { getVipSignIn } = storeToRefs(vipStore());
+        return getVipSignIn.value;
+    });
 
     // flag when login successed
     const success = computed(() => {
@@ -126,6 +136,7 @@ const Login = defineComponent({
       if (success.value) {
         await dispatchUserProfile();
         await dispatchUserBalance();
+        await dispatchCurrencyList();
         await dispatchVipInfo();
         await dispatchVipLevels();
         // await dispatchSocketConnect();
@@ -137,7 +148,7 @@ const Login = defineComponent({
         // state.notificationText = t("login.submit_result.success_text");
         if (route.name == 'Sports') {
           await closeKill();
-          await dispatchGameEnter({ id: '9999' });
+          // await dispatchGameEnter({ id: '9999', demo: false });
           await getGameBetbyInit();
         }
         const toast = useToast();
@@ -180,7 +191,10 @@ const Login = defineComponent({
           rtl: false,
         });
       }
-
+      // 打开VIP活动签到
+      if(vipSignIn.value.is_signin!=2){
+        setLoginBonusDialogVisible(true);
+      }
       state.loading = false;
     };
 
@@ -368,7 +382,7 @@ export default Login;
       <!-- Forgot password -->
       <div v-if="currentPage == PAGE_TYPE.FORGOT_PASSWORD" class="full-width">
         <v-row class="mt-8 d-flex justify-center">
-          <img src="@/assets/public/image/logo_public_01.png" class="logo-image mr-2" />
+          <img src="@/assets/public/image/logo_public_04.png" class="logo-image mr-2" />
           <!-- <span class="logo-text purple text-large">{{ t('main.logo_text_1') }}</span>
                     <span class="logo-text yellow text-large">{{ t('main.logo_text_2') }}</span> -->
         </v-row>
@@ -484,7 +498,7 @@ export default Login;
 
 // divider
 .divide-text {
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -514,7 +528,7 @@ export default Login;
 
 .login-forget-passwrod-text {
   cursor: pointer;
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;

@@ -16,7 +16,7 @@ export default (configEnv: ConfigEnv): UserConfigExport => {
   const { VITE_PUBLIC_PATH } = viteEnv
   return {
     /** Modify according to the actual situation when packaging base */
-    base: VITE_PUBLIC_PATH,
+    base: './',
     plugins: [
       vue({
         template: { transformAssetUrls }
@@ -113,15 +113,16 @@ export default (configEnv: ConfigEnv): UserConfigExport => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@import "@/assets/styles/global.scss"; @import "@/assets/styles/variables.scss";`
+          additionalData: `@import "@/assets/styles/variables.scss"; @import "@/assets/styles/global.scss";`
         }
       }
     },
     server: {
+      hmr: true,
       port: 3000,
       proxy: {
         '/api': {
-          target: 'http://dev.api.xxx.com', // 后端接口的域名
+          target: 'http://dev.api.Hoy777.com', // 后端接口的域名
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, ''),
         },

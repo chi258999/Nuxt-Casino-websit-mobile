@@ -10,6 +10,15 @@ import { bonusStore } from "@/store/bonus";
 import { appBarStore } from "@/store/appBar";
 import moment from "moment-timezone";
 import MBonusDialog from "@/components/bonus_transaction/bonus/dialog/mobile/index.vue";
+import { group } from 'node:console';
+import { bannerStore } from '@/store/banner';
+import { currencyStore } from '@/store/currency';
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n()
 const { width } = useDisplay();
@@ -18,6 +27,8 @@ const { setMainBlurEffectShow } = appBarStore();
 const { setHeaderBlurEffectShow } = appBarStore();
 const { setMenuBlurEffectShow } = appBarStore();
 const { setOverlayScrimShow } = appBarStore();
+const { dispatchUserBalance } = userStore();
+const { dispatchCurrencyList } = currencyStore();
 
 const mobileWidth = computed(() => {
   return width.value
@@ -37,52 +48,60 @@ const userBonusList = computed(() => {
   const { getBonusList } = storeToRefs(bonusStore());
   if (getBonusList.value.list != undefined) {
     getBonusList.value.list.map(item => {
-      item.rate = Math.ceil(item.now / item.max);
+      item.rate = Math.ceil(parseInt(item.now) / parseInt(item.max) * 100);
+    })
+    getBonusList.value.list.map(item => {
+      let relationList = getBonusList.value.list.filter(filterItem => filterItem.id == item.relation_id)
+      if (relationList.length  == 0) {
+        item.relation_id = 0;
+      }
     })
     const resultTree = groupObjects(getBonusList.value.list);
+    console.log(resultTree, 'resultTree');
     getBonusList.value.list = resultTree;
   }
+  console.log(getBonusList.value.list);
   return getBonusList.value
 })
 
-const totalAmount = ref<string>("R$ 1500.56");
-const withdrawAmount = ref<string>("R$ 855.79");
+const totalAmount = ref<string>(platformCurrency.value + " 1500.56");
+const withdrawAmount = ref<string>(platformCurrency.value + " 855.79");
 
 const bonusList = ref<Array<GetBonusData>>([
   {
     type: "Completion",
     rate: 100,
-    currentCash: "R$ 90000.00",
-    totalCash: "R$ 90000.00",
+    currentCash: platformCurrency.value + " 90000.00",
+    totalCash: platformCurrency.value + " 90000.00",
     restCash: "RRL 3000",
-    bonusCash: "R$ 6000",
+    bonusCash: platformCurrency.value + " 6000",
     expireDate: "2023/2/20"
   },
   {
     type: "Underway",
     rate: 50,
-    currentCash: "R$ 90000.00",
-    totalCash: "R$ 90000.00",
+    currentCash: platformCurrency.value + " 90000.00",
+    totalCash: platformCurrency.value + " 90000.00",
     restCash: "RRL 3000",
-    bonusCash: "R$ 6000",
+    bonusCash: platformCurrency.value + " 6000",
     expireDate: "2023/2/20"
   },
   {
     type: "Failure",
     rate: 0,
-    currentCash: "R$ 0.00",
-    totalCash: "R$ 67500.00",
+    currentCash: platformCurrency.value + " 0.00",
+    totalCash: platformCurrency.value + " 67500.00",
     restCash: "RRL 3000",
-    bonusCash: "R$ 0",
+    bonusCash: platformCurrency.value + " 0",
     expireDate: "2023/2/20"
   },
   {
     type: "Failure",
     rate: 50,
-    currentCash: "R$ 36000.00",
-    totalCash: "R$ 67500.00",
+    currentCash: platformCurrency.value + " 36000.00",
+    totalCash: platformCurrency.value + " 67500.00",
     restCash: "RRL 3000",
-    bonusCash: "R$ 0",
+    bonusCash: platformCurrency.value + " 0",
     expireDate: "2023/2/20"
   },
 ]);
@@ -98,9 +117,11 @@ const formsList = ref<Array<any>>([
 
 const dialogVisible = ref<boolean>(false);
 const selectedId = ref<number>(0);
+const receiveValue = ref<any>();
 
-const groupObjects = array => {
-  const grouped = {};
+const groupObjects = (array: Array<any>) => {
+
+  const grouped = {} as any;
 
   array.forEach(obj => {
     const parentId = obj.relation_id;
@@ -110,12 +131,11 @@ const groupObjects = array => {
     grouped[parentId].push(obj);
   });
 
-  const buildTree = parentId => {
+  const buildTree = (parentId: number) => {
     if (!grouped[parentId]) {
       return [];
     }
-
-    return grouped[parentId].map(obj => {
+    return grouped[parentId].map((obj: { id: any; children: any; }) => {
       const children = buildTree(obj.id);
       if (children.length > 0) {
         obj.children = children;
@@ -135,19 +155,53 @@ const bonusDialogHide = () => {
   setOverlayScrimShow(false);
 };
 
-const confirmDailogShow = (id: number) => {
+const confirmDailogShow = (id: number, receive: any) => {
   selectedId.value = id;
+  receiveValue.value = receive;
   dialogVisible.value = true;
   setMainBlurEffectShow(true);
   setHeaderBlurEffectShow(true);
   setMenuBlurEffectShow(true);
   setOverlayScrimShow(true);
 };
+
+const formatCurrency = (currency: number, currencyUnit: string) => {
+  let locale = 'pt-BR';
+  switch (currencyUnit) {
+    case "BRL":
+      locale = 'pt-BR';
+      break;
+    case "PHP":
+      locale = 'en-PH';
+      break;
+    case "PEN":
+      locale = 'en-PE';
+      break;
+    case "MXN":
+      locale = 'es-MX';
+      break;
+    case "CLP":
+      locale = 'es-CL';
+      break;
+    case "USD":
+      locale = 'en-US';
+    case "COP":
+      locale = 'es-CO';
+      break;
+  }
+  const fomarttedAmount = currency.toLocaleString(locale, {
+    style: "currency",
+    currency: currencyUnit,
+  })
+  return fomarttedAmount
+}
 onMounted(async () => {
   await dispatchUserBonus();
-  console.log(userBonusList.value);
+  await dispatchUserBalance();
+  await dispatchCurrencyList();
 })
 </script>
+
 <template>
   <v-row class="mt-4 mx-2 text-400-12 text-gray text-center">
     <v-col cols="12" class="pa-0">
@@ -162,7 +216,9 @@ onMounted(async () => {
         </template>
         <v-list-item-title class="ml-4" style="line-height: 17px">
           <div class="text-400-10 text-gray">{{ t("bonus.account_balance") }}</div>
-          <div class="text-600-12 white">R$ {{ userBalance.real }}</div>
+          <div class="text-600-12 white">
+            {{ formatCurrency(Number(userBalance.real), userBalance.currency) }}
+          </div>
         </v-list-item-title>
         <!-- <template v-slot:append>
           <div v-ripple.center style="width: 24px; height: 24px">
@@ -176,7 +232,9 @@ onMounted(async () => {
         </template>
         <v-list-item-title class="ml-4" style="line-height: 17px">
           <div class="text-400-10 text-gray">{{ t("bonus.bonus_money") }}</div>
-          <div class="text-600-12 white">R$ {{ userBalance.bonus }}</div>
+          <div class="text-600-12 white">
+            {{ formatCurrency(Number(userBalance.bonus), userBalance.currency) }}
+          </div>
         </v-list-item-title>
       </v-list-item>
       <v-list-item class="m-bg-color-1 mt-4 mx-6">
@@ -185,11 +243,13 @@ onMounted(async () => {
         </template>
         <v-list-item-title class="ml-4" style="line-height: 17px">
           <div class="text-400-10 text-gray">{{ t("bonus.total_text") }}</div>
-          <div class="text-600-12 white">R$ {{ userBalance.amount }}</div>
+          <div class="text-600-12 white">
+            {{ formatCurrency(Number(userBalance.amount), userBalance.currency) }}
+          </div>
         </v-list-item-title>
       </v-list-item>
     </v-col>
-    <v-col cols="12" class="pa-1">
+    <v-col cols="12" class="pa-1" style="padding: 4px 28px !important">
       <v-card theme="dark" color="#15161C" class="m-bonus-card-body pa-2">
         <div
           v-if="userBonusList.list == null || userBonusList.list.length == 0"
@@ -224,8 +284,8 @@ onMounted(async () => {
                           {{ item.type == 0 ? t("bonus.text_3") : t("bonus.text_4") }}
                         </div>
                         <div class="mt-2">
-                          {{ userBalance.currency?.toLocaleUpperCase() }}
-                          {{ item.deposit }}
+                          {{ platformCurrency }}
+                          {{ item.receive }}
                         </div>
                       </v-col>
                       <v-col
@@ -263,19 +323,24 @@ onMounted(async () => {
                       >
                         <div class="text-400-10">No time limit</div>
                       </v-col>
-                      <v-col cols="2" class="text-right">
+                      <v-col cols="2" class="text-right" v-if="item.type == 1">
                         <div class="relative" style="margin-left: auto; width: 25px">
                           <img
                             src="@/assets/bonus/img/img_so_01.png"
-                            v-if="(Number(item.receive) * 100) / item.deposit > 50"
+                            v-if="
+                              (Number(item.gain_amount) * 100) / Number(item.deposit) > 50
+                            "
                             width="24"
                           />
                           <img src="@/assets/bonus/img/img_so_06.png" v-else width="24" />
                           <p class="m-bonus-rate">
                             {{
-                              item.deposit == 0
+                              Number(item.deposit) == 0
                                 ? 0
-                                : Number((item.receive * 100) / item.deposit)
+                                : Number(
+                                    (Number(item.gain_amount) * 100) /
+                                      Number(item.deposit)
+                                  )
                             }}%
                           </p>
                         </div>
@@ -295,14 +360,16 @@ onMounted(async () => {
                             :class="[
                               item.status == 3
                                 ? 'failure-progress'
-                                : 'completion-progress',
+                                : 'real-completion-progress',
                             ]"
                           >
                             <div
                               class="text-400-10"
                               :class="[item.status == 3 ? 'gray' : '']"
                             >
-                              R$ {{ item.now }} / R$ {{ item.max }}
+                              {{ formatCurrency(Number(item.now), userBalance.currency) }}
+                              /
+                              {{ formatCurrency(Number(item.max), userBalance.currency) }}
                             </div>
                           </v-progress-linear>
                         </div>
@@ -310,7 +377,6 @@ onMounted(async () => {
                     </v-row>
                   </template>
                 </v-expansion-panel-title>
-
                 <v-expansion-panel-text class="mt-3">
                   <v-table class="m-forms-bonus-table-bg text-400-10 white">
                     <thead>
@@ -332,7 +398,7 @@ onMounted(async () => {
                     <tbody>
                       <tr>
                         <td>{{ moment(item.created_at * 1000).format("YYYY/MM/DD") }}</td>
-                        <td>{{ item.deposit }}</td>
+                        <td>{{ item.gain_amount }}</td>
                         <td>{{ item.receive }}</td>
                         <td>{{ item.wager }}</td>
                       </tr>
@@ -345,192 +411,206 @@ onMounted(async () => {
                   </v-row>
                 </v-expansion-panel-text>
               </v-expansion-panel>
-              <v-expansion-panel
-                class="bg-color-211F31 m-collapse-body mt-1"
-                :ripple="false"
+              <template
                 v-if="item.children != undefined"
+                v-for="(childrenItem, childrenIndex) in item.children"
+                :key="childrenIndex"
               >
-                <v-expansion-panel-title
-                  :class="[
-                    item.children[0].status == 3 ? 'failure-title-bg' : '',
-                    item.children[0].type == 0 && item.children[0].status != 3
-                      ? 'real-title-bg'
-                      : '',
-                    item.children[0].type == 1 && item.children[0].status != 3
-                      ? 'bonus-title-bg'
-                      : '',
-                  ]"
+                <v-expansion-panel
+                  class="bg-color-211F31 m-collapse-body mt-1"
                   :ripple="false"
                 >
-                  <template v-slot:default="{ expanded }">
-                    <v-row no-gutters class="align-center">
-                      <v-col
-                        cols="3"
-                        class="text-700-10 bonus-cash-border pt-1 pl-2"
-                        :class="[item.children[0].status == 3 ? 'black' : '']"
-                      >
-                        <div
-                          class="text-400-10"
-                          :class="item.children[0].type == 0 ? 'color-6AA82D' : 'yellow'"
+                  <v-expansion-panel-title
+                    :class="[
+                      childrenItem.status == 3 ? 'failure-title-bg' : '',
+                      childrenItem.type == 0 && childrenItem.status != 3
+                        ? 'real-title-bg'
+                        : '',
+                      childrenItem.type == 1 && childrenItem.status != 3
+                        ? 'bonus-title-bg'
+                        : '',
+                    ]"
+                    :ripple="false"
+                  >
+                    <template v-slot:default="{ expanded }">
+                      <v-row no-gutters class="align-center">
+                        <v-col
+                          cols="3"
+                          class="text-700-10 bonus-cash-border pt-1 pl-2"
+                          :class="[childrenItem.status == 3 ? 'black' : '']"
                         >
-                          {{
-                            item.children[0].type == 0
-                              ? t("bonus.text_3")
-                              : t("bonus.text_4")
-                          }}
-                        </div>
-                        <div class="mt-2">
-                          {{ userBalance.currency?.toLocaleUpperCase() }}
-                          {{ item.children[0].deposit }}
-                        </div>
-                      </v-col>
-                      <v-col
-                        cols="3"
-                        class="text-400-10 text-center bonus-cash-border d-flex align-center justify-center"
-                        :class="[item.children[0].status == 3 ? 'color-FF6200' : '']"
-                      >
-                        <template v-if="item.children[0].status == 0"
-                          >Not opened</template
-                        >
-                        <template v-else-if="item.children[0].status == 1"
-                          >Underway</template
-                        >
-                        <template v-if="item.children[0].status == 2"
-                          >Completion</template
-                        >
-                        <template v-if="item.children[0].status == 3">Suspend</template>
-                      </v-col>
-                      <v-col
-                        cols="4"
-                        class="text-center bonus-cash-border"
-                        v-if="item.children[0].status != 1"
-                      >
-                        <div
-                          class="text-400-10"
-                          :class="[item.children[0].status == 3 ? 'black' : '']"
-                        >
-                          Expire on
-                        </div>
-                        <div
-                          class="text-600-10 mt-2"
-                          :class="[item.children[0].status == 3 ? 'black' : '']"
-                        >
-                          {{
-                            moment(item.children[0].ended_at * 1000).format("YYYY-MM-DD")
-                          }}
-                        </div>
-                      </v-col>
-                      <v-col
-                        cols="4"
-                        class="text-center bonus-cash-border d-flex align-center justify-center"
-                        v-else
-                      >
-                        <div class="text-400-10">No time limit</div>
-                      </v-col>
-                      <v-col cols="2" class="text-right">
-                        <div class="relative" style="margin-left: auto; width: 25px">
-                          <img
-                            src="@/assets/bonus/img/img_so_01.png"
-                            v-if="
-                              (Number(item.children[0].receive) * 100) /
-                                item.children[0].deposit >
-                              50
-                            "
-                            width="24"
-                          />
-                          <img src="@/assets/bonus/img/img_so_06.png" v-else width="24" />
-                          <p class="m-bonus-rate">
-                            {{
-                              item.children[0].deposit == 0
-                                ? 0
-                                : Number(
-                                    (item.children[0].receive * 100) /
-                                      item.children[0].deposit
-                                  )
-                            }}%
-                          </p>
-                        </div>
-                      </v-col>
-                      <v-col cols="12" class="text-center mt-1">
-                        <div
-                          class="text-400-10 mt-2"
-                          v-if="(item.children[0].status = 1)"
-                          :class="[item.children[0].status == 3 ? 'black' : '']"
-                        >
-                          {{ t("bonus.cashable_progress") }}
-                        </div>
-                        <div :class="[item.children[0].status == 1 ? 'mt-4' : 'mt-2']">
-                          <v-progress-linear
-                            v-model="item.children[0].rate"
-                            height="16"
-                            :class="[
-                              item.children[0].status == 3
-                                ? 'failure-progress'
-                                : 'completion-progress',
-                            ]"
+                          <div
+                            class="text-400-10"
+                            :class="childrenItem.type == 0 ? 'color-6AA82D' : 'yellow'"
                           >
-                            <div
-                              class="text-400-10"
-                              :class="[item.children[0].status == 3 ? 'gray' : '']"
+                            {{
+                              childrenItem.type == 0
+                                ? t("bonus.text_3")
+                                : t("bonus.text_4")
+                            }}
+                          </div>
+                          <div class="mt-2">
+                            {{ item.currency?.toLocaleUpperCase() }}
+                            {{ childrenItem.receive }}
+                          </div>
+                        </v-col>
+                        <v-col
+                          cols="3"
+                          class="text-400-10 text-center bonus-cash-border d-flex align-center justify-center"
+                          :class="[childrenItem.status == 3 ? 'color-FF6200' : '']"
+                        >
+                          <template v-if="childrenItem.status == 0">Not opened</template>
+                          <template v-else-if="childrenItem.status == 1"
+                            >Underway</template
+                          >
+                          <template v-if="childrenItem.status == 2">Completion</template>
+                          <template v-if="childrenItem.status == 3">Suspend</template>
+                        </v-col>
+                        <v-col
+                          cols="4"
+                          class="text-center bonus-cash-border"
+                          v-if="childrenItem.status != 1"
+                        >
+                          <div
+                            class="text-400-10"
+                            :class="[childrenItem.status == 3 ? 'black' : '']"
+                          >
+                            Expire on
+                          </div>
+                          <div
+                            class="text-600-10 mt-2"
+                            :class="[childrenItem.status == 3 ? 'black' : '']"
+                          >
+                            {{
+                              moment(childrenItem.ended_at * 1000).format("YYYY-MM-DD")
+                            }}
+                          </div>
+                        </v-col>
+                        <v-col
+                          cols="4"
+                          class="text-center bonus-cash-border d-flex align-center justify-center"
+                          v-else
+                        >
+                          <div class="text-400-10">No time limit</div>
+                        </v-col>
+                        <v-col cols="2" class="text-right">
+                          <div class="relative" style="margin-left: auto; width: 25px">
+                            <img
+                              src="@/assets/bonus/img/img_so_01.png"
+                              v-if="
+                                (Number(childrenItem.gain_amount) * 100) /
+                                  childrenItem.deposit >
+                                50
+                              "
+                              width="24"
+                            />
+                            <img
+                              src="@/assets/bonus/img/img_so_06.png"
+                              v-else
+                              width="24"
+                            />
+                            <p class="m-bonus-rate">
+                              {{
+                                Number(childrenItem.deposit) == 0
+                                  ? 0
+                                  : Number(
+                                      (childrenItem.gain_amount * 100) /
+                                        Number(childrenItem.deposit)
+                                    )
+                              }}%
+                            </p>
+                          </div>
+                        </v-col>
+                        <v-col cols="12" class="text-center mt-1">
+                          <div
+                            class="text-400-10 mt-2"
+                            v-if="(childrenItem.status = 1)"
+                            :class="[childrenItem.status == 3 ? 'black' : '']"
+                          >
+                            {{ t("bonus.cashable_progress") }}
+                          </div>
+                          <div :class="[childrenItem.status == 1 ? 'mt-4' : 'mt-2']">
+                            <v-progress-linear
+                              v-model="childrenItem.rate"
+                              height="16"
+                              :class="[
+                                childrenItem.status == 3
+                                  ? 'failure-progress'
+                                  : 'bonus-completion-progress',
+                              ]"
                             >
-                              R$ {{ item.children[0].now }} / R$
-                              {{ item.children[0].max }}
-                            </div>
-                          </v-progress-linear>
-                        </div>
+                              <div
+                                class="text-400-10"
+                                :class="[childrenItem.status == 3 ? 'gray' : '']"
+                              >
+                                {{
+                                  formatCurrency(
+                                    Number(childrenItem.now),
+                                    userBalance.currency
+                                  )
+                                }}/
+                                {{
+                                  formatCurrency(
+                                    Number(childrenItem.max),
+                                    userBalance.currency
+                                  )
+                                }}
+                              </div>
+                            </v-progress-linear>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </template>
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text class="mt-3">
+                    <v-table class="m-forms-bonus-table-bg text-400-10 white">
+                      <thead>
+                        <tr>
+                          <th>
+                            {{ t("bonus.table.date") }}
+                          </th>
+                          <th>
+                            {{ t("bonus.table.deposit") }}
+                          </th>
+                          <th>
+                            {{ t("bonus.table.receive") }}
+                          </th>
+                          <th>
+                            {{ t("bonus.table.wager") }}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            {{
+                              moment(childrenItem.created_at * 1000).format("YYYY/MM/DD")
+                            }}
+                          </td>
+                          <td>{{ childrenItem.gain_amount }}</td>
+                          <td>{{ childrenItem.receive }}</td>
+                          <td>{{ childrenItem.wager }}</td>
+                        </tr>
+                      </tbody>
+                    </v-table>
+                    <v-row class="ma-0 align-center">
+                      <v-col cols="6" class="text-left text-500-10">
+                        ID: {{ childrenItem.id }}
+                      </v-col>
+                      <v-col cols="6" class="text-right">
+                        <v-btn
+                          class="m-bonus-forfeit-btn text-none"
+                          @click="
+                            confirmDailogShow(childrenItem.id, childrenItem.receive)
+                          "
+                        >
+                          {{ t("bonus.text_5") }}
+                        </v-btn>
                       </v-col>
                     </v-row>
-                  </template>
-                </v-expansion-panel-title>
-
-                <v-expansion-panel-text class="mt-3">
-                  <v-table class="m-forms-bonus-table-bg text-400-10 white">
-                    <thead>
-                      <tr>
-                        <th>
-                          {{ t("bonus.table.date") }}
-                        </th>
-                        <th>
-                          {{ t("bonus.table.deposit") }}
-                        </th>
-                        <th>
-                          {{ t("bonus.table.receive") }}
-                        </th>
-                        <th>
-                          {{ t("bonus.table.wager") }}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          {{
-                            moment(item.children[0].created_at * 1000).format(
-                              "YYYY/MM/DD"
-                            )
-                          }}
-                        </td>
-                        <td>{{ item.children[0].deposit }}</td>
-                        <td>{{ item.children[0].receive }}</td>
-                        <td>{{ item.children[0].wager }}</td>
-                      </tr>
-                    </tbody>
-                  </v-table>
-                  <v-row class="ma-0 align-center">
-                    <v-col cols="6" class="text-left text-500-10">
-                      ID: {{ item.children[0].id }}
-                    </v-col>
-                    <v-col cols="6" class="text-right">
-                      <v-btn
-                        class="m-bonus-forfeit-btn text-none"
-                        @click="confirmDailogShow(item.children[0].id)"
-                      >
-                        {{ t("bonus.text_5") }}
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </template>
             </v-expansion-panels>
           </div>
         </template>
@@ -543,26 +623,38 @@ onMounted(async () => {
     content-class="m-suspend-dialog-position"
     @click:outside="bonusDialogHide"
   >
-    <MBonusDialog :id="selectedId" @bonusDialogHide="bonusDialogHide" />
+    <MBonusDialog
+      :id="selectedId"
+      :receive="receiveValue"
+      @bonusDialogHide="bonusDialogHide"
+    />
   </v-dialog>
 </template>
-<style lang="scss">
-.m-bonus-forfeit-btn {
+
+<style lang="scss" scoped>
+:deep.m-bonus-forfeit-btn {
   width: 64px;
   height: 24px !important;
   border-radius: 4px;
-  background: var(--Secondary-Button-353652, #1D2027);
+  background: var(--Secondary-Button-353652, #1d2027);
+
   .v-btn__content {
     color: var(--White-BG, #fff);
     text-align: center;
-    font-family: Inter;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
   }
 }
-.v-expansion-panel-title__overlay {
+
+:deep.v-expansion-panel-title--active:hover > .v-expansion-panel-title__overlay {
+  opacity: 0 !important;
+}
+:deep.v-expansion-panel-title:hover > .v-expansion-panel-title__overlay {
   opacity: 0 !important;
 }
 
@@ -572,7 +664,7 @@ onMounted(async () => {
   transition: scale 0.2s;
 }
 
-.m-bonus-card-body {
+:deep.m-bonus-card-body {
   min-height: 233px;
   overflow-y: auto;
   margin-bottom: 6px;
@@ -605,23 +697,23 @@ onMounted(async () => {
 }
 
 .m-forms-bonus-table-bg {
-  background: #15161C !important;
+  background: #15161c !important;
   box-shadow: inset 2px 0px 4px 1px rgba(0, 0, 0, 0.12) !important;
   border-radius: 8px !important;
   width: 100% !important;
 }
 
-.v-expansion-panel-title:active:enabled {
+:deep.v-expansion-panel-title:active:enabled {
   transform: none !important;
   filter: none !important;
 }
 
 .bonus-cash-border {
   height: 30px;
-  border-right: 1px solid #1D2027;
+  border-right: 1px solid #1d2027;
 }
 
-.m-collapse-body .v-expansion-panel-title {
+:deep.m-collapse-body .v-expansion-panel-title {
   border-radius: 8px !important;
   padding: 14px 8px !important;
   height: 100px !important;
@@ -629,47 +721,56 @@ onMounted(async () => {
 
 .real-title-bg {
   border-radius: 8px;
-  background: linear-gradient(90deg, #1D2027 0%, #009B3A 100%) !important;
+  background: linear-gradient(90deg, #1d2027 0%, #009b3a 100%) !important;
 }
 
 .bonus-title-bg {
   border-radius: 8px;
-  background: linear-gradient(90deg, #23262F 0%, #1F4EA8 100%) !important;
+  background: linear-gradient(90deg, #23262f 0%, #1f4ea8 100%) !important;
 }
 
 .failure-title-bg {
   background: linear-gradient(90deg, #221f32 0%, #424567 100%) !important;
 }
 
-.v-expansion-panel:not(:first-child)::after {
+:deep.v-expansion-panel:not(:first-child)::after {
   content: none !important;
 }
 
-.v-progress-linear {
-  background: #1D2027 !important;
+:deep.v-progress-linear {
+  background: #1d2027 !important;
   box-shadow: inset 2px 0px 4px 1px rgba(0, 0, 0, 0.12) !important;
   border-radius: 8px !important;
 }
 
-.v-progress-linear__background {
+:deep.v-progress-linear__background {
   background: transparent !important;
 }
 
-.completion-progress {
+:deep.real-completion-progress {
   .v-progress-linear__determinate {
-    background: linear-gradient(180deg, #6d44f8 0%, #5726fc 100%) !important;
+    background: #009b3a !important;
     border-radius: 8px !important;
+    border: 2px solid #15161c;
   }
 }
 
-.failure-progress {
+:deep.bonus-completion-progress {
   .v-progress-linear__determinate {
-    background: linear-gradient(0deg, #15161C 0%, #393a71 100%);
+    background: #235ac5 !important;
+    border-radius: 8px !important;
+    border: 2px solid #15161c;
+  }
+}
+
+:deep.failure-progress {
+  .v-progress-linear__determinate {
+    background: linear-gradient(0deg, #15161c 0%, #393a71 100%);
     border-radius: 8px;
   }
 }
 
-.v-expansion-panel {
+:deep.v-expansion-panel {
   border-radius: 8px !important;
 }
 
@@ -683,15 +784,17 @@ onMounted(async () => {
   font-weight: 700;
 }
 
-.v-expansion-panel-text__wrapper {
+:deep.v-expansion-panel-text__wrapper {
   padding: 8px 8px 16px !important;
 }
-.m-bonus-deposit-group {
+
+:deep.m-bonus-deposit-group {
   border-radius: 8px;
-  background: #1D2027;
+  background: #1d2027;
   padding: 4px;
+
   .v-expansion-panel {
-    background-color: #23262F !important;
+    background-color: #23262f !important;
   }
 }
 </style>

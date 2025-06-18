@@ -11,14 +11,20 @@ export const userStore = defineStore({
     errMessage: '' as string,
     userCheck: false as boolean,
     verifyTime: 0 as number,
-    userBalance: {} as User.GetUserBalance
+    userBalance: {} as User.GetUserBalance,
+    userFundsIdentity: {
+      identity: {}
+    } as User.UserFundsIdentityResponse,
+    userEmailSendItem: {} as User.UserEmailSendItem
   }),
   getters: {
     getSuccess: (state) => state.success,
     getErrMessage: (state) => state.errMessage,
     getUserCheck: (state) => state.userCheck,
     getVerifyTime: (state) => state.verifyTime,
-    getUserBalance: (state) => state.userBalance
+    getUserBalance: (state) => state.userBalance,
+    getUserFundsIdentity: (state) => state.userFundsIdentity,
+    getUserEmailSendItem: (state) => state.userEmailSendItem,
   },
   actions: {
     // set functions
@@ -38,6 +44,12 @@ export const userStore = defineStore({
       console.log('金额', userBalance)
       this.userBalance = userBalance;
     },
+    setUserFundsIdentity(userFundsIdentity: User.UserFundsIdentityResponse) {
+      this.userFundsIdentity = userFundsIdentity;
+    },
+    setUserEmailSendItem(userEmailSendItem: User.UserEmailSendItem) {
+      this.userEmailSendItem = userEmailSendItem
+    },
     // user check
     async dispatchUserCheck() {
       this.setSuccess(false);
@@ -49,7 +61,8 @@ export const userStore = defineStore({
           this.setSuccess(true);
           this.setUserCheck(true);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, {}, next, 1);
@@ -65,13 +78,14 @@ export const userStore = defineStore({
           this.setSuccess(true);
           this.setUserBalance(response.data);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, {}, next, 1, 4);
     },
     // set user currency
-    async dispatchSetUserCurrency(currency:string) {
+    async dispatchSetUserCurrency(currency: string) {
       this.setSuccess(false);
       const route: string = NETWORK.PERSONAL_INFO_PAGE.SET_USER_CURRENCY;
       const network: Network = Network.getInstance();
@@ -80,10 +94,11 @@ export const userStore = defineStore({
         if (response.code == 200) {
           this.setSuccess(true);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
-      await network.sendMsg(route, {currency_type:currency}, next, 1);
+      await network.sendMsg(route, { currency_type: currency }, next, 1);
     },
     // user email verify
     async dispatchUserEmailVerify() {
@@ -96,10 +111,61 @@ export const userStore = defineStore({
           this.setSuccess(true);
           this.setVerifyTime(response.time);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, {}, next, 1);
+    },
+    // Get account information in storage
+    async dispatchUserFundsIdentity() {
+      this.setSuccess(false);
+      const route: string = NETWORK.PERSONAL_INFO_PAGE.USER_FUNDS_IDENTITY;
+      const network: Network = Network.getInstance();
+      // response call back function
+      const next = (response: User.GetUserFundsIdentityResponseData) => {
+        if (response.code == 200) {
+          this.setSuccess(true);
+          this.setUserFundsIdentity(response.data);
+        } else {
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
+        }
+      }
+      await network.sendMsg(route, {}, next, 1, 4);
+    },
+    // Send email verification code
+    async dispatchUserEmailSend(data: any) {
+      this.setSuccess(false);
+      const route: string = NETWORK.PERSONAL_INFO_PAGE.USER_EMAIL_SEND;
+      const network: Network = Network.getInstance();
+      // response call back function
+      const next = (response: User.GetUserEmailSendResponse) => {
+        if (response.code == 200) {
+          this.setSuccess(true);
+          this.setUserEmailSendItem(response.data);
+        } else {
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
+        }
+      }
+      await network.sendMsg(route, data, next, 1);
+    },
+    // Send email verification code
+    async dispatchUserEmailSubmit(data: any) {
+      this.setSuccess(false);
+      const route: string = NETWORK.PERSONAL_INFO_PAGE.USER_EMAIL_SUBMIT;
+      const network: Network = Network.getInstance();
+      // response call back function
+      const next = (response: User.GetUserEmailSubmitResponse) => {
+        if (response.code == 200) {
+          this.setSuccess(true);
+        } else {
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
+        }
+      }
+      await network.sendMsg(route, data, next, 1);
     },
   }
 })

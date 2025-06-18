@@ -10,12 +10,20 @@ import { mailStore } from "@/store/mail";
 import { ProgressiveImage } from "vue-progressive-image";
 import img_public_42 from "@/assets/public/image/img_public_42.png";
 import { Swiper, SwiperSlide } from "swiper/vue";
+import MGameConfirm from "@/views/home/components/mobile/GameConfirm.vue";
+import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
+import { appBarStore } from "@/store/appBar";
+import type * as Game from "@/interface/game";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 // import Swiper core and required modules
 import { Pagination } from "swiper/modules";
+import { NETWORK } from '@/net/NetworkCfg'
+import { Network } from '@/net/Network'
+import { debounce } from "lodash-es"
 
+const network: Network = Network.getInstance()
 const { t } = useI18n();
 const { width } = useDisplay();
 const router = useRouter();
@@ -28,44 +36,44 @@ const { setMailMenuShow } = mailStore();
 const searchText = ref<string>("");
 const searchLoading = ref<boolean>(false);
 const page_no = ref<number>(1);
-const currentPage = ref<number>(1);
 const moreCurrentPage = ref<number>(1);
-const limit = ref<number>(4);
+const limit = ref<number>(30);
+const initLimit = 6
 const moreLoading = ref<boolean>(false);
 const swiper = ref<any>(null);
 
 const modules = [Pagination];
 
-const testGames = [
-  new URL("@/assets/home/image/img_pg_01.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_02.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_03.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_04.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_05.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_06.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_pg_07.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_01.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_02.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_03.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_04.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_05.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_06.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_og_07.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_01.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_02.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_03.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_04.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_05.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_06.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_slots_07.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_01.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_02.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_03.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_04.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_05.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_06.png", import.meta.url).href,
-  new URL("@/assets/home/image/img_lc_07.png", import.meta.url).href,
-];
+// const testGames = [
+//   new URL("@/assets/home/image/img_pg_01.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_02.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_03.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_04.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_05.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_06.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_pg_07.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_01.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_02.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_03.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_04.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_05.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_06.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_og_07.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_01.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_02.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_03.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_04.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_05.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_06.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_slots_07.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_01.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_02.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_03.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_04.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_05.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_06.png", import.meta.url).href,
+//   new URL("@/assets/home/image/img_lc_07.png", import.meta.url).href,
+// ];
 
 const searchedGameList = ref<Array<Search>>([]);
 
@@ -82,6 +90,10 @@ const props = defineProps<{ searchDialogShow: boolean }>();
 const { searchDialogShow } = toRefs(props);
 
 const searchContainerHeight = ref<number>(590);
+
+const currentTotal = computed(() => {
+  return limit.value * (page_no.value - 1) + initLimit
+})
 
 const mobileWidth = computed(() => {
   return width.value;
@@ -114,47 +126,60 @@ const getSwiperRef = (swiperInstance: any) => {
   swiper.value = swiperInstance;
 };
 
-const handleEnterGame = async (id: number, name: string) => {
+// 是否打开二级确认框
+const gameConfirmDialogShow = ref<boolean>(false);
+// 游戏内容
+const selectedGameItem = ref<Game.GameItem>({
+  id: 0,
+  name: "",
+  image: "",
+  provider: "",
+  provider_name: '',
+  producer: "",
+  is_demo: false
+})
+
+const handleEnterGame = async (item: Game.GameItem, id: number, name: string) => {
   setSearchTextList(searchText.value);
-  searchText.value = "";
-  page_no.value = 1;
-  setGameSearchList({
-    list: [],
-    total: 0,
-  });
-  searchedGameList.value = [];
+  // searchText.value = "";
+  // page_no.value = 1;
+  // setGameSearchList({
+  //   list: [],
+  //   total: 0,
+  // });
+  // searchedGameList.value = [];
   let replaceName = name.replace(/ /g, "-");
   if (mobileWidth.value < 600) {
     setMailMenuShow(true);
   }
-  router.push(`/game/${id}/${replaceName}`);
+  // router.push(`/game-${id}-${replaceName}`);
+  selectedGameItem.value = item;
+  gameConfirmDialogShow.value = true
 };
 
-const handleSearchInput = async () => {
-  if (searchText.value.length >= 3) {
-    searchLoading.value = true;
-    await dispatchGameSearch(
-      `?search=${searchText.value}&page=${currentPage.value}&limit=${
-        limit.value * page_no.value
-      }`
-    );
-    searchLoading.value = false;
-    // if (success.value) {
-    searchedGameCount.value = gameSearchList.value.total;
-    searchedGameList.value = gameSearchList.value.list;
-    searchedGameList.value.map((item) => {
-      // item.image = testGames[Math.floor(Math.random() * 7)];
-    });
-    // }
-  } else {
-    page_no.value = 1;
-    setGameSearchList({
-      list: [],
-      total: 0,
-    });
-    searchedGameList.value = [];
+const { setControlLevel } = appBarStore();
+watch(gameConfirmDialogShow, (value: boolean) => {
+  setControlLevel(value)
+})
+
+const handleSearchInput = async (event) => {
+  // 不是回车键不触发  event.keyCode判断是不是软键盘触发
+  if(event.keyCode !== undefined && event.keyCode === 13) {
+    //关闭手机软键盘
+    document.activeElement.blur();
   }
+
+  // 查询触发重置数组和页码
+  page_no.value = 1;
+  searchedGameList.value = [];
+
+  if (searchText.value.length >= 3) {
+    gameSearchFunc(`?search=${searchText.value}&page=${page_no.value}&limit=${
+        initLimit
+      }`, searchLoading)
+  } 
 };
+const debouncedHandleSearchInput = debounce(handleSearchInput, 500)
 
 const handleResize = () => {
   if (window.visualViewport?.height != undefined) {
@@ -163,23 +188,13 @@ const handleResize = () => {
   }
 };
 
+// 更多游戏
 const handleMoreGame = async () => {
-  moreLoading.value = true;
+  // moreLoading.value = true;
   page_no.value += 1;
   moreCurrentPage.value += 1;
   if (searchText.value.length >= 3) {
-    searchLoading.value = true;
-    await dispatchGameSearch(
-      `?search=${searchText.value}&page=${moreCurrentPage.value}&limit=${limit.value}`
-    );
-    moreLoading.value = false;
-    searchLoading.value = false;
-    if (success.value) {
-      searchedGameList.value = [...searchedGameList.value, ...gameSearchList.value.list];
-      searchedGameList.value.map((item) => {
-        // item.image = testGames[Math.floor(Math.random() * 28)];
-      });
-    }
+    gameSearchFunc(`?search=${searchText.value}&page=${moreCurrentPage.value}&limit=${limit.value}&existing=${searchedGameList.value.length}`, moreLoading)
   }
 };
 
@@ -195,26 +210,28 @@ const removeAllSearchKeyword = () => {
 const handleSearchGame = async (keyword: string) => {
   searchText.value = keyword;
   if (searchText.value.length >= 3) {
-    searchLoading.value = true;
-    await dispatchGameSearch(
-      `?search=${searchText.value}&page=${currentPage.value}&limit=${
-        limit.value * page_no.value
-      }`
-    );
-    searchLoading.value = false;
-    // if (success.value) {
-    searchedGameCount.value = gameSearchList.value.total;
-    searchedGameList.value = gameSearchList.value.list;
-    searchedGameList.value.map((item) => {
-      // item.image = testGames[Math.floor(Math.random() * 7)];
-    });
-    // }
+    // searchLoading.value = true;
+    // await dispatchGameSearch(
+    //   `?search=${searchText.value}&page=${page_no.value}&limit=${
+    //     limit.value
+    //   }`
+    // );
+    // searchLoading.value = false;
+    // searchedGameCount.value = gameSearchList.value.total;
+    // searchedGameList.value = gameSearchList.value.list;
+    // searchedGameList.value.map((item) => {
+    //   // item.image = testGames[Math.floor(Math.random() * 7)];
+    // });
+    page_no.value = 1
+    gameSearchFunc(`?search=${searchText.value}&page=${page_no.value}&limit=${
+        initLimit
+      }`, searchLoading)
   } else {
     page_no.value = 1;
-    setGameSearchList({
-      list: [],
-      total: 0,
-    });
+    // setGameSearchList({
+    //   list: [],
+    //   total: 0,
+    // });
     searchedGameList.value = [];
   }
 };
@@ -224,11 +241,11 @@ watch(
   (value) => {
     if (value == null) searchText.value = "";
     if (searchText.value == "") {
+      // setGameSearchList({
+      //   list: [],
+      //   total: 0,
+      // });
       page_no.value = 1;
-      setGameSearchList({
-        list: [],
-        total: 0,
-      });
       searchedGameList.value = [];
     }
   },
@@ -238,7 +255,7 @@ watch(
 watch(searchDialogShow, (value) => {
   if (value) {
     if (searchRef.value != undefined) {
-      searchRef.value.focus();
+      //searchRef.value.focus();
     }
   }
   if (!value && searchText.value != "") {
@@ -257,25 +274,71 @@ onMounted(async () => {
   // if (searchRef.value != undefined) {
   //   searchRef.value.focus();
   // }
-  window.addEventListener("resize", handleResize);
-  await dispatchGameSearch(
-    `?game_categories_slug=recommend&page=${currentPage.value}&limit=${
-      limit.value * page_no.value
-    }`
-  );
-  recommendedGameList.value = gameSearchList.value.list;
-  if (recommendedGameList.value.length > 0) {
-    recommendedGameList.value.map((item) => {
-      // item.image = testGames[Math.floor(Math.random() * 28)];
-    });
-  }
+  // window.addEventListener("resize", handleResize);
+  // await dispatchGameSearch(
+  //   `?game_categories_slug=HOT&page=${page_no.value}&limit=${
+  //     limit.value
+  //   }`
+  // );
+  // recommendedGameList.value = gameSearchList.value.list;
+  // if (recommendedGameList.value.length > 0) {
+  //   recommendedGameList.value.map((item) => {
+  //     // item.image = testGames[Math.floor(Math.random() * 28)];
+  //   });
+  // }
+  init()
 });
+
+const init = async() => {
+  window.addEventListener("resize", handleResize);
+  
+  // 查询热门游戏
+  network.request({
+    url: NETWORK.GAME_INFO.GAME_SEARCH + `?game_categories_slug=HOT&page=${page_no.value}&limit=${
+      initLimit
+    }`,
+    method: 'GET',
+    data: {},
+  }).then(res => {
+    const { list } = res.data
+    recommendedGameList.value = list;
+    // if (recommendedGameList.value.length > 0) {
+    //   recommendedGameList.value.map((item) => {
+        // item.image = testGames[Math.floor(Math.random() * 28)];
+    //   });
+    // }
+  })
+}
+
+const gameSearchFunc = (sub_api:string, apiloading: any) => {
+  apiloading.value = true;
+  network.request({
+    url: NETWORK.GAME_INFO.GAME_SEARCH + sub_api,
+    method: 'GET',
+    data: {},
+  })
+  .then((res: any) => {
+    if (res.code === 200) {
+      const { total, list } = res.data
+      searchedGameList.value = [...searchedGameList.value, ...list]
+      searchedGameCount.value = total
+      console.log(searchedGameList.value, 'providerGameList.value');
+      console.log(searchedGameCount.value, 'gameSearchTotal.value');
+    }
+  }).catch(err => {
+    console.log(err);
+  }).finally(() => {
+    apiloading.value = false;
+  })
+}
 </script>
 
 <template>
   <div class="m-home-search-body">
     <div class="m-search-header">
-      <span class="m-search-header-icon" @click="emit('searchCancel')"></span>
+      <v-icon class="m-search-header-icon" @click="emit('searchCancel')">
+        mdi-chevron-left
+      </v-icon>
       <span>{{ t("home.search") }}</span>
     </div>
     <!-- <div
@@ -285,147 +348,206 @@ onMounted(async () => {
       maxHeight: '643px',
     }"
   > -->
-    <div class="pt-3">
-      <v-text-field
-        ref="searchRef"
-        :placeholder="t('home.search')"
-        class="form-textfield dark-textfield"
-        variant="solo"
-        hide-details
-        filled
-        clearable
-        density="compact"
-        prepend-inner-icon="mdi-magnify"
-        color="#7782AA"
-        :class="mobileWidth < 600 ? 'home-search-text-height' : ''"
-        @input="handleSearchInput"
-        v-model="searchText"
-      />
-    </div>
-    <div class="m-search-loading-container relative pt-8" v-if="searchLoading">
-      <div class="loading-body">
-        <div class="dot-0"></div>
-        <div class="dot-1"></div>
-        <div class="dot-0"></div>
-      </div>
-    </div>
-    <div class="m-home-search-result pt-8 text-center" v-else>
-      <div v-if="searchedGameList.length == 0">
-        <img
-          src="@/assets/public/image/img_se_1.png"
-          v-if="searchText.length >= 3 && searchText != ''"
+    <div style="position: absolute; top: 50px; width: 100dvw">
+      <div class="pt-3">
+      <form action="javascript:return true;" @submit.prevent>
+        <v-text-field
+          ref="searchRef"
+          :placeholder="t('home.search')"
+          class="form-textfield dark-textfield"
+          variant="solo"
+          hide-details
+          filled
+          clearable
+          density="compact"
+          prepend-inner-icon="mdi-magnify"
+          color="#7782AA"
+          :class="mobileWidth < 600 ? 'home-search-text-height' : ''"
+          @input="debouncedHandleSearchInput"
+          @keypress="debouncedHandleSearchInput"
+          v-model="searchText"
         />
-        <p class="text-400-12 gray" v-if="searchText.length >= 3 && searchText != ''">
-          {{ t("home.search_dialog.text_2") }}
-        </p>
-        <p class="text-400-12 gray" v-else>{{ t("home.search_dialog.text_3") }}</p>
-        <div
-          class="mx-3 mt-4"
-          style="display: flex; justify-content: space-between"
-          v-if="searchHistoryKeywords.length > 0"
-        >
-          <p class="text-700-14 white">{{ t("home.search_dialog.search_history") }}</p>
-          <div class="m-home-search-history-remove" @click="removeAllSearchKeyword">
-            <img src="@/assets/public/svg/icon_public_82.svg" style="margin-top: 6px" />
-          </div>
-        </div>
-        <div
-          class="d-flex mx-3 mt-4"
-          style="gap: 6px; flex-wrap: wrap"
-          v-if="searchHistoryKeywords.length > 0"
-        >
-          <div
-            class="m-home-search-history-text"
-            v-for="(keyword, index) in searchHistoryKeywords"
-            :key="index"
-          >
-            <font @click="handleSearchGame(keyword)"> {{ keyword }}</font>
-            <span
-              class="m-home-search-history-word-remove"
-              v-if="index + 1 == searchHistoryKeywords.length"
-              @click="handleRemoveSearchKeyword(index)"
-            >
-              <img
-                src="@/assets/public/svg/icon_public_52.svg"
-                width="9"
-                class="m-home-search-history-word-remove-icon-position"
-              />
-            </span>
-          </div>
-        </div>
+      </form>
       </div>
-      <div v-else>
-        <div class="d-flex justify-between align-center mx-3">
-          <p class="text-700-14 white">{{ t("home.search_dialog.text_4") }}</p>
-          <p class="text-600-10 gray">
-            {{ t("home.search_dialog.text_5") }}
-            <font class="text-600-10 color-32CFEC">{{ searchedGameCount }}</font>
-            {{ t("home.search_dialog.text_6") }}
-          </p>
-        </div>
-        <v-row class="mx-2 my-4">
-          <template v-for="(item, index) in searchedGameList" :key="index">
-            <v-col cols="4" class="py-0 px-1" v-if="index < 3 * page_no">
-              <ProgressiveImage
-                :src="item.image"
-                lazy-placeholder
-                :placeholder-src="img_public_42"
-                blur="30"
-                @click="handleEnterGame(item.id, item.name)"
-              />
-            </v-col>
-          </template>
-        </v-row>
-        <v-row
-          class="justify-center"
-          :class="mobileWidth < 600 ? 'mt-6 mx-3' : 'mt-8 ml-4'"
-        >
-          <v-btn
-            class="text-none more-btn-color"
-            variant="outlined"
-            width="100%"
-            height="41"
-            v-if="searchedGameCount > 3 && searchedGameCount > 3 * page_no"
-            @click="handleMoreGame()"
-          >
-            <div v-if="!moreLoading">{{ t("home.more") }}</div>
-            <div class="loading-body" v-else>
-              <div class="dot-0"></div>
-              <div class="dot-1"></div>
-              <div class="dot-0"></div>
-            </div>
-          </v-btn>
-        </v-row>
-      </div>
-    </div>
-    <div class="m-home-search-swiper-title mt-8">
-      <p class="ml-3 text-700-14 white">{{ t("home.search_dialog.text_1") }}</p>
-      <div class="swiper-button-next" slot="button-next" @click="goToNext"></div>
-      <div class="swiper-button-prev" slot="button-prev" @click="goToPrev"></div>
-    </div>
-    <div class="relative m-home-search-swiper pt-5">
-      <Swiper
-        :modules="modules"
-        :slidesPerView="3"
-        :spaceBetween="8"
-        class="mx-3"
-        style="height: auto"
-        @swiper="getSwiperRef"
+      <div
+        class="m-search-loading-container relative pt-8"
+        v-if="searchLoading && searchedGameList.length == 0"
       >
-        <SwiperSlide
-          v-for="(gameItem, index) in recommendedGameList"
-          :key="index"
-          :virtualIndex="index"
-        >
+        <div class="loading-body">
+          <div class="dot-0"></div>
+          <div class="dot-1"></div>
+          <div class="dot-0"></div>
+        </div>
+      </div>
+      <div class="m-home-search-result pt-8 text-center" v-else>
+        <div v-if="searchedGameList.length == 0">
           <img
-            :src="gameItem.image"
-            class="m-home-search-swiper-img"
-            @click="handleEnterGame(gameItem.id, gameItem.name)"
+            src="@/assets/public/image/img_se_1.png"
+            v-if="searchText.length >= 3 && searchText != ''"
           />
-        </SwiperSlide>
-      </Swiper>
+          <p class="text-400-12 gray" v-if="searchText.length >= 3 && searchText != ''">
+            {{ t("home.search_dialog.text_2") }}
+          </p>
+          <p class="text-400-12 gray" v-else>{{ t("home.search_dialog.text_3") }}</p>
+          <div
+            class="mx-3 mt-4"
+            style="display: flex; justify-content: space-between"
+            v-if="searchHistoryKeywords.length > 0"
+          >
+            <p class="text-700-14 white">{{ t("home.search_dialog.search_history") }}</p>
+            <div class="m-home-search-history-remove" @click="removeAllSearchKeyword">
+              <img src="@/assets/public/svg/icon_public_82.svg" style="margin-top: 6px" />
+            </div>
+          </div>
+          <div
+            class="d-flex mx-3 mt-4"
+            style="gap: 6px; flex-wrap: wrap"
+            v-if="searchHistoryKeywords.length > 0"
+          >
+            <div
+              class="m-home-search-history-text"
+              v-for="(keyword, index) in searchHistoryKeywords"
+              :key="index"
+            >
+              <font @click="handleSearchGame(keyword)"> {{ keyword }}</font>
+              <span
+                class="m-home-search-history-word-remove"
+                v-if="index + 1 == searchHistoryKeywords.length"
+                @click="handleRemoveSearchKeyword(index)"
+              >
+                <img
+                  src="@/assets/public/svg/icon_public_52.svg"
+                  width="9"
+                  class="m-home-search-history-word-remove-icon-position"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <div class="d-flex justify-between align-center mx-3">
+            <p class="text-700-14 white">{{ t("home.search_dialog.text_4") }}</p>
+            <p class="text-600-10 gray">
+              {{ t("home.search_dialog.text_5") }}
+              <font class="text-600-10 color-32CFEC">{{ searchedGameCount }}</font>
+              {{ t("home.search_dialog.text_6") }}
+            </p>
+          </div>
+          <v-row class="mx-2 my-4">
+            <template v-for="(item, index) in searchedGameList" :key="index">
+              <v-col
+                cols="4"
+                class="py-0 px-1"
+                v-if="index < currentTotal"
+                style="position: relative"
+              >
+                <ProgressiveImage
+                  :src="item.image"
+                  lazy-placeholder
+                  :placeholder-src="img_public_42"
+                  blur="30"
+                  @click="handleEnterGame(item, item.id, item.name)"
+                >
+                  <div class="text-overlay">
+                    <h2>{{ item.name }}</h2>
+                    <p>{{ item.provider_name }}</p>
+                  </div>
+                </ProgressiveImage>
+              </v-col>
+            </template>
+          </v-row>
+          <v-row
+            class="justify-center"
+            :class="mobileWidth < 600 ? 'mt-6 mx-3' : 'mt-8 ml-4'"
+          >
+            <v-btn
+              class="text-none more-btn-color"
+              variant="outlined"
+              width="100%"
+              height="41"
+              v-if="searchedGameCount > initLimit && searchedGameCount > currentTotal"
+              @click="handleMoreGame()"
+            >
+              <div v-if="!moreLoading">{{ t("home.more") }}</div>
+              <div class="loading-body" v-else>
+                <div class="dot-0"></div>
+                <div class="dot-1"></div>
+                <div class="dot-0"></div>
+              </div>
+            </v-btn>
+          </v-row>
+        </div>
+      </div>
+      <div class="m-home-search-swiper-title mt-8">
+        <p class="ml-3 text-700-14 white">{{ t("home.search_dialog.text_1") }}</p>
+        <div class="swiper-button-next" slot="button-next" @click="goToNext"></div>
+        <div class="swiper-button-prev" slot="button-prev" @click="goToPrev"></div>
+      </div>
+      <div class="relative m-home-search-swiper pt-5">
+        <Swiper
+          :modules="modules"
+          :slidesPerView="3"
+          :spaceBetween="8"
+          class="mx-3"
+          style="height: auto"
+          @swiper="getSwiperRef"
+        >
+          <SwiperSlide
+            v-for="(gameItem, index) in recommendedGameList"
+            :key="index"
+            :virtualIndex="index"
+          >
+            <img
+              :src="gameItem.image"
+              class="m-home-search-swiper-img"
+              @click="handleEnterGame(gameItem, gameItem.id, gameItem.name)"   
+            />
+            <div class="text-overlay--search">
+              <h2>{{ gameItem.name }}</h2>
+              <p>{{ gameItem.provider_name }}</p>
+            </div>
+          </SwiperSlide>
+        </Swiper>
+      </div>
     </div>
   </div>
+
+  <v-navigation-drawer
+    v-model="gameConfirmDialogShow"
+    location="bottom"
+    class="m-game-confirm-bar"
+    temporary
+    :touchless="true"
+    :style="{
+      height: 'unset',
+      bottom: '0px',
+      zIndex: 300000,
+      background: 'unset !important',
+    }"
+    v-if="mobileWidth < 600"
+  >
+    <template v-if="gameConfirmDialogShow">
+
+      <div  class="m-game-confirm-drawer-close-button-box" style="display:flex; justify-content: flex-end;">
+        <v-btn
+          class="m-game-confirm-drawer-close-button"
+          icon="true"
+          width="24"
+          height="24"
+          @click="gameConfirmDialogShow = false"
+        >
+          <inline-svg :src="icon_public_10" width="20" height="20"></inline-svg>
+        </v-btn>
+      </div>
+      <!-- 打开游戏 确认弹窗 - 二级页面 -->
+      <MGameConfirm
+        :selectedGameItem="selectedGameItem"
+        :is_favorite="false"
+        :gameConfirmDialogShow="gameConfirmDialogShow"
+        @closeGameConfirmDialog="gameConfirmDialogShow = false"
+      />
+    </template>
+  </v-navigation-drawer>
 </template>
 
 <style lang="scss">
@@ -464,7 +586,7 @@ onMounted(async () => {
   transform: translate(-50%, -50%);
   width: 48px;
   height: 46px;
-  background-image: url("@/assets/public/image/img_public_42.png");
+  background-image: url("@/assets/public/image/logo_public_06.png");
   background-repeat: no-repeat;
   background-size: contain;
   animation: opacityAnimation 0.6s ease-in infinite;
@@ -507,7 +629,9 @@ onMounted(async () => {
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   color: var(--Sec-Text-7782AA, #7782aa);
   text-align: center;
-  font-family: Inter;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
+    sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -536,29 +660,36 @@ onMounted(async () => {
 }
 
 .m-search-header {
-  position: relative;
+  // position: relative;
   height: 50px;
   line-height: 50px;
   background: var(--BG-5-1C1929, #15161c);
   color: #fff;
   text-align: center;
+  position: absolute;
+  width: 100% !important;
+  top: 0px;
+  left: 0px;
 
   .m-search-header-icon {
     width: 20px;
     height: 20px;
+    position: absolute;
+    left: 15px;
+    top: 15px;
   }
 
-  .m-search-header-icon::before {
-    content: "";
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translate(0, -50%) rotate(45deg);
-    border-bottom: 2px solid #fff;
-    border-left: 2px solid #fff;
-    width: 10px;
-    height: 10px;
-  }
+  // .m-search-header-icon::before {
+  //   content: "";
+  //   position: absolute;
+  //   left: 20px;
+  //   top: 50%;
+  //   transform: translate(0, -50%) rotate(45deg);
+  //   border-bottom: 2px solid #fff;
+  //   border-left: 2px solid #fff;
+  //   width: 10px;
+  //   height: 10px;
+  // }
 }
 
 .m-home-search-body {
@@ -567,6 +698,7 @@ onMounted(async () => {
   border-radius: 0px 0px 8px 8px;
   background: var(--Text-Box-1-211F31, #1d2027);
   overflow-y: auto;
+  position: absolute;
 
   .m-home-search-game:active {
     transform: scale(0.9);
@@ -596,7 +728,7 @@ onMounted(async () => {
   }
 
   .mdi:before {
-    font-size: 16px !important;
+    // font-size: 16px !important;
   }
 
   .v-field__input {
@@ -605,11 +737,13 @@ onMounted(async () => {
 
   .v-field__input::placeholder {
     color: var(--Sec-Text-7782AA, #7782aa);
-    font-family: Inter;
-    font-size: 10px !important;
-    font-style: normal;
-    font-weight: 400 !important;
-    line-height: normal;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
+    // font-size: 10px !important;
+    // font-style: normal;
+    // font-weight: 400 !important;
+    // line-height: normal;
   }
 
   .more-btn-color {
@@ -730,6 +864,72 @@ onMounted(async () => {
   .m-home-search-swiper-img {
     width: 100%;
     border-radius: 8px 8px;
+  }
+}
+
+/* 文字叠加在图片上 */
+.text-overlay--search {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  margin-bottom: 7px;
+  padding: 10px 12px 3px;
+  color: white;
+  border-bottom-left-radius: 8px 8px;
+  border-bottom-right-radius: 8px 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1;
+  }
+
+  p {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 4px;
+    overflow-wrap: break-word;
+  }
+}
+
+/* 文字叠加在图片上 */
+.text-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 10px 12px 3px;
+  color: white;
+  text-align: left;
+  border-bottom-left-radius: 8px 8px;
+  border-bottom-right-radius: 8px 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1;
+  }
+
+  p {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 4px;
+    overflow-wrap: break-word;
   }
 }
 </style>

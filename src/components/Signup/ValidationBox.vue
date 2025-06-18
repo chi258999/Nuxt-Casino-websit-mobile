@@ -42,6 +42,7 @@ export default ValidationBox;
   <div
     class="pa-2 animate glow delay-1 fade-in"
     :class="mobileWidth > 600 ? 'validation-box-container' : 'm-validation-box-container'"
+    style="z-index: 10000;"
   >
     <v-row
       v-if="title.length"
@@ -75,7 +76,7 @@ export default ValidationBox;
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @media (max-width: 600px) {
   .label-text-sm {
     font-size: 10px !important;
@@ -127,7 +128,7 @@ export default ValidationBox;
     padding: 0px;
 
     .validation-list-item {
-      font-family: "Inter";
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-style: normal;
       font-weight: 600;
       font-size: 12px;
@@ -167,7 +168,7 @@ export default ValidationBox;
     padding: 0px;
 
     .validation-list-item {
-      font-family: "Inter";
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-style: normal;
       font-weight: 600;
       font-size: 12px;

@@ -13,6 +13,8 @@ export interface Search {
     name: string
     image: string
     provider: string
+    provider_name: string
+    producer: string
     is_demo: boolean
 }
 
@@ -21,6 +23,8 @@ export interface GameItem {
     name: string
     image: string
     provider: string
+    provider_name: string
+    producer: string
     is_demo: boolean
 }
 
@@ -96,7 +100,7 @@ export type GetGameBigWinResponse = {
 export type GetGameCategoriesResponse = {
     code: number
     data: Array<Category>
-    messsage: string
+    message: string
 }
 
 export type GetGameSearchResponse = {

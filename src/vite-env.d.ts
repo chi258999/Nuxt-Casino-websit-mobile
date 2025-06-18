@@ -7,3 +7,7 @@ declare module '*.vue' {
 }
 
 declare module 'vue-progressive-image';
+
+declare module 'vue3-google-login';
+
+declare module '@livechat/widget-vue';

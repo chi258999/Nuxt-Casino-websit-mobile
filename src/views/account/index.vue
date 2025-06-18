@@ -15,7 +15,10 @@ import GameProviders from "@/components/global/game_provider/index.vue";
 import SuspendAccount from "@/components/account/suspend_account/index.vue";
 import MSuspendAccount from "@/components/account/suspend_account/mobile/index.vue";
 import MDialog from "./dialog/index.vue";
-
+import AdjustClass from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
+import { getQueryParams } from "@/utils/getPublicInformation";
+import Loading from "@/components/global/loading.vue";
 
 // const UserInformation = defineAsyncComponent(() => import("@/components/account/user_information/pc/index.vue"));
 // const MUserInformation = defineAsyncComponent(() => import("@/components/account/user_information/mobile/index.vue"));
@@ -37,6 +40,7 @@ const activeMenuIndex = ref<any>(0);
 const mobileDialogVisible = ref<boolean>(false);
 const selectedMenuItem = ref<string>(t('account.menu.user_info_text'));
 const accountMenuShow = ref<boolean>(false);
+const pageLoading = ref<boolean>(false);
 
 const menuList = ref<Array<string>>([
   t('account.menu.user_info_text'),
@@ -60,7 +64,7 @@ const handleDropdown = (item: string, index: number) => {
   setActiveAccountIndex(index)
   selectedMenuItem.value = item;
   activeMenuIndex.value = index;
-  router.push({ name: "Account", params: { index: activeMenuIndex.value }, query: { index: activeMenuIndex.value } });
+  //router.push({ name: "Account", params: { index: activeMenuIndex.value }, query: { index: activeMenuIndex.value } });
 }
 
 const activeAccountIndex = computed(() => {
@@ -125,12 +129,14 @@ const mDialogHide = () => {
   mobileDialogVisible.value = false;
 }
 
+const queryParams = getQueryParams()
+
 const goBeforePage = () => {
-  router.go(-1);
-  setTimeout(() => {
+  router.push({ path:'/', query: queryParams });
+  /*setTimeout(() => {
     activeMenuIndex.value = route.query.index ? route.query.index : 0
     setActiveAccountIndex(activeMenuIndex.value)
-  }, 500)
+  }, 500)*/
 }
 
 watch(activeAccountIndex, (value) => {
@@ -139,6 +145,13 @@ watch(activeAccountIndex, (value) => {
 })
 
 onMounted(() => {
+  pageLoading.value = true;
+  AdjustClass.getInstance().adjustTrackEvent({
+    key: "PAGE_VIEW",
+    value: "account",
+    params: "",
+  });
+
   if (mobileWidth.value > 1280) {
     if (rightBarToggle.value) {
       accountWidth.value = "account-container";
@@ -151,12 +164,15 @@ onMounted(() => {
   if (mobileWidth.value < 600) {
     mobileDialogVisible.value = true;
   }
-  activeMenuIndex.value = route.query.index ? route.query.index : 0
-  setActiveAccountIndex(activeMenuIndex.value)
+  //activeMenuIndex.value = route.query.index ? route.query.index : 0;
+  activeMenuIndex.value = activeAccountIndex.value;
+  selectedMenuItem.value = menuList.value[activeMenuIndex.value];
+  //setActiveAccountIndex(activeMenuIndex.value)
   window.scrollTo({
     top: 0,
     behavior: 'smooth'
   });
+  pageLoading.value = false;
 })
 </script>
 
@@ -199,12 +215,14 @@ onMounted(() => {
       :class="refferalAppBarShow ? 'pt-8' : 'pt-12'"
       :style="{ height: accountHeight + 'px' }"
     >
+      <!-- 顶部栏 -->
       <div class="m-account-tab-body mx-3 d-flex align-center">
         <v-btn class="m-account-back-btn text-none" @click="goBeforePage">
           <v-icon class="header-mdi-icon">mdi-chevron-left</v-icon>
           <!-- <img src="@/assets/public/svg/icon_public_11.svg" width="18" /> -->
           {{ t("account.back_text") }}
         </v-btn>
+        
         <v-menu
           offset="20"
           v-model:model-value="accountMenuShow"
@@ -223,12 +241,12 @@ onMounted(() => {
               </v-list-item>
             </v-card>
           </template>
-          <v-list theme="dark" bg-color="#1D2027" style="border-radius:8px">
+          <v-list theme="dark" bg-color="#1D2027" style="border-radius: 8px">
             <v-list-item
               v-for="(item, i) in menuList"
               :key="i"
               :value="item"
-              :class="{'m-account-menu-item-border':selectedMenuItem == item}"
+              :class="{ 'm-account-menu-item-border': selectedMenuItem == item }"
               @click="handleDropdown(item, i)"
             >
               <v-list-item-title class="text-center text-400-12 gray">{{
@@ -238,8 +256,11 @@ onMounted(() => {
           </v-list>
         </v-menu>
       </div>
-      <MUserInformation v-if="activeMenuIndex == 0" />
-      <MSuspendAccount v-if="activeMenuIndex == 4" />
+      <Loading v-if="pageLoading" height="100%"></Loading>
+      <template v-else>
+        <MUserInformation v-if="activeMenuIndex == 0" />
+        <MSuspendAccount v-if="activeMenuIndex == 4" />
+      </template>
     </div>
   </div>
   <div class="mx-2 pt-10">
@@ -266,7 +287,7 @@ onMounted(() => {
 }
 
 .m-account-container {
-  background: #1D2027;
+  background: #1d2027;
   margin: -40px 0px;
   padding-bottom: 20px;
   border-radius: 8px;
@@ -289,7 +310,7 @@ onMounted(() => {
   align-self: center;
   top: -25px;
   left: 50%;
-  border: 15px solid #1D2027;
+  border: 15px solid #1d2027;
   border-right-color: transparent;
   border-left-color: transparent;
   border-top-color: transparent;
@@ -298,7 +319,7 @@ onMounted(() => {
 }
 
 .account-menu {
-  background-color: #1D2027;
+  background-color: #1d2027;
   border-radius: 0px 0px 12px 12px !important;
   height: 600px;
 
@@ -310,11 +331,11 @@ onMounted(() => {
 .account-divider {
   margin: auto;
   border-width: thin;
-  background: #23262F;
+  background: #23262f;
 }
 
 .m-account-tab-body {
-  background: #1D2027;
+  background: #1d2027;
   height: 48px;
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   border-radius: 8px;
@@ -331,7 +352,7 @@ onMounted(() => {
   }
 }
 
-.m-account-menu-item-border{
+.m-account-menu-item-border {
   margin: 8px;
   border-radius: 8px !important;
   border: 1px solid #00b25c !important;

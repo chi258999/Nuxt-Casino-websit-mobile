@@ -5,6 +5,9 @@ export const handleException = (code: number) => {
         case 0:
             errorMsg = '失败';
             break;
+        case 101004:
+            errorMsg = 'Credentials have expired. Please log in again';
+            break;
         case 100000:
             errorMsg = 'The data passed is abnormal';
             break;
@@ -30,7 +33,7 @@ export const handleException = (code: number) => {
             errorMsg = 'Registration data exception';
             break;
         case 102003:
-            errorMsg = 'Registration data exception';
+            errorMsg = 'The account you entered has been used by someone else, please input again';
             break;
         case 103001:
             errorMsg = 'Abnormal nickname format (abnormal length or illegal identifier)';
@@ -81,7 +84,7 @@ export const handleException = (code: number) => {
             errorMsg = '可提金額不符合';
             break;
         case 106202:
-            errorMsg = '存款失敗';
+            errorMsg = '取款失敗';
             break;
         case 107001:
             errorMsg = 'vip数据异常';

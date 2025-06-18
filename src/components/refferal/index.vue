@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDisplay } from 'vuetify';
 import { refferalStore } from '@/store/refferal';
@@ -8,6 +8,13 @@ import { ElNotification } from 'element-plus'
 import SuccessIcon from '@/components/global/notification/SuccessIcon.vue';
 import WarningIcon from '@/components/global/notification/WarningIcon.vue';
 import { useToast } from "vue-toastification";
+import { storeToRefs } from 'pinia';
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -15,9 +22,9 @@ const { setRefferalDialogShow } = refferalStore();
 
 const invitedUser = ref<number>(28560);
 const earnMoney = ref<number>(85601479);
-const host = ref<string>("xxx.com");
+const host = ref<string>("Hoy777.com");
 const refferalCode = ref<string>("xxxxxxxxxx");
-const siteUrl = ref<string>("https://Brazstar.com/xxxxxxxxxx");
+const siteUrl = ref<string>("https://Hoy777.com/xxxxxxxxxx");
 
 const descriptionVisible = ref<boolean>(false);
 
@@ -78,7 +85,7 @@ onMounted(() => {
                 {{ t('refferal.description.text_1') }}
             </div>
             <div class="mt-4 mx-10 text-gray text-500-14 text-justify">
-                {{ t('refferal.description.text_2') }}
+                {{ t('refferal.description.text_2', [platformCurrency]) }}
             </div>
             <div class="mt-6 mx-10">
                 <v-card height="420" theme="dark" color="#1D2027" class="overflow-y-auto">
@@ -86,7 +93,7 @@ onMounted(() => {
                         {{ t('refferal.description.term_text') }}
                     </div>
                     <p class="mx-4 mt-3 text-400-14 text-gray text-justify">
-                        {{ t('refferal.description.text_3') }}
+                        {{ t('refferal.description.text_3', [platformCurrency]) }}
                     </p>
                 </v-card>
             </div>
@@ -100,7 +107,7 @@ onMounted(() => {
             <div class="refferal-dialog-header text-center">
                 <img src="@/assets/public/image/img_public_08.png" style="margin-top: -10px" />
                 <div class="mt-8 text-center text-700-18 yellow">
-                    {{ t('refferal.dialog.header.title_text') }}
+                    {{ t('refferal.dialog.header.title_text', [platformCurrency]) }}
                 </div>
                 <div class="mt-8 text-center text-700-22 white">
                     {{ t('refferal.dialog.header.body_text') }}
@@ -109,7 +116,7 @@ onMounted(() => {
                     <Font color="#F9BC01">{{ invitedUser.toLocaleString() }}</Font>
                     {{ t('refferal.dialog.header.body_text_1') }}
                     <Font color="#F9BC01">{{ earnMoney.toLocaleString() }}</Font>
-                    {{ t('refferal.dialog.header.body_text_2') }}
+                    {{ t('refferal.dialog.header.body_text_2', [platformCurrency]) }}
                     <Font color="#F9BC01">{{ host }}</Font>
                     {{ t('refferal.dialog.header.body_text_3') }}
                 </div>
@@ -146,7 +153,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .refferal-container {
     background: #2E274C;
     border-radius: 16px;

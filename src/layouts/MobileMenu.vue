@@ -6,6 +6,8 @@ import { appBarStore } from "@/store/appBar";
 import { gameStore } from "@/store/game";
 import { mailStore } from "@/store/mail";
 import { menuStore } from "@/store/menu";
+import { mainStore } from "@/store/main";
+import { refferalStore } from "@/store/refferal";
 import { type GetMailData } from '@/interface/mail';
 import { useDisplay } from 'vuetify'
 import { storeToRefs } from "pinia";
@@ -20,6 +22,7 @@ import icon_public_100 from "@/assets/public/svg/icon_public_100.svg";
 import img_public_17 from "@/assets/public/image/temp/img_public_17.png";
 import img_public_18 from "@/assets/public/image/temp/img_public_18.png";
 import img_public_19 from "@/assets/public/image/temp/img_public_19.png";
+import icon_public_151 from "@/assets/public/svg/icon_public_151.svg";
 
 const { t } = useI18n();
 const { name, width } = useDisplay()
@@ -35,6 +38,10 @@ const { setMailMenuShow } = mailStore();
 const { setSemiCircleShow } = menuStore();
 const { setRewardNavShow } = menuStore();
 const { setMobileMenuMailToggle } = mailStore();
+const { setRefferalDialogShow } = refferalStore();
+const { setSearchDialogShow } = mainStore();
+const { setHomeMenuBtnClicked } = menuStore();
+const { setSelectedCircleItem } = menuStore();
 
 // mail count
 const mailCount = ref<number>(10);
@@ -48,6 +55,7 @@ const searchBtnActive = ref<boolean>(false);
 const mailBtnActive = ref<boolean>(false);
 const mailNavigation = ref<boolean>(false);
 const rewardBtnActive = ref<boolean>(false);
+const homeBtnActive = ref<boolean>(false);
 const mailMenuShow = ref<boolean>(false);
 const tempMailList = ref<Array<GetMailData>>([]);
 
@@ -58,7 +66,7 @@ const mailIconColor = ref<string>('#7782AA');
 const promoIconColor = ref<string>('#7782AA');
 const searchIconColor = ref<string>('#7782AA');
 const rewardIconColor = ref<string>("#7782AA");
-const mailListHeight = ref<number>(0);
+const homeIconColor = ref<string>("#7782AA");
 
 const shareIcon = ref<any>(new URL("@/assets/public/image/img_public_19.png", import.meta.url).href)
 const shareIconIndex = ref<number>(0);
@@ -104,6 +112,21 @@ const mobileMenuMailToggle = computed(() => {
   return getMobileMenuMailToggle.value
 })
 
+const circleMenuBtnClicked = computed(() => {
+  const { getCircleMenuBtnClicked } = storeToRefs(menuStore());
+  return getCircleMenuBtnClicked.value;
+});
+
+const selectedCircleItem = computed(() => {
+  const { getSelectedCircleItem } = storeToRefs(menuStore());
+  return getSelectedCircleItem.value
+})
+
+watch(circleMenuBtnClicked, (value) => {
+  homeBtnActive.value = false;
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
+})
+
 watch(mobileMenuMailToggle, (value) => {
   mailMenuShow.value = value;
 })
@@ -113,7 +136,6 @@ const calculateBottomDistance = () => {
     const containerRect = casino_1.value.getBoundingClientRect();
     const windowHeight = window.innerHeight;
     casino_1_bottom.value = windowHeight - containerRect.bottom;
-    console.log(casino_1_bottom.value);
   }
 };
 
@@ -128,22 +150,24 @@ watch(selectedItem, (new_value, old_value) => {
         case t("mobile_menu.mail"):
           rotation.value = rotation.value + 240;
           break;
-        case t("mobile_menu.search"):
+        case t("mobile_menu.casino"):
           rotation.value = rotation.value + 120;
           break;
       }
+      // rotation.value = 270
       break;
     case t("mobile_menu.mail"):
       switch (new_value) {
         case t("mobile_menu.promo"):
           rotation.value = rotation.value + 120;
           break;
-        case t("mobile_menu.search"):
+        case t("mobile_menu.casino"):
           rotation.value = rotation.value + 240;
           break;
       }
+      // rotation.value = 270 + 90
       break;
-    case t("mobile_menu.search"):
+    case t("mobile_menu.casino"):
       switch (new_value) {
         case t("mobile_menu.promo"):
           rotation.value = rotation.value + 240;
@@ -152,16 +176,18 @@ watch(selectedItem, (new_value, old_value) => {
           rotation.value = rotation.value + 120;
           break;
       }
+      // rotation.value = 180
       break;
   }
+
   switch (new_value) {
     case t("mobile_menu.promo"):
       selectedImg.value = img_public_17;
       selectedIcon.value = icon_public_97;
       break;
-    case t("mobile_menu.search"):
+    case t("mobile_menu.casino"):
       selectedImg.value = img_public_18;
-      selectedIcon.value = icon_public_94;
+      selectedIcon.value = icon_public_34;
       break;
     case t("mobile_menu.mail"):
       selectedImg.value = img_public_19;
@@ -229,8 +255,8 @@ watch(mailList, (newValue) => {
 }, { deep: true })
 
 watch(navToggle, (newValue) => {
-  navbarToggle.value = newValue;
-  menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
+  // navbarToggle.value = newValue;
+  // menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
 }, { deep: true })
 
 watch(bonusToggle, (newValue) => {
@@ -239,6 +265,7 @@ watch(bonusToggle, (newValue) => {
 
 watch(mailMenuShow, async (newValue) => {
   if (newValue) {
+    homeBtnActive.value = false;
     sportBtnActive.value = false
     casinoBtnActive.value = false;
     navbarToggle.value = false;
@@ -250,6 +277,7 @@ watch(mailMenuShow, async (newValue) => {
     setBonusDashboardDialogVisible(false);
     setRewardNavShow(false);
     setSemiCircleShow(false);
+    homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
     menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
     casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
     sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -265,59 +293,17 @@ watch(mailMenuShow, async (newValue) => {
     setOverlayScrimShow(newValue);
     setMobileMenuMailToggle(newValue);
     mailIconColor.value = mailMenuShow.value ? "white" : "#7782AA";
+    setSelectedCircleItem("");
+    setHomeMenuBtnClicked(homeMenuBtnClicked.value ? false : true);
   }
   setMailMenuShow(newValue);
   var scale = 0.94;
   var translateY = -56;
   var opacity = 0.8;
   var zIndex = 100
-  console.log(mailList.value.length);
   if (newValue) {
     for (let item of mailList.value) {
-      await new Promise<void>((resolve) => {
-        setTimeout(async () => {
-          tempMailList.value.push(item);
-          const vList = document.querySelector('.mobile-mail-menu');
-          if (!vList) {
-            return;
-          }
-          await new Promise<void>((resolve) => {
-            setTimeout(() => {
-              resolve();
-            }, 70)
-          })
-          const vListRect = vList.getBoundingClientRect();
-          const listItems = Array.from(vList.querySelectorAll('.mail-item')) as Array<HTMLElement>;
-          console.log("listItem: ", listItems.length);
-          const rect = listItems[tempMailList.value.length - 1].getBoundingClientRect();
-          console.log(tempMailList.value.length);
-          listItems[tempMailList.value.length - 1].style.zIndex = `${zIndex}`
-          if (rect.top > 0 && rect.bottom >= vListRect.bottom) {
-            listItems[tempMailList.value.length - 1].style.scale = `${scale}`;
-            listItems[tempMailList.value.length - 1].style.transform = `translateY(${translateY}px)`
-            listItems[tempMailList.value.length - 1].style.zIndex = `${zIndex}`
-            listItems[tempMailList.value.length - 1].style.opacity = `${opacity}`
-            listItems[tempMailList.value.length - 1].style.animation = '0.8s ease-in-out 0s 1 normal none running fadeIn'
-            var keyframes = `@keyframes fadeIn {
-                  from {
-                    opacity: 0;
-                    translateY(0px)
-                  }
-                  to {
-                    opacity: 0.8;
-                    translateY(${translateY}px)
-                  }
-              }`;
-            var styleSheet = document.styleSheets[0];
-            styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
-            scale -= 0.02;
-            translateY = translateY - 70;
-          }
-          zIndex -= 1;
-          console.log("rect, bottom", rect.bottom, vListRect.bottom);
-          resolve();
-        }, 10);
-      });
+      tempMailList.value.push(item);
     }
   } else {
     tempMailList.value = [];
@@ -326,6 +312,7 @@ watch(mailMenuShow, async (newValue) => {
 
 const handleNavbarToggle = () => {
   navbarToggle.value = !navbarToggle.value
+  homeBtnActive.value = false;
   mailMenuShow.value = false;
   casinoBtnActive.value = false;
   sportBtnActive.value = false;
@@ -343,6 +330,7 @@ const handleNavbarToggle = () => {
       setMainBlurEffectShow(navbarToggle.value);
     }
   }, 10);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -352,13 +340,21 @@ const handleNavbarToggle = () => {
   rewardIconColor.value = rewardBtnActive.value ? "white" : "#7782AA";
 }
 
+const homeMenuBtnClicked = computed(() => {
+  const { getHomeMenuBtnClicked } = storeToRefs(menuStore());
+  return getHomeMenuBtnClicked.value
+})
+
 const goHomePage = () => {
-  casinoBtnActive.value = !casinoBtnActive.value
+  setSelectedCircleItem("");
+  homeBtnActive.value = !homeBtnActive.value;
+  casinoBtnActive.value = false;
   mailMenuShow.value = false;
   sportBtnActive.value = false
   promoBtnActive.value = false;
   searchBtnActive.value = false;
   rewardBtnActive.value = false;
+  setHomeMenuBtnClicked(homeMenuBtnClicked.value ? false : true);
   router.push({ name: "Dashboard" });
   navbarToggle.value = false;
   setUserNavBarToggle(false);
@@ -369,6 +365,7 @@ const goHomePage = () => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
   }, 200);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA";
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -430,6 +427,7 @@ const handlePromoToggle = () => {
 
 const handleRewardToggle = () => {
   rewardBtnActive.value = !rewardBtnActive.value
+  homeBtnActive.value = false;
   promoBtnActive.value = false
   mailMenuShow.value = false;
   sportBtnActive.value = false
@@ -447,6 +445,7 @@ const handleRewardToggle = () => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
   }, 200);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -454,10 +453,15 @@ const handleRewardToggle = () => {
   promoIconColor.value = promoBtnActive.value ? "white" : "#7782AA";
   searchIconColor.value = searchBtnActive.value ? "white" : "#7782AA";
   rewardIconColor.value = rewardBtnActive.value ? "white" : "#7782AA";
+  setTimeout(() => {
+    rewardBtnActive.value = false
+    rewardIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
+  }, 1000)
 }
 
 const handleSearchToggle = () => {
   searchBtnActive.value = !searchBtnActive.value
+  homeBtnActive.value = false;
   mailMenuShow.value = false;
   casinoBtnActive.value = false;
   navbarToggle.value = false;
@@ -467,10 +471,12 @@ const handleSearchToggle = () => {
   setMainBlurEffectShow(false);
   setRewardNavShow(false);
   setSemiCircleShow(false);
+  setSearchDialogShow(true);
   setTimeout(() => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
   }, 200);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA";
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -478,10 +484,15 @@ const handleSearchToggle = () => {
   promoIconColor.value = promoBtnActive.value ? "white" : "#7782AA";
   searchIconColor.value = searchBtnActive.value ? "white" : "#7782AA";
   rewardIconColor.value = rewardBtnActive.value ? "white" : "#7782AA";
+  setTimeout(() => {
+    searchBtnActive.value = false
+    searchIconColor.value = searchBtnActive.value ? "white" : "#7782AA";
+  }, 1000)
 }
 
 const handleSportsToggle = () => {
   sportBtnActive.value = !sportBtnActive.value
+  homeBtnActive.value = false;
   searchBtnActive.value = false;
   mailMenuShow.value = false;
   casinoBtnActive.value = false;
@@ -496,6 +507,7 @@ const handleSportsToggle = () => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
   }, 200);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -504,10 +516,15 @@ const handleSportsToggle = () => {
   searchIconColor.value = searchBtnActive.value ? "white" : "#7782AA";
   rewardIconColor.value = rewardBtnActive.value ? "white" : "#7782AA";
   router.push({ name: "Sports" });
+  setTimeout(() => {
+    sportBtnActive.value = false
+    sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
+  }, 1000)
 }
 
 const goToSportPage = () => {
   sportBtnActive.value = !sportBtnActive.value
+  homeBtnActive.value = false;
   mailMenuShow.value = false;
   casinoBtnActive.value = false;
   navbarToggle.value = false;
@@ -520,6 +537,7 @@ const goToSportPage = () => {
     setNavBarToggle(navbarToggle.value)
     setMainBlurEffectShow(navbarToggle.value);
   }, 200);
+  homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
   menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
   casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
   sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
@@ -531,6 +549,7 @@ const goToSportPage = () => {
 
 const goToSharePage = () => {
   // bonusDashboardToggle.value = !bonusDashboardToggle.value;
+  homeBtnActive.value = false;
   navbarToggle.value = false;
   mailMenuShow.value = false;
   casinoBtnActive.value = false;
@@ -542,17 +561,20 @@ const goToSharePage = () => {
   setUserNavBarToggle(false);
   setMainBlurEffectShow(false);
   setNavBarToggle(false);
+
   // setTimeout(() => {
   //   setBonusDashboardDialogVisible(bonusDashboardToggle.value)
   //   setMainBlurEffectShow(bonusDashboardToggle.value);
   // }, 10);
-  menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
-  casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
-  sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
-  mailIconColor.value = mailMenuShow.value ? "white" : "#7782AA";
-  promoIconColor.value = promoBtnActive.value ? "white" : "#7782AA";
-  searchIconColor.value = searchBtnActive.value ? "white" : "#7782AA";
-  rewardIconColor.value = rewardBtnActive.value ? "white" : "#7782AA";
+
+  // homeIconColor.value = homeBtnActive.value ? "white" : "#7782AA"
+  // menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
+  // casinoIconColor.value = casinoBtnActive.value ? "white" : "#7782AA";
+  // sportIconColor.value = sportBtnActive.value ? "white" : "#7782AA";
+  // mailIconColor.value = mailMenuShow.value ? "white" : "#7782AA";
+  // promoIconColor.value = promoBtnActive.value ? "white" : "#7782AA";
+  // searchIconColor.value = searchBtnActive.value ? "white" : "#7782AA";
+  // rewardIconColor.value = rewardBtnActive.value ? "white" : "#7782AA";
 
   // sportBtnActive.value = false
   // mailMenuShow.value = false;
@@ -575,97 +597,21 @@ const goToSharePage = () => {
 
 const listContainer = ref<any>(null);
 
-const handleScroll = (event: any) => {
-  const vList = document.querySelector('.mobile-mail-menu');
-
-  if (!vList) {
-    return;
-  }
-
-  const listItems = Array.from(vList.querySelectorAll('.mail-item')) as Array<HTMLElement>;
-
-  const currentScrollPos = event.target.scrollTop;
-
-  const vListRect = vList.getBoundingClientRect();
-
-  console.log(currentScrollPos - prevScrollPos.value);
-
-  const delta = currentScrollPos - prevScrollPos.value;
-
-  listItems.forEach((listItem: HTMLElement) => {
-    const rect = listItem.getBoundingClientRect();
-
-    // If the current scroll position is greater than the previous one, the scrollbar is going down
-    if (currentScrollPos > prevScrollPos.value) {
-      console.log('Scrollbar is going down');
-      console.log(Number(listItem.style.scale));
-      if (Number(listItem.style.scale) > 0 && Number(listItem.style.scale) < 1) {
-        listItem.style.scale = `${Number(listItem.style.scale) + 0.001}`;
-      } else if (Number(listItem.style.scale) > 0 && Number(listItem.style.scale) < 0.8) {
-        listItem.style.scale = `${Number(listItem.style.scale) + 0.002}`;
-      }
-      // console.log(window.getComputedStyle(listItem).getPropertyValue('transform'));
-      const matrix = new DOMMatrix(window.getComputedStyle(listItem).getPropertyValue('transform'));
-      // console.log(matrix.m42);
-      if (matrix.m42 != 0) {
-        const translateY = matrix.m42 + delta >= 0 ? 0 : matrix.m42 + delta
-        listItem.style.transform = `translateY(${translateY}px)`
-      } else {
-        listItem.style.scale = "1";
-        listItem.style.opacity = "1"
-      }
-      // listItem.style.zIndex = `100`
-      // if (rect.top > 0 && rect.bottom < window.innerHeight - 85 && rect.bottom > window.innerHeight - 115) {
-      //   listItem.classList.remove('scale-mail-item');
-      //   listItem.classList.add('animation-mail-item');
-      // }
-    }
-    // Otherwise, the scrollbar is going up
-    else {
-      // console.log('Scrollbar is going up');
-      // if (rect.bottom > window.innerHeight - 83) {
-      // listItem.classList.add('scale-mail-item');
-      // listItem.classList.remove('animation-mail-item');
-      // }
-      const opacity = 0.8
-      if (rect.top > 0 && rect.bottom >= vListRect.bottom) {
-        const matrix = new DOMMatrix(window.getComputedStyle(listItem).getPropertyValue('transform'));
-        const translateY = matrix.m42 + delta >= 0 ? 0 : matrix.m42 + delta
-        listItem.style.transform = `translateY(${translateY}px)`
-        listItem.style.scale = `${Number(listItem.style.scale) - 0.01}`;
-        listItem.style.opacity = `${opacity}`
-        listItem.style.animation = '0.8s ease-in-out 0s 1 normal none running fadeIn'
-        // var keyframes = `@keyframes fadeIn {
-        //       from {
-        //         opacity: 0;
-        //         translateY(0px)
-        //       }
-        //       to {
-        //         opacity: 0.8;
-        //         translateY(${translateY}px)
-        //       }
-        // }`;
-        // var styleSheet = document.styleSheets[0];
-        // styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
-      }
-    }
-  });
-
-  if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight) {
-    console.log('Scrollbar reached the end');
-    listItems[listItems.length - 1].style.transform = `translateY(0px)`
-    listItems[listItems.length - 1].style.scale = "1";
-    listItems[listItems.length - 1].style.opacity = "1"
-  }
-
-  prevScrollPos.value = currentScrollPos;
-}
-
 const menuSvgTransform = (el: any) => {
   for (let node of el.children) {
     node.setAttribute('fill', menuIconColor.value)
     for (let subNode of node.children) {
       subNode.setAttribute('fill', menuIconColor.value)
+    }
+  }
+  return el
+}
+
+const homeSvgTransform = (el: any) => {
+  for (let node of el.children) {
+    node.setAttribute('fill', homeIconColor.value)
+    for (let subNode of node.children) {
+      subNode.setAttribute('fill', homeIconColor.value)
     }
   }
   return el
@@ -753,22 +699,16 @@ const menuBlurEffectShow = computed(() => {
   return getMenuBlurEffectShow.value
 })
 
-const handleResize = () => {
-  mailListHeight.value = window.innerHeight - 246;
-}
 
 onMounted(() => {
-  calculateBottomDistance();
-  window_height.value = window.innerHeight
-  setInterval(() => {
-    shareIconIndex.value = shareIconIndex.value + 1;
-  }, 5000);
-  mailCount.value = mailList.value.length
-  console.log(tempMailList.value.length);
-  mailListHeight.value = window.innerHeight - 246;
-  window.addEventListener("resize", handleResize);
-  // console.log("1111111111111111", window.innerHeight - container_c.value.getBoundingClientRect().bottom);
 })
+
+const goReferFriend = (index: number) => {
+  if (index == 1) {
+    setOverlayScrimShow(false);
+    setRefferalDialogShow(true);
+  }
+}
 </script>
 
 <template>
@@ -780,29 +720,32 @@ onMounted(() => {
     :class="menuBlurEffectShow ? 'menu-bg-blur' : ''"
     style="height: 60px"
   >
-    <v-btn class="menu-text-color" @click="handleNavbarToggle" :ripple="false">
+    <v-btn class="menu-text-color" @click="goHomePage" :ripple="false">
       <inline-svg
-        :src="icon_public_81"
+        :src="icon_public_151"
         width="20"
         height="20"
-        :transform-source="menuSvgTransform"
+        :transform-source="homeSvgTransform"
       ></inline-svg>
       <div
-        class="pt-1 text-600-12"
-        :style="{ color: navbarToggle ? 'white' : '#7782AA' }"
+        class="text-600-11 menu-text"
+        :class="homeIconColor == 'white' ? 'white' : 'gray'"
       >
-        {{ t("mobile_menu.menu") }}
+        {{ t("mobile_menu.home") }}
       </div>
     </v-btn>
-    <v-btn class="menu-text-color" @click="goHomePage">
+    <v-btn class="menu-text-color" @click="handleSearchToggle">
       <inline-svg
-        :src="icon_public_34"
+        :src="icon_public_94"
         width="20"
         height="20"
-        :transform-source="casinoSvgTransform"
+        :transform-source="searchSvgTransform"
       ></inline-svg>
-      <div class="pt-1 text-600-12">
-        {{ t("mobile_menu.casino") }}
+      <div
+        class="text-600-11 menu-text"
+        :class="searchIconColor == 'white' ? 'white' : 'gray'"
+      >
+        {{ t("mobile_menu.search") }}
       </div>
     </v-btn>
     <!-- <v-btn class="menu-text-color" @click="goToSharePage">
@@ -832,49 +775,64 @@ onMounted(() => {
         <transition name="fade">
           <inline-svg
             :src="selectedIcon"
-            width="22"
-            height="22"
+            width="20"
+            height="20"
             :transform-source="iconSvgTransform"
             class="m-menu-casino-body-icon"
             :key="selectedIcon"
           ></inline-svg>
         </transition>
-        <div
+        <!-- <div
           class="m-menu-circle"
           :style="{ transform: `rotate(${rotation}deg) translate(-50%, -50%)` }"
         >
           <div
             class="letter white"
             ref="casino_1"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.promo') }"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.promo'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.promo'),
+            }"
           >
             P
           </div>
           <div
             class="letter white"
             ref="casino_2"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.promo') }"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.promo'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.promo'),
+            }"
           >
             R
           </div>
           <div
             class="letter white"
             ref="casino_3"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.promo') }"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.promo'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.promo'),
+            }"
           >
             O
           </div>
           <div
             class="letter white"
             ref="casino_4"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.promo') }"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.promo'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.promo'),
+            }"
           >
             M
           </div>
           <div
             class="letter white"
             ref="casino_5"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.promo') }"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.promo'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.promo'),
+            }"
           >
             O
           </div>
@@ -882,97 +840,141 @@ onMounted(() => {
           <div
             class="letter white"
             ref="reward_1"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
-          >
-            S
-          </div>
-          <div
-            class="letter white"
-            ref="reward_2"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
-          >
-            E
-          </div>
-          <div
-            class="letter white"
-            ref="reward_3"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
-          >
-            A
-          </div>
-          <div
-            class="letter white"
-            ref="reward_4"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
-          >
-            R
-          </div>
-          <div
-            class="letter white"
-            ref="reward_5"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.casino'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.casino'),
+            }"
           >
             C
           </div>
           <div
             class="letter white"
-            ref="reward_6"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.search') }"
+            ref="reward_2"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.casino'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.casino'),
+            }"
           >
-            H
+            A
+          </div>
+          <div
+            class="letter white"
+            ref="reward_3"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.casino'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.casino'),
+            }"
+          >
+            S
+          </div>
+          <div
+            class="letter white"
+            ref="reward_4"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.casino'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.casino'),
+            }"
+          >
+            I
+          </div>
+          <div
+            class="letter white"
+            ref="reward_5"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.casino'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.casino'),
+            }"
+          >
+            N
+          </div>
+          <div
+            class="letter white"
+            ref="reward_6"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.casino'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.casino'),
+            }"
+          >
+            O
           </div>
           <div class="letter white" ref="mail_1"></div>
           <div
             class="letter white"
             ref="mail_2"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.mail') }"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.mail'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.mail'),
+            }"
           >
             M
           </div>
           <div
             class="letter white"
             ref="mail_3"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.mail') }"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.mail'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.mail'),
+            }"
           >
             A
           </div>
           <div
             class="letter white"
             ref="mail_4"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.mail') }"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.mail'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.mail'),
+            }"
           >
             I
           </div>
           <div
             class="letter white"
             ref="mail_5"
-            :class="{ 'opacity-1': selectedItem != t('mobile_menu.mail') }"
+            :class="{
+              'opacity-1': selectedCircleItem != t('mobile_menu.mail'),
+              'text-700-8': selectedCircleItem == t('mobile_menu.mail'),
+            }"
           >
             L
           </div>
           <div class="letter white" ref="mail_6"></div>
-        </div>
+        </div> -->
       </div>
     </v-btn>
-    <v-btn class="menu-text-color" @click="handleSportsToggle">
+    <v-btn
+      class="menu-text-color"
+      @click="handleSportsToggle"
+      v-warp-label="{ nodeName: 'menu-btn' }"
+    >
       <inline-svg
         :src="icon_public_40"
         width="20"
         height="20"
         :transform-source="sportSvgTransform"
       ></inline-svg>
-      <div class="pt-1 text-600-12">
+      <div
+        class="text-600-11 menu-text"
+        :class="sportIconColor == 'white' ? 'white' : 'gray'"
+      >
         {{ t("mobile_menu.sport") }}
       </div>
     </v-btn>
-    <v-btn class="menu-text-color" @click="handleRewardToggle">
+    <v-btn
+      class="menu-text-color"
+      @click="handleRewardToggle"
+      v-warp-label="{ nodeName: 'menu-btn' }"
+    >
       <inline-svg
         :src="icon_public_100"
         width="20"
         height="20"
         :transform-source="rewardSvgTransform"
       ></inline-svg>
-      <div class="pt-1 text-600-12">
+      <div
+        class="text-600-11 menu-text"
+        :class="rewardIconColor == 'white' ? 'white' : 'gray'"
+      >
         {{ t("mobile_menu.reward") }}
       </div>
     </v-btn>
@@ -981,26 +983,12 @@ onMounted(() => {
       content-class="mobile-mail-menu"
       :scrim="true"
       v-model:model-value="mailMenuShow"
-      transition="slide-y-transition"
     >
-      <template v-slot:activator="{ props }">
-        <!-- <v-btn class="menu-text-color" v-bind="props">
-          <div class="relative">
-            <inline-svg :src="icon_public_55" width="20" height="20" :transform-source="mailSvgTransform"></inline-svg>
-            <p class="chat-box-text">{{ mailCount }}</p>
-          </div>
-          <div class="text-600-12" :style="{ color: mailIconColor }">
-            {{ t("mobile_menu.mail") }}
-          </div>
-        </v-btn> -->
-      </template>
       <v-list
         theme="dark"
         bg-color="transparent"
         class="px-2 m-mail-list"
-        :height="tempMailList.length > 8 ? mailListHeight + 'px' : ''"
         :width="mobileWidth"
-        @scroll="handleScroll"
         style="box-shadow: none !important"
         :style="{ marginLeft: tempMailList.length > 8 ? '6px' : 'auto' }"
         ref="listContainer"
@@ -1008,6 +996,7 @@ onMounted(() => {
         <v-list-item
           height="36"
           :class="tempMailList.length > 8 ? 'm-mail-menu-title' : ''"
+          style="background: transparent"
         >
           <v-list-item-title class="ml-2">
             <div class="mail-header-text text-700-14">
@@ -1020,6 +1009,7 @@ onMounted(() => {
             class="mail-item"
             :value="mailItem.mail_content_1.content"
             height="64"
+            @click="goReferFriend(index)"
           >
             <template v-slot:prepend>
               <img :src="mailItem.icon" width="20" />
@@ -1058,20 +1048,6 @@ onMounted(() => {
   opacity: 0;
 }
 
-@keyframes mailScaling {
-  0% {
-    transform: scale(0.8);
-  }
-
-  80% {
-    transform: scale(1.1);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
 @keyframes animationMailScaling {
   0% {
     transform: scale(0.8);
@@ -1103,9 +1079,11 @@ onMounted(() => {
   .letter {
     position: absolute;
     transform-origin: center;
-    font-size: 7px;
-    font-family: Inter;
-    font-weight: 500;
+    font-size: 8px;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
+    font-weight: 400;
     word-wrap: break-word;
     // transform: rotateY(0deg) rotateZ(0deg);
     text-align: center;
@@ -1124,7 +1102,7 @@ onMounted(() => {
   }
 
   .letter:nth-child(3) {
-    transform: rotateZ(278deg) translateY(-27px) rotateZ(-184deg);
+    transform: rotateZ(278deg) translateY(-26px) rotateZ(-184deg);
   }
 
   .letter:nth-child(4) {
@@ -1192,6 +1170,10 @@ onMounted(() => {
   z-index: 2009 !important;
   overflow: inherit !important;
 
+  .v-btn {
+    flex: 1 !important;
+  }
+
   .v-btn--active {
     .v-btn__content {
       color: white;
@@ -1203,6 +1185,10 @@ onMounted(() => {
   }
 }
 
+// ::v-deep .v-bottom-navigation  {
+//   .v-bottom-navigation__content > .v-btn {
+//   }
+// }
 .m-mail-menu-overlay {
   bottom: 80px !important;
   overflow-x: hidden;
@@ -1299,10 +1285,19 @@ onMounted(() => {
 
 .menu-text-color {
   color: #7782aa;
+  padding: 0px !important;
+  min-width: unset !important;
 
   .v-btn__content {
     font-weight: 700 !important;
     font-size: 12px !important;
+    line-height: 20px;
+
+    .menu-text {
+      padding-top: 4px;
+      height: 20px;
+      line-height: 11px;
+    }
   }
 
   .chat-box-text {
@@ -1323,6 +1318,7 @@ onMounted(() => {
   left: unset !important;
   bottom: 0px !important;
   top: unset !important;
+  background: #23262f;
 
   // background: transparent !important;
   // box-shadow: none !important;
@@ -1333,6 +1329,9 @@ onMounted(() => {
     position: fixed;
     top: -36px;
     z-index: 100000;
+  }
+  .v-list-item {
+    background: #15161c;
   }
 
   .v-list-item-title {
@@ -1381,10 +1380,6 @@ onMounted(() => {
     background-color: #15161c !important;
     padding: 14px 20px !important;
     border-radius: 8px !important;
-    animation-name: mailScaling;
-    animation-duration: 0.3s;
-    animation-timing-function: linear;
-    animation-iteration-count: 1;
     // transition: transform 0.2s ease-in-out;
   }
 

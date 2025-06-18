@@ -20,6 +20,15 @@ import img_agentemblem_15 from "@/assets/affiliate/achievement/img_agentemblem_1
 import { type GetAchievementItem } from "@/interface/achievement";
 import { type ExplainItem } from "@/interface/achievement";
 import { achievementStore } from "@/store/achievement";
+import { toFormatNum } from '@/utils/numFormat';
+
+// 获取平台货币
+import { storeToRefs } from "pinia";
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -143,7 +152,7 @@ const achievementAward = async (achievement_item: ExplainItem, achievement_progr
               : 'color-414968'
           "
         >
-          R$ {{ item.award }}
+          {{ platformCurrency }} {{ toFormatNum(item.award) }}
         </p>
       </v-col>
       <v-col cols="7" class="text-center">
@@ -248,7 +257,7 @@ const achievementAward = async (achievement_item: ExplainItem, achievement_progr
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   .v-btn__content {
     color: #000;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -261,7 +270,7 @@ const achievementAward = async (achievement_item: ExplainItem, achievement_progr
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   .v-btn__content {
     color: #23262F;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;

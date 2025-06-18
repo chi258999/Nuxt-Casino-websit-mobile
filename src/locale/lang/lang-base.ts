@@ -19,6 +19,7 @@ export type langType = {
     forgotPasswordPage: {
       title: string,
       submit: string,
+      back_text: string
       notification: string,
     },
     submit_result: {
@@ -186,6 +187,24 @@ export type langType = {
       text_38: string
       text_39: string
       text_40: string
+      text_41: string
+      text_42: string
+      text_44: string
+      text_45: string
+      text_46: string
+      text_47: string
+      text_48: string
+      text_49: string
+      text_50: string
+      text_51: string
+      text_52: string
+      text_53: string
+      text_54: string
+      text_55: string
+      text_56: string
+      text_57: string
+      text_58: string
+      text_59: string
     }
     language: {
       title: string
@@ -231,7 +250,7 @@ export type langType = {
       bronze: string,
     }
   }
-  about: {    
+  about: {
     page: {
       text_1: string
       text_2: string
@@ -881,6 +900,7 @@ export type langType = {
       text_23: string
       text_24: string
       text_25: string
+      text_25_1:string
       text_26: string
       text_27: string
       text_28: string
@@ -1025,7 +1045,7 @@ export type langType = {
     live_win: {
       text_1: string
     }
-    button: {      
+    button: {
       all_game: string
       favorite: string
       recently_played: string
@@ -1073,6 +1093,8 @@ export type langType = {
       text_11: string
       text_12: string
       text_13: string
+      text_14: string
+      text_15: string
     }
     footer: {
       game: {
@@ -1086,6 +1108,7 @@ export type langType = {
         title: string
         menu_1: string
         menu_2: string
+        menu_3: string
       }
       about_us: {
         title: string
@@ -1108,9 +1131,11 @@ export type langType = {
       footer_6: {
         text: string
       }
-    }
+    },
+    viewall: string
   }
   mobile_menu: {
+    home: string
     menu: string
     casino: string
     share: string
@@ -1128,6 +1153,7 @@ export type langType = {
       text_4: string
       text_5: string
       text_6: string
+      text_7: string
     }
     deposit_currency: string
     choose_payment_method: string
@@ -1151,6 +1177,10 @@ export type langType = {
       confirm_success_text: string
       confirm_warning_text: string
     }
+    text_1: string
+    text_2: string
+    text_3: string
+    text_4: string
   }
   transaction_history: {
     type: {
@@ -1190,7 +1220,6 @@ export type langType = {
       confirm_warning_text: string
     }
     text_1: string
-    text_1_1: string
     text_2: string
     text_3: string
     text_4: string
@@ -1198,6 +1227,17 @@ export type langType = {
     other_text_1: string
     withdraw_btn_text: string
     withdraw_warning_text: string
+    text_5: string
+    text_6: string
+    text_7: string
+    text_8: string
+    text_9: string
+    text_10: string
+    text_11: string
+    text_12: string
+    text_13: string
+    text_14: string
+    text_15: string
   }
   mail_dialog: {
     header_text: string
@@ -1282,6 +1322,13 @@ export type langType = {
       text_9: string
       text_10: string
       text_11: string
+      text_12: string
+      text_13: string
+      text_14: string
+      text_15: string
+      text_16: string
+      text_17: string
+      text_18: string
       summary_text: string
       receive_btn_text: string
       total_profit_text: string
@@ -1346,6 +1393,8 @@ export type langType = {
     dialog: {
       title_text: string
       content_text_1: string
+      content_text_2: string
+      content_text_3: string
       determine_btn_text: string
       cancel_btn_text: string
     }
@@ -1358,6 +1407,7 @@ export type langType = {
       withdrawal: string
       vip: string
       referral: string
+      report: string
     }
     game_history: {
       game: string
@@ -1392,6 +1442,15 @@ export type langType = {
       text_9: string
       text_10: string
       text_11: string
+      text_12: string
+      text_13: string
+    },
+    report: {
+      invitationbonus: string
+      bettingCommission: string
+      date: string
+      user: string
+      bonus: string
     }
   }
   account: {
@@ -1445,13 +1504,18 @@ export type langType = {
         cancel_btn_text: string
       }
     }
+    text_1: string
+    text_2: string
+    text_3: string
   }
   refferal: {
     app_bar_title: string
     earn_btn_text: string
     dialog: {
       header: {
-        title_text: string
+        tabs_text1: string,
+        tabs_text2:string
+        title_text: string,
         body_text: string
         body_text_1: string
         body_text_2: string
@@ -1469,8 +1533,14 @@ export type langType = {
     description: {
       text_1: string
       text_2: string
-      term_text: string
       text_3: string
+      term_text_1:string
+      term_text_2:string
+      term_text_3:string
+      text_4: string
+      term_text_4: string
+      text_5:string
+      text_6: string
       back_btn_text: string
     }
   }
@@ -1593,6 +1663,12 @@ export type langType = {
       footer_text_2: string
       footer_text_3: string
       footer_text_4: string
+      footer_text_5: string
+      footer_text_6: string
+      footer_text_7: string
+      footer_text_8: string,
+      footer_text_9: string,
+      validation_text_1: string
     }
     roulette_bonus: {
       paid_text: string
@@ -1643,6 +1719,9 @@ export type langType = {
         text_14: string,
         text_15: string,
         text_16: string,
+        text_17:string,
+        text_18:string,
+        text_19:string,
       },
       bonus: {
         text_1: string,
@@ -1660,6 +1739,10 @@ export type langType = {
         text_4: string,
         text_5: string,
         text_6: string,
+      },
+      uprank: {
+        text_1: string,
+        text_2: string,
       },
       black_iron: {
         week: string,
@@ -1716,6 +1799,28 @@ export type langType = {
         cash: string,
         mosaic: string,
         withdraw: string
+      },
+      rule: {
+        text1: string,
+        text2: string,
+        text3: string,
+        text4: string,
+        text5: string,
+        text6: string,
+        text7: string,
+        text8: string,
+        text9: string,
+        text10: string,
+        text11: string,
+        text12: string,
+        text13: string,
+        text14: string,
+        text15: string,
+        text16: string,
+        text17: string,
+        text18: string,
+        text19: string,
+        text20: string,
       }
     }
   }
@@ -1914,6 +2019,69 @@ export type langType = {
     text_37: string
   },
   game_confirm: {
+    text_1: string
+    text_2: string
+    text_3: string
+  },
+  deposit_confirm: {
+    text_1: string
+    text_2: string
+    text_3: string
+    text_4: string
+    text_5: string
+    text_6: string
+    text_7: string
+    text_8: string
+    text_9: string
+    text_10: string
+    text_11: string
+    text_12: string
+    text_13: string
+  }
+  phone_binding_dialog: {
+    text_1: string
+    text_2: string
+    text_3: string
+    text_4: string
+    text_5: string
+    text_6: string
+    text_7: string
+    text_8: string
+    text_9: string
+  }
+  withdraw_info_dialog: {
+    text_1: string
+    text_2: string
+    text_3: string
+    text_4: string
+    text_5: string
+    text_6: string
+    text_7: string
+    text_8: string
+    text_9: string
+    text_10: string
+    text_11: string
+    text_12: string
+    text_13: string
+    text_14: string
+    text_15: string
+    text_16: string
+    text_17: string
+    text_18: string
+    text_19: string
+    text_20: string
+    text_21: string
+    text_22: string
+    text_23: string
+    text_24: string
+    text_25: string
+  }
+  order_dialog: {
+    text_1: string
+    text_2: string
+    text_3: string
+  }
+  game: {
     text_1: string
     text_2: string
   }

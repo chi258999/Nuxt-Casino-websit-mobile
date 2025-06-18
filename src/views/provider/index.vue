@@ -9,21 +9,46 @@ import { type Search } from "@/interface/game";
 import { gameStore } from "@/store/game";
 import { mailStore } from "@/store/mail";
 import { storeToRefs } from "pinia";
+import icon_public_10 from "@/assets/public/svg/icon_public_10.svg";
+import type * as Game from "@/interface/game";
+import MGameConfirm from "@/views/home/components/mobile/GameConfirm.vue";
+import AdjustClass from "@/utils/adjust";
+import { appBarStore } from "@/store/appBar";
+import EventToken from "@/constants/EventToken";
+import { NETWORK } from '@/net/NetworkCfg'
+import { Network } from '@/net/Network'
 
+const network: Network = Network.getInstance()
 const { t } = useI18n();
 const { width } = useDisplay();
 const route = useRoute();
 const router = useRouter();
 const { dispatchGameSearch } = gameStore();
+const { setFavoriteGameList } = gameStore();
+const { dispatchGameFavoriteList } = gameStore();
 const { setMailMenuShow } = mailStore();
 
 const currentPage = ref<number>(1);
-const limit = ref<number>(8);
+// 初始展示数量 6
+const initLimit = 6
+const limit = ref<number>(30);
 const loading = ref<boolean>(false);
 const searchLoading = ref<boolean>(false);
 const moreLoading = ref<boolean>(false);
 const slug = ref<any>("");
 const searchText = ref<string>("");
+const gameConfirmDialogShow = ref<boolean>(false);
+const is_favorite = ref<boolean>(false);
+const selectedGameItem = ref<Game.GameItem>({
+  id: 0,
+  name: "",
+  image: "",
+  provider: "",
+  provider_name: "",
+  producer: "",
+  is_demo: false
+})
+const gameSearchTotal = ref(0)
 
 const mobileWidth: any = computed(() => {
   return width.value;
@@ -39,70 +64,132 @@ const providerGames = computed(() => {
   return getGameSearchList.value;
 });
 
+const favoriteGameList = computed(() => {
+  const { getFavoriteGameList } = storeToRefs(gameStore());
+  return getFavoriteGameList.value
+})
+
+const currentTotal = computed(() => {
+  return limit.value * (currentPage.value - 1) + initLimit
+})
+
 const goToBackPage = () => {
   router.go(-1);
 };
 
 const handleMoreGame = async () => {
-  moreLoading.value = true;
+  // moreLoading.value = true;
   currentPage.value += 1;
-  await dispatchGameSearch(
-    "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + limit.value
-  );
-  providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
-  moreLoading.value = false;
+  // await dispatchGameSearch(
+  //   "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + limit.value + "&existing=" + providerGameList.value.length
+  // );
+  // providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
+  // moreLoading.value = false;
+  gameSearch("?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + limit.value + "&existing=" + providerGameList.value.length, moreLoading)
 };
 
-const handleEnterGame = async (id: number, name: string) => {
-  let replaceName = name.replace(/ /g, "-");
-  if (mobileWidth.value < 600) {
-    setMailMenuShow(true);
-  }
-  router.push(`/game/${id}/${replaceName}`);
-};
+// const handleEnterGame = async (id: number, name: string) => {
+//   let replaceName = name.replace(/ /g, "-");
+//   if (mobileWidth.value < 600) {
+//     setMailMenuShow(true);
+//   }
+//   router.push(`/game/${id}/${replaceName}`);
+// };
 
-const handleInputChange = async (event: any) => {
-  providerGameList.value = [];
-  searchLoading.value = true;
-  await dispatchGameSearch(
-    "?game_categories_slug=" + slug.value + "&search=" + searchText.value + "&page=" + currentPage.value + "&limit=" + limit.value
-  );
-  providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
-  searchLoading.value = false;
+const showGameConfirmationDialog = async (game_item: Game.GameItem) => {
+  setFavoriteGameList([]);
+  await dispatchGameFavoriteList();
+  is_favorite.value = favoriteGameList.value.some(item => item == game_item.id);
+  gameConfirmDialogShow.value = true;
+  selectedGameItem.value = game_item;
+}
+
+const { setControlLevel } = appBarStore();
+watch(gameConfirmDialogShow, (value: boolean) => {
+  setControlLevel(value)
+})
+
+// const handleInputChange = async (event: any) => {
+//   providerGameList.value = [];
+//   searchLoading.value = true;
+//   await dispatchGameSearch(
+//     "?game_categories_slug=" + slug.value + "&search=" + searchText.value + "&page=" + currentPage.value + "&limit=" + initLimit
+//   );
+//   providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
+//   searchLoading.value = false;
+// }
+
+const refreshGameFavoriteList = (id: string | number) => {
 }
 
 watch(searchText, async (value) => {
+  // console.log(slug.value, 'slug.value');
+
+  // 重置页数
+  currentPage.value = 1
   providerGameList.value = [];
   if (value) {
-    searchLoading.value = true;
-    await dispatchGameSearch(
-      "?game_categories_slug=" + slug.value + "&search=" + value + "&page=" + currentPage.value + "&limit=" + limit.value
-    );
-    providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
-    searchLoading.value = false;
+    // searchLoading.value = true;
+    // await dispatchGameSearch(
+    //   "?game_categories_slug=" + slug.value + "&search=" + value + "&page=" + currentPage.value + "&limit=" + initLimit
+    // );
+    // providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
+    // searchLoading.value = false;
+    gameSearch("?game_categories_slug=" + slug.value + "&search=" + value + "&page=" + currentPage.value + "&limit=" + initLimit, searchLoading)
   } else {
-    searchLoading.value = true;
-    await dispatchGameSearch(
-      "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + limit.value
-    );
-    providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
-    searchLoading.value = false;
+    // searchLoading.value = true;
+    // await dispatchGameSearch(
+    //   "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + initLimit
+    // );
+    // providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
+    // searchLoading.value = false;
+    gameSearch("?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + initLimit, searchLoading)
   }
 })
 
 onMounted(async () => {
+  AdjustClass.getInstance().adjustTrackEvent({
+    key: "PAGE_VIEW",
+    value: "provider",
+    params: "",
+  });
   loading.value = true;
   window.scrollTo({
     top: 0,
     behavior: "smooth",
   });
   slug.value = route.query.slug ? route.query.slug : "";
-  await dispatchGameSearch(
-    "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + limit.value
-  );
-  providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
-  loading.value = false;
+  // await dispatchGameSearch(
+  //   "?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + initLimit
+  // );
+  gameSearch("?game_categories_slug=" + slug.value + "&page=" + currentPage.value + "&limit=" + initLimit, loading)
+  // providerGameList.value = [...providerGameList.value, ...providerGames.value.list];
+
+  
+  
 });
+
+const gameSearch = (sub_api, apiloading) => {
+  apiloading.value = true;
+  network.request({
+    url: NETWORK.GAME_INFO.GAME_SEARCH + sub_api,
+    method: 'GET',
+    data: {},
+  })
+  .then((res: any) => {
+    if (res.code === 200) {
+      const { total, list } = res.data
+      providerGameList.value = [...providerGameList.value, ...list]
+      gameSearchTotal.value = total
+      console.log(providerGameList.value, 'providerGameList.value');
+      console.log(gameSearchTotal.value, 'gameSearchTotal.value');
+    }
+  }).catch(err => {
+    console.log(err);
+  }).finally(() => {
+    apiloading.value = false;
+  })
+}
 </script>
 
 <template>
@@ -117,94 +204,142 @@ onMounted(async () => {
       <div class="dot-0"></div>
     </div>
   </div>
-  <div class="mx-3 m-provider-loading-container" v-else>
-    <div class="d-flex align-center">
-      <v-btn
-        class="text-none m-provider-back-btn"
-        variant="elevated"
-        icon="mdi-chevron-left"
-        width="20"
-        height="20"
-        @click="goToBackPage"
-      >
-      </v-btn>
-      <p class="text-800-14 white ml-2">{{ t("provider.text_1") }}</p>
-    </div>
-    <v-text-field
-      :placeholder="t('provider.text_2')"
-      class="form-textfield dark-textfield mx-0"
-      variant="solo"
-      hide-details
-      filled
-      clearable
-      density="compact"
-      prepend-inner-icon="mdi-magnify"
-      color="#7782AA"
-      :class="mobileWidth < 600 ? 'm-provider-game-search-text' : ''"
-      v-model="searchText"
-    />
-    <template v-if="searchLoading">
-      <div class="m-provider-loading-container relative" style="padding-top: 400px">
-        <div class="loading-body">
-          <div class="dot-0"></div>
-          <div class="dot-1"></div>
-          <div class="dot-0"></div>
-        </div>
-      </div>
-    </template>
-    <template v-else>
-      <div
-        v-if="providerGameList.length == 0"
-        class="text-400-12 gray text-center mt-4"
-        style="width: 202px; margin: auto"
-      >
-        {{ t("provider.text_6") }}
-      </div>
-      <v-row class="ma-0">
-        <template v-for="(game, index) in providerGameList" :key="index">
-          <v-col
-            cols="4"
-            lg="2"
-            md="2"
-            sm="3"
-            class="px-1 relative py-0 m-provider-game-img"
-            v-if="index < 6 * currentPage"
+  <div v-else>
+    <!-- game confirmation dialog -->
+
+    <v-navigation-drawer
+      v-model="gameConfirmDialogShow"
+      location="bottom"
+      class="m-game-confirm-bar"
+      temporary
+      :touchless="true"
+      :style="{
+        height: 'unset',
+        bottom: '0px',
+        zIndex: 300000,
+        background: 'unset !important',
+      }"
+      v-if="mobileWidth < 600"
+    >
+      <template v-if="gameConfirmDialogShow">
+        <div class="m-game-confirm-drawer-close-button-box" style="display:flex; justify-content: flex-end;">
+          <v-btn
+            class="m-game-confirm-drawer-close-button"
+            icon="true"
+            width="24"
+            height="24"
+            @click="gameConfirmDialogShow = false"
           >
-            <ProgressiveImage
-              :src="game.image"
-              lazy-placeholder
-              blur="30"
-              @click="handleEnterGame(game.id, game.name)"
-            />
-          </v-col>
-        </template>
-      </v-row>
-      <div
-        class="mt-4 text-center text-700-14 gray"
-        v-if="providerGames.total > 6 && providerGames.total > 6 * currentPage"
-      >
-        {{ t("provider.text_3") }}
-        <font class="white">&nbsp;{{ 6 * currentPage }}&nbsp;</font>
-        {{ t("provider.text_4") }}
-        <font class="white">&nbsp;{{ providerGames.total }}&nbsp;</font>
-        {{ t("provider.text_5") }}
-      </div>
-      <v-btn
-        class="text-none more-btn-color mt-5 text-center"
-        variant="outlined"
-        :width="mobileWidth < 600 ? '100%' : 164"
-        :height="mobileWidth < 600 ? 41 : 48"
-        v-if="providerGames.total > 6 && providerGames.total > 6 * currentPage"
-        @click="handleMoreGame()"
-      >
-        <div v-if="!moreLoading">{{ t("home.more") }}</div>
-        <div class="m-more-loading-body" v-else>
-          <div class="dot-0"></div>
-          <div class="dot-1"></div>
-          <div class="dot-0"></div>
+            <inline-svg :src="icon_public_10" width="20" height="20"></inline-svg>
+          </v-btn>
         </div>
-      </v-btn>
-    </template>
+        <MGameConfirm
+          :selectedGameItem="selectedGameItem"
+          :is_favorite="is_favorite"
+          :gameConfirmDialogShow="gameConfirmDialogShow"
+          @closeGameConfirmDialog="gameConfirmDialogShow = false"
+          @refreshGameFavoriteList="refreshGameFavoriteList"
+        />
+      </template>
+    </v-navigation-drawer>
+    
+    <!-- 展示部分 -->
+    <div
+      class="mx-3 m-provider-loading-container"
+      :class="gameConfirmDialogShow ? 'm-provider-bg-blur' : ''"
+    >
+      <div class="d-flex align-center" @click="goToBackPage">
+        <v-btn
+          class="text-none m-provider-back-btn"
+          variant="elevated"
+          icon="mdi-chevron-left"
+          width="20"
+          height="20"
+        >
+        </v-btn>
+        <p class="text-800-14 white ml-2">{{ t("provider.text_1") }}</p>
+      </div>
+      <v-text-field
+        :placeholder="t('provider.text_2')"
+        class="form-textfield dark-textfield mx-0"
+        variant="solo"
+        hide-details
+        filled
+        clearable
+        density="compact"
+        prepend-inner-icon="mdi-magnify"
+        color="#7782AA"
+        :class="mobileWidth < 600 ? 'm-provider-game-search-text' : ''"
+        v-model="searchText"
+      />
+      <template v-if="searchLoading">
+        <div class="m-provider-loading-container relative" style="padding-top: 400px">
+          <div class="loading-body">
+            <div class="dot-0"></div>
+            <div class="dot-1"></div>
+            <div class="dot-0"></div>
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <div
+          v-if="providerGameList.length == 0"
+          class="text-400-12 gray text-center mt-4"
+          style="width: 202px; margin: auto"
+        >
+          {{ t("provider.text_6") }}
+        </div>
+        <v-row class="ma-0">
+          <template v-for="(game, index) in providerGameList" :key="index">
+            <v-col
+              cols="4"
+              lg="2"
+              md="2"
+              sm="3"
+              class="px-1 relative py-0 m-provider-game-img"
+              v-if="index < currentTotal"
+            >
+              <ProgressiveImage
+                :src="game.image"
+                lazy-placeholder
+                blur="30"
+                @click="showGameConfirmationDialog(game)"
+              >
+                <div class="text-overlay">
+                  <h2>{{ game.name }}</h2>
+                  <p>{{ game.provider_name }}</p>
+                </div>
+              </ProgressiveImage>
+            </v-col>
+          </template>
+        </v-row>
+        <div
+          class="mt-4 text-center text-700-14 gray"
+          v-if="gameSearchTotal > initLimit && gameSearchTotal > currentTotal"
+        >
+          {{ t("provider.text_3") }}
+          <font class="white">&nbsp;{{ currentTotal }}&nbsp;</font>
+          {{ t("provider.text_4") }}
+          <font class="white">&nbsp;{{ gameSearchTotal }}&nbsp;</font>
+          {{ t("provider.text_5") }}
+        </div>
+        <v-btn
+          class="text-none more-btn-color mt-5 text-center"
+          variant="outlined"
+          :width="mobileWidth < 600 ? '100%' : 164"
+          :height="mobileWidth < 600 ? 41 : 48"
+          v-if="gameSearchTotal > initLimit && gameSearchTotal > currentTotal"
+          @click="handleMoreGame()"
+        >
+          <div v-if="!moreLoading">{{ t("home.more") }}</div>
+          <div class="m-more-loading-body" v-else>
+            <div class="dot-0"></div>
+            <div class="dot-1"></div>
+            <div class="dot-0"></div>
+          </div>
+        </v-btn>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -236,9 +371,16 @@ onMounted(async () => {
     scale: 0.8;
   }
 }
+
+.m-provider-bg-blur {
+  filter: blur(3px);
+  -webkit-filter: blur(3px);
+}
+
 .m-provider-back-btn {
   background: transparent !important;
   box-shadow: unset !important;
+
   .v-icon {
     font-size: 20px !important;
     color: white;
@@ -283,7 +425,9 @@ onMounted(async () => {
   .v-field__input::placeholder {
     opacity: unset !important;
     color: #7782aa !important;
-    font-family: "Inter";
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
     font-size: 10px;
     font-style: normal;
     font-weight: 500;
@@ -292,6 +436,7 @@ onMounted(async () => {
 
   .v-input__control {
     height: 36px !important;
+
     .mdi:before {
       font-size: 19px !important;
       color: #7782aa !important;
@@ -332,7 +477,7 @@ onMounted(async () => {
   transform: translate(-50%, -50%);
   width: 48px;
   height: 46px;
-  background-image: url("@/assets/public/image/img_public_42.png");
+  background-image: url("@/assets/public/image/logo_public_06.png");
   background-repeat: no-repeat;
   background-size: contain;
   animation: opacityAnimation 0.6s ease-in infinite;
@@ -413,6 +558,38 @@ onMounted(async () => {
     border-radius: 16px;
     margin: 0px 4px;
     animation: expandReverseAnimation 0.6s 0.1s ease-in infinite;
+  }
+}
+
+/* 文字叠加在图片上 */
+.text-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 10px 12px 3px;
+  color: white;
+  border-bottom-left-radius: 8px 8px;
+  border-bottom-right-radius: 8px 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1;
+  }
+
+  p {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 4px;
+    overflow-wrap: break-word;
   }
 }
 </style>

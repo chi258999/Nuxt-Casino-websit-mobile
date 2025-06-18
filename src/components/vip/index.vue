@@ -9,6 +9,13 @@ import { type GetSpinData } from "@/interface/vip";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
+import { toFormatNum } from '@/utils/numFormat';
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay()
@@ -525,8 +532,8 @@ onMounted(() => {
                   <div class="d-flex mx-4">
                     <div class="white">{{ t("appBar.deposit") }}</div>
                     <div class="ml-auto">
-                      <Font class="text-gray">R$ {{ item.currentDepositAmount }} / </Font>
-                      <Font color="#F9BC01">R$ {{ item.totalDepositAmount }}</Font>
+                      <Font class="text-gray">{{ platformCurrency }} {{ toFormatNum(item.currentDepositAmount) }} / </Font>
+                      <Font color="#F9BC01">{{ platformCurrency }} {{ toFormatNum(item.totalDepositAmount) }}</Font>
                     </div>
                   </div>
                   <div>
@@ -542,8 +549,8 @@ onMounted(() => {
                   <div class="d-flex mx-4">
                     <div class="white">{{ t("appBar.wager") }}</div>
                     <div class="ml-auto">
-                      <Font class="text-gray">R$ {{ item.currentWagerAmount }} / </Font>
-                      <Font color="#623AEC">R$ {{ item.totalWagerAmount }}</Font>
+                      <Font class="text-gray">{{ platformCurrency }} {{ toFormatNum(item.currentWagerAmount) }} / </Font>
+                      <Font color="#623AEC">{{ platformCurrency }} {{ toFormatNum(item.totalWagerAmount) }}</Font>
                     </div>
                   </div>
                   <div>
@@ -831,11 +838,11 @@ onMounted(() => {
             <v-row class="pa-3 align-center">
               <v-col cols="6" md="3">
                 <p class="text-700-16 white">{{ t("vip.cashback_body.text_7") }}</p>
-                <p class="text-700-20 yellow mt-6">R$ 12345678910</p>
+                <p class="text-700-20 yellow mt-6">{{ platformCurrency }} 12345678910</p>
               </v-col>
               <v-col cols="6" md="5">
                 <p class="text-700-16 white">{{ t("vip.cashback_body.text_8") }}</p>
-                <p class="text-700-20 yellow mt-6">R$ 12345678910</p>
+                <p class="text-700-20 yellow mt-6">{{ platformCurrency }} 12345678910</p>
               </v-col>
               <v-col cols="12" md="4" class="text-right">
                 <v-btn
@@ -961,7 +968,7 @@ onMounted(() => {
               >
                 <img src="@/assets/public/image/img_public_11.png" />
                 <p class="text-500-12 text-gray mt-2">
-                  {{ t("vip.vip_mission_body.text_4") }}
+                  {{ t("vip.vip_mission_body.text_4", [platformCurrency]) }}
                 </p>
                 <p class="text-600-12 white mt-1">
                   {{ t("vip.vip_mission_body.text_5") }}
@@ -990,7 +997,7 @@ onMounted(() => {
                 </div>
                 <img src="@/assets/public/image/img_public_11.png" />
                 <p class="text-500-12 text-gray mt-2">
-                  {{ t("vip.vip_mission_body.text_4") }}
+                  {{ t("vip.vip_mission_body.text_4", [platformCurrency]) }}
                 </p>
                 <p class="text-600-12 white mt-1">
                   {{ t("vip.vip_mission_body.text_8") }}
@@ -1029,13 +1036,13 @@ onMounted(() => {
                 </div>
                 <img src="@/assets/public/image/img_public_11.png" />
                 <p class="text-500-12 text-gray mt-2">
-                  {{ t("vip.vip_mission_body.text_4") }}
+                  {{ t("vip.vip_mission_body.text_4", [platformCurrency]) }}
                 </p>
                 <p class="text-600-12 white mt-1">
                   {{ t("vip.vip_mission_body.text_8") }}
                 </p>
                 <p class="text-600-12 white mt-1">
-                  {{ t("vip.vip_mission_body.text_10") }}
+                  {{ t("vip.vip_mission_body.text_10", [platformCurrency]) }}
                 </p>
                 <div class="mission-progress-bg mx-4 mt-1">
                   <v-progress-linear
@@ -1073,7 +1080,7 @@ onMounted(() => {
                 </div>
                 <img src="@/assets/public/image/img_public_11.png" />
                 <p class="text-500-12 text-gray mt-2">
-                  {{ t("vip.vip_mission_body.text_4") }}
+                  {{ t("vip.vip_mission_body.text_4", [platformCurrency]) }}
                 </p>
                 <p class="text-600-12 white mt-1">
                   {{ t("vip.vip_mission_body.text_5") }}
@@ -1099,13 +1106,13 @@ onMounted(() => {
               >
                 <img src="@/assets/public/image/img_public_13.png" />
                 <p class="text-500-12 text-gray mt-2">
-                  {{ t("vip.vip_mission_body.text_4") }}
+                  {{ t("vip.vip_mission_body.text_4", [platformCurrency]) }}
                 </p>
                 <p class="text-600-12 white mt-1">
                   {{ t("vip.vip_mission_body.text_5") }}
                 </p>
                 <p class="text-600-12 white mt-1">
-                  {{ t("vip.vip_mission_body.text_10") }}
+                  {{ t("vip.vip_mission_body.text_10", [platformCurrency]) }}
                 </p>
                 <v-btn
                   class="text-none button-dark mission-btn-3 mt-6"
@@ -1162,7 +1169,7 @@ onMounted(() => {
                         <p class="text-500-16 text-gray">
                           {{ t("vip.benifit_description_body.text_4") }}
                         </p>
-                        <p class="text-700-20 yellow">R$ 100</p>
+                        <p class="text-700-20 yellow">{{ platformCurrency }} 100</p>
                       </div>
                     </v-col>
                     <v-col cols="6" class="d-flex justify-center">
@@ -1170,7 +1177,7 @@ onMounted(() => {
                         <p class="text-500-16 text-gray">
                           {{ t("vip.benifit_description_body.text_5") }}
                         </p>
-                        <p class="text-700-20 yellow">R$ 800</p>
+                        <p class="text-700-20 yellow">{{ platformCurrency }} 800</p>
                       </div>
                     </v-col>
                   </v-row>
@@ -1186,7 +1193,7 @@ onMounted(() => {
                       <p class="text-500-16 text-gray">
                         {{ t("vip.benifit_description_body.text_5") }}
                       </p>
-                      <p class="text-700-20 yellow">R$ 800</p>
+                      <p class="text-700-20 yellow">{{ platformCurrency }} 800</p>
                     </v-col>
                   </v-row>
                 </v-card>
@@ -1209,7 +1216,7 @@ onMounted(() => {
                         <p class="text-500-16 text-gray">
                           {{ t("vip.benifit_description_body.text_7") }}
                         </p>
-                        <p class="text-700-20 yellow">R$ 10</p>
+                        <p class="text-700-20 yellow">{{ platformCurrency }} 10</p>
                       </div>
                     </v-col>
                     <v-col cols="4">
@@ -1218,7 +1225,7 @@ onMounted(() => {
                           <p class="text-500-16 text-gray">
                             {{ t("vip.benifit_description_body.text_8") }}
                           </p>
-                          <p class="text-700-20 yellow">R$ 10 + 1 free spin</p>
+                          <p class="text-700-20 yellow">{{ platformCurrency }} 10 + 1 free spin</p>
                         </div>
                       </div>
                     </v-col>
@@ -1227,7 +1234,7 @@ onMounted(() => {
                         <p class="text-500-16 text-gray">
                           {{ t("vip.benifit_description_body.text_9") }}
                         </p>
-                        <p class="text-700-20 yellow">R$ 30 + 5 free spin</p>
+                        <p class="text-700-20 yellow">{{ platformCurrency }} 30 + 5 free spin</p>
                       </div>
                     </v-col>
                   </v-row>
@@ -1449,7 +1456,7 @@ onMounted(() => {
   .v-btn__content {
     color: #000;
     font-size: 16px;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-weight: 800;
   }
 }
@@ -1487,7 +1494,7 @@ onMounted(() => {
   .v-btn__content {
     color: #000;
     font-size: 20px;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-weight: 800;
   }
 }
@@ -1497,7 +1504,7 @@ onMounted(() => {
     color: var(--white-bg, #fff);
     text-align: center;
     font-size: 18px;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-weight: 600;
   }
 }
@@ -1531,7 +1538,7 @@ onMounted(() => {
   .v-btn__content {
     color: #000;
     font-size: 12px;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-weight: 700;
   }
 }
@@ -1541,7 +1548,7 @@ onMounted(() => {
     color: #6842ec;
     text-align: center;
     font-size: 12px;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-weight: 700;
   }
 }
@@ -1551,7 +1558,7 @@ onMounted(() => {
     color: #fff;
     text-align: center;
     font-size: 12px;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-weight: 700;
   }
 }
@@ -1651,7 +1658,7 @@ onMounted(() => {
   color: #fff;
   text-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.25);
   font-size: 40px;
-  font-family: Inter;
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: italic;
   font-weight: 700;
 }
@@ -1659,7 +1666,7 @@ onMounted(() => {
 .vip-footer-content {
   color: #fff;
   font-size: 24px;
-  font-family: Inter;
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: italic;
   font-weight: 700;
 }
@@ -1668,7 +1675,7 @@ onMounted(() => {
   .v-btn__content {
     color: #000;
     font-size: 20px;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-weight: 800;
   }
 }

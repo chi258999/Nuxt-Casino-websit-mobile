@@ -4,6 +4,13 @@ import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { inviteStore } from "@/store/invite";
 import { storeToRefs } from "pinia";
+import { toFormatNum } from '@/utils/numFormat';
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -38,7 +45,7 @@ onMounted(async () => {
           </v-col>
           <v-col cols="12" class="py-0">
             <p class="m-statistics-profit-cash-text">
-              R$ {{ personalInvitationInfo.total_profit }}
+              {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.total_profit) }}
             </p>
             <p class="m-statistics-profit-text pa-0 my-2">
               {{ t("affiliate.statistics.total_profit_text") }}
@@ -60,7 +67,7 @@ onMounted(async () => {
           class="ma-4 text-center m-statistics-card-border"
         >
           <p class="m-statistics-profit-cash-text-1" style="margin-top: 11px">
-            R$ {{ personalInvitationInfo.invitation_bonus }}
+            {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.invitation_bonus) }}
           </p>
           <p class="m-statistics-text-700 mb-1">
             {{ t("affiliate.invite.invitation_bonus") }}
@@ -72,7 +79,7 @@ onMounted(async () => {
           class="ma-4 text-center m-statistics-card-border"
         >
           <p class="m-statistics-profit-cash-text-1" style="margin-top: 11px">
-            R$ {{ personalInvitationInfo.bettion_commission }}
+            {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.bettion_commission) }}
           </p>
           <p class="m-statistics-text-700 mb-1">
             {{ t("affiliate.invite.betting_commision") }}
@@ -84,7 +91,7 @@ onMounted(async () => {
           class="ma-4 text-center m-statistics-card-border"
         >
           <p class="m-statistics-profit-cash-text-1" style="margin-top: 11px">
-            R$ {{ personalInvitationInfo.achievement_bonus }}
+            {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.achievement_bonus) }}
           </p>
           <p class="m-statistics-text-700 mb-1">
             {{ t("affiliate.invite.achivement_bonus") }}
@@ -148,7 +155,7 @@ onMounted(async () => {
               </v-col>
               <v-col cols="6" class="text-center">
                 <p class="text-800-26 yellow">
-                  R$ {{ personalInvitationInfo.profit_today.profit }}
+                  {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.profit_today.profit) }}
                 </p>
                 <p class="text-800-12 white pa-0 my-2">
                   {{ t("affiliate.statistics.tab.today.profit_today_text") }}
@@ -163,7 +170,7 @@ onMounted(async () => {
               class="ma-4 text-center m-statistics-card-border"
             >
               <p class="m-statistics-profit-cash-text-1" style="margin-top: 11px">
-                R$ {{ personalInvitationInfo.profit_today.bettion_commission }}
+                {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.profit_today.bettion_commission) }}
               </p>
               <p class="m-statistics-text-700 mb-1">
                 {{ t("affiliate.invite.betting_commision") }}
@@ -175,7 +182,7 @@ onMounted(async () => {
               class="ma-4 text-center m-statistics-card-border"
             >
               <p class="m-statistics-profit-cash-text-1" style="margin-top: 11px">
-                R$ {{ personalInvitationInfo.profit_today.invite_bonus }}
+                {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.profit_today.invite_bonus) }}
               </p>
               <p class="m-statistics-text-700 mb-1">
                 {{ t("affiliate.invite.invitation_bonus") }}
@@ -213,7 +220,7 @@ onMounted(async () => {
               </v-col>
               <v-col cols="6" class="text-center">
                 <p class="text-800-26 yellow">
-                  R$ {{ personalInvitationInfo.profit_week.profit }}
+                  {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.profit_week.profit) }}
                 </p>
                 <p class="text-800-12 white pa-0 my-2">
                   {{ t("affiliate.statistics.tab.week.profit_this_week_text") }}
@@ -228,7 +235,7 @@ onMounted(async () => {
               class="ma-4 text-center m-statistics-card-border"
             >
               <p class="m-statistics-profit-cash-text-1" style="margin-top: 11px">
-                R$ {{ personalInvitationInfo.profit_week.bettion_commission }}
+                {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.profit_week.bettion_commission) }}
               </p>
               <p class="m-statistics-text-700 mb-1">
                 {{ t("affiliate.invite.betting_commision") }}
@@ -240,7 +247,7 @@ onMounted(async () => {
               class="ma-4 text-center m-statistics-card-border"
             >
               <p class="m-statistics-profit-cash-text-1" style="margin-top: 11px">
-                R$ {{ personalInvitationInfo.profit_week.invite_bonus }}
+                {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.profit_week.invite_bonus) }}
               </p>
               <p class="m-statistics-text-700 mb-1">
                 {{ t("affiliate.invite.invitation_bonus") }}
@@ -278,7 +285,7 @@ onMounted(async () => {
               </v-col>
               <v-col cols="6" class="text-center">
                 <p class="text-800-26 yellow">
-                  R$ {{ personalInvitationInfo.profit_month.profit }}
+                  {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.profit_month.profit) }}
                 </p>
                 <p class="text-800-12 white pa-0 my-2">
                   {{ t("affiliate.statistics.tab.month.profit_this_month_text") }}
@@ -293,7 +300,7 @@ onMounted(async () => {
               class="ma-4 text-center m-statistics-card-border"
             >
               <p class="m-statistics-profit-cash-text-1" style="margin-top: 11px">
-                R$ {{ personalInvitationInfo.profit_month.bettion_commission }}
+                {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.profit_month.bettion_commission) }}
               </p>
               <p class="m-statistics-text-700 mb-1">
                 {{ t("affiliate.invite.betting_commision") }}
@@ -305,7 +312,7 @@ onMounted(async () => {
               class="ma-4 text-center m-statistics-card-border"
             >
               <p class="m-statistics-profit-cash-text-1" style="margin-top: 11px">
-                R$ {{ personalInvitationInfo.profit_month.invite_bonus }}
+                {{ platformCurrency }} {{ toFormatNum(personalInvitationInfo.profit_month.invite_bonus) }}
               </p>
               <p class="m-statistics-text-700 mb-1">
                 {{ t("affiliate.invite.invitation_bonus") }}
@@ -344,7 +351,7 @@ onMounted(async () => {
 
 .m-statistics-text_1 {
   color: var(--white-bg, #fff);
-  font-family: Inter;
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 700;
@@ -373,7 +380,7 @@ onMounted(async () => {
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
 
   .v-btn__content {
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;

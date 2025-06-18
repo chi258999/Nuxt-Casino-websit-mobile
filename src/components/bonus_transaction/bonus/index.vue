@@ -8,6 +8,14 @@ import { storeToRefs } from 'pinia';
 import { type GetBonusData } from "@/interface/bonus";
 import { bonusStore } from "@/store/bonus";
 import moment from "moment-timezone";
+import { toFormatNum } from '@/utils/numFormat';
+
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n()
 const { width } = useDisplay();
@@ -37,44 +45,44 @@ const userBonusList = computed(() => {
   return getBonusList.value
 })
 
-const totalAmount = ref<string>("R$ 1500.56");
-const withdrawAmount = ref<string>("R$ 855.79");
+const totalAmount = ref<string>(platformCurrency.value + " 1500.56");
+const withdrawAmount = ref<string>(platformCurrency.value + " 855.79");
 
 const bonusList = ref<Array<GetBonusData>>([
   {
     type: "Completion",
     rate: 100,
-    currentCash: "R$ 90000.00",
-    totalCash: "R$ 90000.00",
+    currentCash: platformCurrency.value + " 90000.00",
+    totalCash: platformCurrency.value + " 90000.00",
     restCash: "RRL 3000",
-    bonusCash: "R$ 6000",
+    bonusCash: platformCurrency.value + " 6000",
     expireDate: "2023/2/20"
   },
   {
     type: "Underway",
     rate: 50,
-    currentCash: "R$ 90000.00",
-    totalCash: "R$ 90000.00",
+    currentCash: platformCurrency.value + " 90000.00",
+    totalCash: platformCurrency.value + " 90000.00",
     restCash: "RRL 3000",
-    bonusCash: "R$ 6000",
+    bonusCash: platformCurrency.value + " 6000",
     expireDate: "2023/2/20"
   },
   {
     type: "Failure",
     rate: 0,
-    currentCash: "R$ 0.00",
-    totalCash: "R$ 67500.00",
+    currentCash: platformCurrency.value + " 0.00",
+    totalCash: platformCurrency.value + " 67500.00",
     restCash: "RRL 3000",
-    bonusCash: "R$ 0",
+    bonusCash: platformCurrency.value + " 0",
     expireDate: "2023/2/20"
   },
   {
     type: "Failure",
     rate: 50,
-    currentCash: "R$ 36000.00",
-    totalCash: "R$ 67500.00",
+    currentCash: platformCurrency.value + " 36000.00",
+    totalCash: platformCurrency.value + " 67500.00",
     restCash: "RRL 3000",
-    bonusCash: "R$ 0",
+    bonusCash: platformCurrency.value + " 0",
     expireDate: "2023/2/20"
   },
 ]);
@@ -90,7 +98,6 @@ const formsList = ref<Array<any>>([
 
 onMounted(async () => {
   await dispatchUserBonus();
-  console.log(userBonusList.value);
 })
 </script>
 <template>
@@ -107,7 +114,7 @@ onMounted(async () => {
         </template>
         <v-list-item-title class="ml-4">
           <div class="text-400-12 text-gray">{{ t("bonus.total_text") }}</div>
-          <div class="text-600-14 white">R$ {{ userBalance.amount }}</div>
+          <div class="text-600-14 white">{{ platformCurrency }} {{ toFormatNum(userBalance.amount) }}</div>
         </v-list-item-title>
         <!-- <template v-slot:append>
           <img src="@/assets/public/svg/btn_public_02.svg" />
@@ -119,7 +126,7 @@ onMounted(async () => {
         </template>
         <v-list-item-title class="ml-4">
           <div class="text-400-12 text-gray">{{ t("bonus.bonus_money_text") }}</div>
-          <div class="text-600-14 white">R$ {{ userBalance.availabe_balance }}</div>
+          <div class="text-600-14 white">{{ platformCurrency }} {{ toFormatNum(userBalance.availabe_balance) }}</div>
         </v-list-item-title>
       </v-list-item>
       <v-list-item class="bg-color-1 mt-4">
@@ -128,7 +135,7 @@ onMounted(async () => {
         </template>
         <v-list-item-title class="ml-4">
           <div class="text-400-12 text-gray">{{ t("bonus.withdraw_text") }}</div>
-          <div class="text-600-14 white">R$ {{ userBalance.availabe_balance }}</div>
+          <div class="text-600-14 white">{{ platformCurrency }} {{ toFormatNum(userBalance.availabe_balance) }}</div>
         </v-list-item-title>
       </v-list-item>
     </v-col>

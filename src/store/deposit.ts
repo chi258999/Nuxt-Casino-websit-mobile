@@ -17,7 +17,19 @@ export const depositStore = defineStore({
     depositSubmit: {} as any,
     pixInfo: {} as Deposit.GetPixInfo,
     pixInfoToggle: false as boolean,
-    depositHistoryItem: {} as Deposit.DepositHistoryResponse
+    depositHistoryItem: {
+      total_pages: 0,
+      record: []
+    } as Deposit.DepositHistoryResponse,
+    depositConfirmDialogToggle: false as boolean,
+    channelName: "spei" as string,
+    depositAmount: 0 as number,
+    depositOrderDialog: false as boolean,
+    socketDepositConfirmDialog: false as boolean,
+    timerValue: 0 as number,
+    depositOrderTimeRefresh: false as boolean,
+    depositCurrency: "MXN" as string,
+    moreDepositHistoryFlag: true as boolean
   }),
   getters: {
     getSuccess: (state) => state.success,
@@ -26,7 +38,16 @@ export const depositStore = defineStore({
     getDepositSubmit: (state) => state.depositSubmit,
     getPixInfo: (state) => state.pixInfo,
     getPixInfoToggle: (state) => state.pixInfoToggle,
-    getDepositHistoryItem: (state) => state.depositHistoryItem
+    getDepositHistoryItem: (state) => state.depositHistoryItem,
+    getDepositConfirmDialogToggle: (state) => state.depositConfirmDialogToggle,
+    getChannelName: (state) => state.channelName,
+    getDepositAmount: (state) => state.depositAmount,
+    getDepositOrderDialog: (state) => state.depositOrderDialog,
+    getTimerValue: (state) => state.timerValue,
+    getDepositOrderTimeRefresh: (state) => state.depositOrderTimeRefresh,
+    getDepositCurrency: (state) => state.depositCurrency,
+    getMoreDepositHistoryFlag: (state) => state.moreDepositHistoryFlag,
+    getSocketDepositConfirmDialog: (state) => state.socketDepositConfirmDialog
   },
   actions: {
     // set functions
@@ -48,8 +69,65 @@ export const depositStore = defineStore({
     setPixInfoToggle(pixInfoToggle: boolean) {
       this.pixInfoToggle = pixInfoToggle
     },
+    setSocketDepositConfirmDialog(socketDepositConfirmDialog: boolean) {
+      this.socketDepositConfirmDialog = socketDepositConfirmDialog
+    },
     setDepositHistoryItem(depositHistoryItem: Deposit.DepositHistoryResponse) {
-      this.depositHistoryItem = depositHistoryItem
+      if (depositHistoryItem.record.length < 9) {
+        this.moreDepositHistoryFlag = false;
+      } else {
+        this.moreDepositHistoryFlag = true;
+      }
+
+      const baseArr = [0,1,2,3,4,5,6,7]
+      let record = depositHistoryItem.record.slice(0, 8)
+      baseArr.map((item) => {
+        if(record[item]) {
+          this.depositHistoryItem.record.push(record[item])
+        } else {
+          this.depositHistoryItem.record.push({
+            amount: '',
+            created_at: 0,
+            id: '' as unknown as number,
+            note: "",
+            type: '',
+            status: NaN,
+            currency: ''
+          })
+          return {}
+        }
+      })
+
+      // this.depositHistoryItem.record = [...this.depositHistoryItem.record, ...recordList]
+      this.depositHistoryItem.total_pages = depositHistoryItem.total_pages;
+    },
+    setDepositHistoryIteEmpty() {
+      this.depositHistoryItem = {
+        record: [],
+        total_pages: 0
+      }
+      this.moreDepositHistoryFlag = false;
+    },
+    setDepositConfirmDialogToggle(depositConfirmDialogToggle: boolean) {
+      this.depositConfirmDialogToggle = depositConfirmDialogToggle
+    },
+    setChannelName(channelName: string) {
+      this.channelName = channelName;
+    },
+    setDepositAmount(depositAmount: number) {
+      this.depositAmount = depositAmount
+    },
+    setDepositOrderDialog(depositOrderDialog: boolean){
+      this.depositOrderDialog = depositOrderDialog
+    },
+    setTimerValue(timerValue: number) {
+      this.timerValue = timerValue
+    },
+    setDepositOrderTimeRefresh(depositOrderTimeRefresh: boolean){
+      this.depositOrderTimeRefresh = depositOrderTimeRefresh
+    },
+    setDepositCurrency(depositCurrency: string) {
+      this.depositCurrency = depositCurrency;
     },
     // user deposit configuration
     async dispatchUserDepositCfg() {
@@ -62,7 +140,8 @@ export const depositStore = defineStore({
           this.setSuccess(true);
           this.setDepositCfg(response.data);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, {}, next, 1, 4);
@@ -78,7 +157,8 @@ export const depositStore = defineStore({
           this.setSuccess(true);
           this.setDepositSubmit(response.data);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, data, next, 1);
@@ -94,7 +174,8 @@ export const depositStore = defineStore({
           this.setSuccess(true);
           this.setDepositHistoryItem(response.data);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, data, next, 1);

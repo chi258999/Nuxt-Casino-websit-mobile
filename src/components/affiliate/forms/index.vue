@@ -7,6 +7,13 @@ import moment from "moment-timezone";
 import { storeToRefs } from "pinia";
 import { appBarStore } from "@/store/appBar";
 
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
+
 const { t } = useI18n();
 const { width } = useDisplay();
 
@@ -45,62 +52,62 @@ const formsList = ref<Array<any>>([
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
   {
     time: "04/08 12:29:42",
     user: "User6910821714",
-    bonus: "R$ 12",
+    bonus: `${ platformCurrency.value } 12`,
   },
 ]);
 
@@ -328,7 +335,7 @@ tbody {
 }
 
 .el-date-editor .el-range-input {
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -352,7 +359,7 @@ tbody {
 .date-picker-background {
   .el-picker-panel {
     background-color: #181522;
-    font-family: "Inter";
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-style: normal;
     font-weight: 600;
     font-size: 12px;

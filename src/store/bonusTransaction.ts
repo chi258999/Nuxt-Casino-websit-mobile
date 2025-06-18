@@ -35,13 +35,38 @@ export const bonusTransactionStore = defineStore({
       this.transactionTab = transactionTab;
     },
     setTransactionHistoryItem(transactionHistoryItem: TransactionHistoryResponse) {
-      if (transactionHistoryItem.record.length == 0) {
+      if (transactionHistoryItem.record.length < 9) {
         this.moreTransactionHistoryFlag = false;
       } else {
-        this.transactionHistoryItem.record = [...this.transactionHistoryItem.record, ...transactionHistoryItem.record]
-        this.transactionHistoryItem.total_pages = transactionHistoryItem.total_pages;
         this.moreTransactionHistoryFlag = true;
       }
+
+      const baseArr = [0,1,2,3,4,5,6,7]
+      let record = transactionHistoryItem.record.slice(0, 8)
+      baseArr.map((item) => {
+        if(record[item]) {
+          this.transactionHistoryItem.record.push(record[item])
+        } else {
+          this.transactionHistoryItem.record.push({
+            amount: '' as unknown as number,
+            balance: 0,
+            created_at: 0,
+            id: "",
+            note: "",
+            type: 0,
+            status: ''
+          })
+          return {}
+        }
+      })
+      this.transactionHistoryItem.total_pages = transactionHistoryItem.total_pages;
+    },
+    setTransactionHistoryItemEmpty() {
+      this.transactionHistoryItem = {
+        record: [],
+        total_pages: 0,
+      }
+      this.moreTransactionHistoryFlag = false;
     },
     setSuccess(success: boolean) {
       this.success = success
@@ -60,7 +85,8 @@ export const bonusTransactionStore = defineStore({
           this.setSuccess(true);
           this.setTransactionHistoryItem(response.data);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, data, next, 1);

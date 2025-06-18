@@ -5,6 +5,9 @@ import type * as Game from "@/interface/game";
 import { handleException } from './exception';
 import { authStore } from "@/store/auth";
 import { appBarStore } from "@/store/appBar";
+import Cookies from "js-cookie";
+import CacheKey from "@/constants/cacheKey";
+import { refferalStore } from "@/store/refferal";
 
 type dialogType = "login" | "signup";
 
@@ -43,7 +46,8 @@ export const gameStore = defineStore({
             high_rollers: [],
             lucky_bets: []
         } as Game.GameBigWinData,
-        favoriteGameList: [] as Array<number | string>
+        favoriteGameList: [] as Array<number | string>,
+        isScroll: true as boolean, // 是否需要打开横屏遮罩监听
     }),
     getters: {
         getSuccess: (state) => state.success,
@@ -63,11 +67,16 @@ export const gameStore = defineStore({
         getLanguage: (state) => state.language,
         getGameBigWinItem: (state) => state.gameBigWinItem,
         getFavoriteGameList: (state) => state.favoriteGameList,
+        getIsScroll: (state) => state.isScroll,
     },
     actions: {
         // set functions
         setSuccess(success: boolean) {
             this.success = success
+        },
+        // 设置是否显示横屏遮罩层
+        setIsScroll(param: boolean) {
+            this.isScroll = param
         },
         setErrorMessage(message: string) {
             this.errMessage = message
@@ -89,8 +98,12 @@ export const gameStore = defineStore({
         },
         setSearchTextList(searchText: string) {
             let sameSearchText = this.searchTextList.filter(item => item == searchText)
+            console.log(sameSearchText, 'sameSearchTextsameSearchTextsameSearchTextsameSearchText');
+            
             if (sameSearchText.length == 0) {
                 this.searchTextList.push(searchText);
+                // 过滤掉['']空数据情况
+                this.searchTextList = this.searchTextList.filter(item => item !== "");
             }
         },
         removeSearchTextList(index: number) {
@@ -126,16 +139,36 @@ export const gameStore = defineStore({
         openDialog(type: dialogType) {
             const { setAuthModalType } = authStore();
             const { setOverlayScrimShow } = appBarStore();
+            const { setAuthDialogVisible } = authStore();
             setAuthModalType(type);
+            setAuthDialogVisible(true);
             setOverlayScrimShow(false);
         },
+        openDepositDialog() {
+            const { setDepositWithdrawToggle } = appBarStore();
+            const { setNavBarToggle } = appBarStore();
+            const { setUserNavBarToggle } = appBarStore();
+            const { setDepositDialogToggle } = appBarStore();
+            const { setCashDialogToggle } = appBarStore();
+            setDepositWithdrawToggle(true);
+            setNavBarToggle(false);
+            setUserNavBarToggle(false);
+            setDepositDialogToggle(true);
+            setCashDialogToggle(true);
+        },
         closeKill() {
-            this.betby?.kill();
+            (this.betby as any)?.kill();
         },
         setGameBigWinItem(gameBigWinItem: Game.GameBigWinData) {
             this.gameBigWinItem = gameBigWinItem;
         },
+        updateOptionsBy(options:any){
+            (this.betby as any)?.updateOptions(options);
+        },
         async getGameBetbyInit() {
+            const { setRefferalAppBarShow } = refferalStore();
+            setRefferalAppBarShow(false)
+            await this.dispatchGameEnter({ id: '9999', demo: false });
             this.betby = new BTRenderer().initialize(
                 {
                     token: this.enterGameItem.reserve || '',
@@ -144,21 +177,34 @@ export const gameStore = defineStore({
                     brand_id: "2331516940205559808",
                     betSlipOffsetTop: 0,
                     betslipZIndex: 999,
-                    themeName: "default",
-                    onLogin: () => {
-                        this.openDialog('login');
+                    stickyTop: 0,
+                    themeName: "demo-green-dark-table",
+                    onLogin: async () => {
+                        if (Cookies.get(CacheKey.TOKEN) == "" || !Cookies.get(CacheKey.TOKEN)) {
+                            this.openDialog('login');
+                        } else {
+                            this.closeKill();
+                            await this.getGameBetbyInit();
+                        }
                     },
                     onRegister: () => {
                         this.openDialog('signup');
                     },
                     onTokenExpired: async () => {
-                        this.closeKill();
-                        await this.dispatchGameEnter({ id: '9999' });
-                        await this.getGameBetbyInit();
+                        // this.closeKill();
+                        // await this.getGameBetbyInit();
+                        await this.dispatchGameEnter({ id: '9999', demo: false });
+                        return this.enterGameItem.reserve;
                     },
                     onSessionRefresh: async () => {
                         this.closeKill();
                         await this.getGameBetbyInit();
+                    },
+                    onRecharge: () => {
+                        this.openDepositDialog();
+                    },
+                    onRouteChange:()=>{
+                        console.log('路由切换','onRouteChangeonRouteChangeonRouteChangeonRouteChange')
                     }
                 });
         },
@@ -177,7 +223,8 @@ export const gameStore = defineStore({
                         this.setGameCategories(response.data);
                     }
                 } else {
-                    this.setErrorMessage(handleException(response.code));
+                    // this.setErrorMessage(handleException(response.code));
+                    this.setErrorMessage(response.message);
                 }
             }
             await network.sendMsg(route, {}, next, 1, 4);
@@ -191,10 +238,12 @@ export const gameStore = defineStore({
             const next = (response: Game.GetGameSearchResponse) => {
                 if (response.code == 200) {
                     this.setSuccess(true);
+                    
                     this.setGameSearchList(response.data);
                 } else {
                     this.setGameSearchList({ list: [], total: 0 });
-                    this.setErrorMessage(handleException(response.code));
+                    // this.setErrorMessage(handleException(response.code));
+                    this.setErrorMessage(response.message);
                 }
             }
             await network.sendMsg(route, {}, next, 1, 4);
@@ -211,7 +260,8 @@ export const gameStore = defineStore({
                     this.setGameSearchList(response.data);
                 } else {
                     this.setGameSearchList({ list: [], total: 0 });
-                    this.setErrorMessage(handleException(response.code));
+                    // this.setErrorMessage(handleException(response.code));
+                    this.setErrorMessage(response.message);
                 }
             }
             await network.sendMsg(route, data, next, 1, 4);
@@ -226,7 +276,8 @@ export const gameStore = defineStore({
                 if (response.code == 200) {
                     this.setSuccess(true);
                 } else {
-                    this.setErrorMessage(handleException(response.code));
+                    // this.setErrorMessage(handleException(response.code));
+                    this.setErrorMessage(response.message);
                 }
             }
             await network.sendMsg(route, data, next, 1);
@@ -240,12 +291,33 @@ export const gameStore = defineStore({
             const next = (response: Game.GetGameEnterResponse) => {
                 if (response.code == 200) {
                     this.setSuccess(true);
+                    this.setErrorMessage("");
                     this.setGameEnterItem(response.data);
                 } else {
-                    this.setErrorMessage(handleException(response.code));
+                    // this.setErrorMessage(handleException(response.code));
+                    this.setErrorMessage(response.message);
                 }
             }
             await network.sendMsg(route, data, next, 1);
+        },
+        async dispatchGameEnterRequest(data: Game.GameEnterBody) {
+            const route: string = NETWORK.GAME_INFO.GAME_ENTER;
+            const network: Network = Network.getInstance();
+            return new Promise(async (resolve, reject) => {
+                network.request({
+                    url: route,
+                    method: 'POST',
+                    data
+                }).then((response:any )=> {
+                    if (response.code == 200) {
+                        resolve(response.data)
+                    } else {
+                        reject(response)
+                    }
+                }).catch((err:any) => {
+                    reject(err)
+                })
+            })
         },
         // game history api response
         async dispatchGameHistory(data: any) {
@@ -258,7 +330,8 @@ export const gameStore = defineStore({
                     this.setSuccess(true);
                     this.setGameHistoryItem(response.data);
                 } else {
-                    this.setErrorMessage(handleException(response.code));
+                    // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
                 }
             }
             await network.sendMsg(route, data, next, 1);
@@ -274,7 +347,8 @@ export const gameStore = defineStore({
                     this.setSuccess(true);
                     this.setUserSpinPage(response.data);
                 } else {
-                    this.setErrorMessage(handleException(response.code));
+                    // this.setErrorMessage(handleException(response.code));
+                    this.setErrorMessage(response.message);
                 }
             }
             await network.sendMsg(route, {}, next, 1, 4);
@@ -290,7 +364,8 @@ export const gameStore = defineStore({
                     this.setSuccess(true);
                     this.setUserSpin(response.data);
                 } else {
-                    this.setErrorMessage(handleException(response.code));
+                    // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
                 }
             }
             await network.sendMsg(route, {}, next, 1);
@@ -306,7 +381,8 @@ export const gameStore = defineStore({
                     this.setSuccess(true);
                     this.setGameBigWinItem(response.data);
                 } else {
-                    this.setErrorMessage(handleException(response.code));
+                    // this.setErrorMessage(handleException(response.code));
+                    this.setErrorMessage(response.message);
                 }
             }
             await network.sendMsg(route, {}, next, 1, 4);
@@ -322,7 +398,8 @@ export const gameStore = defineStore({
                     this.setSuccess(true);
                     this.setFavoriteGameList(response.data);
                 } else {
-                    this.setErrorMessage(handleException(response.code));
+                    // this.setErrorMessage(handleException(response.code));
+                    this.setErrorMessage(response.message);
                 }
             }
             await network.sendMsg(route, {}, next, 1, 4);

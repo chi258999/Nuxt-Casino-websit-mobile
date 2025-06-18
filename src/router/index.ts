@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 
 const routes = [
   {
@@ -9,6 +9,9 @@ const routes = [
         path: '',
         name: 'Dashboard',
         component: () => import('@/views/home/index.vue'),
+        meta: {
+          keepAlive: true
+        }
       },
     ],
   },
@@ -68,7 +71,7 @@ const routes = [
     ],
   },
   {
-    path: '/game/:id?/:name?/:demo?',
+    path: '/game-:id?-:name?-:demo?',
     component: () => import('@/layouts/index.vue'),
     children: [
       {
@@ -127,11 +130,48 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/third-parth-vendor',
+    component: () => import('@/layouts/index.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Third_Parth_Vendor',
+        component: () => import('@/views/third_parth_vendor/index.vue'),
+      },
+    ],
+  }
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_PUBLIC_PATH),
+  history: createWebHistory(),
+  // history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),
   routes,
+  async scrollBehavior(to, from, savePosition) {
+    console.log(to) // to：要进入的目标路由对象，到哪里去
+    console.log(from) // from：离开的路由对象，哪里来
+    // console.log(savePosition) // savePosition：会记录滚动条的坐标，点击前进/后退的时候记录值{x:?,y:?}
+    // console.log(router) // savePosition：会记录滚动条的坐标，点击前进/后退的时候记录值{x:?,y:?}
+
+    // 不缓存的
+    if(!to.meta.keepAlive) {
+      if (from.path === '/about-us') {
+        if (to.path === '/about-us') {
+          return { top: 0, left: 0 }
+        } else {
+          if (savePosition && savePosition.top > 0) {
+            localStorage.setItem('scrollPosition', JSON.stringify(savePosition))
+          }
+        }
+      }
+      if(from.path === '/') {
+        if (to.path === '/about-us') {
+          return { top: 0, left: 0 }
+        }
+      }
+      return { top: 0, left: 0}
+    } 
+  }
 })
 
 export default router

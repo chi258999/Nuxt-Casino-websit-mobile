@@ -15,6 +15,8 @@ import MPaymentMethods from "@/components/about_us/payment_methods/mobile/index.
 import MReferralSystem from "@/components/about_us/referral_system/mobile/index.vue";
 import MAMLPolicy from "@/components/about_us/aml_policy/mobile/index.vue";
 import MKYCPolicy from "@/components/about_us/kyc_policy/mobile/index.vue";
+import AdjustClass from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -77,24 +79,32 @@ watch(
     if (newQuery.index) {
       activeMenuIndex.value = newQuery.index;
       selectedMenuItem.value = menuList.value[activeMenuIndex.value];
-      window.scrollTo({
+      window.scroll({
         top: 0,
         behavior: "smooth",
       });
+      //document.getElementsByClassName("m-about-container")[0].scrollIntoView({behavior:"smooth"});
     }
   }
 );
 
 onMounted(() => {
+  AdjustClass.getInstance().adjustTrackEvent({
+    key: "PAGE_VIEW",
+    value: "about_us",
+    params: "",
+  });
+
   if (route.query.index) {
     activeMenuIndex.value = route.query.index;
     selectedMenuItem.value = menuList.value[activeMenuIndex.value];
   }
   setActiveAboutIndex(activeMenuIndex.value);
-  window.scrollTo({
+  window.scroll({
     top: 0,
     behavior: "smooth",
   });
+  //document.getElementsByClassName("m-about-container")[0].scrollIntoView({behavior:"smooth"});
 });
 </script>
 
@@ -150,7 +160,7 @@ onMounted(() => {
 
 <style lang="scss">
 .m-about-container {
-  background: #1D2027;
+  background: #1d2027;
   margin: -40px 0px 0px 0px;
   padding-bottom: 20px;
   border-radius: 8px;
@@ -159,7 +169,7 @@ onMounted(() => {
 .m-about-main-body {
   margin-top: 8px;
   border-radius: 8px;
-  background: var(--BG-5-1C1929, #15161C);
+  background: var(--BG-5-1C1929, #15161c);
 }
 
 .m-about-menu-card {
@@ -186,7 +196,7 @@ onMounted(() => {
   align-self: center;
   top: -25px;
   left: 50%;
-  border: 15px solid #1D2027;
+  border: 15px solid #1d2027;
   border-right-color: transparent;
   border-left-color: transparent;
   border-top-color: transparent;
@@ -195,7 +205,7 @@ onMounted(() => {
 }
 
 .m-about-tab-body {
-  background: #1D2027;
+  background: #1d2027;
   height: 48px;
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   border-radius: 8px;

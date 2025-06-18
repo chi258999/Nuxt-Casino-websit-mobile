@@ -7,6 +7,8 @@ import { achievementStore } from "@/store/achievement";
 import { authStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
 import MAgentRealization from "./components/AgentRealization.vue";
+import AdjustClass from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -64,6 +66,11 @@ const achievementItem = computed(() => {
 });
 
 onMounted(async () => {
+  AdjustClass.getInstance().adjustTrackEvent({
+    key: "PAGE_VIEW",
+    value: "agent_grade",
+    params: "",
+  });
   if (token.value) {
     await dispatchAchievementList();
   } else {
@@ -75,14 +82,14 @@ onMounted(async () => {
 <template>
   <div class="pb-4">
     <v-row class="mt-1 justify-center mx-16 mb-0">
-      <div class="text-800-14 white text-center relative">
+      <div class="text-800-14 white text-center">
         {{ t("affiliate.invite.commission_title_text") }}
         <v-menu v-model="commissionMenuShow">
           <template v-slot:activator="{ props }">
             <img
               src="@/assets/public/svg/icon_public_22.svg"
               v-bind="props"
-              style="cursor: pointer; position: absolute; top: 2px; right: -21px"
+              style="cursor: pointer; position: absolute; top: 7px; right: 10px"
               width="16"
             />
           </template>

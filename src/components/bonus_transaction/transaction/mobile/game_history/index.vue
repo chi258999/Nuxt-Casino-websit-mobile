@@ -6,6 +6,12 @@ import { useDisplay } from "vuetify";
 import router from "@/router";
 import { appBarStore } from "@/store/appBar";
 import { storeToRefs } from "pinia";
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -14,29 +20,29 @@ const formsList = ref<Array<any>>([
   {
     game: "Crash",
     date: "2023/1/29 17:50:36",
-    amount: "R$ 1500000.00",
+    amount: platformCurrency.value + " 1500000.00",
     multilier: "2.00x",
     betId: "re54er35sgf",
     status: "win",
-    profit: "R$ 300000000.00",
+    profit: platformCurrency.value + " 300000000.00",
   },
   {
     game: "Crash",
     date: "2023/1/29 17:50:36",
-    amount: "R$ 1500000.00",
+    amount: platformCurrency.value + " 1500000.00",
     multilier: "2.00x",
     betId: "re54er35sgf",
     status: "win",
-    profit: "R$ 3000000.00",
+    profit: platformCurrency.value + " 3000000.00",
   },
   {
     game: "Crash",
     date: "2023/1/29 17:50:36",
-    amount: "R$ 1500000.00",
+    amount: platformCurrency.value + " 1500000.00",
     multilier: "2.00x",
     betId: "re54er35sgf",
     status: "loss",
-    profit: "- R$ 300000000.00",
+    profit: `- ${platformCurrency.value} 300000000.00`,
   },
   {},
   {},
@@ -446,7 +452,7 @@ const handleNext = () => {};
   .m-bonus-transaction-tooltip {
     font-size: 12px;
     font-weight: 400;
-    font-family: "Inter";
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   }
 }
 .m-bonus-transaction-table-btn {

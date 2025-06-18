@@ -4,6 +4,7 @@ import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { appBarStore } from "@/store/appBar";
 import MSuspendDialog from "@/components/account/suspend_account/dialog/mobile/index.vue";
+import { liveChatStore } from "@/store/liveChat";
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -11,6 +12,7 @@ const { setMainBlurEffectShow } = appBarStore();
 const { setHeaderBlurEffectShow } = appBarStore();
 const { setMenuBlurEffectShow } = appBarStore();
 const { setOverlayScrimShow } = appBarStore();
+const { setLiveChatMaximize } = liveChatStore();
 
 const mobileWidth: any = computed(() => {
   return width.value;
@@ -37,6 +39,11 @@ const confirmDailogShow = () => {
   setMenuBlurEffectShow(true);
   setOverlayScrimShow(true);
 };
+
+// 打开客服
+const contactService = () => {
+  setLiveChatMaximize()
+}
 </script>
 
 <template>
@@ -44,7 +51,7 @@ const confirmDailogShow = () => {
     <v-row class="mx-4 mt-4 text-700-12 text-white">
       {{ t("account.menu.suspend_account_text") }}
     </v-row>
-    <v-row class="mx-4 mt-6 text-400-12 text-gray">
+    <v-row class="mx-4 mt-6 text-400-12 text-gray"  style="word-break: break-all;">
       {{ t("account.suspend_account.help_text") }}
     </v-row>
     <v-row class="mx-4 mt-10">
@@ -72,12 +79,12 @@ const confirmDailogShow = () => {
         </v-btn>
       </v-col>
     </v-row>
-    <v-btn class="m-account-speaker-bg" icon>
+    <!-- <v-btn class="m-account-speaker-bg" icon @click="contactService">
       <img
         src="@/assets/public/svg/icon_public_75.svg"
         class="m-account-speaker-img-position"
       />
-    </v-btn>
+    </v-btn> -->
     <v-dialog
       v-model="dialogVisible"
       width="326"
@@ -95,6 +102,23 @@ const confirmDailogShow = () => {
   border-radius: 0px 0px 12px 12px !important;
   height: 400px;
 
+  .m-account-speaker-bg {
+    width: 44px;
+    height: 44px;
+    background: #009b3a;
+    border-radius: 44px;
+    position: absolute;
+    right: 20px;
+    top: 328px;
+
+    .m-account-speaker-img-position {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
   .v-field__field {
     background: #15161C !important;
   }
@@ -111,7 +135,7 @@ const confirmDailogShow = () => {
   .m-suspend-confirm-btn {
     .v-btn__content {
       text-align: center;
-      font-family: Inter;
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 14px;
       font-style: normal;
       font-weight: 700;
@@ -129,7 +153,7 @@ const confirmDailogShow = () => {
 
   .v-field__field {
     .v-label.v-field-label {
-      font-family: "Inter";
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 12px !important;
       font-style: normal;
       font-weight: 400;

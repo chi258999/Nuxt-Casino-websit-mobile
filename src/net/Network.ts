@@ -2,7 +2,9 @@ import { EXITTYPE, NetworkData, SENDTYPE } from './NetworkData'
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import { get } from "lodash-es"
 import { createWebSocket } from '@/plugins/socket'
-
+import { getFingerprintInfor } from "@/utils/getPublicInformation";
+import { getErrorInfoCollector } from '@/utils/errorInfoCollector'
+import { getUrl } from '@/utils';
 /**
  * Event Object
  */
@@ -33,13 +35,14 @@ export class Network {
 
   private service: any
 
-  private request: any
+  public request: any
 
   private noWaitView: string[] = []
 
   constructor() {
     this.netCfg = NetworkData.getInstance()
     this.service = this.createService()
+    this.request = this.createRequestFunction(this.service)
     this.onUnsolicited()
   }
 
@@ -50,6 +53,15 @@ export class Network {
 
     return Network.instance
   }
+
+  /**
+   * Offer refresh
+   */
+  public refresh() {
+    this.service = this.createService()
+    this.request = this.createRequestFunction(this.service)
+  }
+
 
   /**
    * Offer Agreement
@@ -86,8 +98,8 @@ export class Network {
    * @param next
    * @param timeout
    */
-  private async POST(route: string, data: any, next: Function) {
-    this.request = this.createRequestFunction(this.service)
+  public async POST(route: string, data: any, next: Function) {
+    // this.request = this.createRequestFunction(this.service)
     await this.request({
       url: route,
       method: 'POST',
@@ -102,8 +114,8 @@ export class Network {
    * @param route
    * @param msg
    */
-  private GET(route: string, data: any, next: Function) {
-    this.request = this.createRequestFunction(this.service)
+  public GET(route: string, data: any, next: Function) {
+    // this.request = this.createRequestFunction(this.service)
     return this.request({
       url: route,
       method: 'GET',
@@ -133,7 +145,7 @@ export class Network {
   }
 
   private handleOpen() {
-    console.log('WebSocket connection established');
+    // console.log('WebSocket connection established');
   }
 
   private handleMessage(event: MessageEvent) {
@@ -332,6 +344,14 @@ export class Network {
         }
       },
       (error: any) => {
+        const { code, message } = error
+        if (code === 'ECONNABORTED' || message.indexOf('timeout') !== -1) {
+          // 请求超时
+          const currentUrl = error.config.url;
+          const params = error.config.params;
+          getErrorInfoCollector(`api network connection timeout: "${currentUrl}". Parameters passed: "${params}"`)
+        }
+
         // Status is the HTTP status code
         const status = get(error, 'response.status')
         switch (status) {
@@ -384,19 +404,54 @@ export class Network {
   private createRequestFunction(
     service: AxiosInstance,
     timeout: number = this.netCfg.getTimeout(),
-    token: string | undefined = this.netCfg.getToken()
+    token: string | undefined = this.netCfg.getToken(),
   ) {
-    return function <T>(config: AxiosRequestConfig): Promise<T> {
+    return async function <T>(config: AxiosRequestConfig): Promise<T> {
+      const fingerprintInfor = getFingerprintInfor()
       const configDefault = {
         headers: {
           "Authorization": 'Bearer ' + token,
-          "X-Language": "en",
+          ...fingerprintInfor,
+          // "X-Language": "en",
+          "X-Language": localStorage.getItem('lang') || 'en',
+          "X-Currency": sessionStorage.getItem('currency')
         },
         timeout: timeout,
-        baseURL: import.meta.env.VITE_BASE_API,
+        baseURL: getUrl('api'),
         data: {}
       }
+
       return service(Object.assign(configDefault, config))
     }
+  }
+
+
+
+  public commonGet(route: string, data: any) {
+    return new Promise((resolve,reject)=>{
+      this.request({
+        url: route,
+        method: 'GET',
+        params: data
+      }).then((response: any) => {
+        resolve(response);
+      }).catch((error:any)=>{
+        reject(error)
+      })
+    })
+  }
+
+  public commonPost(route: string, data: any) {
+    return new Promise((resolve,reject)=>{
+      this.request({
+        url: route,
+        method: 'post',
+        data
+      }).then((response: any) => {
+        resolve(response);
+      }).catch((error:any)=>{
+        reject(error)
+      })
+    })
   }
 }

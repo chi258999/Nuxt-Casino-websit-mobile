@@ -3,16 +3,30 @@ import { ref, computed, onMounted, watch, watchEffect } from "vue";
 import { gameStore } from "@/store/game";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
+import AdjustClass from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
 
 const route = useRoute();
-const { dispatchGameEnter, getGameBetbyInit, closeKill } = gameStore();
+const { dispatchGameEnter, getGameBetbyInit,updateOptionsBy, closeKill } = gameStore();
 const betbyShow = ref<boolean>(false);
 const betbyHeight = ref<number | undefined>(0);
 const betby = ref(null);
 type dialogType = "login" | "signup";
 
-const handleResize = () => {
-  betbyHeight.value = window.innerHeight;
+let observer: null = null;
+let resizeTimer: any = null;
+// 监听嵌套体育页面高度，当有内容就会有高度，去掉页面loading
+const handleResize = (entries: any) => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    for (const entry of entries) {
+      const { height } = entry.contentRect;
+      if (height > 20) {
+        betbyShow.value = false;
+        document.body.style.overflow = 'scroll';
+      }
+    }
+  }, 200);
 };
 
 const getLang = computed(() => {
@@ -26,25 +40,45 @@ watch(
     if (oldVal !== newVal) {
       betbyShow.value = true;
       await closeKill();
-      await dispatchGameEnter({ id: "9999", demo: false });
+      // await dispatchGameEnter({ id: "9999", demo: false });
       await getGameBetbyInit();
       betbyShow.value = false;
+      document.body.style.overflow = 'scroll';
     }
   },
   { deep: true }
 );
 
+watch(route, async () => {
+  console.log(route,route.query,'routerouteroute')
+  updateOptionsBy({url:route.query['bt-path']})
+  // betbyShow.value = true;
+  // await closeKill();
+  // await getGameBetbyInit();
+  // observer = new ResizeObserver(handleResize);
+  // observer.observe(betby.value);
+  // betbyShow.value = false;
+});
+
 onMounted(async () => {
-  window.addEventListener("resize", handleResize);
+  AdjustClass.getInstance().adjustTrackEvent({
+    key: "PAGE_VIEW",
+    value: "sports",
+    params: ""
+  });
+  // window.addEventListener("resize", handleResize);
   betbyHeight.value = window.innerHeight;
   betbyShow.value = true;
+  document.body.style.overflow = 'hidden';
   window.scrollTo({
     top: 0,
-    behavior: "smooth",
+    behavior: "smooth"
   });
-  await dispatchGameEnter({ id: "9999", demo: false });
+  // await dispatchGameEnter({ id: "9999", demo: false });
   await getGameBetbyInit();
-  betbyShow.value = false;
+  // 监听嵌套体育页面高度，当有内容就会有高度，去掉页面loading
+  observer = new ResizeObserver(handleResize);
+  observer.observe(betby.value);
 });
 </script>
 <template>
@@ -56,7 +90,7 @@ onMounted(async () => {
         <div class="dot-0"></div>
       </div>
     </div>
-    <div id="betby"></div>
+    <div id="betby" ref="betby" class="betby"></div>
   </div>
 </template>
 <style lang="scss">
@@ -87,12 +121,21 @@ onMounted(async () => {
     scale: 0.8;
   }
 }
+
 .p-betby-main {
+  position: relative;
   width: 100%;
   max-width: 1300px;
-  min-height: 500px;
+  // min-height: 500px;
+  height: 100vh;
+  overflow: auto;
   margin: 0 auto;
 }
+
+.betby {
+  height: 100%;
+}
+
 .m-loading-container {
   position: absolute;
   top: 0px;

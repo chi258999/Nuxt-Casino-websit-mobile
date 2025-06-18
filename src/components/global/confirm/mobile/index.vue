@@ -3,6 +3,13 @@ import { ref, computed, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
 import { vipStore } from "@/store/vip";
 import { storeToRefs } from "pinia";
+import { toFormatNum } from '@/utils/numFormat';
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const emit = defineEmits<{ (e: "submitConfirm"): void }>();
@@ -16,7 +23,7 @@ const { selectedAward } = toRefs(props);
     <div class="m-confirm-dialog-header">
       <p class="text-800-16">{{ t("confirm.text_1") }}</p>
     </div>
-    <p class="text-900-24 white text-center mt-5">R$ {{ selectedAward }}</p>
+    <p class="text-900-24 white text-center mt-5">{{ platformCurrency }} {{ toFormatNum(selectedAward) }}</p>
     <div class="mt-5 mx-4">
       <v-btn
         class="button-bright m-confirm-btn"
@@ -68,7 +75,7 @@ const { selectedAward } = toRefs(props);
     .v-btn__content {
       color: var(--Text-Dark-Black-000000, #000);
       text-align: center;
-      font-family: Inter;
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 14px;
       font-style: normal;
       font-weight: 700;

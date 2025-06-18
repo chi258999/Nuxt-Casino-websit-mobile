@@ -16,6 +16,15 @@ import img_agentemblem_11 from "@/assets/affiliate/achievement/img_agentemblem_1
 import img_agentemblem_12 from "@/assets/affiliate/achievement/img_agentemblem_12.png";
 import img_agentemblem_13 from "@/assets/affiliate/achievement/img_agentemblem_13.png";
 import img_agentemblem_14 from "@/assets/affiliate/achievement/img_agentemblem_14.png";
+import { toFormatNum } from '@/utils/numFormat';
+
+// 获取平台货币
+import { storeToRefs } from "pinia";
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -144,7 +153,7 @@ const mobileWidth = computed(() => {
           class="text-900-18"
           :class="item.grade >= 1000 ? 'color-F9BC01' : 'color-414968'"
         >
-          R$ {{ item.grade }}
+          {{ platformCurrency }} {{ toFormatNum(item.grade) }}
         </p>
       </v-col>
       <v-col cols="2" class="text-center pa-0">
@@ -210,7 +219,7 @@ const mobileWidth = computed(() => {
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   .v-btn__content {
     color: #000;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 700;
@@ -223,7 +232,7 @@ const mobileWidth = computed(() => {
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   .v-btn__content {
     color: #23262F;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 700;

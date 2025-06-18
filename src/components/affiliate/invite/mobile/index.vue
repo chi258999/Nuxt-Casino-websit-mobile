@@ -20,6 +20,13 @@ import MAchievementBonus from "../components/mobile/AchievementBonus.vue";
 import MInviteFooter from "../components/mobile/InviteFooter.vue";
 import MCommission from "../components/mobile/Commission.vue";
 
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
+
 const { setMainBlurEffectShow } = appBarStore();
 const { setOverlayScrimShow } = appBarStore();
 const { dispatchUserInvite } = inviteStore();
@@ -44,12 +51,12 @@ const commissionMenuShow = ref<boolean>(false);
 const morePeople = ref<number>(1025);
 
 const invitationBonusItem = ref({
-    cash: "R$ 40.496.845",
+    cash: platformCurrency.value + " 40.496.845",
     content: "8099369 people received"
 })
 
 const bettingCommissionItem = ref({
-    cash: "R$ 38.776.550",
+    cash: platformCurrency.value + " 38.776.550",
     content: "7755310 people received",
 })
 const bonusDialog = ref<boolean>(false);
@@ -66,27 +73,27 @@ const invitationBonusList = ref<GetInvitaionBonusData[]>([
     {
         id: "User931469401",
         content: "Receive an invitation bonus",
-        cash: "R$ 12"
+        cash: platformCurrency.value + " 12"
     },
     {
         id: "User931469401",
         content: "Receive an invitation bonus",
-        cash: "R$ 12"
+        cash: platformCurrency.value + " 12"
     },
     {
         id: "User931469401",
         content: "Receive an invitation bonus",
-        cash: "R$ 12"
+        cash: platformCurrency.value + " 12"
     },
     {
         id: "User931469401",
         content: "Receive an invitation bonus",
-        cash: "R$ 12"
+        cash: platformCurrency.value + " 12"
     },
     {
         id: "User931469401",
         content: "Receive an invitation bonus",
-        cash: "R$ 12"
+        cash: platformCurrency.value + " 12"
     }
 ])
 
@@ -273,7 +280,7 @@ onMounted(async () => {
     height: 20px;
     flex-shrink: 0;
     border-radius: 30px;
-    background: var(--primary-button-32-cfec, #009B3A);
+    background: var(--primary-button-32-cfec, #009b3a);
     box-shadow: 0px 3px 2px 1px rgba(0, 0, 0, 0.11);
   }
 
@@ -294,7 +301,7 @@ onMounted(async () => {
     visibility: hidden;
   }
   .v-slider-thumb--pressed > div {
-    background-color: #009B3A;
+    background-color: #009b3a;
   }
 }
 
@@ -313,7 +320,9 @@ onMounted(async () => {
 
 .m-invite-partner-text {
   color: var(--logo-f-9-bc-01, #f9bc01);
-  font-family: Inter;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
+    sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 800;
@@ -322,18 +331,18 @@ onMounted(async () => {
 
 .m-invite-url-item {
   margin: 16px 12px !important;
-  background-color: #1D2027 !important;
+  background-color: #1d2027 !important;
   padding: 4px 8px !important;
   border-radius: 8px !important;
 }
 
 .m-invite-url-copy-btn {
   border-radius: 4px;
-  background: var(--secondary-button-353652, #23262F);
+  background: var(--secondary-button-353652, #23262f);
 }
 
 .invite-receive-btn {
-  background: #23262F !important;
+  background: #23262f !important;
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21) !important;
   border-radius: 16px !important;
   font-weight: 700 !important;
@@ -343,7 +352,9 @@ onMounted(async () => {
 
 .m-invite-url-title {
   color: var(--sec-text-7782-aa, #7782aa);
-  font-family: Inter;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
+    sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -363,7 +374,7 @@ onMounted(async () => {
 }
 
 .m-invite-border {
-  border-right: 2px solid #23262F;
+  border-right: 2px solid #23262f;
 }
 
 .invite-right-card-bg {
@@ -419,7 +430,7 @@ onMounted(async () => {
 }
 
 .invitation-bonus-table-bg {
-  background-color: #1D2027 !important;
+  background-color: #1d2027 !important;
   box-shadow: inset 2px 0px 4px 1px rgba(0, 0, 0, 0.12) !important;
   border-radius: 8px !important;
   width: 100% !important;
@@ -493,7 +504,7 @@ onMounted(async () => {
   height: 300px;
   flex-shrink: 0;
   border-radius: 30px;
-  background: #1D2027;
+  background: #1d2027;
 
   /* Button Shadow */
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
@@ -545,7 +556,9 @@ onMounted(async () => {
   margin-top: 60px;
 
   .v-btn__content {
-    font-family: Inter;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -563,7 +576,7 @@ onMounted(async () => {
 
 .m-footer-body-bg {
   margin-top: -7px;
-  background: #1D2027;
+  background: #1d2027;
   border-radius: 8px;
 }
 
@@ -586,7 +599,7 @@ onMounted(async () => {
 }
 
 .bonus-progress-bg .v-progress-linear {
-  background: #1D2027 !important;
+  background: #1d2027 !important;
   box-shadow: inset 2px 0px 4px 1px rgba(0, 0, 0, 0.12) !important;
   border-radius: 20px !important;
 }
@@ -611,13 +624,15 @@ onMounted(async () => {
   height: 60px;
   border: none;
   border-radius: 16px 0px 0px 16px;
-  background: var(--bg-2, #181522);
+  background: var(--bg-2, #15161c);
   box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.4);
 }
 
 .Vue-Toastification__toast-body {
   color: var(--sec-text, #7782aa);
-  font-family: Inter;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
+    sans-serif;
   font-size: 10px;
   font-style: normal;
   font-weight: 500;

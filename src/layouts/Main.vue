@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted, defineAsyncComponent, watchEffect } from 'vue';
+import { ref, computed, watch, onMounted, defineAsyncComponent, watchEffect, nextTick } from 'vue';
 import { useDisplay } from 'vuetify';
 import { appBarStore } from '@/store/appBar';
 import { refferalStore } from '@/store/refferal';
@@ -12,25 +12,28 @@ import { useI18n } from "vue-i18n";
 import Footer from "./Footer.vue";
 import { useRoute } from 'vue-router';
 import { mainStore } from "@/store/main";
+import { useScroll } from "@/hooks/scrollTo";
 
-// import Deposit from "@/components/cash/deposit/index.vue";
-// import MDeposit from "@/components/cash/deposit/mobile/index.vue";
-// import Withdraw from "@/components/cash/withdraw/index.vue";
-// import MWithdraw from "@/components/cash/withdraw/mobile/index.vue";
-// import MCashHeader from "@/components/cash/header/mobile/index.vue";
-// import CashHeader from "@/components/cash/header/index.vue";
-import Signup from "@/components/Signup/index.vue";
-import MSignup from "@/components/Signup/mobile/index.vue";
-import MNickName from "@/components/Signup/mobile/NickName.vue";
-import Login from "@/components/Login/index.vue";
-import MLogin from "@/components/Login/mobile/index.vue";
-import Signout from "@/components/Signout/index.vue";
-import MSignout from "@/components/Signout/mobile/index.vue";
+import Deposit from "@/components/cash/mxn/deposit/index.vue";
+import MDeposit from "@/components/cash/mxn/deposit/mobile/index.vue";
+import Withdraw from "@/components/cash/mxn/withdraw/index.vue";
+import MWithdraw from "@/components/cash/mxn/withdraw/mobile/index.vue";
+import MCashHeader from "@/components/cash/mxn/header/mobile/index.vue";
+import CashHeader from "@/components/cash/mxn/header/index.vue";
 // import MobileDialog from "@/components/Signout/mobile/Header.vue";
-// import RefferalDialog from "@/components/refferal/index.vue";
-// import MRefferalDialog from "@/components/refferal/mobile/index.vue";
+// import Signup from "@/components/Signup/index.vue";
+// import MSignup from "@/components/Signup/mobile/index.vue";
+// import Login from "@/components/Login/index.vue";
+// import MLogin from "@/components/Login/mobile/index.vue";
+import MNickName from "@/components/auth/components/mobile/sign_up/NickName.vue";
+import Signout from "@/components/Signout/index.vue";
+import StaticActivityPage from "@/components/static_activity_page/index.vue";
+import MSignout from "@/components/Signout/mobile/index.vue";
+import MAuth from "@/components/auth/mobile/index.vue";
 import LoginBonusDialog from "@/components/login_bonus/index.vue";
 import MLoginBonusDialog from "@/components/login_bonus/mobile/index.vue";
+// import RefferalDialog from "@/components/refferal/index.vue";
+// import MRefferalDialog from "@/components/refferal/mobile/index.vue";
 // import GetBonusDialog from "@/components/get_bonus/index.vue";
 // import MGetBonusDialog from "@/components/get_bonus/mobile/index.vue";
 // import RouletteBonusDialog from "@/components/roulette_bonus/index.vue";
@@ -39,21 +42,37 @@ import MLoginBonusDialog from "@/components/login_bonus/mobile/index.vue";
 // import MenuSemiCircle from "@/components/global/menu_semi_circle/index.vue";
 // import LevelUpDialog from "@/components/level_up/index.vue";
 // import MLevelUpDialog from "@/components/level_up/mobile/index.vue";
-
+import { CookieService } from "@/utils/cookieService";
 import { mailStore } from "@/store/mail";
 import router from '@/router';
+import { depositStore } from '@/store/deposit';
+import { activityAppStore } from '@/store/activityApp';
+import { liveChatStore } from "@/store/liveChat";
+import { useDialog } from "@/hooks/dialog";
+const { setLiveChatMaximize, LiveChatWidget } = liveChatStore();
+const { authDialog } = useDialog();
+
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
+
+import { toFormatNum } from '@/utils/numFormat';
 
 const GetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonus/index.vue"));
 const MGetBonusDialog = defineAsyncComponent(() => import("@/components/get_bonus/mobile/index.vue"));
 const MenuSemiCircle = defineAsyncComponent(() => import("@/components/global/menu_semi_circle/index.vue"));
 const LevelUpDialog = defineAsyncComponent(() => import("@/components/level_up/index.vue"));
 const MLevelUpDialog = defineAsyncComponent(() => import("@/components/level_up/mobile/index.vue"));
-const Deposit = defineAsyncComponent(() => import("@/components/cash/deposit/index.vue"));
-const MDeposit = defineAsyncComponent(() => import("@/components/cash/deposit/mobile/index.vue"));
-const Withdraw = defineAsyncComponent(() => import("@/components/cash/withdraw/index.vue"));
-const MWithdraw = defineAsyncComponent(() => import("@/components/cash/withdraw/mobile/index.vue"));
-const MCashHeader = defineAsyncComponent(() => import("@/components/cash/header/mobile/index.vue"));
-const CashHeader = defineAsyncComponent(() => import("@/components/cash/header/index.vue"));
+const ActivityApp = defineAsyncComponent(() => import("@/components/activity_app/index.vue"));
+// const Deposit = defineAsyncComponent(() => import("@/components/cash/deposit/index.vue"));
+// const MDeposit = defineAsyncComponent(() => import("@/components/cash/deposit/mobile/index.vue"));
+// const Withdraw = defineAsyncComponent(() => import("@/components/cash/withdraw/index.vue"));
+// const MWithdraw = defineAsyncComponent(() => import("@/components/cash/withdraw/mobile/index.vue"));
+// const MCashHeader = defineAsyncComponent(() => import("@/components/cash/header/mobile/index.vue"));
+// const CashHeader = defineAsyncComponent(() => import("@/components/cash/header/index.vue"));
 // const Signup = defineAsyncComponent(() => import("@/components/Signup/index.vue"));
 // const MSignup = defineAsyncComponent(() => import("@/components/Signup/mobile/index.vue"));
 // const MNickName = defineAsyncComponent(() => import("@/components/Signup/mobile/NickName.vue"));
@@ -61,7 +80,7 @@ const CashHeader = defineAsyncComponent(() => import("@/components/cash/header/i
 // const MLogin = defineAsyncComponent(() => import("@/components/Login/mobile/index.vue"));
 // const Signout = defineAsyncComponent(() => import("@/components/Signout/index.vue"));
 // const MSignout = defineAsyncComponent(() => import("@/components/Signout/mobile/index.vue"));
-const MobileDialog = defineAsyncComponent(() => import("@/components/Signout/mobile/Header.vue"));
+// const MobileDialog = defineAsyncComponent(() => import("@/components/Signout/mobile/Header.vue"));
 const RefferalDialog = defineAsyncComponent(() => import("@/components/refferal/index.vue"));
 const MRefferalDialog = defineAsyncComponent(() => import("@/components/refferal/mobile/index.vue"));
 // const LoginBonusDialog = defineAsyncComponent(() => import("@/components/login_bonus/index.vue"));
@@ -70,8 +89,11 @@ const RouletteBonusDialog = defineAsyncComponent(() => import("@/components/roul
 const MRouletteBonusDialog = defineAsyncComponent(() => import("@/components/roulette_bonus/mobile/index.vue"));
 const MAccountDialog = defineAsyncComponent(() => import("@/views/account/dialog/index.vue"));
 const VipUpgradeDialog = defineAsyncComponent(() => import("@/components/vip/components/vip_upgrade_dialog/index.vue"));
+const VipUpRankDialog = defineAsyncComponent(() => import("@/components/vip/components/vip_uprank_dialog/index.vue"));
+const GroupDialog = defineAsyncComponent(() => import("@/components/vip/components/group_dialog/index.vue"));
 const Search = defineAsyncComponent(() => import("@/components/global/search/index.vue"));
 const MSearch = defineAsyncComponent(() => import("@/components/global/search/mobile/index.vue"));
+const MDepositConfirm = defineAsyncComponent(() => import("@/components/cash/mxn/deposit/mobile/MDepositConfirm.vue"));
 
 const { t } = useI18n();
 const { name, width } = useDisplay();
@@ -84,9 +106,10 @@ const { setMenuBlurEffectShow } = appBarStore();
 const { setOverlayScrimShow } = appBarStore();
 const { setAccountDialogShow } = appBarStore();
 const { setActiveAccountIndex } = appBarStore();
+const { dispatchVipSignIn } = vipStore();
 // const { setBonusDashboardDialogVisible } = appBarStore();
 const { setAuthModalType } = authStore();
-const { setNickNameDialogVisible } = authStore();
+const { setNickNameDialogVisible,setAuthDialogVisible } = authStore();
 const { setRefferalDialogShow } = refferalStore();
 const { setLoginBonusDialogVisible } = loginBonusStore();
 const { setRouletteBonusDialogVisible } = loginBonusStore();
@@ -96,6 +119,8 @@ const { setMailMenuShow } = mailStore();
 const { setNavBarToggle } = appBarStore();
 const { setLevelUpDialogVisible } = vipStore();
 const { setSearchDialogShow } = mainStore();
+const { scrollTo } = useScroll()
+
 
 type dialogType = "login" | "signup" | "signout";
 
@@ -121,7 +146,11 @@ const signUpForm = computed(() => {
   return getSignUpForm.value
 })
 
-// authentication dialog
+const controlLevel = computed(() => {
+  const { getControlLevel } = storeToRefs(appBarStore());
+  return getControlLevel.value
+})
+
 const signupDialog = ref<boolean>(false);
 const signoutDialog = ref<boolean>(false);
 const loginDialog = ref<boolean>(false);
@@ -131,8 +160,12 @@ const accountDialog = ref<boolean>(false);
 const nickNameDialog = ref<boolean>(false);
 const levelUpDialog = ref<boolean>(false);
 const searchDialog = ref<boolean>(false);
+const depositConfirmDialog = ref<boolean>(false);
+const groupVisible = ref<boolean>(false);
 // const bonusDashboardDialog = ref<boolean>(false);
 const overlayScrimBackground = ref<string>('rgb(var(--v-theme-on-surface))')
+
+const authDialogType = ref<dialogType>("login");
 
 const searchDialogShow = computed(() => {
   const { getSearchDialogShow } = storeToRefs(mainStore());
@@ -144,10 +177,14 @@ watch(searchDialogShow, (value) => {
   setMailMenuShow(value);
 })
 
-const authDialogVisible = computed(() => {
-  const { getAuthDialogVisible } = storeToRefs(authStore());
-  return getAuthDialogVisible.value;
-});
+// const authDialogVisible = computed(() => {
+//   const { getAuthDialogVisible } = storeToRefs(authStore());
+//   return getAuthDialogVisible.value;
+// });
+
+// watch(authDialogVisible, (value) => {
+//   authDialog.value = value;
+// })
 
 const nickNameDialogVisible = computed(() => {
   const { getNickNameDialogVisible } = storeToRefs(authStore());
@@ -207,6 +244,18 @@ const closeDialog = (type: dialogType) => {
   mobileDialog.value = false;
   setAuthModalType("");
 };
+
+const staticActivityDialog = ref<boolean>(true); // 静态活动页面显示
+// 关闭静态页面弹框
+const closeStaticActivityDialog = () => {
+  staticActivityDialog.value = false
+  // 打开活动指引弹窗
+}
+
+// 判断是否已经勾选当天不显示静态活动弹框
+if (CookieService.getCookie('Static_Activity')) {
+  staticActivityDialog.value = false
+}
 
 const closeNickNameDialog = () => {
   setMainBlurEffectShow(false);
@@ -307,6 +356,16 @@ watch(cashDialog, (newValue) => {
   console.log(cashDialog)
 })
 
+// deposit confirm dialog
+const depositConfirmDialogToggle = computed(() => {
+  const { getDepositConfirmDialogToggle } = storeToRefs(depositStore());
+  return getDepositConfirmDialogToggle.value
+})
+
+watch(depositConfirmDialogToggle, (value) => {
+  depositConfirmDialog.value = value
+})
+
 // refferal dialog
 const refferalDialog = ref<boolean>(false);
 
@@ -355,6 +414,13 @@ watch(getBonusDialogVisible, (newValue) => {
   setMainBlurEffectShow(newValue);
 }, { deep: true })
 
+// 判断是否在首页
+const isHomePage = ref(route.path === '/');
+// 使用 watch 监听路由变化
+watch(() => route.path, (newPath) => {
+  isHomePage.value = newPath === '/';
+});
+
 const closeLoginBonusDialog = () => {
   setLoginBonusDialogVisible(false);
   setMainBlurEffectShow(false);
@@ -397,6 +463,7 @@ const overlayScrimShow = computed(() => {
   const { getOverlayScrimShow } = storeToRefs(appBarStore());
   return getOverlayScrimShow.value;
 })
+
 watch(overlayScrimShow, (newValue) => {
   if (newValue) {
     overlayScrimBackground.value = "transparent";
@@ -450,7 +517,8 @@ const selectActiveIndex = (index: number) => {
   setMenuBlurEffectShow(false);
   setOverlayScrimShow(false);
   setAccountDialogShow(false);
-  router.push({ name: "Account", params: { index: activeMenuIndex.value }, query: { index: activeMenuIndex.value } });
+  //router.push({ name: "Account", params: { index: activeMenuIndex.value }, query: { index: activeMenuIndex.value } });
+  router.push({ name: "Account"});
 }
 
 watch(accountDialogVisible, (value: boolean) => {
@@ -490,13 +558,117 @@ const handleResize = () => {
   mainHeight.value = window.innerHeight;
 }
 
+const fixBtnContainer = ref(false)
 watch(route, (to) => {
   // console.log(to.path);
+  if(to.path === '/sports') {
+    fixBtnContainer.value = false;
+  } else {
+    fixBtnContainer.value = true;
+  }
 }, { flush: 'pre', immediate: true, deep: true })
 
-onMounted(() => {
-  console.log(route.query.code);
+// 打开加入group弹窗
+const openGroupDialog=()=>{
+  groupVisible.value=true
+}
+
+// 打开客服
+const openLiveChat=()=>{
+  if(userInfo.value?.id) {
+    LiveChatWidget?.call?.("set_customer_name", userInfo.value?.id || '');
+    // 最大化
+    setLiveChatMaximize()
+  }
+}
+
+const { setAppConfirmDialogShow, automaticPopUpApp, setAppGuidance, setShowAppGuidance } = activityAppStore();
+// 打开下载app弹框
+const openActivityApp = () => {
+  setAppConfirmDialogShow(true)
+  // automaticPopUpApp(true)
+}
+
+const activityAppBonus = computed(() => {
+  const { getActivityBonus } = storeToRefs(activityAppStore());
+  return getActivityBonus.value;
+});
+
+const showAppGuidance = computed(() => {
+  const { getShowAppGuidance } = storeToRefs(activityAppStore());
+  return getShowAppGuidance.value;
+});
+
+// 点击引导框执行函数
+const appGuidanceEvent = () => {
+  setAppGuidance(true)
+  setShowAppGuidance(false)
+  setAppConfirmDialogShow(true)
+  // 如果在首页，就打开监听
+  // if (isHomePage.value) {
+  //   automaticPopUpApp(false)
+  // } else {
+  //   automaticPopUpApp(true)
+  // }
+}
+
+const appConfirmDialogShow = computed(() => {
+  const { getAppConfirmDialogShow } = storeToRefs(activityAppStore());
+  return getAppConfirmDialogShow.value
+})
+
+// 获取模式
+const mobile = computed(() => {
+  const { getMobile } = storeToRefs(activityAppStore());
+  return getMobile.value;
+});
+
+// 定义状态
+const isSwinging = ref(false);
+
+// 摇摆按钮函数
+const swingButton = () => {
+  isSwinging.value = true;
+  setTimeout(() => {
+    isSwinging.value = false;
+  }, 1600);
+};
+
+const token = computed(() => {
+  const { getToken } = storeToRefs(authStore());
+  return getToken.value;
+});
+
+onMounted(async() => {
+  // 在组件挂载时启动摇摆按钮定时器
+  setInterval(swingButton, 10000); // 每10秒执行一次
+
+  // 初始化，默认打开弹框
+  // setAppConfirmDialogShow(true)
+
+  // 判断下载app是否需要自动弹出
+  // 如果在首页，就打开监听
+  // if (isHomePage.value) {
+  //   automaticPopUpApp(false)
+  // } else {
+  //   automaticPopUpApp(true)
+  // }
+
+  // console.log(route.query.code);
+  // 带有邀请注册码的，直接打开注册弹窗
+  if (!token.value) {
+    if(route.query.code){
+      setAuthDialogVisible(true)
+    }
+  }
+  
   window.addEventListener("resize", handleResize);
+  // window.addEventListener('scroll', (e) => {
+  //         // 获取滚动的值并打印出来
+  //     const scrollTop = window.scrollY || window.pageYOffset;
+  //   // 在滚动时执行的操作
+  //   console.log('Scrolling...', scrollTop);
+  // });
   mainHeight.value = window.innerHeight;
   if (overlayScrimShow.value) {
     overlayScrimBackground.value = "transparent";
@@ -508,15 +680,25 @@ onMounted(() => {
   setDepositDialogToggle(false);
   setWithdrawDialogToggle(false);
 })
+
+
+
+// 监听路由页面 home 初始化时间
+const routeInited = () => {
+  // scrollTo()
+}
+
+const test=ref(true)
 </script>
 
 <template>
   <v-main
+    id="mainContainer"
     class="main-background"
     :class="mainBlurEffectShow ? 'main-bg-blur' : ''"
     :style="{
-      height: mobileWidth < 600 && mailMenuShow ? mainHeight + 'px' : 'unset',
-      overflow: mobileWidth < 600 && mailMenuShow ? 'hidden' : 'unset',
+      // height: mobileWidth < 600 && mailMenuShow ? mainHeight + 'px' : 'fit-content',
+      overflow: mobileWidth < 600 && mailMenuShow ? 'hidden' : 'hidden',
     }"
   >
     <!-- game search dialog -->
@@ -528,22 +710,20 @@ onMounted(() => {
       temporary
       :touchless="true"
       :style="{
-        height: '100%',
+        height: '100dvh',
         top: '0px',
         zIndex: 300000,
         background: 'unset !important',
+        width: '100dvw',
       }"
       v-if="mobileWidth < 600"
     >
-      <MSearch
-        :searchDialogShow="searchDialogShow"
-        @searchCancel="setSearchDialogShow(false)"
-      />
+      <MSearch :searchDialogShow="searchDialogShow" @searchCancel="setSearchDialogShow(false)" />
     </v-navigation-drawer>
 
     <!---------------------- Deposit Dialog ----------------------------------------------->
-
-    <v-dialog
+    <!-- 存款菜单弹窗 -->
+    <!-- <v-dialog
       v-model="cashDialog"
       class="cash-header-dialog"
       :width="''"
@@ -552,11 +732,11 @@ onMounted(() => {
       :transition="'dialog-top-transition'"
       @click:outside="setCashDialogToggle(false)"
       v-if="mobileVersion == 'sm'"
-    >
-      <MCashHeader />
-    </v-dialog>
-
-    <v-dialog
+    >-->
+    <MCashHeader v-if="cashDialog&&mobileVersion == 'sm'" v-model="cashDialog" />
+    <!-- </v-dialog> -->
+    <!-- 存款充值 -->
+    <!-- <v-dialog
       v-model="withdrawDialog"
       :class="depositBlurEffectShow ? 'm-deposit-dialog' : ''"
       :width="''"
@@ -567,13 +747,13 @@ onMounted(() => {
       persistent
       v-if="mobileVersion == 'sm'"
     >
-      <template v-if="withdrawDialog">
-        <Withdraw v-if="mobileWidth > 600" />
-        <MWithdraw v-else />
-      </template>
-    </v-dialog>
-
-    <v-dialog
+    <template v-if="withdrawDialog">-->
+    <!-- <Withdraw v-if="mobileWidth > 600" /> -->
+    <MWithdraw v-if="withdrawDialog&&mobileVersion == 'sm'" v-model="withdrawDialog" />
+    <!-- </template>
+    </v-dialog>-->
+    <!-- 存款选择 -->
+    <!-- <v-dialog
       v-model="depositDialog"
       :class="depositBlurEffectShow ? 'm-deposit-dialog' : ''"
       :width="''"
@@ -585,10 +765,14 @@ onMounted(() => {
       v-if="mobileVersion == 'sm'"
     >
       <template v-if="depositDialog">
-        <Deposit v-if="mobileWidth > 600" />
-        <MDeposit class="m-deposit-sub-dialog" v-else />
-      </template>
-    </v-dialog>
+    <Deposit v-if="mobileWidth > 600" />-->
+    <MDeposit
+      class="m-deposit-sub-dialog"
+      v-if="depositDialog&&mobileVersion == 'sm'"
+      v-model="depositDialog"
+    />
+    <!-- </template>
+    </v-dialog>-->
 
     <v-dialog
       v-model="cashDialog"
@@ -611,16 +795,69 @@ onMounted(() => {
       </template>
     </v-dialog>
 
+    <!---------------------------------- Deposit Confirm ----------------------------------------->
+    <!-- 充值确认 -->
+    <!-- <v-dialog
+      class="m-deposit-cofirm-dialog"
+      v-model="depositConfirmDialog"
+      :width="''"
+      :fullscreen="true"
+      :scrim="false"
+      persistent
+      v-if="mobileVersion == 'sm'"
+      :transition="'dialog-top-transition'"
+    >-->
+    <MDepositConfirm
+      v-if="depositConfirmDialog&&mobileVersion == 'sm'"
+      v-model="depositConfirmDialog"
+    />
+    <!-- </v-dialog> -->
+
     <!-----------------------Authentication Dialog --------------------------------------->
 
+    <!-- <v-dialog
+      v-model="authDialog"
+      :width="mobileVersion == 'sm' ? '' : 471"
+      :fullscreen="mobileVersion == 'sm'"
+      :scrim="true"
+      :transition="
+        mobileVersion == 'sm' ? 'dialog-bottom-transition' : 'scale-transition'
+      "
+      :class="[mobileVersion == 'sm' ? 'mobile-auth-dialog-position' : '']"
+      persistent
+      style="z-index: 2147483646"
+    >-->
+    <template v-if="mobileVersion != 'sm'"></template>
+    <template v-else>
+      <MAuth v-if="authDialog" v-model="authDialog" />
+    </template>
+    <!-- </v-dialog> -->
+
+    <!-------------------------------      静态活动页面     ------------------------------------>
+    <!-- <v-dialog
+      v-model="staticActivityDialog"
+      :width="mobileWidth < 600 ? 328 : 471"
+      :scrim="true"
+      persistent
+      style="z-index: 1000001"
+    >-->
+    <StaticActivityPage
+      v-model="staticActivityDialog"
+      v-if="staticActivityDialog && mobileVersion == 'sm'"
+      @close="closeStaticActivityDialog"
+    />
+    <!-- </v-dialog> -->
+
     <!-------------------------------      SIGNUP     ------------------------------------>
-    <v-dialog
+
+    <!-- <v-dialog
       v-model="mobileDialog"
       :fullscreen="mobileVersion == 'sm'"
       transition="dialog-top-transition"
       class="mobile-dialog-toggle-height"
+      :scrim="false"
       v-if="mobileVersion == 'sm'"
-      style="z-index: 10000000000000010"
+      style="z-index: 2147483647"
     >
       <MobileDialog :mobileDialogCheck="mobileDialogCheck" @switch="switchDialog" />
     </v-dialog>
@@ -635,7 +872,7 @@ onMounted(() => {
       :class="[mobileVersion == 'sm' ? 'mobile-login-dialog-position' : '']"
       @click:outside="closeDialog('signup')"
       persistent
-      style="z-index: 10000000000000020"
+      style="z-index: 2147483646"
     >
       <Signup
         v-if="mobileVersion != 'sm'"
@@ -643,11 +880,11 @@ onMounted(() => {
         @switch="switchDialog('signup')"
       />
       <MSignup v-else @close="closeDialog('signup')" @switch="switchDialog('signup')" />
-    </v-dialog>
+    </v-dialog>-->
 
     <!-------------------------------      LOGIN     ------------------------------------>
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="loginDialog"
       :width="mobileVersion == 'sm' ? '' : 471"
       :fullscreen="mobileVersion == 'sm'"
@@ -658,7 +895,7 @@ onMounted(() => {
       :class="[mobileVersion == 'sm' ? 'mobile-login-dialog-position' : '']"
       @click:outside="closeDialog('login')"
       persistent
-      style="z-index: 10000000000000020"
+      style="z-index: 2147483646"
     >
       <Login
         v-if="mobileVersion != 'sm'"
@@ -666,31 +903,39 @@ onMounted(() => {
         @switch="switchDialog('login')"
       />
       <MLogin v-else @close="closeDialog('login')" @switch="switchDialog('login')" />
-    </v-dialog>
+    </v-dialog>-->
 
     <!-------------------------------      NICKNAME     ------------------------------------>
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="nickNameDialog"
       width="320"
       :scrim="true"
       transition="scale-transition"
       @click:outside="closeNickNameDialog"
-    >
-      <MNickName @close="closeNickNameDialog" />
-    </v-dialog>
+    >-->
+    <MNickName v-if="nickNameDialog" @close="closeNickNameDialog" v-model="nickNameDialog" />
+    <!-- </v-dialog> -->
 
     <!-------------------------------      SIGNOUT     ------------------------------------>
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="signoutDialog"
       :width="mobileWidth < 600 ? 328 : 471"
-      :scrim="false"
+      :scrim="true"
       @click:outside="closeDialog('signout')"
-    >
-      <Signout v-if="mobileVersion != 'sm'" @close="closeDialog('signout')" />
-      <MSignout v-else @close="closeDialog('signout')" />
-    </v-dialog>
+    >-->
+    <Signout
+      v-if="signoutDialog && mobileWidth > 600"
+      @close="closeDialog('signout')"
+      v-model="signoutDialog"
+    />
+    <MSignout
+      v-else-if="signoutDialog"
+      @close="closeDialog('signout')"
+      v-model="signoutDialog"
+    />
+    <!-- </v-dialog> -->
 
     <!----------------------------------- level up dialog --------------------------------->
 
@@ -704,35 +949,39 @@ onMounted(() => {
       <MLevelUpDialog v-else />
     </v-dialog>
 
-    <!----------------------------------- refferal dialog --------------------------------->
+    <!----------------------------------- refferal dialog @click:outside="closeReferDialog"--------------------------------->
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="refferalDialog"
       persistent
       :width="mobileWidth < 600 ? '360' : '471'"
-      :scrim="mobileVersion == 'sm' ? false : true"
-      @click:outside="false"
+      :scrim="true"
       style="z-index: 2147483646"
-    >
-      <RefferalDialog v-if="mobileWidth > 600" />
-      <MRefferalDialog v-else />
-    </v-dialog>
+    >-->
+    <RefferalDialog v-if="mobileWidth > 600&&refferalDialog" v-model="refferalDialog" />
+    <MRefferalDialog v-if="mobileWidth <= 600&&refferalDialog" v-model="refferalDialog" />
+    <!-- </v-dialog> -->
 
     <!----------------------------------- login bonus dialog --------------------------------->
 
-    <v-dialog
+    <!-- <v-dialog
       v-model="loginBonusDialog"
       :width="mobileWidth < 600 ? '340' : '471'"
       @click:outside="closeLoginBonusDialog"
       :class="mobileWidth < 600 ? 'm-login-bonus-dialog' : ''"
-      style="z-index: 10000000000000020"
-    >
-      <LoginBonusDialog
-        v-if="mobileWidth > 600"
-        @closeLoginBonusDialog="closeLoginBonusDialog"
-      />
-      <MLoginBonusDialog v-else @closeLoginBonusDialog="closeLoginBonusDialog" />
-    </v-dialog>
+      style="z-index: 2147483646"
+    >-->
+    <LoginBonusDialog
+      v-if="mobileWidth > 600&&loginBonusDialog"
+      v-model="loginBonusDialog"
+      @closeLoginBonusDialog="closeLoginBonusDialog"
+    />
+    <MLoginBonusDialog
+      v-if="mobileWidth <= 600&&loginBonusDialog"
+      v-model="loginBonusDialog"
+      @closeLoginBonusDialog="closeLoginBonusDialog"
+    />
+    <!-- </v-dialog> -->
 
     <!----------------------------------- deposit and get bonus dialog --------------------------------->
 
@@ -742,10 +991,7 @@ onMounted(() => {
       @click:outside="closeGetBonusDialog"
       :class="mobileWidth < 600 ? 'm-get-bonus-dialog' : ''"
     >
-      <GetBonusDialog
-        v-if="mobileWidth > 600"
-        @closeGetBonusDialog="closeGetBonusDialog"
-      />
+      <GetBonusDialog v-if="mobileWidth > 600" @closeGetBonusDialog="closeGetBonusDialog" />
       <MGetBonusDialog v-else @closeGetBonusDialog="closeGetBonusDialog" />
     </v-dialog>
 
@@ -765,20 +1011,62 @@ onMounted(() => {
 
     <!----------------------------------- account dialog --------------------------------->
 
-    <v-dialog v-model="accountDialog" width="312" @click:outside="accountDialogClose">
-      <MAccountDialog
-        @mDialogHide="accountDialogClose"
-        :avatar="userInfo.avatar"
-        :nickName="userInfo.name"
-        @selectActiveIndex="selectActiveIndex"
-      />
-    </v-dialog>
+    <!-- <v-dialog v-model="accountDialog" width="312" @click:outside="accountDialogClose"> -->
+    <MAccountDialog
+      v-if="accountDialog"
+      v-model="accountDialog"
+      @mDialogHide="accountDialogClose"
+      :avatar="userInfo.avatar"
+      :nickName="userInfo.name"
+      @selectActiveIndex="selectActiveIndex"
+    />
+    <!-- </v-dialog> -->
 
     <VipUpgradeDialog />
+    <VipUpRankDialog />
+
+    <!-- join group dialog -->
+    <GroupDialog v-if="groupVisible" v-model="groupVisible"></GroupDialog>
 
     <!------------------------------ Main Page ------------------------------------------->
 
-    <router-view />
+    <router-view v-slot="{ Component, route }">
+      <!-- 缓存路由 -->
+      <keep-alive>
+        <component v-if="route.meta.keepAlive" :is="Component" :key="route.path" />
+      </keep-alive>
+      <!-- 正常路由 -->
+      <component v-if="!route.meta.keepAlive" :is="Component" :key="route.path" />
+    </router-view>
+
+    <!-- fix钉 按钮集合 -->
+    <div v-show="fixBtnContainer">
+      <!-- message btn -->
+      <div class="m-message-btn" @click="openGroupDialog" :style="{'z-index': controlLevel ? '9' : '1000'}">
+        <img src="@/assets/public/svg/message.svg" class="m-back-icon-position" />
+      </div>
+
+      <!-- service btn -->
+      <div class="m-service-btn" @click="openLiveChat" :style="{'z-index': controlLevel ? '9' : '1000'}">
+        <img src="@/assets/public/svg/service-icon.svg" class="m-back-icon-position" />
+      </div>
+
+      <!-- 点击打开下载app页面 -->
+      <div class="m-activity-app-btn" v-if="mobile" :style="{'z-index': controlLevel ? '9' : '1000'}">
+          <transition
+            enter-active-class="animated-lr hinge-lr fadeInRight"
+            leave-active-class="animated-lr hinge-lr fadeOutRight"
+          >
+            <div v-show="isHomePage && showAppGuidance && !appConfirmDialogShow" class="app-content" @click="appGuidanceEvent">
+              {{ t('activity_app.text_9') }} <span>{{ platformCurrency }}{{ toFormatNum(activityAppBonus) }}</span>
+            </div>
+          </transition>
+
+          <div style="position: absolute;" :class="{ 'm-activity-app-swinging-button': isSwinging, 'm-activity-app-prompt': true }" @click="openActivityApp" >
+            <img src="@/assets/activity_app/app-floating-button.svg" class="m-back-icon-position" />
+          </div>
+        </div>
+    </div>
 
     <!-- back top -->
 
@@ -794,6 +1082,9 @@ onMounted(() => {
 
     <!-------------------------------- Footer Tab ----------------------------------------->
     <Footer v-if="route.path != '/promo'" />
+
+    <!-- 下载app -->
+    <ActivityApp />
   </v-main>
 </template>
 <style lang="scss">
@@ -806,13 +1097,141 @@ onMounted(() => {
   height: 60px;
   border: none;
   border-radius: 16px 0px 0px 16px;
-  background: var(--bg-2, #181522);
+  background: var(--bg-2, #15161c);
   box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.4);
 }
 
 .el-backtop {
   width: 44px;
   height: 44px;
+  z-index: 1000;
+}
+
+.m-message-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 190px;
+  width: 44px;
+  height: 44px;
+  background: rgba(22, 130, 241, 1);
+  border-radius: 44px;
+  filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
+  z-index: 1000;
+  .m-back-icon-position {
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.m-service-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 130px;
+  width: 44px;
+  height: 44px;
+  background: rgba(22, 130, 241, 1);
+  border-radius: 44px;
+  filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
+  z-index: 1000;
+  .m-back-icon-position {
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.m-activity-app-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 250px;
+  width: 44px;
+  height: 44px;
+  background: #ffd632;
+  border-radius: 44px;
+  filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.4));
+  z-index: 1000;
+  & > .m-back-icon-position {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.m-activity-app-prompt::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: rgba(222, 61, 18, 1);
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.app-content {
+  position: absolute;
+  top: 0;
+  left: -279px;
+  box-sizing: border-box;
+  padding: 5px 62px;
+  border-top-left-radius: 50px; /* 左上角圆角 */
+  border-bottom-left-radius: 50px; /* 左下角圆角 */
+  border-top-right-radius: 50px; /* 右上角圆角 */
+  border-bottom-right-radius: 50px; /* 右下角圆角 */
+  background-image: linear-gradient(
+    to right,
+    rgba(249, 188, 1, 1),
+    rgba(228, 172, 0, 1)
+  ); /* 左到右的渐变，从红色到蓝色 */
+  width: 316px;
+  height: 44px;
+  font-size: 10px;
+  color: rgba(0, 0, 0, 1);
+  font-weight: 400;
+
+  span {
+    color: #fff;
+  }
+
+  &::after {
+    content: "";
+    width: 67.75px;
+    height: 44px;
+    background: url(@/assets/activity_app/img_ci_13.svg);
+    position: absolute;
+    top: -5px;
+    left: -18px;
+  }
+}
+
+@keyframes swing {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(20deg);
+  }
+  50% {
+    transform: rotate(-20deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+.m-activity-app-swinging-button {
+  animation: swing 0.8s ease-in-out infinite;
 }
 
 .m-back-top {
@@ -842,6 +1261,7 @@ onMounted(() => {
 }
 
 .main-background {
+  width: 100dvw !important;
   background: #15161c;
 }
 
@@ -852,19 +1272,22 @@ onMounted(() => {
 }
 
 .mobile-dialog-toggle-height {
-  height: 40px !important;
+  height: 50px !important;
   margin: 0 !important;
   bottom: unset !important;
   top: 0 !important;
 }
 
+.mobile-auth-dialog-position {
+  position: fixed !important;
+  margin: 0 !important;
+  top: 0px !important;
+}
+
 .mobile-login-dialog-position {
   position: fixed !important;
-  // position: absolute !important;
   margin: 0 !important;
-  height: 0px !important;
-  bottom: 0 !important;
-  top: unset !important;
+  top: 50px !important;
 }
 
 .v-navigation-drawer__scrim {
@@ -896,9 +1319,13 @@ onMounted(() => {
 }
 
 .cash-header-dialog {
-  z-index: 2430 !important;
+  z-index: 2431 !important;
   height: 80px;
   margin: 0px !important;
+}
+
+.m-deposit-cofirm-dialog {
+  z-index: 2432 !important;
 }
 
 // .m-withdraw-dialog{

@@ -22,7 +22,8 @@ import SuccessIcon from "@/components/global/notification/SuccessIcon.vue";
 import WarningIcon from "@/components/global/notification/WarningIcon.vue";
 import { useToast } from "vue-toastification";
 import { useRoute, useRouter } from "vue-router";
-
+import { bannerStore } from "@/store/banner";
+import { currencyStore } from "@/store/currency";
 
 const MSignup = defineComponent({
   components: {
@@ -44,6 +45,7 @@ const MSignup = defineComponent({
     const { setDialogCheckbox } = authStore();
     const { setNickNameDialogVisible } = authStore();
     const { dispatchUserBalance } = userStore();
+    const { dispatchCurrencyList} = currencyStore();
     const { dispatchSocketConnect } = socketStore();
     const { setAuthDialogVisible } = authStore();
 
@@ -289,7 +291,7 @@ const MSignup = defineComponent({
       await dispatchSignUp({
         uid: state.formData.emailAddress,
         password: state.formData.password,
-        referral_code: state.formData.promoCode,
+        referral_code: state.formData.promoCode.trim().replace(/\s+/g, ' '),
         browser: "",
         device: "",
         model: "",
@@ -300,6 +302,7 @@ const MSignup = defineComponent({
       if (success.value) {
         await dispatchUserProfile();
         await dispatchUserBalance();
+        await dispatchCurrencyList();
         await dispatchSocketConnect();
         setSignUpForm(false);
         emit("close");
@@ -324,7 +327,11 @@ const MSignup = defineComponent({
         // ).href;
         // state.notificationText = t("signup.submit_result.success_text");
       } else {
-        if (errMessage.value == "Registering an existing account is abnormal") {
+        console.log;
+        if (
+          errMessage.value ==
+          "The account you entered has been used by someone else, please input again"
+        ) {
           state.currentPage = state.PAGE_TYPE.ALREADY_REGISTERED;
         } else {
           const toast = useToast();
@@ -457,17 +464,16 @@ const MSignup = defineComponent({
       state.closeBtnShow = false;
     });
 
-    
     const router = useRouter();
     const authDialogVisible = computed(() => {
-    const { getAuthDialogVisible } = storeToRefs(authStore());
+      const { getAuthDialogVisible } = storeToRefs(authStore());
       return getAuthDialogVisible.value;
     });
     const goPrivatePolicy = async () => {
       await router.push({ name: "About_US", query: { index: 1 } });
       setSignUpForm(false);
       emit("close");
-    }
+    };
     return {
       t,
       ...toRefs(state),
@@ -502,18 +508,19 @@ export default MSignup;
 
 <template>
   <div class="m-signup-container">
-    <!-- <div
-    class="m-signup-container"
-    :style="{ height: containerHeight + 'px', overflowY: overflow ? 'auto' : 'unset' }"
-  > -->
-    <SignupHeader v-if="currentPage !== PAGE_TYPE.DISPLAY_NAME" />
-    <div
-      class="m-signup-body px-6"
-      :style="{
-        height: bodyHeight + 'px',
-      }"
-    >
-      <!-- SIGN UP FORM  -->
+    <!-- <SignupHeader v-if="currentPage !== PAGE_TYPE.DISPLAY_NAME" /> -->
+    <div class="m-signup-body px-6">
+      <div class="my-15 d-flex justify-center align-center">
+        <img src="@/assets/public/image/logo_public_04.png" width="86" />
+        <div class="ml-2">
+          <div class="text-800-16 white">
+            {{ t("signup.formPage.header.titleLine1") }}
+          </div>
+          <div class="text-900-20 white">
+            {{ t("signup.formPage.header.titleLine2") }}
+          </div>
+        </div>
+      </div>
       <v-form
         v-if="currentPage === PAGE_TYPE.SIGNUP_FORM"
         ref="form"
@@ -650,7 +657,7 @@ export default MSignup;
           <p class="m-divide-text">
             {{ t("signup.formPage.divider") }}
           </p>
-          <v-divider color="white" />
+          <v-divider class="mx-10" style="border: 1px solid #414968 !important" />
         </v-row>
         <v-row class="mt-6">
           <v-col cols="8" offset="2">
@@ -831,7 +838,7 @@ export default MSignup;
 @media (max-width: 600px) {
   .v-field__field {
     color: var(--sec-text-7782-aa, #7782aa);
-    font-family: "Inter";
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -840,7 +847,7 @@ export default MSignup;
 
     input {
       padding-top: 6px !important;
-      font-family: "Inter";
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 12px;
       font-style: normal;
       font-weight: 600;
@@ -848,7 +855,7 @@ export default MSignup;
     }
 
     .v-label.v-field-label {
-      font-family: "Inter";
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 10px;
       font-style: normal;
       font-weight: 400;
@@ -874,17 +881,17 @@ export default MSignup;
 }
 
 .m-label-text-md {
-  margin-top: 142px;
+  margin-top: 80px;
   font-weight: 600;
   font-size: 16px;
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
 }
 
 .m-signup-continue-btn {
   .v-btn__content {
     color: var(--text-dark-black, white);
     text-align: center;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -896,7 +903,7 @@ export default MSignup;
 .m-signup-confirm-btn {
   .v-btn__content {
     text-align: center;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -908,7 +915,7 @@ export default MSignup;
   .v-btn__content {
     color: var(--text-dark-black, #fff);
     text-align: center;
-    font-family: Inter;
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -935,7 +942,7 @@ export default MSignup;
   border-radius: 8px !important;
   .v-btn__content {
     text-align: center;
-    font-family: "Inter";
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -955,7 +962,7 @@ export default MSignup;
   .v-btn__content {
     color: #ffffff;
     text-align: center;
-    font-family: "Inter";
+    font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -972,12 +979,10 @@ export default MSignup;
 
 // mobile dialog contaier
 .m-signup-container {
-  border-radius: 26px 26px 0px 0px;
-  position: fixed;
-  bottom: 0;
-  height: 613px;
+  height: 100vh;
   width: 100%;
-  background: var(--bg-2-e-274-c, #2e274c);
+  background: $color_1;
+  overflow-y: auto;
 
   .v-field--variant-solo {
     background: transparent !important;
@@ -990,13 +995,13 @@ export default MSignup;
 
 // wrapper
 .m-signup-body {
-  border-radius: 8px 8px 0px 0px;
-  background: var(--bg-2-e-274-c, #1d2027);
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
-  height: 464px;
-  z-index: 99;
+  // border-radius: 8px 8px 0px 0px;
+  // background: var(--bg-2-e-274-c, #1d2027);
+  // position: absolute;
+  // bottom: 0px;
+  // width: 100%;
+  // height: 464px;
+  // z-index: 99;
 
   // overflow-y: auto;
   .form-textfield div.v-field__field {
@@ -1034,11 +1039,11 @@ export default MSignup;
 
 // divider
 .m-divide-text {
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
-  color: #23262f;
+  color: #414968;
   position: relative;
   top: 12px;
   text-align: center;
@@ -1065,7 +1070,7 @@ export default MSignup;
 
 // ask signin text
 .signin-text {
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -1076,7 +1081,7 @@ export default MSignup;
 
 .signin-text2 {
   cursor: pointer;
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: normal;
   font-weight: 800;
   font-size: 16px;
@@ -1086,7 +1091,7 @@ export default MSignup;
 
 // agreement
 .agreement-text {
-  font-family: "Inter";
+  font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
@@ -1125,7 +1130,7 @@ export default MSignup;
       padding-top: 2px !important;
     }
     .v-label.v-field-label {
-      font-family: "Inter";
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 12px !important;
       font-style: normal;
       font-weight: 400;
@@ -1153,7 +1158,7 @@ export default MSignup;
       padding-right: 30px !important;
     }
     .v-label.v-field-label {
-      font-family: "Inter";
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 12px !important;
       font-style: normal;
       font-weight: 400;
@@ -1181,7 +1186,7 @@ export default MSignup;
       padding-top: 2px !important;
     }
     .v-label.v-field-label {
-      font-family: "Inter";
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 12px !important;
       font-style: normal;
       font-weight: 400;

@@ -14,9 +14,10 @@ import { useToast } from "vue-toastification";
 const { t } = useI18n();
 const { width } = useDisplay();
 const { dispatchBonusCancel } = bonusStore();
+const { dispatchUserBonus } = bonusStore();
 const emit = defineEmits<{ (e: "bonusDialogHide"): void }>();
-const props = defineProps<{ id: number }>();
-const { id } = toRefs(props);
+const props = defineProps<{ id: number, receive: any  }>();
+const { id, receive } = toRefs(props);
 
 const loading = ref<boolean>(false);
 const notificationShow = ref<boolean>(false);
@@ -40,6 +41,7 @@ const submitCancel = async () => {
   await dispatchBonusCancel({
     id: id.value,
   });
+  await dispatchUserBonus();
   if (success.value) {
     emit("bonusDialogHide");
   } else {
@@ -64,11 +66,16 @@ const submitCancel = async () => {
 <template>
   <div class="m-bonus-dialog-container">
     <v-row class="mx-4 mt-6 text-700-12 text-gray justify-center">
-      {{ t("bonus.dialog.title_text") }}
-    </v-row>
-    <v-row class="mx-4 mt-6 text-700-12 text-gray">
+      <!-- {{ t("bonus.dialog.title_text") }} -->
       <p class="text-center">
         {{ t("bonus.dialog.content_text_1") }}
+      </p>
+    </v-row>
+    <v-row class="mx-4 mt-6 text-700-12 text-gray justify-center">
+      <p class="text-center">
+        <span>{{ t("bonus.dialog.content_text_2") }}</span>
+        <span style="color: #f9bc01;">{{ ` ${receive} ` }}</span>
+        <span>{{ t("bonus.dialog.content_text_3") }}</span>
       </p>
     </v-row>
     <v-row class="mx-10 mt-10 text-700-14">
@@ -100,7 +107,7 @@ const submitCancel = async () => {
 <style lang="scss">
 // bonus dialog container
 .m-bonus-dialog-container {
-  background-color: #1D2027;
+  background-color: #1d2027;
   border-radius: 8px !important;
   height: 173px;
 }
@@ -112,6 +119,7 @@ const submitCancel = async () => {
 
     .v-btn__content {
       color: #ffffff;
+      font-size: 12px;
     }
   }
 }
@@ -119,12 +127,13 @@ const submitCancel = async () => {
 .m-bonus-cancel-btn {
   // button
   button {
-    background: #23262F !important;
+    background: #23262f !important;
     box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
-    border-radius: 26px;
+    border-radius: 8px !important;
 
     .v-btn__content {
       color: #ffffff;
+      font-size: 12px;
     }
   }
 }

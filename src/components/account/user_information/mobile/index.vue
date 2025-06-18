@@ -3,6 +3,7 @@ import { ref, watch, computed, onMounted } from "vue"
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { authStore } from "@/store/auth";
+import { userStore } from "@/store/user";
 import { storeToRefs } from "pinia";
 import { type GetUserInfo } from "@/interface/user";
 import EditNickname from "@/components/account/user_information/dialog/EditNickname.vue";
@@ -17,6 +18,9 @@ import { ElNotification } from 'element-plus'
 import SuccessIcon from '@/components/global/notification/SuccessIcon.vue';
 import WarningIcon from '@/components/global/notification/WarningIcon.vue';
 import { useToast } from "vue-toastification";
+import { liveChatStore } from "@/store/liveChat";
+import { useRoute, useRouter } from "vue-router";
+import LoadingBtn from "@/components/global/loadingBtn.vue"
 
 const { t } = useI18n();
 const { width } = useDisplay()
@@ -24,14 +28,39 @@ const { setMainBlurEffectShow } = appBarStore();
 const { setOverlayScrimShow } = appBarStore();
 const { setHeaderBlurEffectShow } = appBarStore();
 const { setMenuBlurEffectShow } = appBarStore();
+const { setLiveChatMaximize } = liveChatStore();
+const { dispatchUserEmailSend } = userStore();
+const { dispatchUserEmailSubmit } = userStore();
+
+const { dispatchUserProfile } = authStore();
+
+const route = useRoute();
+const router = useRouter();
+
+const loading = ref<boolean>(false);
 
 const userInfo = computed((): GetUserInfo => {
-    const { getUserInfo } = storeToRefs(authStore());
-    return getUserInfo.value;
+  const { getUserInfo } = storeToRefs(authStore());
+  return getUserInfo.value;
+})
+
+const token = computed(() => {
+  const { getToken } = storeToRefs(authStore());
+  return getToken.value;
+});
+
+const success = computed(() => {
+  const { getSuccess } = storeToRefs(userStore());
+  return getSuccess.value
+})
+
+const errMessage = computed(() => {
+  const { getErrMessage } = storeToRefs(userStore());
+  return getErrMessage.value
 })
 
 const mobileWidth: any = computed(() => {
-    return width.value;
+  return width.value;
 })
 
 const dialogVisible = ref<boolean>(false);
@@ -46,78 +75,174 @@ const checkIcon = ref<any>(new URL("@/assets/public/svg/icon_public_17.svg", imp
 const notificationText = ref<string>(t('account.phone_warning_text'));
 
 const handlePhonNumber = () => {
-    notificationShow.value = !notificationShow.value;
-    if (notificationShow.value) {
-        const toast = useToast();
-        toast.success(notificationText.value, {
-            timeout: 3000,
-            closeOnClick: false,
-            pauseOnFocusLoss: false,
-            pauseOnHover: false,
-            draggable: false,
-            showCloseButtonOnHover: false,
-            hideProgressBar: true,
-            closeButton: "button",
-            icon: WarningIcon,
-            rtl: false,
-        });
-    }
+  notificationShow.value = !notificationShow.value;
+  if (notificationShow.value) {
+    const toast = useToast();
+    toast.success(notificationText.value, {
+      timeout: 3000,
+      closeOnClick: false,
+      pauseOnFocusLoss: false,
+      pauseOnHover: false,
+      draggable: false,
+      showCloseButtonOnHover: false,
+      hideProgressBar: true,
+      closeButton: "button",
+      icon: WarningIcon,
+      rtl: false,
+    });
+  }
 }
 
 const editNicknameDialogShow = () => {
-    dialogVisible.value = true;
-    editNicknameDialog.value = true;
-    editPasswordDialog.value = false;
-    editEmailDialog.value = false;
-    setMainBlurEffectShow(true);
-    setHeaderBlurEffectShow(true);
-    setMenuBlurEffectShow(true);
-    setOverlayScrimShow(true);
+  dialogVisible.value = true;
+  editNicknameDialog.value = true;
+  editPasswordDialog.value = false;
+  editEmailDialog.value = false;
+  setMainBlurEffectShow(true);
+  setHeaderBlurEffectShow(true);
+  setMenuBlurEffectShow(true);
+  setOverlayScrimShow(true);
 }
 
 const editPasswordDialogShow = () => {
-    dialogVisible.value = true;
-    editPasswordDialog.value = true;
-    editNicknameDialog.value = false;
-    editEmailDialog.value = false;
-    setMainBlurEffectShow(true);
-    setHeaderBlurEffectShow(true);
-    setMenuBlurEffectShow(true);
-    setOverlayScrimShow(true);
+  dialogVisible.value = true;
+  editPasswordDialog.value = true;
+  editNicknameDialog.value = false;
+  editEmailDialog.value = false;
+  setMainBlurEffectShow(true);
+  setHeaderBlurEffectShow(true);
+  setMenuBlurEffectShow(true);
+  setOverlayScrimShow(true);
 }
 
 const editEmailDialogShow = () => {
-    dialogVisible.value = true;
-    editEmailDialog.value = true;
-    editPasswordDialog.value = false;
-    editNicknameDialog.value = false;
-    setMainBlurEffectShow(true);
-    setHeaderBlurEffectShow(true);
-    setMenuBlurEffectShow(true);
-    setOverlayScrimShow(true);
+  if (!userInfo.value.email_confirmd) {
+    const toast = useToast();
+    toast.success("Please complete the current email verification first.", {
+      timeout: 3000,
+      closeOnClick: false,
+      pauseOnFocusLoss: false,
+      pauseOnHover: false,
+      draggable: false,
+      showCloseButtonOnHover: false,
+      hideProgressBar: true,
+      closeButton: "button",
+      icon: WarningIcon,
+      rtl: false,
+    });
+    return;
+  }
+  dialogVisible.value = true;
+  editEmailDialog.value = true;
+  editPasswordDialog.value = false;
+  editNicknameDialog.value = false;
+  setMainBlurEffectShow(true);
+  setHeaderBlurEffectShow(true);
+  setMenuBlurEffectShow(true);
+  setOverlayScrimShow(true);
 }
 
 const userDialogHide = () => {
-    dialogVisible.value = false;
-    editPasswordDialog.value = false;
-    editNicknameDialog.value = false;
-    editEmailDialog.value = false;
-    setMainBlurEffectShow(false);
-    setHeaderBlurEffectShow(false);
-    setMenuBlurEffectShow(false);
-    setOverlayScrimShow(false);
+  dialogVisible.value = false;
+  editPasswordDialog.value = false;
+  editNicknameDialog.value = false;
+  editEmailDialog.value = false;
+  setMainBlurEffectShow(false);
+  setHeaderBlurEffectShow(false);
+  setMenuBlurEffectShow(false);
+  setOverlayScrimShow(false);
 }
 
 const submitNickName = (name: string) => {
-    userInfo.value.name = name
+  userInfo.value.name = name
 }
 
-const handleVerifyCode = () => {
+const handleVerifyCode = async () => {
+  loading.value = true;
+  await dispatchUserEmailSend({
+    email: userInfo.value.email
+  })
+  loading.value = false;
+  if (success.value) {
+    const toast = useToast();
+    toast.success(t("account.text_2"), {
+      timeout: 3000,
+      closeOnClick: false,
+      pauseOnFocusLoss: false,
+      pauseOnHover: false,
+      draggable: false,
+      showCloseButtonOnHover: false,
+      hideProgressBar: true,
+      closeButton: "button",
+      icon: SuccessIcon,
+      rtl: false,
+    });
+  } else {
+    const toast = useToast();
+    toast.success(errMessage.value, {
+      timeout: 3000,
+      closeOnClick: false,
+      pauseOnFocusLoss: false,
+      pauseOnHover: false,
+      draggable: false,
+      showCloseButtonOnHover: false,
+      hideProgressBar: true,
+      closeButton: "button",
+      icon: SuccessIcon,
+      rtl: false,
+    });
+  }
 }
+
+// 打开客服
+const contactService = () => {
+  setLiveChatMaximize()
+}
+
+onMounted(async () => {
+  if (route.query.email_code) {
+    setTimeout(async () => {
+      await dispatchUserEmailSubmit({
+        email: userInfo.value.email,
+        encode: route.query.email_code
+      })
+      if (success.value) {
+        const toast = useToast();
+        toast.success(t("account.text_1"), {
+          timeout: 3000,
+          closeOnClick: false,
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+          draggable: false,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: SuccessIcon,
+          rtl: false,
+        });
+      } else {
+        const toast = useToast();
+        toast.success(errMessage.value, {
+          timeout: 3000,
+          closeOnClick: false,
+          pauseOnFocusLoss: false,
+          pauseOnHover: false,
+          draggable: false,
+          showCloseButtonOnHover: false,
+          hideProgressBar: true,
+          closeButton: "button",
+          icon: SuccessIcon,
+          rtl: false,
+        });
+      }
+      await dispatchUserProfile();
+    }, 2000)
+  }
+})
 </script>
 
 <template>
-  <div class="relative">
+  <div class="relative user_information">
     <v-row class="mx-4 mt-4 text-700-12 text-white">
       {{ t("account.menu.user_info_text") }}
     </v-row>
@@ -167,8 +292,12 @@ const handleVerifyCode = () => {
           class="text-none m-email-verify-btn-color"
           @click="handleVerifyCode"
           height="40px"
+          v-if="!userInfo.email_confirmd"
         >
-          {{ t("account.verify_code_text") }}
+          <LoadingBtn v-if="loading"></LoadingBtn>
+          <div v-else>
+            {{ t("account.verify_code_text") }}
+          </div>
         </v-btn>
       </v-col>
     </v-row>
@@ -191,7 +320,7 @@ const handleVerifyCode = () => {
         </v-card>
       </v-col>
     </v-row>
-    <v-row class="mx-3 my-4">
+    <v-row class="mx-3 my-4" v-if="userInfo.phone_confirmd">
       <v-col cols="12" class="pa-0">
         <div class="mt-4">
           <v-row>
@@ -237,12 +366,12 @@ const handleVerifyCode = () => {
         </div>
       </v-col>
     </v-row>
-    <v-btn class="m-account-speaker-bg" icon>
+    <!-- <v-btn class="m-account-speaker-bg" icon @click="contactService">
       <img
         src="@/assets/public/svg/icon_public_75.svg"
         class="m-account-speaker-img-position"
       />
-    </v-btn>
+    </v-btn> -->
     <v-dialog
       v-model="dialogVisible"
       :width="mobileWidth < 600 ? 328 : 471"
@@ -274,67 +403,52 @@ const handleVerifyCode = () => {
 </template>
 
 <style lang="scss">
-.m-account-speaker-bg {
-  width: 44px;
-  height: 44px;
-  background: #009B3A;
-  border-radius: 44px;
-  position: absolute;
-  right: 20px;
-  top: 328px;
-
-  .m-account-speaker-img-position {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+.user_information {
+  .m-user-info-item {
+    height: 40px !important;
+    box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset;
   }
-}
 
-.m-user-info-item {
-  height: 40px !important;
-  box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset;
-}
+  .m-account-edit-btn {
+    background: transparent !important;
+    box-shadow: none !important;
+    min-width: auto !important;
 
-.m-account-edit-btn {
-  background: transparent !important;
-  box-shadow: none !important;
-  min-width: auto !important;
-
-  .v-btn__content {
-    font-weight: 400;
-    font-size: 12px;
-    color: #7782aa;
+    .v-btn__content {
+      font-weight: 400;
+      font-size: 12px;
+      color: #7782aa;
+    }
   }
-}
 
-.user-pwd-spacing {
-  letter-spacing: 2px;
-}
-
-.m-email-verify-btn-color {
-  width: 100%;
-  background: transparent;
-  border: 1px solid #009B3A;
-  border-radius: 8px;
-
-  .v-btn__content {
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 17px;
-    color: #009B3A;
+  .user-pwd-spacing {
+    letter-spacing: 2px;
   }
-}
 
-.Vue-Toastification__container {
-  right: 0 !important;
-  left: unset !important;
-  width: 290px !important;
-  margin-right: 37px;
-  height: 60px !important;
-  //flex-direction: unset!important;
-}
-.Vue-Toastification__toast {
+  .m-email-verify-btn-color {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #009b3a;
+    border-radius: 8px;
+
+    .v-btn__content {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 17px;
+      color: #009b3a;
+    }
+  }
+
+  .Vue-Toastification__container {
+    right: 0 !important;
+    left: unset !important;
+    width: 290px !important;
+    margin-right: 37px;
+    height: 60px !important;
+    //flex-direction: unset!important;
+  }
+
+  .Vue-Toastification__toast {
     align-items: center !important;
     z-index: 1000000000 !important;
     top: 70px;
@@ -343,26 +457,29 @@ const handleVerifyCode = () => {
     height: 60px;
     border: none;
     border-radius: 16px 0px 0px 16px;
-    background: var(--bg-2, #181522);
+    background: var(--bg-2, #15161c);
     box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.4);
-}
+  }
 
-.Vue-Toastification__toast-body {
-  color: var(--sec-text, #7782aa);
-  font-family: Inter;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  text-align: left;
-}
+  .Vue-Toastification__toast-body {
+    color: var(--sec-text, #7782aa);
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
+      sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-align: left;
+  }
 
-.Vue-Toastification__close-button {
-  top: 22px !important;
-  background-image: url("@/assets/public/svg/icon_public_52.svg");
-  background-repeat: no-repeat;
-  background-size: 18px;
-  color: transparent;
-  opacity: 1;
+  .Vue-Toastification__close-button {
+    top: 22px !important;
+    background-image: url("@/assets/public/svg/icon_public_52.svg");
+    background-repeat: no-repeat;
+    background-size: 18px;
+    color: transparent;
+    opacity: 1;
+  }
 }
 </style>

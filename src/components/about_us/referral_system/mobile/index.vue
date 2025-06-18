@@ -2,6 +2,13 @@
 import { ref, watch, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
+import { storeToRefs } from 'pinia';
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -27,11 +34,11 @@ const mobileWidth: any = computed(() => {
           <div>{{ t("about.referral_system.text_5") }}</div>
         </el-collapse-item>
         <el-collapse-item :title="t('about.referral_system.text_6')" name="2">
-          <div>{{ t("about.referral_system.text_7") }}</div>
+          <div>{{ t("about.referral_system.text_7", [platformCurrency]) }}</div>
           <div>{{ t("about.referral_system.text_8") }}</div>
           <div>{{ t("about.referral_system.text_9") }}</div>
           <div>{{ t("about.referral_system.text_10") }}</div>
-          <div>{{ t("about.referral_system.text_11") }}</div>
+          <div>{{ t("about.referral_system.text_11", [platformCurrency]) }}</div>
           <div>{{ t("about.referral_system.text_12") }}</div>
           <div>{{ t("about.referral_system.text_13") }}</div>
           <div>{{ t("about.referral_system.text_14") }}</div>
@@ -63,40 +70,6 @@ const mobileWidth: any = computed(() => {
   </div>
 </template>
 
-<style lang="scss">
-.m-about-collapse {
-  .el-collapse {
-    border-top: unset !important;
-    border-bottom: unset !important;
-  }
-  .el-collapse-item {
-    border-bottom: 2px solid #1D2027;
-  }
-  .el-collapse-item__header {
-    background-color: #15161C !important;
-    border-bottom: unset !important;
-    color: var(--White-BG, #fff);
-    font-family: Inter;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-  }
-  .el-collapse-item__wrap {
-    background-color: #15161C !important;
-  }
-  .el-collapse-item__content {
-    padding-bottom: 16px;
-    color: var(--Sec-Text-7782AA, #7782aa);
-    font-family: Inter;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 160%; /* 19.2px */
-  }
-  .el-icon {
-    color: white !important;
-    font-size: 14px;
-  }
-}
+<style lang="scss" scoped>
+
 </style>

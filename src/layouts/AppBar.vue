@@ -8,6 +8,7 @@ import { appBarStore } from "@/store/appBar";
 import { vipStore } from "@/store/vip";
 import { socketStore } from "@/store/socket";
 import { refferalStore } from '@/store/refferal';
+import { gameStore } from "@/store/game";
 import { loginBonusStore } from "@/store/loginBonus";
 import { bonusTransactionStore } from "@/store/bonusTransaction";
 import { mailStore } from "@/store/mail";
@@ -18,7 +19,7 @@ import { type GetCurrencyBalanceList } from '@/interface/currency';
 import { useToast } from "vue-toastification";
 import * as clipboard from "clipboard-polyfill";
 import { useDisplay } from 'vuetify'
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import SuccessIcon from '@/components/global/notification/SuccessIcon.vue';
 import img_vipemblem_2 from "@/assets/vip/image/img_vipemblem_2.png";
 import img_vipemblem_1_24 from "@/assets/vip/image/img_vipemblem_1-24.png";
@@ -28,11 +29,35 @@ import img_vipemblem_75_99 from "@/assets/vip/image/img_vipemblem_75-99.png";
 import img_vipemblem_100_149 from "@/assets/vip/image/img_vipemblem_100-149.png";
 import img_vipemblem_159_199 from "@/assets/vip/image/img_vipemblem_159-199.png";
 import img_vipemblem_200 from "@/assets/vip/image/img_vipemblem_200.png";
-
+import Cookies from "js-cookie"
+import currencyListValue from "@/utils/currencyList";
 import { currencyStore } from "@/store/currency";
+import { bonusStore } from "@/store/bonus";
+import { bannerStore } from "@/store/banner";
+import { depositStore } from "@/store/deposit";
+import icon_public_81 from "@/assets/public/svg/icon_public_81.svg";
+import { BtTabEnum } from '@/enums/bonusTransactionEnum';
+import { activityAppStore } from '@/store/activityApp';
+
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const { setPlatformCurrency } = appCurrencyStore()
+
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
+
+// 获取模式
+const mobile = computed(() => {
+  const { getMobile } = storeToRefs(activityAppStore());
+  return getMobile.value;
+});
 
 const { setAuthModalType } = authStore();
+const { setAuthDialogVisible } = authStore();
 const { dispatchUserProfile } = authStore();
+const { dispatchSignout } = authStore();
 const { setRightBarToggle } = appBarStore();
 const { setNavBarToggle } = appBarStore();
 const { setOverlayScrimShow } = appBarStore();
@@ -52,9 +77,16 @@ const { dispatchSocketConnect } = socketStore();
 const { setDepositWithdrawToggle } = appBarStore();
 const { setBonusDashboardDialogVisible } = appBarStore();
 const { dispatchCurrencyList } = currencyStore();
+const { dispatchUserBonus } = bonusStore();
+const { setSocketDepositConfirmDialog } = depositStore();
+const { setTimerValue } = depositStore();
+
+const { dispatchBannerList } = bannerStore();
+const { dispatchGameEnter, getGameBetbyInit, closeKill } = gameStore();
 
 const { name, width } = useDisplay()
 const router = useRouter();
+const route = useRoute();
 
 type dialogType = "login" | "signup";
 const color = ref<string>("#1D2027");
@@ -64,6 +96,9 @@ const currentLanguage = ref<string>("en");
 const appBarWidth = ref<string>("app-bar-pc");
 const notificationText = ref<string>("");
 
+const menuIconColor = ref<string>("#7782AA");
+const navbarToggle = ref<boolean>(false);
+
 // logged in user info
 const user = ref<GetUserData>({
   id: "User6696608024",
@@ -71,8 +106,8 @@ const user = ref<GetUserData>({
   name: "Little Planes",
   grade_level: "Bronze",
   grade: "VIP 4",
-  wallet: "R$515.25",
-  currency: "R$",
+  wallet: platformCurrency.value + "0",
+  currency: platformCurrency.value,
 });
 
 const vipLevelImgs = ref<Array<any>>([
@@ -129,6 +164,18 @@ const token = computed(() => {
   return getToken.value;
 });
 
+const socketDepositConfirmDialog = computed(() => {
+  const { getSocketDepositConfirmDialog } = storeToRefs(depositStore());
+  return getSocketDepositConfirmDialog.value
+})
+
+console.log(Cookies.get("blue-game-token-key"))
+
+const navToggle = computed(() => {
+  const { getNavBarToggle } = storeToRefs(appBarStore());
+  return getNavBarToggle.value
+})
+
 const userInfo = computed(() => {
   const { getUserInfo } = storeToRefs(authStore());
   return getUserInfo.value
@@ -172,6 +219,12 @@ const mobileVersion = computed(() => {
 
 const mobileWidth: any = computed(() => {
   return width.value;
+})
+
+
+const errMessage = computed(() => {
+  const { getErrMessage } = storeToRefs(authStore());
+  return getErrMessage.value
 })
 
 const refferalAppBarShow = computed(() => {
@@ -226,20 +279,19 @@ watch(mobileWidth, (newValue: number) => {
   }
 })
 
-watch(currencyMenuShow, (value: boolean) => {
-  console.log(value);
+watch(currencyMenuShow, async (value: boolean) => {
   if (mobileWidth.value < 600) {
     if (value) {
+      await dispatchCurrencyList();
       setUserNavBarToggle(false);
-      setMainBlurEffectShow(false);
+      // setMainBlurEffectShow(false);
       setNavBarToggle(false);
-      setMailMenuShow(false);
+      // setMailMenuShow(false);
       setBonusDashboardDialogVisible(false);
-      setTimeout(() => {
-        setFixPositionEnable(true);
-        setMainBlurEffectShow(true);
-      }, 10)
-
+      // setTimeout(() => {
+      setFixPositionEnable(true);
+      //   setMainBlurEffectShow(true);
+      // }, 10)
     } else {
       setFixPositionEnable(false);
     }
@@ -257,12 +309,49 @@ const formatCurrency = (currency: number, locale: string, currencyUnit: string) 
   return fomarttedAmount
 }
 
+// 获取货币符号
+const formatCurrencySymbols = (currency: string) => {
+  let locale = 'pt-BR';
+  const currencyUnit = currency
+  switch (currencyUnit) {
+    case "BRL":
+      locale = 'pt-BR';
+      break;
+    case "PHP":
+      locale = 'en-PH';
+      break;
+    case "PEN":
+      locale = 'en-PE';
+      break;
+    case "MXN":
+      locale = 'es-MX';
+      break;
+    case "CLP":
+      locale = 'es-CL';
+      break;
+    case "USD":
+      locale = 'en-US';
+    case "COP":
+      locale = 'es-CO';
+      break;
+  }
+
+  const currencySymbol = Number(0).toLocaleString(locale, {
+    style: "currency",
+    currency: currencyUnit,
+  })
+
+  const parts = currencySymbol.split('0');
+  return parts[0]
+}
+
 const toggleLanguage = () => {
   currentLanguage.value = currentLanguage.value === "en" ? "zh" : "en";
 };
 
 const openDialog = (type: dialogType) => {
   setAuthModalType(type);
+  setAuthDialogVisible(true);
   setOverlayScrimShow(false);
 };
 
@@ -270,7 +359,12 @@ const showSignoutDialog = () => {
   setAuthModalType("signout");
 }
 
-const depositDialogShow = () => {
+const depositDialogShow = async () => {
+  // await dispatchUserProfile();
+  // if (errMessage.value == "Credentials have expired. Please log in again") {
+  //   dispatchSignout();
+  //   return;
+  // }
   setDepositWithdrawToggle(true);
   setNavBarToggle(false);
   setUserNavBarToggle(false);
@@ -288,13 +382,13 @@ const userNavBarToggle = ref(false);
 const selectedCurrencyItem = ref<GetCurrencyBalanceList>({
   //icon: new URL("@/assets/public/svg/icon_public_84.svg", import.meta.url).href,
   currency: "BRL",
-  amount: "515.25",
+  amount: "0",
   availabe_balance: "",
   real: "",
   bonus: "",
 })
 
-const currencyImages : Array<any> = ([
+const currencyImages: Array<any> = ([
   {
     icon: new URL("@/assets/public/svg/icon_public_84.svg", import.meta.url).href,
     name: "BRL",
@@ -329,24 +423,30 @@ const currencyImages : Array<any> = ([
   },
 ])
 const imageIndex = ref<Array<number>>([]);
-const currencyList = computed(()=>{
+const currencyList = computed(() => {
   const { getCurrencyList } = storeToRefs(currencyStore());
-  return getCurrencyList.value
+  let orderedCurrencyList = getCurrencyList.value.sort((a, b) => a.currency.localeCompare(b.currency));
+  return orderedCurrencyList
 })
 
-watch(currencyList, (()=>{
+watch(currencyList, (() => {
   imageIndex.value.length = 0;
   currencyList.value.forEach(currency => {
-    imageIndex.value.push(currencyImages.findIndex(item=>item.name==currency.currency) !=  -1 ? currencyImages.findIndex(item=>item.name==currency.currency) : 0);
+    imageIndex.value.push(currencyImages.findIndex(item => item.name == currency.currency) != -1 ? currencyImages.findIndex(item => item.name == currency.currency) : 0);
   });
 }))
-
+// 切换货币
 const handleSelectCurrency = async (item: GetCurrencyBalanceList) => {
   selectedCurrencyItem.value = item;
 
+  sessionStorage.setItem('currency', item.currency);
+  // 切换币种的时候，更变全平台货币的符号
+  setPlatformCurrency(formatCurrencySymbols(item.currency))
   await dispatchSetUserCurrency(item.currency);
-  await dispatchUserBalance();
-
+  if (route.name == 'Sports') {
+    await closeKill();
+    await getGameBetbyInit();
+  }
   setTimeout(() => {
     setOverlayScrimShow(false);
     setMainBlurEffectShow(false);
@@ -354,11 +454,18 @@ const handleSelectCurrency = async (item: GetCurrencyBalanceList) => {
   }, 300)
 }
 
-const handleCurrencyMenuShow = () => {
-  currencyMenuShow.value = !currencyMenuShow.value;
+const handleCurrencyMenuShow = async () => {
+  await dispatchUserBalance();
+  await dispatchUserBonus();
 }
 
-const showUserNavBar = (): void => {
+const showUserNavBar = async () => {
+  // await dispatchUserProfile();
+  // console.log(errMessage.value);
+  // if (errMessage.value == "Credentials have expired. Please log in again") {
+  //   dispatchSignout();
+  //   return;
+  // }
   userNavBarToggle.value = !userNavBarToggle.value
   setNavBarToggle(false)
   setBonusDashboardDialogVisible(false);
@@ -370,6 +477,8 @@ const showUserNavBar = (): void => {
 }
 
 watch(userBalance, (value) => {
+  console.log("userbalance================", value);
+  sessionStorage.setItem('currency', value.currency);
   let locale = 'pt-BR';
   const currencyUnit = value.currency
   switch (currencyUnit) {
@@ -383,7 +492,7 @@ watch(userBalance, (value) => {
       locale = 'en-PE';
       break;
     case "MXN":
-      locale = 'en-MX';
+      locale = 'es-MX';
       break;
     case "CLP":
       locale = 'es-CL';
@@ -397,6 +506,9 @@ watch(userBalance, (value) => {
   user.value.wallet = formatCurrency(Number(value.amount), locale, currencyUnit);
   user.value.currency = value.currency
   selectedCurrencyItem.value.currency = value.currency
+  // 设置货币符号
+  setPlatformCurrency(formatCurrencySymbols(currencyUnit))
+
   /*currencyList.value.map(item => {
     if (item.name == "BRL") {
       item.value = Number(value.amount)
@@ -405,10 +517,22 @@ watch(userBalance, (value) => {
 })
 
 watch(socketBalance, (value) => {
-  const locale = 'pt-BR';
-  const currencyUnit = "BRL";
-  user.value.wallet = formatCurrency(Number(value.bal), locale, currencyUnit);
-  user.value.currency = value.cur
+  console.log("socketBalance================", value);
+  if (value.op_type == 201||value.op_type ==2010) {
+    setTimerValue(0);
+    localStorage.removeItem("spei");
+    localStorage.removeItem("timer");
+    setSocketDepositConfirmDialog(!socketDepositConfirmDialog.value);
+  }
+  let locale = currencyListValue[value.cur];
+  if (user.value.currency == value.cur) {
+    user.value.wallet = formatCurrency(Number(value.bal), locale, value.cur);
+  }
+  currencyList.value.map(item => {
+    if (item.currency == value.cur) {
+      item.amount = value.bal.toString()
+    }
+  })
 })
 
 watch(userNavToggle, (newValue) => {
@@ -428,19 +552,19 @@ const goBonusPage = () => {
 const goTransactionPage = () => {
   router.push({ name: 'Bonuses And Transactions' });
   setBonusTabIndex(1);
-  setTransactionTab(t('transaction.tab.transactions'));
+  setTransactionTab(BtTabEnum.transactions);
 }
 
 const goDepositPage = () => {
   router.push({ name: 'Bonuses And Transactions' });
   setBonusTabIndex(1);
-  setTransactionTab(t('transaction.tab.transactions'));
+  setTransactionTab(BtTabEnum.transactions);
 }
 
 const goWithdrawPage = () => {
   router.push({ name: 'Bonuses And Transactions' });
   setBonusTabIndex(1);
-  setTransactionTab(t('transaction.tab.withdrawal'));
+  setTransactionTab(BtTabEnum.withdrawal);
 }
 
 const goGameHistoryPage = () => {
@@ -495,6 +619,35 @@ const headerBlurEffectShow = computed(() => {
   return getHeaderBlurEffectShow.value
 })
 
+const menuSvgTransform = (el: any) => {
+  for (let node of el.children) {
+    node.setAttribute('fill', menuIconColor.value)
+    for (let subNode of node.children) {
+      subNode.setAttribute('fill', menuIconColor.value)
+    }
+  }
+  return el
+}
+
+const handleNavbarToggle = () => {
+  navbarToggle.value = !navbarToggle.value
+  setUserNavBarToggle(false);
+  setBonusDashboardDialogVisible(false);
+  setMainBlurEffectShow(false);
+  setTimeout(() => {
+    setNavBarToggle(navbarToggle.value);
+    if (mobileWidth.value < 600) {
+      setMainBlurEffectShow(navbarToggle.value);
+    }
+  }, 10);
+  menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
+}
+
+watch(navToggle, (newValue) => {
+  navbarToggle.value = newValue;
+  menuIconColor.value = navbarToggle.value ? "white" : "#7782AA"
+}, { deep: true })
+
 onMounted(async () => {
   if (mobileWidth.value < 600) {
     currencyMenuWidth.value = (window.innerWidth - 20) + "px";
@@ -513,7 +666,7 @@ onMounted(async () => {
   if (token.value != undefined) {
     await dispatchUserProfile();
     await dispatchUserBalance();
-    await dispatchCurrencyList();
+    await dispatchCurrencyList(); 
     // await dispatchSocketConnect();
   }
 });
@@ -529,32 +682,42 @@ onMounted(async () => {
       headerBlurEffectShow ? 'header-bg-blur' : mobileWidth > 1200 ? 'pc-header-l' : '',
     ]"
     class="app-bar-height"
+    :style="{ top: !mobile ? '0 !important' : '' }"
   >
     <v-app-bar-nav-icon
       @click.stop="setNavBarToggle(true)"
       v-if="!navBarToggle && mobileWidth > 600"
-    ></v-app-bar-nav-icon>
-    
+    >
+    </v-app-bar-nav-icon>
+
     <v-toolbar-title v-if="mobileWidth > 800">
       <img
-        src="@/assets/public/image/logo_public_01.png"
+        src="@/assets/public/image/logo_public_04.png"
         @click="goHomePage"
         style="margin-top: 12px"
       />
       <!-- <v-btn height="60" @click="goHomePage" class="align-center mt-1">
-        <img src="@/assets/public/image/logo_public_01.png" />
+        <img src="@/assets/public/image/logo_public_04.png" />
       </v-btn> -->
     </v-toolbar-title>
-    
+
     <v-toolbar-title v-else>
+      <inline-svg
+        :src="icon_public_81"
+        width="20"
+        height="20"
+        class="mb-3 mr-4"
+        :transform-source="menuSvgTransform"
+        @click="handleNavbarToggle"
+      ></inline-svg>
       <img
-        src="@/assets/public/image/logo_public_03.png"
+        src="@/assets/public/image/logo_public_04.png"
         @click="goHomePage"
         class="mt-1"
-        width="52"
+        width="44"
       />
       <!-- <v-btn height="46" width="100" @click="goHomePage" class="align-center">
-        <img src="@/assets/public/image/logo_public_03.png" />
+        <img src="@/assets/public/image/logo_public_04.png" />
       </v-btn> -->
     </v-toolbar-title>
     <div v-if="token != undefined">
@@ -602,12 +765,12 @@ onMounted(async () => {
                         <template v-slot:prepend>
                           <img width="24" />
                         </template>
-                        <v-list-item-title class="ml-2 text-700-14">{{
-                          currencyItem.currency
-                        }}</v-list-item-title>
+                        <v-list-item-title class="ml-2 text-700-14">
+                          {{ currencyItem.currency }}
+                        </v-list-item-title>
                         <template v-slot:append>
                           <p class="text-700-14 white">
-                            $ {{ parseFloat(currencyItem.amount).toFixed(2) }}
+                            {{ formatCurrencySymbols(currencyItem.currency) }} {{ parseFloat(currencyItem.amount).toFixed(2) }}
                           </p>
                         </template>
                       </v-list-item>
@@ -652,7 +815,7 @@ onMounted(async () => {
                         style="height: 40px"
                       >
                         <!-- <p class="mr-1 text-700-12">{{ user.currency }}</p> -->
-                        <p class="text-700-12">{{ user.wallet }}</p>
+                        <p class="text-700-14 white">{{ user.wallet }}</p>
                         <img
                           src="@/assets/public/svg/icon_public_50.svg"
                           class="mr-3"
@@ -662,7 +825,7 @@ onMounted(async () => {
                     </template>
                     <v-list
                       theme="dark"
-                      bg-color="#23262F"
+                      bg-color="#1d2027"
                       class="px-2"
                       :width="currencyMenuWidth"
                     >
@@ -679,14 +842,17 @@ onMounted(async () => {
                         @click="handleSelectCurrency(currencyItem)"
                       >
                         <template v-slot:prepend>
-                          <img width="20" :src="currencyImages[imageIndex[currencyIndex]].icon"/>
+                          <img
+                            width="20"
+                            :src="currencyImages[imageIndex[currencyIndex]].icon"
+                          />
                         </template>
                         <v-list-item-title class="ml-2 text-700-10">{{
                           currencyItem.currency
                         }}</v-list-item-title>
                         <template v-slot:append>
                           <p class="text-700-10 white">
-                            $ {{ parseFloat(currencyItem.amount).toFixed(2) }}
+                            {{ formatCurrencySymbols(currencyItem.currency) }} {{ parseFloat(currencyItem.amount).toFixed(2) }}
                           </p>
                         </template>
                       </v-list-item>
@@ -701,7 +867,7 @@ onMounted(async () => {
                       class="deposit-icon-position cursor-pointer"
                       width="20"
                     />
-                    <div class="text-700-8 white m-deposit-text-position">
+                    <div class="text-700-10 white m-deposit-text-position">
                       {{ t("appBar.deposit") }}
                     </div>
                   </div>
@@ -756,7 +922,7 @@ onMounted(async () => {
                 <img src="@/assets/public/svg/icon_public_58.svg" />
               </template>
               <v-list-item-title class="ml-2"
-                >{{ t("appBar.id") }}ddd: {{ userInfo.uid }}</v-list-item-title
+                >{{ t("appBar.id") }}: {{ userInfo.uid }}</v-list-item-title
               >
               <template v-slot:append>
                 <img
@@ -867,7 +1033,7 @@ onMounted(async () => {
                   <div class="d-flex">
                     <div class="white">{{ t("appBar.deposit") }}</div>
                     <div class="ml-auto">
-                      <font>R$ 5642</font> / <font color="#F9BC01">R$ 10000</font>
+                      <font>{{ platformCurrency }} 5642</font> / <font color="#F9BC01">{{ platformCurrency }} 10000</font>
                     </div>
                   </div>
                   <div>
@@ -883,7 +1049,7 @@ onMounted(async () => {
                   <div class="d-flex">
                     <div class="white">{{ t("appBar.wager") }}</div>
                     <div class="ml-auto">
-                      <font>R$ 5642</font> / <font color="#623AEC">R$ 10000</font>
+                      <font>{{ platformCurrency }} 5642</font> / <font color="#623AEC">{{ platformCurrency }} 10000</font>
                     </div>
                   </div>
                   <div>
@@ -1154,13 +1320,13 @@ onMounted(async () => {
     opacity: 0 !important;
   }
 
-  .v-overlay__content::after {
+  .v-overlay__content::before {
     content: "";
     position: absolute;
     align-self: center;
     top: -25px;
     right: 150px;
-    border: 13px solid #1D2027;
+    border: 13px solid #1d2027;
     border-right-color: transparent;
     border-left-color: transparent;
     border-top-color: transparent;
@@ -1176,7 +1342,7 @@ onMounted(async () => {
     align-self: center;
     top: -25px;
     left: 60px;
-    border: 13px solid #1D2027;
+    border: 13px solid #1d2027;
     border-right-color: transparent;
     border-left-color: transparent;
     border-top-color: transparent;
@@ -1258,14 +1424,14 @@ onMounted(async () => {
 
 @media (max-width: 600px) {
   .app-bar-position {
-    top: 32px !important;
+    top: 48px !important;
   }
 
   .app-bar-height {
-    height: 60px !important;
+    height: $appBarHeight !important;
 
     .v-toolbar__content {
-      height: 60px !important;
+      height: $appBarHeight !important;
     }
   }
 }
@@ -1304,12 +1470,13 @@ onMounted(async () => {
 
 // login btn mobile version
 .app-bar-login-btn-mobile {
-  width: 80px;
+  // width: 80px;
   height: 40px !important;
   background-color: transparent;
   margin-right: 6px;
   font-size: 6px !important;
   font-weight: 400;
+  padding: 0 8px;
 
   .v-btn__content {
     font-weight: 700;
@@ -1321,14 +1488,14 @@ onMounted(async () => {
   width: 120px;
   height: 48px !important;
   border-radius: 8px !important;
-  background-color: #009B3A !important;
+  background-color: #009b3a !important;
 }
 
 .app-bar-signup-btn-mobile {
   width: 91px;
   height: 40px !important;
-  border-radius: 8px;
-  background: #009B3A;
+  border-radius: 8px !important;
+  background: #009b3a !important;
   //border: 1px solid #8664f7;
   //background: linear-gradient(0deg, #5524fd 0%, #6d44f7 100%);
 
@@ -1409,7 +1576,7 @@ onMounted(async () => {
     align-self: center;
     top: -25px;
     right: 68px;
-    border: 13px solid #1D2027;
+    border: 13px solid #1d2027;
     border-right-color: transparent;
     border-left-color: transparent;
     border-top-color: transparent;
@@ -1433,7 +1600,7 @@ onMounted(async () => {
     align-self: center;
     right: 66px;
     top: -18px;
-    border: 9px solid #1D2027;
+    border: 9px solid #1d2027;
     border-right-color: transparent;
     border-left-color: transparent;
     border-top-color: transparent;
@@ -1490,7 +1657,7 @@ onMounted(async () => {
 
   .mail-item {
     margin-top: 4px !important;
-    background-color: #15161C !important;
+    background-color: #15161c !important;
     padding: 4px 8px !important;
     border-radius: 8px !important;
   }
@@ -1509,7 +1676,8 @@ onMounted(async () => {
 }
 
 .refer-friend-background {
-  background-image: url("@/assets/public/image/bg_public_28.png");
+  background-image: url("@/assets/public/image/bg_public_28.png") !important;
+  background-size: 100% 100% !important;
 }
 
 .refer-friend-img-position {
@@ -1522,7 +1690,7 @@ onMounted(async () => {
   position: absolute;
   right: 9px;
   top: 23px;
-  background: #1D2027;
+  background: #1d2027;
   border-radius: 20px;
   padding: 2px 12px;
   font-weight: 500;
@@ -1530,7 +1698,8 @@ onMounted(async () => {
 }
 
 .app-background {
-  background-image: url("@/assets/public/image/bg_public_29.png");
+  background-image: url("@/assets/public/image/bg_public_29.png") !important;
+  background-size: 100% 100% !important;
 }
 
 .app-img-position {
@@ -1543,7 +1712,7 @@ onMounted(async () => {
   position: absolute;
   right: 13px;
   top: 22px;
-  background: #1D2027;
+  background: #1d2027;
   border-radius: 20px;
   padding: 2px 21px;
   font-weight: 500;
@@ -1552,7 +1721,7 @@ onMounted(async () => {
 
 .sign-out-btn {
   cursor: pointer;
-  background: #23262F;
+  background: #23262f;
   border-radius: 8px;
   padding: 13px;
   margin: 0px 20px;
@@ -1574,7 +1743,7 @@ onMounted(async () => {
 
 .deposit-progress-bg {
   .v-progress-linear {
-    background: #15161C !important;
+    background: #15161c !important;
     box-shadow: inset 2px 0px 4px 1px rgba(0, 0, 0, 0.12) !important;
     border-radius: 20px !important;
   }
@@ -1598,7 +1767,7 @@ onMounted(async () => {
   border-radius: 8px;
   //border: 1px solid #8664f7;
   //background: linear-gradient(0deg, #5524fd 0%, #6d44f7 100%);
-  background: #009B3A;
+  background: #009b3a;
 }
 
 .deposit-text-position {

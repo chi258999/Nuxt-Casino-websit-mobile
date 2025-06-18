@@ -18,11 +18,12 @@ import { mainStore } from "@/store/main";
 const casinoIconColor = ref<string>("#7782AA");
 const rewardIconColor = ref<string>("#7782AA");
 const sportIconColor = ref<string>("#7782AA");
-const promoIconColor = ref<string>("#ffffff");
+const promoIconColor = ref<string>("#7782AA");
 const searchIconColor = ref<string>("#7782AA");
 const mailIconColor = ref<string>("#7782AA");
 const scale = ref<number>(1);
 const bottom = ref<number>(-48);
+const selectedText = ref<string>("");
 
 // mail count
 const mailCount = ref<number>(10);
@@ -40,6 +41,9 @@ const { setMobileMenuMailToggle } = mailStore();
 const { setOverlayScrimShow } = appBarStore();
 const { setMainBlurEffectShow } = appBarStore();
 const { setSearchDialogShow } = mainStore();
+const { setCasinoGameShow } = mainStore();
+const { setCircleMenuBtnClicked } = menuStore();
+const { setSelectedCircleItem } = menuStore();
 
 const selectedItem = computed(() => {
   const { getSelectedItem } = storeToRefs(menuStore());
@@ -51,22 +55,48 @@ const semiCircleShow = computed(() => {
   return getSemiCircleShow.value;
 });
 
+const casinoGameShow = computed(() => {
+  const { getCasinoGameShow } = storeToRefs(mainStore());
+  return getCasinoGameShow.value;
+});
+
+const homeMenuBtnClicked = computed(() => {
+  const { getHomeMenuBtnClicked } = storeToRefs(menuStore());
+  return getHomeMenuBtnClicked.value;
+});
+
+const circleMenuBtnClicked = computed(() => {
+  const { getCircleMenuBtnClicked } = storeToRefs(menuStore());
+  return getCircleMenuBtnClicked.value;
+});
+
+watch(homeMenuBtnClicked, (value) => {
+  selectedText.value = "";
+  promoIconColor.value = "#7782AA";
+  searchIconColor.value = "#7782AA";
+  mailIconColor.value = "#7782AA";
+  casinoIconColor.value = "#7782AA";
+});
+
 watch(selectedItem, (newValue) => {
   switch (newValue) {
     case t("mobile_menu.promo"):
       promoIconColor.value = "#ffffff";
       searchIconColor.value = "#7782AA";
       mailIconColor.value = "#7782AA";
-      break;
-    case t("mobile_menu.search"):
-      promoIconColor.value = "#7782AA";
-      searchIconColor.value = "#ffffff";
-      mailIconColor.value = "#7782AA";
+      casinoIconColor.value = "#7782AA";
       break;
     case t("mobile_menu.mail"):
       promoIconColor.value = "#7782AA";
       searchIconColor.value = "#7782AA";
       mailIconColor.value = "#ffffff";
+      casinoIconColor.value = "#7782AA";
+      break;
+    case t("mobile_menu.casino"):
+      casinoIconColor.value = "#ffffff";
+      promoIconColor.value = "#7782AA";
+      searchIconColor.value = "#7782AA";
+      mailIconColor.value = "#7782AA";
       break;
   }
 });
@@ -143,6 +173,9 @@ const mailSvgTransform = (el: any) => {
 };
 
 const handleSelectItem = (item: string) => {
+  setSelectedCircleItem(item);
+  setCircleMenuBtnClicked(circleMenuBtnClicked.value ? false : true);
+  selectedText.value = item;
   setSelectedItem(item);
   setSemiCircleShow(false);
   bottom.value = -48;
@@ -152,10 +185,31 @@ const handleSelectItem = (item: string) => {
     setOverlayScrimShow(false);
     setMainBlurEffectShow(false);
     setMailMenuShow(false);
-  } else if (item == t("mobile_menu.search")) {
-    setSearchDialogShow(true);
   } else if (item == t("mobile_menu.mail")) {
     setMobileMenuMailToggle(true);
+  } else if (item == t("mobile_menu.casino")) {
+    setCasinoGameShow(casinoGameShow.value ? false : true);
+    router.push({ name: "Dashboard", query: { game: "casino" } });
+  }
+  switch (item) {
+    case t("mobile_menu.promo"):
+      promoIconColor.value = "#ffffff";
+      searchIconColor.value = "#7782AA";
+      mailIconColor.value = "#7782AA";
+      casinoIconColor.value = "#7782AA";
+      break;
+    case t("mobile_menu.mail"):
+      promoIconColor.value = "#7782AA";
+      searchIconColor.value = "#7782AA";
+      mailIconColor.value = "#ffffff";
+      casinoIconColor.value = "#7782AA";
+      break;
+    case t("mobile_menu.casino"):
+      casinoIconColor.value = "#ffffff";
+      promoIconColor.value = "#7782AA";
+      searchIconColor.value = "#7782AA";
+      mailIconColor.value = "#7782AA";
+      break;
   }
 };
 
@@ -191,11 +245,11 @@ onMounted(() => {
           height="22"
           :transform-source="promoSvgTransform"
         ></inline-svg>
-        <p class="chat-box-text">{{ mailCount }}</p>
+        <!-- <p class="chat-box-text">{{ mailCount }}</p> -->
       </div>
       <div
         class="text-600-12"
-        :class="selectedItem == t('mobile_menu.promo') ? 'white' : 'gray'"
+        :class="selectedText == t('mobile_menu.promo') ? 'white' : 'gray'"
       >
         {{ t("mobile_menu.promo") }}
       </div>
@@ -211,30 +265,30 @@ onMounted(() => {
           height="22"
           :transform-source="mailSvgTransform"
         ></inline-svg>
-        <p class="chat-box-text">{{ mailCount }}</p>
+        <!-- <p class="chat-box-text">{{ mailCount }}</p> -->
       </div>
       <div
         class="text-600-12"
-        :class="selectedItem == t('mobile_menu.mail') ? 'white' : 'gray'"
+        :class="selectedText == t('mobile_menu.mail') ? 'white' : 'gray'"
       >
         {{ t("mobile_menu.mail") }}
       </div>
     </div>
     <div
       class="m-semicircle-item m-semicircle-search"
-      @click="handleSelectItem(t('mobile_menu.search'))"
+      @click="handleSelectItem(t('mobile_menu.casino'))"
     >
       <inline-svg
-        :src="icon_public_94"
+        :src="icon_public_34"
         width="22"
         height="22"
-        :transform-source="searchSvgTransform"
+        :transform-source="casinoSvgTransform"
       ></inline-svg>
       <div
         class="text-600-12"
-        :class="selectedItem == t('mobile_menu.search') ? 'white' : 'gray'"
+        :class="selectedText == t('mobile_menu.casino') ? 'white' : 'gray'"
       >
-        {{ t("mobile_menu.search") }}
+        {{ t("mobile_menu.casino") }}
       </div>
     </div>
   </div>
@@ -242,8 +296,8 @@ onMounted(() => {
 
 <style lang="scss">
 .m-menu-semicircle-toggle {
-  width: 175px;
-  height: 87.5px;
+  width: 180px;
+  height: 90px;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(8px);
   position: fixed;
@@ -261,8 +315,9 @@ onMounted(() => {
   }
 
   .m-semicircle-promo {
-    left: 17px;
+    left: 23%;
     top: 32px;
+    transform: translateX(-50%);
 
     .chat-box-text {
       top: -1px;
@@ -284,8 +339,10 @@ onMounted(() => {
   }
 
   .m-semicircle-mail {
-    right: 23px;
+    // right: 23px;
     top: 32px;
+    right: 23%;
+    transform: translateX(50%);
 
     .chat-box-text {
       top: -1px;

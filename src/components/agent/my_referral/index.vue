@@ -11,16 +11,24 @@ import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import { authStore } from "@/store/auth";
 import SuccessIcon from "@/components/global/notification/SuccessIcon.vue";
-
+import { appCurrencyStore } from "@/store/app";
+import { toFormatNum } from '@/utils/numFormat';
+import { useOpenUrl } from '@/plugins/openPage'
+import { getUrl } from "@/utils";
 const { dispatchUserInvite } = inviteStore();
 const { dispatchInviteAward } = inviteStore();
+// 获取平台货币
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
-const emit = defineEmits<{ (e: "goReportTab", index: number): void }>();
+const emit = defineEmits<{ (e: "goReportTab", index: number): void, (e: 'inited', val: boolean): void }>();
 
 const { t } = useI18n();
 const svgColor = ref<string>("#ffffff");
 const size = ref<number>(64);
-
+const { openUrl } = useOpenUrl()
 const notificationText = ref<string>("");
 
 const loading = ref<boolean>(false);
@@ -76,51 +84,57 @@ const goReportTab = () => {
 
 const sendTelegramAppInvite = () => {
   const Telegram_BASE_URL = "https://t.me/share/url?url=";
-  const BASE_URL = token
-    ? `${import.meta.env.VITE_BASE_URL}?code=${inviteItem.value.invite_code}`
-    : import.meta.env.VITE_BASE_URL;
+  const BASE_URL = (token&&inviteItem.value.invite_code)
+    ? `${getUrl('base')}?code=${inviteItem.value.invite_code}`
+    : getUrl('base');
   const url = `${Telegram_BASE_URL}${BASE_URL}`;
-  window.location.href = url;
+  // window.location.href = url;
+  openUrl(url)
 };
 
 const sendWhatsAppInvite = () => {
   const inviteMessage = encodeURIComponent("message");
   const WHATSAPP_BASE_URL = "https://api.whatsapp.com/send?text=";
-  const BASE_URL = token
-    ? `${import.meta.env.VITE_BASE_URL}?code=${inviteItem.value.invite_code}`
-    : import.meta.env.VITE_BASE_URL;
+  const BASE_URL = (token&&inviteItem.value.invite_code)
+    ? `${getUrl('base')}?code=${inviteItem.value.invite_code}`
+    : getUrl('base');
   const url = `${WHATSAPP_BASE_URL}${BASE_URL}`;
-  window.location.href = url;
+  // window.location.href = url;
+  openUrl(url)
 };
 
 const sendFacebookAppInvite = () => {
   const FACEBOOK_BASE_URL = "https://www.facebook.com/sharer/sharer.php?u=";
-  const BASE_URL = token
-    ? `${import.meta.env.VITE_BASE_URL}?code=${inviteItem.value.invite_code}`
-    : import.meta.env.VITE_BASE_URL;
+  const BASE_URL = (token&&inviteItem.value.invite_code)
+    ? `${getUrl('base')}?code=${inviteItem.value.invite_code}`
+    : getUrl('base');
   const url = `${FACEBOOK_BASE_URL}${BASE_URL}`;
-  window.location.href = url;
+  // window.location.href = url;
+  openUrl(url)
 };
 
 const sendTwitterAppInvite = () => {
   const TWITTER_BASE_URL = "https://twitter.com/intent/tweet?url=";
-  const BASE_URL = token
-    ? `${import.meta.env.VITE_BASE_URL}?code=${inviteItem.value.invite_code}`
-    : import.meta.env.VITE_BASE_URL;
+  const BASE_URL = (token&&inviteItem.value.invite_code)
+    ? `${getUrl('base')}?code=${inviteItem.value.invite_code}`
+    : getUrl('base');
   const url = `${TWITTER_BASE_URL}${BASE_URL}`;
-  window.location.href = url;
+  // window.location.href = url;
+  openUrl(url)
 };
 
 const sendEmailAppInvite = () => {
   const EMAIL_BASE_URL = "mailto:?body=";
-  const BASE_URL = token
-    ? `${import.meta.env.VITE_BASE_URL}?code=${inviteItem.value.invite_code}`
-    : import.meta.env.VITE_BASE_URL;
+  const BASE_URL = (token&&inviteItem.value.invite_code)
+    ? `${getUrl('base')}?code=${inviteItem.value.invite_code}`
+    : getUrl('base');
   const url = `${EMAIL_BASE_URL}${BASE_URL}`;
-  window.location.href = url;
+  // window.location.href = url;
+  openUrl(url)
 };
 
 const inviteAward = async () => {
+  if (inviteItem.value.available_bonus == 0) return;
   loading.value = true;
   await dispatchInviteAward({});
   loading.value = false;
@@ -141,11 +155,12 @@ const inviteAward = async () => {
 
 onMounted(async () => {
   await dispatchUserInvite();
+  emit('inited', false)
 });
 </script>
 
 <template>
-  <div>
+  <div class="myReferral">
     <div class="relative">
       <img src="@/assets/public/svg/img_public_26.svg" style="width: 100%" />
       <div class="m-my-referral-report-card">
@@ -166,13 +181,19 @@ onMounted(async () => {
           <div class="text-400-12 text-white">{{ t("agent.text_7") }}</div>
         </v-col>
         <v-col cols="6" class="text-right">
-          <v-btn width="112" height="32" :loading="loading" @click="inviteAward">
+          <v-btn
+            width="112"
+            height="32"
+            :loading="loading"
+            :disabled="inviteItem.available_bonus == 0"
+            @click="inviteAward"
+          >
             {{ t("agent.text_8") }}
           </v-btn>
         </v-col>
       </v-row>
       <div class="m-referral-reward-card-1 mx-7 text-700-18 text-white">
-        R$ {{ inviteItem.available_bonus }}
+        {{ platformCurrency }} {{ toFormatNum(inviteItem.available_bonus) }}
       </div>
     </div>
     <v-card class="mx-2 m-agent-referral-partner-card">
@@ -189,6 +210,7 @@ onMounted(async () => {
           <div
             class="text-700-10 text-black text-center mt-2"
             @click="inviteUrlCopy(inviteItem.web_invite_url)"
+            style="line-height: 10px;"
           >
             {{ t("agent.text_10") }}
           </div>
@@ -235,6 +257,14 @@ onMounted(async () => {
   </div>
 </template>
 
+<style lang="scss" scoped>
+.myReferral {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+</style>
+
 <style lang="scss">
 .m-my-referral-report-card {
   position: absolute;
@@ -278,18 +308,25 @@ onMounted(async () => {
     .v-btn__content {
       color: #000;
       text-align: center;
-      font-family: Inter;
+      font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed,
+        DisplayRegular, Helvetica, Arial, PingFang SC, Hiragino Sans GB,
+        WenQuanYi Micro Hei, Microsoft Yahei, sans-serif;
       font-size: 12px;
       font-style: normal;
       font-weight: 700;
       line-height: normal;
     }
   }
+  .v-btn--disabled {
+    .v-btn__content {
+      color: #ffffff !important;
+    }
+  }
 }
 
 .m-referral-reward-card-1 {
   position: absolute;
-  top: 76px;
+  top: 70px;
 }
 
 .m-agent-referral-partner-card {

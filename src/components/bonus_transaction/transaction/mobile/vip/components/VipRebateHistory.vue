@@ -8,6 +8,12 @@ import { vipStore } from "@/store/vip";
 import { storeToRefs } from "pinia";
 import moment from "moment-timezone";
 import { type VipRebateHistoryItem } from "@/interface/vip";
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
 
 const { t } = useI18n();
 const { width } = useDisplay();
@@ -22,6 +28,7 @@ const loading = ref<boolean>(false);
 const loadingIndex = ref<number>(0)
 const startIndex = ref<number>(0);
 const endIndex = ref<number>(8);
+const isScrollRight=ref(false)
 
 const tempHistoryList = [{},{},{},{},{},{}];
 
@@ -33,14 +40,39 @@ const fixPositionShow = computed(() => {
   const { getFixPositionEnable } = storeToRefs(appBarStore());
   return getFixPositionEnable.value;
 });
+onMounted(async () => {
+  handleScroll()
+});
+
+const handleScroll=()=>{
+  const scrollContainer = document.getElementsByClassName('v-table__wrapper')[0];
+  scrollContainer.addEventListener('scroll', ()=> {
+  // 当前滚动位置
+  const scrollPosition = scrollContainer.scrollLeft;
+  // 容器总宽度
+  const totalWidth = scrollContainer.scrollWidth;
+  // 容器可视区域宽度
+  const containerWidth = scrollContainer.clientWidth;
+ 
+  // 检查是否滚动到最右边
+  if (scrollPosition + containerWidth >= totalWidth) {
+    isScrollRight.value=true
+    // 执行到达最右边时的操作
+  }else{
+     isScrollRight.value=false
+  }
+});
+}
+
 </script>
 <template>
   <v-table
-    class="m-forms-bonus-table-bg"
+    class="m-forms-bonus-table-bg relative"
     :class="fixPositionShow ? 'table-position-overflow' : ''"
     theme="dark"
     fixed-header
     style="padding: 16px"
+    height="570px"
   >
     <thead class="forms-table-header">
       <tr>
@@ -86,33 +118,27 @@ const fixPositionShow = computed(() => {
         <tr v-for="(item, index) in tempHistoryList" :key="index">
           <td
             class="text-400-12"
-            style="padding-top: 21px !important; padding-bottom: 21px !important"
+            style=""
           ></td>
           <td
             class="text-400-12"
             style="
-              padding-top: 21px !important;
-              padding-bottom: 21px !important;
               min-width: 60px;
             "
           ></td>
           <td
             class="text-400-12"
-            style="padding-top: 21px !important; padding-bottom: 21px !important"
+            style=""
           ></td>
           <td
             class="text-400-12 color-D42763"
             style="
-              padding-top: 21px !important;
-              padding-bottom: 21px !important;
               min-width: 130px;
             "
           ></td>
           <td
             class="text-400-12"
             style="
-              padding-top: 21px !important;
-              padding-bottom: 21px !important;
               min-width: 130px;
             "
           ></td>
@@ -122,51 +148,79 @@ const fixPositionShow = computed(() => {
         <tr v-for="(item, index) in currentList" :key="index">
           <td
             class="text-400-12"
-            style="padding-top: 21px !important; padding-bottom: 21px !important"
+            style=""
           >
-            {{ moment(Number(item.created_at) * 1000).format("YYYY-MM-DD HH:mm:ss") }}
+            {{
+              item.created_at == ""
+                ? ""
+                : moment(Number(item.created_at) * 1000).format("YYYY-MM-DD HH:mm:ss")
+            }}
           </td>
           <td
             class="text-400-12"
             style="
-              padding-top: 21px !important;
-              padding-bottom: 21px !important;
               min-width: 60px;
             "
           >
-            R$ {{ Number(item.amount).toFixed(2) }}
+            {{
+              item.amount == "" ? "" : platformCurrency + Number(item.amount).toFixed(2)
+            }}
           </td>
           <td
             class="text-400-12 color-01983A"
-            style="padding-top: 21px !important; padding-bottom: 21px !important"
+            style=""
           >
-            R$ {{ Number(item.cash_back).toFixed(2) }}
+            {{
+              item.cash_back == ""
+                ? ""
+                : platformCurrency + Number(item.cash_back).toFixed(2)
+            }}
           </td>
           <td
             class="text-400-12"
             style="
-              padding-top: 21px !important;
-              padding-bottom: 21px !important;
               min-width: 130px;
             "
           >
-            VIP {{ item.vip_level }} / {{ Number(item.vip_rate) * 100 }}%
+            {{
+              item.vip_level == ""
+                ? ""
+                : `VIP${item.vip_level}/${Number(item.vip_rate) * 100}%`
+            }}
           </td>
           <td
             class="text-400-12"
             style="
-              padding-top: 21px !important;
-              padding-bottom: 21px !important;
               min-width: 130px;
             "
           >
             <div>
-              {{ item.game_type }}
+              {{ item.game_type == "" ? "" : item.game_type }}
             </div>
           </td>
         </tr>
       </template>
+      <div class="arrow" v-if="!isScrollRight">
+        <img class="arrow-img" src="@/assets/public/svg/arrow-right.svg" />
+      </div>
     </tbody>
   </v-table>
 </template>
-<style lang="scss"></style>
+<style lang="scss">
+.arrow {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateX(-50%, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 32px;
+  background: #000;
+  .arrow-img {
+    width: 14px;
+    height: 14px;
+  }
+}
+</style>

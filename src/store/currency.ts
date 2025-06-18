@@ -14,7 +14,6 @@ export const currencyStore = defineStore({
   getters: {
     getSuccess: (state) => state.success,
     getErrMessage: (state) => state.errMessage,
-
     getCurrencyList: (state) => state.currencyList,
   },
   actions: {
@@ -39,7 +38,8 @@ export const currencyStore = defineStore({
                 this.setSuccess(true);
                 this.setCurrencyList(response.data);
             } else {
-                this.setErrorMessage(handleException(response.code));
+                // this.setErrorMessage(handleException(response.code));
+                this.setErrorMessage(response.message);
             }
         }
         await network.sendMsg(route, {}, next, 1, 4);

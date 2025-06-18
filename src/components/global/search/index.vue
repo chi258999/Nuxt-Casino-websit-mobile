@@ -127,7 +127,8 @@ const handleEnterGame = async (id: number, name: string) => {
   if (mobileWidth.value < 600) {
     setMailMenuShow(true);
   }
-  router.push(`/game/${id}/${replaceName}`);
+  // router.push(`/game/${id}/${replaceName}`);
+  router.push(`/game-${id}-${replaceName}`);
 };
 
 const handleSearchInput = async () => {
@@ -450,7 +451,7 @@ onMounted(async () => {
   transform: translate(-50%, -50%);
   width: 48px;
   height: 46px;
-  background-image: url("@/assets/public/image/img_public_42.png");
+  background-image: url("@/assets/public/image/logo_public_06.png");
   background-repeat: no-repeat;
   background-size: contain;
   animation: opacityAnimation 0.6s ease-in infinite;
@@ -493,7 +494,9 @@ onMounted(async () => {
   box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, 0.21);
   color: var(--Sec-Text-7782AA, #7782aa);
   text-align: center;
-  font-family: Inter;
+  font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+    Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei, Microsoft Yahei,
+    sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -528,10 +531,12 @@ onMounted(async () => {
   background: var(--BG-5-1C1929, #15161c);
   color: #fff;
   text-align: center;
+
   .m-search-header-icon {
     width: 20px;
     height: 20px;
   }
+
   .m-search-header-icon::before {
     content: "";
     position: absolute;
@@ -589,7 +594,9 @@ onMounted(async () => {
 
   .v-field__input::placeholder {
     color: var(--Sec-Text-7782AA, #7782aa);
-    font-family: Inter;
+    font-family: Inter, -apple-system, Framedcn, Helvetica Neue, Condensed, DisplayRegular,
+      Helvetica, Arial, PingFang SC, Hiragino Sans GB, WenQuanYi Micro Hei,
+      Microsoft Yahei, sans-serif;
     font-size: 10px !important;
     font-style: normal;
     font-weight: 400 !important;

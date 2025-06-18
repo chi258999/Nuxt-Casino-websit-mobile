@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted, onUnmounted } from "vue";
+import { ref, computed, nextTick, onMounted, onUnmounted, defineAsyncComponent } from "vue";
 import { gameStore } from "@/store/game";
 import { mailStore } from "@/store/mail";
+import { vipStore } from '@/store/vip'
 import { useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
@@ -14,12 +15,28 @@ import "swiper/css/virtual";
 // import Swiper core and required modules
 import { Pagination, Virtual, Autoplay, Navigation } from "swiper/modules";
 import { useRoute, useRouter } from "vue-router";
+import AdjustClass from "@/utils/adjust";
+import EventToken from "@/constants/EventToken";
+import CloseIframe from "@/components/close_iframe/index.vue";
+import gameBonusDrawer from "./components/gameBonusDrawer.vue";
+import { getDeviceType } from "@/utils/getPublicInformation";
+import { getQueryParams } from "@/utils/getPublicInformation";
+import { appCurrencyStore } from "@/store/app";
+// 设置首屏是否显示
+const { setIsShowSkeleton } = appCurrencyStore()
+
+// 是否显示关闭按钮
+const displayedCloseBtn = ref<boolean>(false)
+// 奖金使用弹窗
+const bonusDrawer=ref(true)
 
 const { t } = useI18n();
 const { width } = useDisplay();
 const { setMailMenuShow } = mailStore();
 const { dispatchGameEnter } = gameStore();
+const { setIsScroll } = gameStore();
 const { setMobileMenuShow } = gameStore();
+const { dispatchVipInfo } = vipStore()
 const route = useRoute();
 const router = useRouter();
 const mobileHeight = ref<number | undefined>(0);
@@ -357,6 +374,12 @@ const isNumeric = (value: any) => {
 };
 
 const handleIframeLoad = () => {
+  // 打开游戏，显示关闭按钮
+  displayedCloseBtn.value = true
+
+  // 打开游戏，关闭横屏遮罩层的监听
+  setIsScroll(false)
+
   if (enterGameItem.value.weburl != "") {
     frameShow.value = true;
   }
@@ -368,16 +391,61 @@ const handleIframeLoad = () => {
 const handleMessageFromIframe = (event: any) => {
   console.log(event);
   if (event.data.url == "bluesite:exit") {
-    router.push({ name: "Dashboard" });
+    // 关闭游戏，打开横屏遮罩层的监听
+    setIsScroll(true)
+    router.go(-1);
   }
 };
 
 const handleResize = () => {
+  const doc = document.documentElement
+  doc.style.setProperty('--doc-height', `${window.innerHeight}px`)
   mobileHeight.value = window.innerHeight;
 };
 
+const queryParams = getQueryParams()
+
+// 点击关闭按钮回调
+const closeGame = async() => {
+  // 关闭游戏，打开横屏遮罩层的监听
+  setIsScroll(true)
+  //退出游戏获取进度条 
+  await dispatchVipInfo()
+  router.go(-1);
+  // router.push({path: "/", query: queryParams})
+  // 关闭按钮显示
+  // displayedCloseBtn.value = false
+}
+
 onMounted(async () => {
+  AdjustClass.getInstance().adjustTrackEvent({
+    key: "PAGE_VIEW",
+    value: "game",
+    params: "",
+  });
   window.addEventListener("resize", handleResize);
+  handleResize()
+
+  // 判断是否切换横竖屏
+  window.addEventListener(
+    "onorientationchange" in window ? "orientationchange" : "resize",
+    function () {
+      frameShow.value = true;
+      setTimeout(() => {
+        // 页面重载
+        window.location.reload();
+        frameShow.value = false;
+      }, 200);
+    },
+    false
+  );
+
+  // 判断初始化是否在游戏页面并且是移动端，则关闭遮罩层
+  if(['ios', 'android'].includes(getDeviceType())) {
+    // 打开游戏，关闭横屏遮罩层的监听
+    setIsScroll(false)
+  }
+
   mobileHeight.value = window.innerHeight;
   setMobileMenuShow(false);
   window.scrollTo({
@@ -396,6 +464,27 @@ onMounted(async () => {
     id: route.params.id,
     demo: route.params.demo == "true" ? true : false,
   });
+  if (enterGameItem.value.provider.toLocaleUpperCase() == "SOFTSWISS") {
+    // launch_options
+    let obOptions = JSON.parse(enterGameItem.value.reserve);
+    console.log(obOptions);
+    // run softswiss game
+    const gameLaunchOptions = { target_element: "game_wrapper" } as any;
+    gameLaunchOptions["launch_options"] = {
+      game_launcher_url: obOptions.launch_options.game_launcher_url,
+      game_url: enterGameItem.value.weburl,
+      strategy: enterGameItem.value.parames,
+      lobby_url: "", // Host address where the lobby JavaScript libraries are located.
+      token_id: "", // Unique player authorization token.
+    };
+    (window as any).sg.launch(gameLaunchOptions);
+  }
+
+  nextTick(() => {
+    // 设置首屏加载动画关闭
+    setIsShowSkeleton(false)
+  })
+
 });
 
 onUnmounted(() => {
@@ -404,7 +493,9 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div class="game-body" v-if="mobileWidth < 600">
+  <gameBonusDrawer v-if="bonusDrawer" v-model="bonusDrawer"></gameBonusDrawer>
+  <div class="game-body" v-if="mobileWidth < 600 || ['ios', 'android'].includes(getDeviceType())">
+    <CloseIframe v-if="displayedCloseBtn" @close="closeGame"></CloseIframe>
     <div class="m-game-frame-body">
       <div class="m-loading-container relative" v-if="!frameShow">
         <div class="loading-body">
@@ -413,25 +504,28 @@ onUnmounted(() => {
           <div class="dot-0"></div>
         </div>
       </div>
-      <iframe
-        v-if="enterGameItem.method == 'HTML'"
-        ref="gameFrameRef"
-        :srcdoc="enterGameItem.weburl"
-        :style="{ height: frameShow ? mobileHeight + 'px' : '0px', position: 'fixed' }"
-        class="home-game-frame-area"
-        @load="handleIframeLoad"
-      ></iframe>
-      <iframe
-        v-else
-        ref="gameFrameRef"
-        :src="enterGameItem.weburl"
-        :style="{ height: frameShow ? mobileHeight + 'px' : '0px', position: 'fixed' }"
-        class="home-game-frame-area"
-        @load="handleIframeLoad"
-      ></iframe>
+      <div id="game_wrapper safari_only">
+        <iframe
+          v-if="enterGameItem.method == 'HTML'"
+          ref="gameFrameRef"
+          :srcdoc="enterGameItem.weburl"
+          :style="{ height: frameShow ? '100%' : '0px', position: 'fixed' }"
+          class="home-game-frame-area"
+          @load="handleIframeLoad"
+        ></iframe>
+        <iframe
+          v-else
+          ref="gameFrameRef"
+          :src="enterGameItem.weburl"
+          :style="{ height: frameShow ? '100%' : '0px', position: 'fixed' }"
+          class="home-game-frame-area"
+          @load="handleIframeLoad"
+        ></iframe>
+      </div>
     </div>
   </div>
   <div class="game-body" v-else>
+    <CloseIframe v-if="displayedCloseBtn" @close="closeGame"></CloseIframe>
     <div class="game-frame-body">
       <div class="loading-container relative" v-if="!frameShow">
         <div class="loading-body">
@@ -440,20 +534,22 @@ onUnmounted(() => {
           <div class="dot-0"></div>
         </div>
       </div>
-      <iframe
-        v-if="enterGameItem.method == 'HTML'"
-        :srcdoc="enterGameItem.weburl"
-        class="home-game-frame-area"
-        :style="{ height: frameShow ? 'calc(100vh - 130px)' : '0px' }"
-        @load="handleIframeLoad"
-      ></iframe>
-      <iframe
-        :src="enterGameItem.weburl"
-        class="home-game-frame-area"
-        :style="{ height: frameShow ? 'calc(100vh - 130px)' : '0px' }"
-        @load="handleIframeLoad"
-        v-else
-      ></iframe>
+      <div id="game_wrapper safari_only">
+        <iframe
+          v-if="enterGameItem.method == 'HTML'"
+          :srcdoc="enterGameItem.weburl"
+          class="home-game-frame-area"
+          :style="{ height: frameShow ?'100%' : '0px' }"
+          @load="handleIframeLoad"
+        ></iframe>
+        <iframe
+          :src="enterGameItem.weburl"
+          class="home-game-frame-area"
+          :style="{ height: frameShow ? '100%' : '0px' }"
+          @load="handleIframeLoad"
+          v-else
+        ></iframe>
+      </div>
     </div>
     <!--------------------- Game History ---------------------->
     <v-row class="mx-6 mt-6">
@@ -571,6 +667,11 @@ onUnmounted(() => {
   </div>
 </template>
 <style lang="scss">
+_::-webkit-full-page-media,
+_:future,
+:root .safari_only {
+  height: calc(100vh - 120px); //解决Safari浏览器底部遮挡问题
+}
 @keyframes expandAnimation {
   0% {
     scale: 1.3;
@@ -598,7 +699,6 @@ onUnmounted(() => {
     scale: 0.8;
   }
 }
-
 .game-body {
   width: 100%;
 

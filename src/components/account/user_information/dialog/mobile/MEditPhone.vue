@@ -105,7 +105,7 @@ const updatePhone = async () => {
 </script>
 
 <template>
-  <div class="user-container">
+  <div class="user-container--phone">
     <v-row class="mt-10 relative" :class="mobileWidth < 600 ? 'ma-2' : 'ma-10'">
       <v-text-field
         :label="t('account.item.phone_text')"
@@ -133,7 +133,7 @@ const updatePhone = async () => {
 
 <style lang="scss">
 // account dialog container
-.user-container {
+.user-container--phone {
   .form-textfield div.v-field__field {
     box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset !important;
   }
@@ -151,7 +151,7 @@ const updatePhone = async () => {
 
   .v-field__field {
     .v-label.v-field-label {
-      font-family: "Inter";
+      font-family: Inter,-apple-system,Framedcn,Helvetica Neue,Condensed,DisplayRegular,Helvetica,Arial,PingFang SC,Hiragino Sans GB,WenQuanYi Micro Hei,Microsoft Yahei,sans-serif;
       font-size: 12px !important;
       font-style: normal;
       font-weight: 400;

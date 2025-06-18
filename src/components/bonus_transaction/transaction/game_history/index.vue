@@ -5,6 +5,14 @@ import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify";
 import { appBarStore } from "@/store/appBar";
 import { storeToRefs } from "pinia";
+// 获取平台货币
+import { appCurrencyStore } from "@/store/app";
+const platformCurrency = computed(() => {
+  const { getPlatformCurrency } = storeToRefs(appCurrencyStore());
+  return getPlatformCurrency.value;
+});
+
+
 const { t } = useI18n();
 const { width } = useDisplay();
 
@@ -12,29 +20,29 @@ const formsList = ref<Array<any>>([
   {
     game: "Crash",
     date: "2023/1/29 17:50:36",
-    amount: "R$ 150000000.00",
+    amount: platformCurrency.value + " 150000000.00",
     multilier: "2.00x",
     betId: "re54er35sgf",
     status: "win",
-    profit: "R$ 300000000.00",
+    profit: platformCurrency.value + " 300000000.00",
   },
   {
     game: "Crash",
     date: "2023/1/29 17:50:36",
-    amount: "R$ 150000000.00",
+    amount: platformCurrency.value + " 150000000.00",
     multilier: "2.00x",
     betId: "re54er35sgf",
     status: "win",
-    profit: "R$ 300000000.00",
+    profit: platformCurrency.value + " 300000000.00",
   },
   {
     game: "Crash",
     date: "2023/1/29 17:50:36",
-    amount: "R$ 150000000.00",
+    amount: platformCurrency.value + " 150000000.00",
     multilier: "2.00x",
     betId: "re54er35sgf",
     status: "loss",
-    profit: "- R$ 300000000.00",
+    profit: `- ${platformCurrency.value} 300000000.00`,
   },
   {},
   {},
@@ -148,7 +156,7 @@ const handleNext = () => {};
               style="
                 width: 20px;
                 height: 20px;
-                background: #23262F;
+                background: #23262f;
                 border-radius: 20px;
                 position: relative;
               "
@@ -175,8 +183,9 @@ const handleNext = () => {};
                     top: 50%;
                     transform: translate(-50%, -50%);
                   "
-                  >mdi-chevron-up</v-icon
                 >
+                  mdi-chevron-up
+                </v-icon>
               </el-tooltip>
             </div>
             <div class="ml-2">{{ item.amount }}</div>
@@ -254,7 +263,7 @@ const handleNext = () => {};
 <style lang="scss">
 .forms-bonus-table-bg {
   height: 700px;
-  background: #15161C !important;
+  background: #15161c !important;
   box-shadow: inset 2px 0px 4px 1px rgba(0, 0, 0, 0.12) !important;
   border-radius: 8px !important;
   width: 100% !important;
@@ -262,11 +271,11 @@ const handleNext = () => {};
 
 .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > td,
 .v-table .v-table__wrapper > table > tbody > tr:not(:last-child) > th {
-  border-bottom: 1px solid #23262F;
+  border-bottom: 1px solid #23262f;
 }
 
 .v-table.v-table--fixed-header > .v-table__wrapper > table > thead > tr > th {
-  background: #23262F;
+  background: #23262f;
 }
 
 .forms-table-header {
@@ -303,7 +312,7 @@ const handleNext = () => {};
     margin-left: -10px;
     border-width: 10px;
     border-style: solid;
-    border-color: #1D2027 transparent transparent transparent;
+    border-color: #1d2027 transparent transparent transparent;
   }
 }
 
@@ -313,18 +322,18 @@ const handleNext = () => {};
   height: 26px;
   flex-shrink: 0;
   border-radius: 27px;
-  background: var(--bg-51-c-1929, #15161C);
+  background: var(--bg-51-c-1929, #15161c);
   box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.12) inset;
 }
 
 .el-popper.is-customized {
   padding: 6px 12px;
-  background: #1D2027;
+  background: #1d2027;
   border-radius: 10px;
 }
 
 .el-popper.is-customized .el-popper__arrow::before {
-  background: #1D2027;
+  background: #1d2027;
   right: 0;
 }
 </style>

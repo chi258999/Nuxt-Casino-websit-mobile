@@ -4,6 +4,11 @@ export namespace NETWORK {
   export class LOGIN {
     static LOGIN: string = '/login' //Login
     static REGISTER: string = '/register' //Registration
+    static QUICK_LOGIN: string = '/quick/login'
+    static QUICK_REGISTER: string = '/quick/register'
+    static REGISTER_CONFIG: string = '/register/config' //注册配置信息
+    static VERIFY_SEND: string = '/verify/send' //发送验证码
+    static CLOUDFLARE_VERIFY: string = '/cloudflare/verify' //验证CloudFlare token
   }
 
   //Business logic after entering the home page
@@ -16,13 +21,16 @@ export namespace NETWORK {
     static USER_INFO = '/user/info'; // get user profile
     static USER_BALANCE = '/user/balance'; // get user balance
     static SET_USER_CURRENCY = '/user/currency'; // set user currency
-    
+
     static USER_CHANGE = '/user/change'; // update user info
     static USER_EMAIL = '/user/email'; // update email
+    static USER_EMAIL_SEND = '/user/email/send'; // Send email verification code
+    static USER_EMAIL_SUBMIT = '/user/email/submit'; // Submit email verification code for verification
     static USER_PASSWORD = '/user/password'; // update password
     static USER_SUSPEND = '/user/suspend'; // suspend user
     static USER_CHECK = '/user/check'; // user check
     static USER_EMAIL_VERIFY = '/user/verifyemail'; // user email verify
+    static USER_FUNDS_IDENTITY = '/user/funds/identity'; // Get account information in storage
   }
 
   // deposit api
@@ -84,7 +92,8 @@ export namespace NETWORK {
     static VIP_TIMES_HISTORY = '/user/viptimeshistory' // Get VIP weekly and monthly reward records
     static VIP_SIGNIN_REWARDS = '/user/vipsignin/award'; // Receive VIP sign-in rewards
     // static VIP_SIGNIN = '/user/vipsignin'; // Get VIP check-in content
-    static VIP_SIGNIN = '/user/vip/signinaward/list';  // Get VIP check-in content
+    static VIP_SIGNIN = '/user/vip/signinaward/list';  // Get VIP check-in content  获取签到奖励
+    static VIP_SIGNINAWARD_RECEIVE = '/user/vip/signinaward/receive';  // Get sign-in rewards  领取签到奖励
     static VIP_LEVELUP_LIST = '/user/viplevelup/list'; // Get VIP upgrade reward information
     static VIP_LEVELUP_RECEIVE = '/user/viplevelup/receive'; // Receive VIP upgrade rewards
     static USER_VIP_CYCLEAWARD_LIST = '/user/vip/cycleaward/list';  // Get periodic rewards  获取周期性奖励
@@ -93,6 +102,7 @@ export namespace NETWORK {
     static USER_VIP_LEVELAWARD_RECEIVE = '/user/vip/levelaward/receive';  // Receive level-related rewards  领取等级相关奖励
     static USER_VIP_BETAWARD_LIST = '/user/vip/betaward/list';  // Get coding rebates  获取打码返利
     static USER_VIP_BETAWARD_RECEIVE = '/user/vip/betaward/receive';  // Get coding rebates  领取打码返利
+    static VIP_SIGNIN_HISTORY = '/user/vipsigninhistory';  //  Get sign-in reward collection records  获取签到奖励领取记录
   }
 
   // websocket api
@@ -130,5 +140,28 @@ export namespace NETWORK {
 
   export class Currency{
     static CURRENCY_LIST = '/user/balance/list'; // currency list
+  }
+
+  // phone binding api
+  export class PHONE_BIDING {
+    static SMS_VERIFICATION_CODE = '/user/sms/send'; // Send SMS verification code
+    static SUBMIT_SMS_CODE = '/user/sms/submit'; // Submit SMS verification code for verification
+  }
+
+  // collector log api
+  export class COLLECTOR_LOG {
+    static OPERATE_COLLECTOR_LOG = '/log/collector/new';
+  }
+
+  // 下载app活动 api
+  export class DOWNLOADAPP {
+    static USER_DOWAPP_INFO_ACQUISTION = '/user/downloadapp/list';//下載app送bonus活動信息顯示（登录后）
+    static DOWAPP_INFO_ACQUISTION = '/downloadapp/list';//下載app送bonus活動信息顯示（登陆前）
+    static DOWAPP_RECEIVE = '/user/downloadapp/receive';
+  }
+
+  // 通用 api
+  export class COMMON {
+    static SERVER_TIMESTAMP = '/timeunix';
   }
 }

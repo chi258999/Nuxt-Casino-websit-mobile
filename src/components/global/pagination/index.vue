@@ -1,10 +1,9 @@
-<script lang="ts" setup>
+<script lang="ts" name="page" setup>
 import { onMounted, toRefs } from "vue";
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 
 const props = defineProps<{ length: number }>();
-
 const emit = defineEmits<{
   (e: "handlePrev", pageNo: number): void;
   (e: "handleNext", pageNo: number): void;
@@ -28,6 +27,13 @@ const handlePrev = () => {
 const handleNext = () => {
   emit("handleNext", pageNo.value);
 };
+
+const resetPageNo = ():void => {
+  pageNo.value = 1
+}
+
+defineExpose({resetPageNo, pageNo})
+
 
 onMounted(() => {
   if (mobileWidth.value > 600) {
@@ -91,15 +97,33 @@ onMounted(() => {
 
   .v-pagination__prev,
   .v-pagination__next {
+    box-shadow: 0px 4px 6px 1px #0000004D;
+    background: #23262F;
+    border-radius: 4px;
+
     .v-btn {
       width: 28px !important;
       height: 28px !important;
 
       .v-btn__content {
-        font-weight: 800 !important;
-        font-size: 12px !important;
+        font-weight: bold !important;
+        font-size: 14px !important;
+        color: #fff !important;
       }
     }
+
+    .v-btn--disabled {
+      opacity: 1;
+
+      .v-btn__content {
+        font-weight: bold !important;
+        font-size: 14px !important;
+        color: #15161c !important;
+      }
+    }
+  }
+  .v-pagination__prev {
+    margin-right: 10px !important;
   }
 
   .v-pagination__item {

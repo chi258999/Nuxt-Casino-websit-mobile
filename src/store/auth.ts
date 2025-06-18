@@ -22,7 +22,7 @@ export const authStore = defineStore({
     userInfo: {
       uid: "User6696608024",
       name: "Little Planes",
-      email: "anderson.brazstar@gmail.com",
+      email: "anderson.Hoy777@gmail.com",
       phone: "+5517991696669",
       avatar: new URL("@/assets/public/image/ua_public_10.png", import.meta.url).href,
     } as User.GetUserInfo,
@@ -36,7 +36,8 @@ export const authStore = defineStore({
       },
       withdraw: 111111,
       rate: 1000
-    }
+    },
+    timerValue: 0 as number, //倒计时存储
   }),
   getters: {
     getSuccess: (state) => state.success,
@@ -48,7 +49,8 @@ export const authStore = defineStore({
     getDialogCheckbox: (state) => state.dialogCheckbox,
     getAuthDialogVisible: (state) => state.authDialogVisible,
     getSignUpForm: (state) => state.signUpForm,
-    getNickNameDialogVisible: (state) => state.nickNameDialogVisible
+    getNickNameDialogVisible: (state) => state.nickNameDialogVisible,
+    getTimerValue: (state) => state.timerValue,
   },
   actions: {
     // set functions
@@ -61,17 +63,24 @@ export const authStore = defineStore({
     setErrorMessage(message: string) {
       this.errMessage = message
     },
+    setTimerValue(timerValue: number) {
+      this.timerValue = timerValue
+    },
     setToken(token: string) {
       const networkData: NetworkData = NetworkData.getInstance();
       const netCfg: Netcfg = Netcfg.getInstance();
+      const network: Network = Network.getInstance();
       networkData.setToken(token);
       netCfg.setToken(token);
+      network.refresh()
       this.token = token;
     },
     removeToken() {
       this.token = undefined;
       const networkData: NetworkData = NetworkData.getInstance();
       networkData.resetData();
+      const network: Network = Network.getInstance();
+      network.refresh()
       this.userInfo = {
         uid: "User6696608024",
         name: "Little Planes",
@@ -150,7 +159,8 @@ export const authStore = defineStore({
           this.setToken(response.token);
           this.setSuccess(true);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, msg, next, 1);
@@ -167,10 +177,15 @@ export const authStore = defineStore({
           if (response.data.avatar == "") {
             response.data.avatar = new URL("@/assets/public/image/ua_public_10.png", import.meta.url).href
           }
+          this.setErrorMessage("");
           this.setUserInfo(response.data);
           this.setSuccess(true);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          if(response.code == 101004) {
+            this.dispatchSignout();
+          }
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, {}, next, 1, 4);
@@ -186,7 +201,8 @@ export const authStore = defineStore({
           this.setUserAmount(response.data);
           this.setSuccess(true);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, {}, next, 1, 4);
@@ -201,7 +217,8 @@ export const authStore = defineStore({
         if (response.code == 200) {
           this.setSuccess(true);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, data, next, 1);
@@ -216,7 +233,8 @@ export const authStore = defineStore({
         if (response.code == 200) {
           this.setSuccess(true);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, data, next, 1);
@@ -231,7 +249,8 @@ export const authStore = defineStore({
         if (response.code == 200) {
           this.setSuccess(true);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, data, next, 1);
@@ -244,6 +263,39 @@ export const authStore = defineStore({
       // response call back function
       const next = (response: User.GetUserInfoResponseData) => {
         if (response.code == 200) {
+          this.setSuccess(true);
+        } else {
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
+        }
+      }
+      await network.sendMsg(route, data, next, 1);
+    },
+    // 一键注册
+    async dispatchQuickRegister(data: SignIn.QuickRegisterRequestData) {
+      this.setSuccess(false);
+      const route: string = NETWORK.LOGIN.QUICK_REGISTER;
+      const network: Network = Network.getInstance();
+      // response call back function
+      const next = (response: SignIn.GetSigninResponseData) => {
+        if (response.code == 200) {
+          this.setToken(response.token);
+          this.setSuccess(true);
+        } else {
+          this.setErrorMessage(handleException(response.code));
+        }
+      }
+      await network.sendMsg(route, data, next, 1);
+    },
+    // 一键登录
+    async dispatchQuickLogin(data: SignIn.QuickLoginRequestData) {
+      this.setSuccess(false);
+      const route: string = NETWORK.LOGIN.QUICK_LOGIN;
+      const network: Network = Network.getInstance();
+      // response call back function
+      const next = (response: SignIn.GetSigninResponseData) => {
+        if (response.code == 200) {
+          this.setToken(response.token);
           this.setSuccess(true);
         } else {
           this.setErrorMessage(handleException(response.code));

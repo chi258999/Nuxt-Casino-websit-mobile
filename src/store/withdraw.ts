@@ -14,14 +14,18 @@ export const withdrawStore = defineStore({
     withdrawHistoryItem: {
       total_pages: 0,
       record: []
-    } as Withdraw.WithdrawalHistoryResponse
+    } as Withdraw.WithdrawalHistoryResponse,
+    smsVerificationItem: { remaining_time: 0 } as Withdraw.SmsSendResponseItem,
+    moreWithdrawHistoryFlag: true as boolean
   }),
   getters: {
     getSuccess: (state) => state.success,
     getErrMessage: (state) => state.errMessage,
     getWithdrawCfg: (state) => state.withdrawConfig,
     getWithdrawSubmit: (state) => state.withdrawSubmit,
-    getWithdrawHistoryItem: (state) => state.withdrawHistoryItem
+    getWithdrawHistoryItem: (state) => state.withdrawHistoryItem,
+    getSmsVerificationItem: (state) => state.smsVerificationItem,
+    getMoreTransactionHistoryFlag: (state) => state.moreWithdrawHistoryFlag,
   },
   actions: {
     // set functions
@@ -38,11 +42,47 @@ export const withdrawStore = defineStore({
       this.withdrawSubmit = withdrawSubmit;
     },
     setWithdrawHistoryItem(withdrawHistoryItem: Withdraw.WithdrawalHistoryResponse) {
-      this.withdrawHistoryItem.record = [...this.withdrawHistoryItem.record, ...withdrawHistoryItem.record]
-      this.withdrawHistoryItem.total_pages = withdrawHistoryItem.total_pages;
       // withdrawHistoryItem.record.map(item => {
       //   this.withdrawHistoryItem.record.push(item);
       // })
+      console.log(withdrawHistoryItem, 'setWithdrawHistoryItem');
+
+      if (withdrawHistoryItem.record.length < 9) {
+        this.moreWithdrawHistoryFlag = false;
+      } else {
+        this.moreWithdrawHistoryFlag = true;
+      }
+
+      const baseArr = [0,1,2,3,4,5,6,7]
+      let record = withdrawHistoryItem.record.slice(0, 8)
+      baseArr.map((item) => {
+        if(record[item]) {
+          this.withdrawHistoryItem.record.push(record[item])
+        } else {
+          this.withdrawHistoryItem.record.push({
+            amount: '',
+            created_at: 0,
+            id: '' as unknown as number,
+            note: "",
+            type: '',
+            status: NaN,
+            currency_type: '',
+            currency: ''
+          })
+          return {}
+        }
+      })
+
+      // this.withdrawHistoryItem.record = [...this.withdrawHistoryItem.record, ...recordList]
+      this.withdrawHistoryItem.total_pages = withdrawHistoryItem.total_pages;
+    },
+    setWithdrawHistoryItemEmpty() {
+      this.withdrawHistoryItem.record = [];
+      this.withdrawHistoryItem.total_pages = 0;
+      this.moreWithdrawHistoryFlag = false;
+    },
+    setSmsVerificationItem(smsVerificationItem: Withdraw.SmsSendResponseItem) {
+      this.smsVerificationItem = smsVerificationItem
     },
     // user withdraw configuration
     async dispatchUserWithdrawCfg() {
@@ -55,7 +95,8 @@ export const withdrawStore = defineStore({
           this.setSuccess(true);
           this.setWithdrawCfg(response.data);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, {}, next, 1, 4);
@@ -71,7 +112,8 @@ export const withdrawStore = defineStore({
           this.setSuccess(true);
           this.setWithdrawSubmit(response.data);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, data, next, 1);
@@ -87,7 +129,8 @@ export const withdrawStore = defineStore({
           this.setSuccess(true);
           this.setWithdrawHistoryItem(response.data);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, data, next, 1);
@@ -107,7 +150,41 @@ export const withdrawStore = defineStore({
           })
           this.setSuccess(true);
         } else {
-          this.setErrorMessage(handleException(response.code));
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
+        }
+      }
+      await network.sendMsg(route, data, next, 1);
+    },
+    // Send SMS verification code
+    async dispatchSmsVerificationCode(data: Withdraw.SmsSendRequestForm) {
+      this.setSuccess(false);
+      const route: string = NETWORK.PHONE_BIDING.SMS_VERIFICATION_CODE;
+      const network: Network = Network.getInstance();
+      // response call back function
+      const next = (response: Withdraw.GetSmsSendResponse) => {
+        if (response.code == 200) {
+          this.setSuccess(true);
+          this.setSmsVerificationItem(response.data);
+        } else {
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
+        }
+      }
+      await network.sendMsg(route, data, next, 1);
+    },
+    // Submit SMS verification code for verification
+    async dispatchSubmitSMS(data: Withdraw.SmsSubmitRequestForm) {
+      this.setSuccess(false);
+      const route: string = NETWORK.PHONE_BIDING.SUBMIT_SMS_CODE;
+      const network: Network = Network.getInstance();
+      // response call back function
+      const next = (response: Withdraw.GetSmsSubmitResponse) => {
+        if (response.code == 200) {
+          this.setSuccess(true);
+        } else {
+          // this.setErrorMessage(handleException(response.code));
+          this.setErrorMessage(response.message);
         }
       }
       await network.sendMsg(route, data, next, 1);
